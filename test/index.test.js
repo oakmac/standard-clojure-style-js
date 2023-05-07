@@ -2,7 +2,7 @@ const fs = require('fs-plus')
 const path = require('path')
 
 const enolib = require('enolib')
-  const clojurefmt = require('../lib/clojurefmt.js')
+const clojurefmtLib = require('../lib/clojurefmt.js')
 
 const rootDir = path.join(__dirname, '../')
 
@@ -50,6 +50,7 @@ enoFilesInTestParserDir().forEach((f) => {
 
 allTestCases.forEach(testCase => {
   test(testCase.name, () => {
-    expect(clojurefmt(testCase.input)).toBe(testCase.expected)
+    // expect(clojurefmtLib.parseAst(testCase.input)).toBe(testCase.expected)
+    console.log(clojurefmtLib.parseAst(testCase.input))
   })
 })

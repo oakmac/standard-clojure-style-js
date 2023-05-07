@@ -1,0 +1,13 @@
+# Simple String
+
+-- Input
+"hello there"
+-- Input
+
+-- Expected
+(source 0..13
+  (string 0..13
+    (.open 0..1 '"')
+    (.body 1..12 'hello there')
+    (.close 12..13 '"')))
+-- Expected
