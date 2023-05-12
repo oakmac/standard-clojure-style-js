@@ -11,6 +11,7 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 
 ## Notes
 
+- write the parser first, then the formatter
 - follows Simple Clojure Formatting Rules
 - alphabetically sorts namespaces
 - trims strings of trailing whitespace
@@ -22,6 +23,7 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
   - I think "yes"
   - ie: "fold"
 - should allow to skip the next form via a comment
+  - we definitely need this
   - only allow this for top-level forms?
 
 [janet fmt]:https://raw.githubusercontent.com/janet-lang/spork/master/spork/fmt.janet
@@ -36,7 +38,11 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 ## Development
 
 ```sh
+## run unit tests
 npm test
+
+## lint JS
+npm run lint
 ```
 
 ## License

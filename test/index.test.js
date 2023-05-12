@@ -1,3 +1,5 @@
+/* global test expect */
+
 const fs = require('fs-plus')
 const path = require('path')
 
@@ -50,7 +52,15 @@ enoFilesInTestParserDir().forEach((f) => {
 
 allTestCases.forEach(testCase => {
   test(testCase.name, () => {
-    // expect(clojurefmtLib.parseAst(testCase.input)).toBe(testCase.expected)
-    console.log(clojurefmtLib.parseAst(testCase.input))
+    // console.log(testCase.input)
+    // console.log('------------------')
+
+    const ast = clojurefmtLib.parseAst(testCase.input)
+
+    // console.log(ast)
+    // console.log('*************')
+    // console.log(clojurefmtLib.printAst(ast))
+
+    expect(clojurefmtLib.astToString(ast)).toBe(testCase.expected)
   })
 })
