@@ -42,25 +42,19 @@ enoFilesInTestParserDir().forEach((f) => {
   allTestCases = allTestCases.concat(testsInFile)
 })
 
-// const foo1 = require('../lib')
-
-// test('test1', () => {
-//   expect(foo1('aaa', 'bbb')).toBe('zzz')
-// })
-
-// console.log(allTestCases)
+const onlyRunCertainTests = true
+const certainTests = new Set()
+certainTests.add('Keyword')
+certainTests.add('Simple String')
 
 allTestCases.forEach(testCase => {
-  test(testCase.name, () => {
-    // console.log(testCase.input)
-    // console.log('------------------')
+  let runThisTest = true
+  if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
 
-    const ast = clojurefmtLib.parseAst(testCase.input)
-
-    // console.log(ast)
-    // console.log('*************')
-    // console.log(clojurefmtLib.printAst(ast))
-
-    expect(clojurefmtLib.astToString(ast)).toBe(testCase.expected)
-  })
+  if (runThisTest) {
+    test(testCase.name, () => {
+      const ast = clojurefmtLib.parseAst(testCase.input)
+      expect(clojurefmtLib.astToString(ast)).toBe(testCase.expected)
+    })
+  }
 })

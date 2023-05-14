@@ -1,3 +1,14 @@
+# Keyword
+
+-- Input
+:smile
+-- Input
+
+-- Expected
+(source 0..6
+  (token 0..6 ':smile'))
+-- Expected
+
 # Simple String
 
 -- Input
