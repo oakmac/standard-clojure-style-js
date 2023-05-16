@@ -53,6 +53,39 @@
   (token 0..2 ':/'))
 -- Expected
 
+# Namespaced Division Symbol Keyword
+
+-- Input
+:clojure.core//
+-- Input
+
+-- Expected
+(source 0..15
+  (token 0..15 ':clojure.core//'))
+-- Expected
+
+# Autoresolving Division Symbol Keyword
+
+-- Input
+::/
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '::/'))
+-- Expected
+
+# Autoresolving Aliased Division Symbol Keyword
+
+-- Input
+::clojure//
+-- Input
+
+-- Expected
+(source 0..11
+  (token 0..11 '::clojure//'))
+-- Expected
+
 # Simple String
 
 -- Input

@@ -1,0 +1,32 @@
+# Keyword With Underscores and Hyphens
+
+-- Input
+:aaa-bbb_ccc
+-- Input
+
+-- Expected
+(source 0..12
+  (token 0..12 ':aaa-bbb_ccc'))
+-- Expected
+
+# Underscore Keyword
+
+-- Input
+:_
+-- Input
+
+-- Expected
+(source 0..2
+  (token 0..2 ':_'))
+-- Expected
+
+# Hyphen Keyword
+
+-- Input
+:-
+-- Input
+
+-- Expected
+(source 0..2
+  (token 0..2 ':-'))
+-- Expected
