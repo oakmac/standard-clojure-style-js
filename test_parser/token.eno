@@ -9,6 +9,28 @@
   (token 0..6 ':smile'))
 -- Expected
 
+# Keyword with Prefix
+
+-- Input
+:fun/day
+-- Input
+
+-- Expected
+(source 0..8
+  (token 0..8 ':fun/day'))
+-- Expected
+
+# Autoresolving Keyword
+
+-- Input
+::run
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '::run'))
+-- Expected
+
 # Simple String
 
 -- Input

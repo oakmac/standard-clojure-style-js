@@ -45,6 +45,8 @@ enoFilesInTestParserDir().forEach((f) => {
 const onlyRunCertainTests = true
 const certainTests = new Set()
 certainTests.add('Keyword')
+certainTests.add('Keyword with Prefix')
+certainTests.add('Autoresolving Keyword')
 certainTests.add('Simple String')
 
 allTestCases.forEach(testCase => {
