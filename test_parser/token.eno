@@ -86,6 +86,168 @@
   (token 0..11 '::clojure//'))
 -- Expected
 
+# Integer
+
+-- Input
+1
+-- Input
+
+-- Expected
+(source 0..1
+  (token 0..1 '1'))
+-- Expected
+
+# Negative Integer
+
+-- Input
+-2
+-- Input
+
+-- Expected
+(source 0..2
+  (token 0..2 '-2'))
+-- Expected
+
+# BigInt Integer
+
+-- Input
+11N
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '11N'))
+-- Expected
+
+# BigDecimal Integer
+
+-- Input
+99M
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '99M'))
+-- Expected
+
+# Hex
+
+-- Input
+0xaB
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '0xaB'))
+-- Expected
+
+# Negative Hex
+
+-- Input
+-0xFF
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '-0xFF'))
+-- Expected
+
+# Shouting Hex
+
+-- Input
+0XA
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '0XA'))
+-- Expected
+
+# BigInt Hex
+
+-- Input
+0XeN
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '0XeN'))
+-- Expected
+
+# Octal
+
+-- Input
+013
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '013'))
+-- Expected
+
+# Negative Octal
+
+-- Input
+-027
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '-027'))
+-- Expected
+
+# BigInt Octal
+
+-- Input
+0377N
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '0377N'))
+-- Expected
+
+# Radix
+
+-- Input
+2r0101010001
+-- Input
+
+-- Expected
+(source 0..12
+  (token 0..12 '2r0101010001'))
+-- Expected
+
+# Negative Radix
+
+-- Input
+-10r256
+-- Input
+
+-- Expected
+(source 0..7
+  (token 0..7 '-10r256'))
+-- Expected
+
+# Negative Radix
+
+-- Input
+36RBREATHESL0WLY
+-- Input
+
+-- Expected
+(source 0..16
+  (token 0..16 '36RBREATHESL0WLY'))
+-- Expected
+
+
+
+
+
+
+
+
+
 # Simple String
 
 -- Input
