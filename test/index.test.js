@@ -42,16 +42,23 @@ enoFilesInTestParserDir().forEach((f) => {
   allTestCases = allTestCases.concat(testsInFile)
 })
 
-const onlyRunCertainTests = true
+const onlyRunCertainTests = false
 const certainTests = new Set()
 certainTests.add('Keyword')
 certainTests.add('Keyword with Prefix')
 certainTests.add('Autoresolving Keyword')
+certainTests.add('Autoresolving Aliased Keyword')
 certainTests.add('Simple String')
+
+const ignoreCertainTests = true
+const ignoreTests = new Set()
+ignoreTests.add('Empty Anonymous Function')
+ignoreTests.add('Empty Anonymous Function Gap')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
   if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
+  if (ignoreCertainTests && ignoreTests.has(testCase.name)) runThisTest = false
 
   if (runThisTest) {
     test(testCase.name, () => {

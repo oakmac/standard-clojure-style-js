@@ -31,6 +31,28 @@
   (token 0..5 '::run'))
 -- Expected
 
+# Autoresolving Aliased Keyword
+
+-- Input
+::slow/dance
+-- Input
+
+-- Expected
+(source 0..12
+  (token 0..12 '::slow/dance'))
+-- Expected
+
+# Division Symbol Keyword
+
+-- Input
+:/
+-- Input
+
+-- Expected
+(source 0..2
+  (token 0..2 ':/'))
+-- Expected
+
 # Simple String
 
 -- Input
