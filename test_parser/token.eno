@@ -240,6 +240,106 @@
   (token 0..16 '36RBREATHESL0WLY'))
 -- Expected
 
+# Ratio
+
+-- Input
+22/7
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '22/7'))
+-- Expected
+
+# Negative Ratio
+
+-- Input
+-1/2
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '-1/2'))
+-- Expected
+
+# Double
+
+-- Input
+1.0
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '1.0'))
+-- Expected
+
+# Negative Double
+
+-- Input
+-2.71828
+-- Input
+
+-- Expected
+(source 0..8
+  (token 0..8 '-2.71828'))
+-- Expected
+
+# Double with Exponent
+
+-- Input
+3e8
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '3e8'))
+-- Expected
+
+# Shouting Double with Exponent
+
+-- Input
+1E9
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '1E9'))
+-- Expected
+
+# Double with Negative Exponent
+
+-- Input
+2e-1
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 '2e-1'))
+-- Expected
+
+# BigDecimal Double with Exponent
+
+-- Input
+3e1415926535M
+-- Input
+
+-- Expected
+(source 0..13
+  (token 0..13 '3e1415926535M'))
+-- Expected
+
+# Everything Double
+
+-- Input
++0.1E-10M
+-- Input
+
+-- Expected
+(source 0..9
+  (token 0..9 '+0.1E-10M'))
+-- Expected
+
+
 
 
 

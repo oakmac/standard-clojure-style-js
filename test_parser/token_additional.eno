@@ -1,14 +1,3 @@
-# Keyword With Underscores and Hyphens
-
--- Input
-:aaa-bbb_ccc
--- Input
-
--- Expected
-(source 0..12
-  (token 0..12 ':aaa-bbb_ccc'))
--- Expected
-
 # Underscore Keyword
 
 -- Input
@@ -29,4 +18,48 @@
 -- Expected
 (source 0..2
   (token 0..2 ':-'))
+-- Expected
+
+# Keyword With Underscores and Hyphens
+
+-- Input
+:aaa-bbb_ccc
+-- Input
+
+-- Expected
+(source 0..12
+  (token 0..12 ':aaa-bbb_ccc'))
+-- Expected
+
+# Positive Integer
+
+-- Input
++13
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 '+13'))
+-- Expected
+
+# Positive BigDecimal
+
+-- Input
++2.4M
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '+2.4M'))
+-- Expected
+
+# Everything Double 2
+
+-- Input
+-0.1E+10M
+-- Input
+
+-- Expected
+(source 0..9
+  (token 0..9 '-0.1E+10M'))
 -- Expected
