@@ -501,6 +501,61 @@ clojure.string/blank?
   (token 0..21 'clojure.string/blank?'))
 -- Expected
 
+# Division Symbol
+
+-- Input
+/
+-- Input
+
+-- Expected
+(source 0..1
+  (token 0..1 '/'))
+-- Expected
+
+# Namespaced Division Symbol
+
+-- Input
+clojure.core//
+-- Input
+
+-- Expected
+(source 0..14
+  (token 0..14 'clojure.core//'))
+-- Expected
+
+# Inf
+
+-- Input
+##Inf
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '##Inf'))
+-- Expected
+
+# -Inf
+
+-- Input
+##-Inf
+-- Input
+
+-- Expected
+(source 0..6
+  (token 0..6 '##-Inf'))
+-- Expected
+
+# NaN
+
+-- Input
+##NaN
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '##NaN'))
+-- Expected
+
 # True
 
 -- Input
@@ -521,6 +576,17 @@ false
 -- Expected
 (source 0..5
   (token 0..5 'false'))
+-- Expected
+
+# Simple Char
+
+-- Input
+\a
+-- Input
+
+-- Expected
+(source 0..2
+  (token 0..2 '\a'))
 -- Expected
 
 # Nil

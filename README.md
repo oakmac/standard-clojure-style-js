@@ -4,10 +4,13 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 
 ## TODO
 
-- [ ] copy over [parsing test suite](https://github.com/tonsky/Clojure-Sublimed/tree/master/test_parser) from [Clojure-Sublimed](https://github.com/tonsky/Clojure-Sublimed)
-- [ ] integrate test suite with `npm test` harness
+- [x] copy over [parsing test suite](https://github.com/tonsky/Clojure-Sublimed/tree/master/test_parser) from [Clojure-Sublimed](https://github.com/tonsky/Clojure-Sublimed)
+- [x] integrate test suite with `npm test` harness
 - [x] write JS module boilerplate
-- [ ] start passing the test suite
+- [x] start passing the test suite
+- [ ] tokens - Division Symbol followed by delimiter
+- [ ] tokens - gensym'd symbol
+- [ ] tokens - Special Chars
 
 ## Notes
 

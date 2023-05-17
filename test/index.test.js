@@ -50,13 +50,15 @@ const certainTests = new Set()
 // certainTests.add('Autoresolving Aliased Keyword')
 // certainTests.add('Simple Regular Expression')
 // certainTests.add('Simple String')
-certainTests.add('Empty String')
+certainTests.add('Special Chars')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
 ignoreTests.add('Empty Anonymous Function')
 ignoreTests.add('Empty Anonymous Function Gap')
 // ignoreTests.add('Simple Regular Expression')
+
+const logOutput = false
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
@@ -66,7 +68,12 @@ allTestCases.forEach(testCase => {
   if (runThisTest) {
     test(testCase.name, () => {
       const ast = clojurefmtLib.parseAst(testCase.input)
-      expect(clojurefmtLib.astToString(ast)).toBe(testCase.expected)
+      const treeStr = clojurefmtLib.astToString(ast)
+      if (logOutput) {
+        console.log(treeStr)
+        console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttt')
+      }
+      expect(treeStr).toBe(testCase.expected)
     })
   }
 })
