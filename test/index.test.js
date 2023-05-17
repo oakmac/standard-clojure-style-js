@@ -48,8 +48,9 @@ const certainTests = new Set()
 // certainTests.add('Keyword with Prefix')
 // certainTests.add('Autoresolving Keyword')
 // certainTests.add('Autoresolving Aliased Keyword')
-certainTests.add('Simple Regular Expression')
-certainTests.add('Simple String')
+// certainTests.add('Simple Regular Expression')
+// certainTests.add('Simple String')
+certainTests.add('Empty String')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()

@@ -408,3 +408,45 @@
     (.body 1..12 'hello there')
     (.close 12..13 '"')))
 -- Expected
+
+# Simple with Escapes
+
+-- Input
+"ab\ncd\tde"
+-- Input
+
+-- Expected
+(source 0..12
+  (string 0..12
+    (.open 0..1 '"')
+    (.body 1..11 'ab\ncd\tde')
+    (.close 11..12 '"')))
+-- Expected
+
+# Multiline String
+
+-- Input
+"first
+second"
+-- Input
+
+-- Expected
+(source 0..14
+  (string 0..14
+    (.open 0..1 '"')
+    (.body 1..13 'first\nsecond')
+    (.close 13..14 '"')))
+-- Expected
+
+# Empty String
+
+-- Input
+""
+-- Input
+
+-- Expected
+(source 0..2
+  (string 0..2
+    (.open 0..1 '"')
+    (.close 1..2 '"')))
+-- Expected
