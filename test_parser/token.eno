@@ -450,3 +450,86 @@ second"
     (.open 0..1 '"')
     (.close 1..2 '"')))
 -- Expected
+
+# String with escaped quote
+
+-- Input
+"abc\"def"
+-- Input
+
+-- Expected
+(source 0..10
+  (string 0..10
+    (.open 0..1 '"')
+    (.body 1..9 'abc\"def')
+    (.close 9..10 '"')))
+-- Expected
+
+# String with double escaped quote
+
+-- Input
+"abcdef\\"
+-- Input
+
+-- Expected
+(source 0..10
+  (string 0..10
+    (.open 0..1 '"')
+    (.body 1..9 'abcdef\\')
+    (.close 9..10 '"')))
+-- Expected
+
+# Simple Symbol
+
+-- Input
+def
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 'def'))
+-- Expected
+
+# Symbol with Prefix
+
+-- Input
+clojure.string/blank?
+-- Input
+
+-- Expected
+(source 0..21
+  (token 0..21 'clojure.string/blank?'))
+-- Expected
+
+# True
+
+-- Input
+true
+-- Input
+
+-- Expected
+(source 0..4
+  (token 0..4 'true'))
+-- Expected
+
+# False
+
+-- Input
+false
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 'false'))
+-- Expected
+
+# Nil
+
+-- Input
+nil
+-- Input
+
+-- Expected
+(source 0..3
+  (token 0..3 'nil'))
+-- Expected
