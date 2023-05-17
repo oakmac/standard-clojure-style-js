@@ -339,14 +339,61 @@
   (token 0..9 '+0.1E-10M'))
 -- Expected
 
+# Simple Regular Expression
 
+-- Input
+#"."
+-- Input
 
+-- Expected
+(source 0..4
+  (string 0..4
+    (.open 0..2 '#"')
+    (.body 2..3 '.')
+    (.close 3..4 '"')))
+-- Expected
 
+# Hex Digits Regular Expression
 
+-- Input
+#"[0-9a-fA-F]+"
+-- Input
 
+-- Expected
+(source 0..15
+  (string 0..15
+    (.open 0..2 '#"')
+    (.body 2..14 '[0-9a-fA-F]+')
+    (.close 14..15 '"')))
+-- Expected
 
+# Regular Expression Escape
 
+-- Input
+#"\""
+-- Input
 
+-- Expected
+(source 0..5
+  (string 0..5
+    (.open 0..2 '#"')
+    (.body 2..4 '\"')
+    (.close 4..5 '"')))
+-- Expected
+
+# Regular Expression Double Escape
+
+-- Input
+#"\\"
+-- Input
+
+-- Expected
+(source 0..5
+  (string 0..5
+    (.open 0..2 '#"')
+    (.body 2..4 '\\')
+    (.close 4..5 '"')))
+-- Expected
 
 # Simple String
 
