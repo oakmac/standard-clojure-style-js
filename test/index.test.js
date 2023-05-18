@@ -50,12 +50,12 @@ const certainTests = new Set()
 // certainTests.add('Autoresolving Aliased Keyword')
 // certainTests.add('Simple Regular Expression')
 // certainTests.add('Simple String')
-certainTests.add('Special Chars')
+certainTests.add('Empty Anonymous Function')
 
-const ignoreCertainTests = true
+const ignoreCertainTests = false
 const ignoreTests = new Set()
 ignoreTests.add('Empty Anonymous Function')
-ignoreTests.add('Empty Anonymous Function Gap')
+// ignoreTests.add('Empty Anonymous Function Gap')
 // ignoreTests.add('Simple Regular Expression')
 
 const logOutput = false
