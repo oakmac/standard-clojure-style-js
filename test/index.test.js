@@ -52,10 +52,10 @@ const certainTests = new Set()
 // certainTests.add('Simple String')
 certainTests.add('Empty Anonymous Function')
 
-const ignoreCertainTests = false
+const ignoreCertainTests = true
 const ignoreTests = new Set()
-ignoreTests.add('Empty Anonymous Function')
-// ignoreTests.add('Empty Anonymous Function Gap')
+// ignoreTests.add('Empty Anonymous Function')
+ignoreTests.add('Empty Anonymous Function Gap')
 // ignoreTests.add('Simple Regular Expression')
 
 const logOutput = false
