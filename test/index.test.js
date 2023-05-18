@@ -44,7 +44,7 @@ enoFilesInTestParserDir().forEach((f) => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Special Chars')
+certainTests.add('Division Symbol followed by delimiter')
 // certainTests.add('Empty Anonymous Function')
 
 const ignoreCertainTests = true

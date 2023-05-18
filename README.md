@@ -8,9 +8,10 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 - [x] integrate test suite with `npm test` harness
 - [x] write JS module boilerplate
 - [x] start passing the test suite
-- [ ] tokens - Division Symbol followed by delimiter
-- [ ] tokens - gensym'd symbol
+- [x] tokens - Division Symbol followed by delimiter
 - [x] tokens - Special Chars
+- [ ] tokens - gensym'd symbol
+- [ ] parens - Anonymous Function
 
 ## Notes
 
