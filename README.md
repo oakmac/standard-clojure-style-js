@@ -10,7 +10,7 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 - [x] start passing the test suite
 - [ ] tokens - Division Symbol followed by delimiter
 - [ ] tokens - gensym'd symbol
-- [ ] tokens - Special Chars
+- [x] tokens - Special Chars
 
 ## Notes
 

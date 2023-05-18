@@ -589,6 +589,24 @@ false
   (token 0..2 '\a'))
 -- Expected
 
+# Special Chars
+
+-- Input
+\( \) \[ \] \{ \} \@ \"
+-- Input
+
+-- Expected
+(source 0..23
+  (token 0..2 '\(')
+  (token 3..5 '\)')
+  (token 6..8 '\[')
+  (token 9..11 '\]')
+  (token 12..14 '\{')
+  (token 15..17 '\}')
+  (token 18..20 '\@')
+  (token 21..23 '\"'))
+-- Expected
+
 # Nil
 
 -- Input

@@ -44,18 +44,13 @@ enoFilesInTestParserDir().forEach((f) => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-// certainTests.add('Keyword')
-// certainTests.add('Keyword with Prefix')
-// certainTests.add('Autoresolving Keyword')
-// certainTests.add('Autoresolving Aliased Keyword')
-// certainTests.add('Simple Regular Expression')
-// certainTests.add('Simple String')
-certainTests.add('Empty Anonymous Function')
+certainTests.add('Special Chars')
+// certainTests.add('Empty Anonymous Function')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
-// ignoreTests.add('Empty Anonymous Function')
-ignoreTests.add('Empty Anonymous Function Gap')
+ignoreTests.add('Anonymous Function')
+// ignoreTests.add('Empty Anonymous Function Gap')
 // ignoreTests.add('Simple Regular Expression')
 
 const logOutput = false
