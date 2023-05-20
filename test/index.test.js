@@ -45,7 +45,7 @@ enoFilesInTestParserDir().forEach((f) => {
 const onlyRunCertainTests = false
 const certainTests = new Set()
 // certainTests.add('Division Symbol followed by delimiter')
-certainTests.add('List with Keywords')
+certainTests.add('Map Lookup')
 
 const ignoreCertainTests = false
 const ignoreTests = new Set()
