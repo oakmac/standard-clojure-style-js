@@ -44,10 +44,10 @@ enoFilesInTestParserDir().forEach((f) => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Division Symbol followed by delimiter')
-// certainTests.add('Empty Anonymous Function')
+// certainTests.add('Division Symbol followed by delimiter')
+certainTests.add('Anonymous Function')
 
-const ignoreCertainTests = true
+const ignoreCertainTests = false
 const ignoreTests = new Set()
 ignoreTests.add('Anonymous Function')
 // ignoreTests.add('Empty Anonymous Function Gap')
