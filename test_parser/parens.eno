@@ -114,3 +114,45 @@
       (token 8..10 ':a'))
     (.close 10..11 ')')))
 -- Expected
+
+# Map Lookup Alternate
+
+-- Input
+(:b {:b 2})
+-- Input
+
+-- Expected
+(source 0..11
+  (parens 0..11
+    (.open 0..1 '(')
+    (.body 1..10
+      (token 1..3 ':b')
+      (braces 4..10
+        (.open 4..5 '{')
+        (.body 5..9
+          (token 5..7 ':b')
+          (token 8..9 '2'))
+        (.close 9..10 '}')))
+    (.close 10..11 ')')))
+-- Expected
+
+# Set Lookup
+
+-- Input
+(#{:c :e} :e)
+-- Input
+
+-- Expected
+(source 0..13
+  (parens 0..13
+    (.open 0..1 '(')
+    (.body 1..12
+      (braces 1..9
+        (.open 1..3 '#{')
+        (.body 3..8
+          (token 3..5 ':c')
+          (token 6..8 ':e'))
+        (.close 8..9 '}'))
+      (token 10..12 ':e'))
+    (.close 12..13 ')')))
+-- Expected

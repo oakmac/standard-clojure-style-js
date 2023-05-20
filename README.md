@@ -12,6 +12,8 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 - [x] tokens - Special Chars
 - [x] parens - Anonymous Function
 - [ ] tokens - gensym'd symbol
+- [ ] parens - Call with Symbol with Metadata
+- [ ] parens - Eval
 
 ## Notes
 
