@@ -1,0 +1,77 @@
+# Empty Vector
+
+-- Input
+[]
+-- Input
+
+-- Expected
+(source 0..2
+  (brackets 0..2
+    (.open 0..1 '[')
+    (.close 1..2 ']')))
+-- Expected
+
+# Empty Vector with gap
+
+-- Input
+[   ]
+-- Input
+
+-- Expected
+(source 0..5
+  (brackets 0..5
+    (.open 0..1 '[')
+    (.body 1..4)
+    (.close 4..5 ']')))
+-- Expected
+
+# Vector with Numbers
+
+-- Input
+[1 1 2 3 5 8]
+-- Input
+
+-- Expected
+(source 0..13
+  (brackets 0..13
+    (.open 0..1 '[')
+    (.body 1..12
+      (token 1..2 '1')
+      (token 3..4 '1')
+      (token 5..6 '2')
+      (token 7..8 '3')
+      (token 9..10 '5')
+      (token 11..12 '8'))
+    (.close 12..13 ']')))
+-- Expected
+
+# Vector with Different Types
+
+-- Input
+[:a 1 'fun {:x 1 :y 2} #{}]
+-- Input
+
+-- Expected
+(source 0..27
+  (brackets 0..27
+    (.open 0..1 '[')
+    (.body 1..26
+      (token 1..3 ':a')
+      (token 4..5 '1')
+      (wrap 6..10
+        (.marker 6..7 ''')
+        (.body 7..10
+          (token 7..10 'fun')))
+      (braces 11..22
+        (.open 11..12 '{')
+        (.body 12..21
+          (token 12..14 ':x')
+          (token 15..16 '1')
+          (token 17..19 ':y')
+          (token 20..21 '2'))
+        (.close 21..22 '}'))
+      (braces 23..26
+        (.open 23..25 '#{')
+        (.close 25..26 '}')))
+    (.close 26..27 ']')))
+-- Expected

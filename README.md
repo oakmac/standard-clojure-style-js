@@ -14,6 +14,7 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 - [ ] tokens - gensym'd symbol
 - [ ] parens - Call with Symbol with Metadata
 - [ ] parens - Eval
+- [ ] brackets - Vector with Different Types
 
 ## Notes
 

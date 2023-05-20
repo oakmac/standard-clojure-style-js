@@ -47,11 +47,9 @@ const certainTests = new Set()
 // certainTests.add('Division Symbol followed by delimiter')
 certainTests.add('Map Lookup')
 
-const ignoreCertainTests = false
+const ignoreCertainTests = true
 const ignoreTests = new Set()
-ignoreTests.add('Anonymous Function')
-// ignoreTests.add('Empty Anonymous Function Gap')
-// ignoreTests.add('Simple Regular Expression')
+ignoreTests.add('Vector with Different Types')
 
 const logOutput = false
 
