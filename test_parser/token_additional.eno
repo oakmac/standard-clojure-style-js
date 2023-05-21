@@ -63,3 +63,14 @@
 (source 0..9
   (token 0..9 '-0.1E+10M'))
 -- Expected
+
+# Symbol with Slash
+
+-- Input
+clj-kondo/clj-kondo
+-- Input
+
+-- Expected
+(source 0..19
+  (token 0..19 'clj-kondo/clj-kondo'))
+-- Expected

@@ -64,7 +64,7 @@ test('All test cases should have unique names', () => {
 const onlyRunCertainTests = false
 const certainTests = new Set()
 // certainTests.add('Division Symbol followed by delimiter')
-certainTests.add('Map Lookup')
+certainTests.add('Deeper Map')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
