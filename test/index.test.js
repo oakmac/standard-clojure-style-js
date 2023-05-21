@@ -42,6 +42,25 @@ enoFilesInTestParserDir().forEach((f) => {
   allTestCases = allTestCases.concat(testsInFile)
 })
 
+function compareTestCases (testCaseA, testCaseB) {
+  if (testCaseB.name > testCaseA.name) return -1
+  else if (testCaseB.name < testCaseA.name) return 1
+  else return 0
+}
+
+// sort the test cases by name
+allTestCases.sort(compareTestCases)
+
+// sanity-check that all of the test cases have unique names
+const uniqueTestCaseNames = new Set()
+allTestCases.forEach(testCase => {
+  uniqueTestCaseNames.add(testCase.name)
+})
+
+test('All test cases should have unique names', () => {
+  expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
+})
+
 const onlyRunCertainTests = false
 const certainTests = new Set()
 // certainTests.add('Division Symbol followed by delimiter')

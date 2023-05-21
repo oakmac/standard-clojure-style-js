@@ -218,7 +218,7 @@
   (token 0..12 '2r0101010001'))
 -- Expected
 
-# Negative Radix
+# Negative Radix 1
 
 -- Input
 -10r256
@@ -229,7 +229,7 @@
   (token 0..7 '-10r256'))
 -- Expected
 
-# Negative Radix
+# Negative Radix 2
 
 -- Input
 36RBREATHESL0WLY
