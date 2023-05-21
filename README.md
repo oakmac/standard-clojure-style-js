@@ -15,6 +15,7 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 - [ ] parens - Call with Symbol with Metadata
 - [ ] parens - Eval
 - [ ] brackets - Vector with Different Types
+- [ ] need to add additional cases for namespace maps (what is allowed?)
 
 ## Notes
 
