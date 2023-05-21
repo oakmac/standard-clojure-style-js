@@ -1,0 +1,34 @@
+# Simple Comment
+
+-- Input
+; a comment
+-- Input
+
+-- Expected
+(source 0..11
+  (comment 0..11 '; a comment'))
+-- Expected
+
+# Two semicolons
+
+-- Input
+;; another comment
+-- Input
+
+-- Expected
+(source 0..18
+  (comment 0..18 ';; another comment'))
+-- Expected
+
+# Multiple lines
+
+-- Input
+;; first line
+;; second line
+-- Input
+
+-- Expected
+(source 0..28
+  (comment 0..13 ';; first line')
+  (comment 14..28 ';; second line'))
+-- Expected
