@@ -63,7 +63,7 @@ test('All test cases should have unique names', () => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Discard Number')
+certainTests.add('Constructor Alternate 1')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()

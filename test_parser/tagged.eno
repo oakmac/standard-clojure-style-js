@@ -1,0 +1,86 @@
+# Tagged Literal
+
+-- Input
+#uuid "00000000-0000-0000-0000-000000000000"
+-- Input
+
+-- Expected
+(source 0..44
+  (tagged 0..44
+    (.tag 1..5
+      (token 1..5 'uuid'))
+    (.body 6..44
+      (string 6..44
+        (.open 6..7 '"')
+        (.body 7..43 '00000000-0000-0000-0000-000000000000')
+        (.close 43..44 '"')))))
+-- Expected
+
+# Constructor
+
+-- Input
+#user.Fun [1 2]
+-- Input
+
+-- Expected
+(source 0..15
+  (tagged 0..15
+    (.tag 1..9
+      (token 1..9 'user.Fun'))
+    (.body 10..15
+      (brackets 10..15
+        (.open 10..11 '[')
+        (.body 11..14
+          (token 11..12 '1')
+          (token 13..14 '2'))
+        (.close 14..15 ']')))))
+-- Expected
+
+# Constructor Alternate 1
+
+-- Input
+#user.Fun {:a 1 :b 2}
+-- Input
+
+-- Expected
+(source 0..21
+  (tagged 0..21
+    (.tag 1..9
+      (token 1..9 'user.Fun'))
+    (.body 10..21
+      (braces 10..21
+        (.open 10..11 '{')
+        (.body 11..20
+          (token 11..13 ':a')
+          (token 14..15 '1')
+          (token 16..18 ':b')
+          (token 19..20 '2'))
+        (.close 20..21 '}')))))
+-- Expected
+
+# Constructor Alternate 2
+
+-- Input
+#object["A" 2 "C"]
+-- Input
+
+-- Expected
+(source 0..18
+  (tagged 0..18
+    (.tag 1..7
+      (token 1..7 'object'))
+    (.body 7..18
+      (brackets 7..18
+        (.open 7..8 '[')
+        (.body 8..17
+          (string 8..11
+            (.open 8..9 '"')
+            (.body 9..10 'A')
+            (.close 10..11 '"'))
+          (token 12..13 '2')
+          (string 14..17
+            (.open 14..15 '"')
+            (.body 15..16 'C')
+            (.close 16..17 '"')))
+        (.close 17..18 ']')))))
+-- Expected

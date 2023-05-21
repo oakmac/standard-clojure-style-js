@@ -41,10 +41,10 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 
 ```sh
 ## run unit tests
-npm test
+bun test
 
 ## lint JS
-npm run lint
+bun run lint
 ```
 
 ## License
