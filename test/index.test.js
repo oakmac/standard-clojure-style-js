@@ -68,11 +68,15 @@ test('All test cases should have unique names', () => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Constructor Alternate 1')
+certainTests.add('Nonsense 2')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
-ignoreTests.add('Vector with Different Types')
+ignoreTests.add('Nonsense 1')
+ignoreTests.add('Nonsense 2')
+ignoreTests.add('Nonsense 3')
+ignoreTests.add('Nonsense inside form')
+ignoreTests.add('Nonsense inside form 2')
 
 const logOutput = false
 

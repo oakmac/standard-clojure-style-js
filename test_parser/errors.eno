@@ -1,0 +1,305 @@
+# Wrong Bracket
+
+-- Input
+(])
+(})
+[)]
+[}]
+{)}
+{]}
+-- Input
+
+-- Expected
+(source 0..23
+  (parens 0..3
+    (.open 0..1 '(')
+    (.body 1..2
+      (error 1..2 ']'))
+    (.close 2..3 ')'))
+  (parens 4..7
+    (.open 4..5 '(')
+    (.body 5..6
+      (error 5..6 '}'))
+    (.close 6..7 ')'))
+  (brackets 8..11
+    (.open 8..9 '[')
+    (.body 9..10
+      (error 9..10 ')'))
+    (.close 10..11 ']'))
+  (brackets 12..15
+    (.open 12..13 '[')
+    (.body 13..14
+      (error 13..14 '}'))
+    (.close 14..15 ']'))
+  (braces 16..19
+    (.open 16..17 '{')
+    (.body 17..18
+      (error 17..18 ')'))
+    (.close 18..19 '}'))
+  (braces 20..23
+    (.open 20..21 '{')
+    (.body 21..22
+      (error 21..22 ']'))
+    (.close 22..23 '}')))
+-- Expected
+
+# Wrong bracket with body
+
+-- Input
+(abc]def}xyz)
+-- Input
+
+-- Expected
+(source 0..13
+  (parens 0..13
+    (.open 0..1 '(')
+    (.body 1..12
+      (token 1..4 'abc')
+      (error 4..5 ']')
+      (token 5..8 'def')
+      (error 8..9 '}')
+      (token 9..12 'xyz'))
+    (.close 12..13 ')')))
+-- Expected
+
+# Unfinished paren
+
+-- Input
+(
+-- Input
+
+-- Expected
+(source 0..1
+  (parens 0..1
+    (.open 0..1 '(')))
+-- Expected
+
+# Unfinished bracket
+
+-- Input
+[
+-- Input
+
+-- Expected
+(source 0..1
+  (brackets 0..1
+    (.open 0..1 '[')))
+-- Expected
+
+# Unfinished brace
+
+-- Input
+{
+-- Input
+
+-- Expected
+(source 0..1
+  (braces 0..1
+    (.open 0..1 '{')))
+-- Expected
+
+# Unfinished string
+
+-- Input
+"
+-- Input
+
+-- Expected
+(source 0..1
+  (string 0..1
+    (.open 0..1 '"')))
+-- Expected
+
+# Lone escape
+
+-- Input
+\
+-- Input
+
+-- Expected
+(source 0..1
+  (token 0..1 '\'))
+-- Expected
+
+# Unfinished hash
+
+-- Input
+#
+-- Input
+
+-- Expected
+(source 0..1
+  (error 0..1 '#'))
+-- Expected
+
+# Unfinished everything
+
+-- Input
+({[# "
+-- Input
+
+-- Expected
+(source 0..6
+  (parens 0..6
+    (.open 0..1 '(')
+    (.body 1..6
+      (braces 1..6
+        (.open 1..2 '{')
+        (.body 2..6
+          (brackets 2..6
+            (.open 2..3 '[')
+            (.body 3..6
+              (error 3..4 '#')
+              (string 5..6
+                (.open 5..6 '"')))))))))
+-- Expected
+
+# Nonsense 1
+
+-- Input
+#~#+@!(# abc
+-- Input
+
+-- Expected
+(source 0..12
+  (error 0..1 '#')
+  (wrap 1..6
+    (.marker 1..2 '~')
+    (.body 2..6
+      (tagged 2..6
+        (.tag 3..4
+          (token 3..4 '+'))
+        (.body 4..6
+          (wrap 4..6
+            (.marker 4..5 '@')
+            (.body 5..6
+              (token 5..6 '!')))))))
+  (parens 6..12
+    (.open 6..7 '(')
+    (.body 7..12
+      (error 7..8 '#')
+      (token 9..12 'abc'))))
+-- Expected
+
+# Nonsense 2
+
+-- Input
+#~#+@!)# abc
+-- Input
+
+-- Expected
+(source 0..12
+  (error 0..1 '#')
+  (wrap 1..6
+    (.marker 1..2 '~')
+    (.body 2..6
+      (tagged 2..6
+        (.tag 3..4
+          (token 3..4 '+'))
+        (.body 4..6
+          (wrap 4..6
+            (.marker 4..5 '@')
+            (.body 5..6
+              (token 5..6 '!')))))))
+  (error 6..7 ')')
+  (error 7..8 '#')
+  (token 9..12 'abc'))
+-- Expected
+
+# Nonsense 3
+
+-- Input
+#~#+@!# abc
+-- Input
+
+-- Expected
+(source 0..11
+  (error 0..1 '#')
+  (wrap 1..7
+    (.marker 1..2 '~')
+    (.body 2..7
+      (tagged 2..7
+        (.tag 3..4
+          (token 3..4 '+'))
+        (.body 4..7
+          (wrap 4..7
+            (.marker 4..5 '@')
+            (.body 5..7
+              (token 5..7 '!#')))))))
+  (token 8..11 'abc'))
+-- Expected
+
+# Nonsense inside form
+
+-- Input
+(let [x #~#+@!)#]
+   x)
+-- Input
+
+-- Expected
+(source 0..23
+  (parens 0..23
+    (.open 0..1 '(')
+    (.body 1..22
+      (token 1..4 'let')
+      (brackets 5..17
+        (.open 5..6 '[')
+        (.body 6..16
+          (token 6..7 'x')
+          (error 8..9 '#')
+          (wrap 9..14
+            (.marker 9..10 '~')
+            (.body 10..14
+              (tagged 10..14
+                (.tag 11..12
+                  (token 11..12 '+'))
+                (.body 12..14
+                  (wrap 12..14
+                    (.marker 12..13 '@')
+                    (.body 13..14
+                      (token 13..14 '!')))))))
+          (error 14..15 ')')
+          (error 15..16 '#'))
+        (.close 16..17 ']'))
+      (token 21..22 'x'))
+    (.close 22..23 ')')))
+-- Expected
+
+# Nonsense inside form 2
+
+-- Input
+(let [x #~#+@!(#]
+   x)
+-- Input
+
+-- Expected
+(source 0..23
+  (parens 0..23
+    (.open 0..1 '(')
+    (.body 1..23
+      (token 1..4 'let')
+      (brackets 5..23
+        (.open 5..6 '[')
+        (.body 6..23
+          (token 6..7 'x')
+          (error 8..9 '#')
+          (wrap 9..14
+            (.marker 9..10 '~')
+            (.body 10..14
+              (tagged 10..14
+                (.tag 11..12
+                  (token 11..12 '+'))
+                (.body 12..14
+                  (wrap 12..14
+                    (.marker 12..13 '@')
+                    (.body 13..14
+                      (token 13..14 '!')))))))
+          (parens 14..23
+            (.open 14..15 '(')
+            (.body 15..22
+              (error 15..16 '#')
+              (error 16..17 ']')
+              (token 21..22 'x'))
+            (.close 22..23 ')')))))))
+
+-- Expected
