@@ -68,13 +68,12 @@ test('All test cases should have unique names', () => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
+certainTests.add('True')
 // certainTests.add('String with emoji')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
 ignoreTests.add('String with emoji')
-
-const logOutput = false
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
@@ -85,7 +84,7 @@ allTestCases.forEach(testCase => {
     test(testCase.filename + ': ' + testCase.name, () => {
       const ast = clojurefmtLib.parseAst(testCase.input)
       const treeStr = clojurefmtLib.astToString(ast)
-      if (logOutput) {
+      if (onlyRunCertainTests) {
         console.log(treeStr)
         console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttt')
       }

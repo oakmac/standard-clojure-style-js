@@ -4,8 +4,6 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 
 ## TODO
 
-- [ ] tokens - gensym'd symbol
-- [ ] parens - Call with Symbol with Metadata
 - [ ] need to add additional cases for namespace maps (what is allowed?)
 - [ ] PR upstream to Clojure-Sublimed the option map for Repeat (can remove Repeat1)
 - [ ] chat with Nikita about what he wants to do about emoji length inside of Strings
