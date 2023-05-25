@@ -82,8 +82,8 @@ allTestCases.forEach(testCase => {
 
   if (runThisTest) {
     test(testCase.filename + ': ' + testCase.name, () => {
-      const ast = clojurefmtLib.parseAst(testCase.input)
-      const treeStr = clojurefmtLib.astToString(ast)
+      const tree = clojurefmtLib.parse(testCase.input)
+      const treeStr = clojurefmtLib.astToString(tree)
       if (onlyRunCertainTests) {
         console.log(treeStr)
         console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttt')

@@ -13,7 +13,7 @@
     "url": "https://github.com/oakmac/clojurefmt-js/issues"
   },
   "scripts": {
-    "lint": "standard --fix lib/ test/",
+    "lint": "standard --fix lib/ scripts/ test/",
     "test": "jest"
   },
   "devDependencies": {
