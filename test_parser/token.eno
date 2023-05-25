@@ -218,7 +218,7 @@
   (token 0..12 '2r0101010001'))
 -- Expected
 
-# Negative Radix 1
+# Negative Radix
 
 -- Input
 -10r256
@@ -229,7 +229,7 @@
   (token 0..7 '-10r256'))
 -- Expected
 
-# Negative Radix 2
+# Shouting Radix
 
 -- Input
 36RBREATHESL0WLY
@@ -541,6 +541,35 @@ clojure.core//
     (.close 8..9 ')')))
 -- Expected
 
+# gensym'd symbol
+
+-- Input
+`(let [x# ~x]
+   x#)
+-- Input
+
+-- Expected
+(source 0..20
+  (wrap 0..20
+    (.marker 0..1 '`')
+    (.body 1..20
+      (parens 1..20
+        (.open 1..2 '(')
+        (.body 2..19
+          (token 2..5 'let')
+          (brackets 6..13
+            (.open 6..7 '[')
+            (.body 7..12
+              (token 7..9 'x#')
+              (wrap 10..12
+                (.marker 10..11 '~')
+                (.body 11..12
+                  (token 11..12 'x'))))
+            (.close 12..13 ']'))
+          (token 17..19 'x#'))
+        (.close 19..20 ')')))))
+-- Expected
+
 # Inf
 
 -- Input
@@ -623,6 +652,39 @@ false
   (token 15..17 '\}')
   (token 18..20 '\@')
   (token 21..23 '\"'))
+-- Expected
+
+# Octal Char
+
+-- Input
+\o377
+-- Input
+
+-- Expected
+(source 0..5
+  (token 0..5 '\o377'))
+-- Expected
+
+# Named Char
+
+-- Input
+\backspace
+-- Input
+
+-- Expected
+(source 0..10
+  (token 0..10 '\backspace'))
+-- Expected
+
+# Unicode Char
+
+-- Input
+\u611B
+-- Input
+
+-- Expected
+(source 0..6
+  (token 0..6 '\u611B'))
 -- Expected
 
 # Nil

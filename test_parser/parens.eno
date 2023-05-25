@@ -156,3 +156,41 @@
       (token 10..12 ':e'))
     (.close 12..13 ')')))
 -- Expected
+
+# Call with Symbol with Metadata
+
+-- Input
+(.get ^ByteBuffer b)
+-- Input
+
+-- Expected
+(source 0..20
+  (parens 0..20
+    (.open 0..1 '(')
+    (.body 1..19
+      (token 1..5 '.get')
+      (meta 6..19
+        (.marker 6..7 '^')
+        (.meta 7..17
+          (token 7..17 'ByteBuffer'))
+        (.body 18..19
+          (token 18..19 'b'))))
+    (.close 19..20 ')')))
+-- Expected
+
+# Eval
+
+-- Input
+#=(+ 1 1)
+-- Input
+
+-- Expected
+(source 0..9
+  (parens 0..9
+    (.open 0..3 '#=(')
+    (.body 3..8
+      (token 3..4 '+')
+      (token 5..6 '1')
+      (token 7..8 '1'))
+    (.close 8..9 ')')))
+-- Expected

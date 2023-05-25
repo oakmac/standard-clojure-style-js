@@ -72,6 +72,13 @@ certainTests.add('Nonsense 2')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
+ignoreTests.add("gensym'd symbol")
+ignoreTests.add('Named Char')
+ignoreTests.add('Octal Char')
+ignoreTests.add('Unicode Char')
+
+ignoreTests.add('Call with Symbol with Metadata')
+
 ignoreTests.add('Nonsense 1')
 ignoreTests.add('Nonsense 2')
 ignoreTests.add('Nonsense 3')
