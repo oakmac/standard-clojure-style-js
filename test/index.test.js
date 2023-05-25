@@ -28,6 +28,7 @@ const parseTestFile = (txt) => {
   const tests = []
   sections.forEach((s) => {
     tests.push({
+      filename: s.filename,
       name: s._instruction.key,
       input: s.field('Input').requiredStringValue(),
       expected: s.field('Expected').requiredStringValue()
@@ -39,7 +40,11 @@ const parseTestFile = (txt) => {
 enoFilesInTestParserDir().forEach((f) => {
   const testFileContents = fs.readFileSync(path.join(rootDir, 'test_parser', f), 'utf8')
   const testsInFile = parseTestFile(testFileContents)
-  allTestCases = allTestCases.concat(testsInFile)
+  const testsWithFilename = testsInFile.map(t => {
+    t.filename = f
+    return t
+  })
+  allTestCases = allTestCases.concat(testsWithFilename)
 })
 
 function compareTestCases (testCaseA, testCaseB) {
@@ -77,7 +82,7 @@ allTestCases.forEach(testCase => {
   if (ignoreCertainTests && ignoreTests.has(testCase.name)) runThisTest = false
 
   if (runThisTest) {
-    test(testCase.name, () => {
+    test(testCase.filename + ': ' + testCase.name, () => {
       const ast = clojurefmtLib.parseAst(testCase.input)
       const treeStr = clojurefmtLib.astToString(ast)
       if (logOutput) {
