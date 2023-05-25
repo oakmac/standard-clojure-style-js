@@ -68,7 +68,8 @@ test('All test cases should have unique names', () => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Nonsense 2')
+// certainTests.add('Nonsense 2')
+certainTests.add('String with emoji')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
@@ -84,6 +85,8 @@ ignoreTests.add('Nonsense 2')
 ignoreTests.add('Nonsense 3')
 ignoreTests.add('Nonsense inside form')
 ignoreTests.add('Nonsense inside form 2')
+
+ignoreTests.add('String with emoji')
 
 const logOutput = false
 

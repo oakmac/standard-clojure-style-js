@@ -74,3 +74,17 @@ clj-kondo/clj-kondo
 (source 0..19
   (token 0..19 'clj-kondo/clj-kondo'))
 -- Expected
+
+# String with emoji
+
+-- Input
+"👁️ ❤️ 🤓"
+-- Input
+
+-- Expected
+(source 0..9
+  (string 0..9
+    (.open 0..1 '"')
+    (.body 1..8 '👁️ ❤️ 🤓')
+    (.close 8..9 '"')))
+-- Expected
