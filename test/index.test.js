@@ -69,14 +69,11 @@ test('All test cases should have unique names', () => {
 const onlyRunCertainTests = false
 const certainTests = new Set()
 // certainTests.add('Nonsense 2')
-certainTests.add('String with emoji')
+// certainTests.add('String with emoji')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
 ignoreTests.add("gensym'd symbol")
-ignoreTests.add('Named Char')
-ignoreTests.add('Octal Char')
-ignoreTests.add('Unicode Char')
 
 ignoreTests.add('Call with Symbol with Metadata')
 
