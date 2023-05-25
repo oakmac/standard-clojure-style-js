@@ -73,8 +73,6 @@ const certainTests = new Set()
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
-ignoreTests.add("gensym'd symbol")
-
 ignoreTests.add('Call with Symbol with Metadata')
 
 ignoreTests.add('Nonsense 1')
