@@ -37,6 +37,24 @@
   (bbb))
 --Expected
 
+# Close Wrapping Parens 2
+
+--Input
+(def aaa
+(bbb
+   {:a "a"
+}ccc
+)
+  )
+--Input
+
+--Expected
+(def aaa
+  (bbb
+    {:a "a"}
+    ccc))
+--Expected
+
 # Do not cross the next indentation level
 
 --Input
