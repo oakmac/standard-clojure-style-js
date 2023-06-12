@@ -68,7 +68,8 @@ test('All test_printer/ cases should have unique names', () => {
 
 const onlyRunCertainTests = true
 const certainTests = new Set()
-// certainTests.add('Multiple Indentation Levels')
+certainTests.add('Simple Indentation')
+certainTests.add('Multiple Indentation Levels')
 certainTests.add('Close Wrapping Parens')
 
 const ignoreCertainTests = true
