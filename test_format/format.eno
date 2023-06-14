@@ -73,6 +73,30 @@
    (str a "-" b)))
 --Expected
 
+# jcd test case 1
+
+--Input
+{:this-is-a-key "fantastic"
+ :short         "sad"}
+--Input
+
+--Expected
+{:this-is-a-key "fantastic"
+ :short         "sad"}
+--Expected
+
+# jcd test case 2
+
+--Input
+[1001    "FIFTY"    :column
+ 1002    "SEVENTY"  :row]
+--Input
+
+--Expected
+[1001    "FIFTY"    :column
+ 1002    "SEVENTY"  :row]
+--Expected
+
 # Preserve commas
 
 --Input

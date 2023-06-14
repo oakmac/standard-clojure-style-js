@@ -72,6 +72,8 @@ const certainTests = new Set()
 // certainTests.add('Multiple Indentation Levels')
 // certainTests.add('Close Wrapping Parens')
 // certainTests.add('Close Wrapping Parens 2')
+// certainTests.add('jcd test case 1')
+// certainTests.add('jcd test case 2')
 certainTests.add('Do not cross previous line last opener')
 
 const ignoreCertainTests = false
