@@ -55,7 +55,7 @@
     ccc))
 --Expected
 
-# Do not cross the next indentation level
+# Do not cross previous line last opener
 
 --Input
 (defn foo

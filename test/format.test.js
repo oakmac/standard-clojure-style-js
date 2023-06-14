@@ -72,7 +72,7 @@ const certainTests = new Set()
 // certainTests.add('Multiple Indentation Levels')
 // certainTests.add('Close Wrapping Parens')
 // certainTests.add('Close Wrapping Parens 2')
-certainTests.add('Do not cross the next indentation level')
+certainTests.add('Do not cross previous line last opener')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
