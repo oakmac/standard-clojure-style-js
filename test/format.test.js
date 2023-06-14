@@ -12,9 +12,9 @@ const isEnoFile = (f) => {
   return path.extname(f) === '.eno'
 }
 
-// returns an Array of all the .eno files in the test_printer/ folder
-const enoFilesInTestPrinterDir = () => {
-  const allFiles = fs.readdirSync(path.join(rootDir, 'test_printer/'))
+// returns an Array of all the .eno files in the test_format/ folder
+const enoFilesInTestFormatDir = () => {
+  const allFiles = fs.readdirSync(path.join(rootDir, 'test_format/'))
   return allFiles.filter(isEnoFile)
 }
 
@@ -37,8 +37,8 @@ const parseTestFile = (txt) => {
   return tests
 }
 
-enoFilesInTestPrinterDir().forEach((f) => {
-  const testFileContents = fs.readFileSync(path.join(rootDir, 'test_printer', f), 'utf8')
+enoFilesInTestFormatDir().forEach((f) => {
+  const testFileContents = fs.readFileSync(path.join(rootDir, 'test_format', f), 'utf8')
   const testsInFile = parseTestFile(testFileContents)
   const testsWithFilename = testsInFile.map(t => {
     t.filename = f
@@ -62,7 +62,7 @@ allTestCases.forEach(testCase => {
   uniqueTestCaseNames.add(testCase.name)
 })
 
-test('All test_printer/ cases should have unique names', () => {
+test('All test_format/ cases should have unique names', () => {
   expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
 })
 
@@ -74,9 +74,9 @@ const certainTests = new Set()
 // certainTests.add('Close Wrapping Parens 2')
 certainTests.add('Do not cross previous line last opener')
 
-const ignoreCertainTests = true
+const ignoreCertainTests = false
 const ignoreTests = new Set()
-ignoreTests.add('String with emoji')
+// ignoreTests.add('String with emoji')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
