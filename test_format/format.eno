@@ -98,6 +98,18 @@
   1002    "SEVENTY"  :row]]
 --Expected
 
+# set alignment
+
+--Input
+#{"a"
+"b" "c"}
+--Input
+
+--Expected
+#{"a"
+  "b" "c"}
+--Expected
+
 # Preserve commas
 
 --Input

@@ -66,15 +66,15 @@ test('All test_format/ cases should have unique names', () => {
   expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
 })
 
-const onlyRunCertainTests = true
+const onlyRunCertainTests = false
 const certainTests = new Set()
 // certainTests.add('Simple Indentation')
 // certainTests.add('Multiple Indentation Levels')
 // certainTests.add('Close Wrapping Parens')
 // certainTests.add('Close Wrapping Parens 2')
-certainTests.add('jcd test case 1')
-certainTests.add('jcd test case 2')
-// certainTests.add('Do not cross previous line last opener')
+// certainTests.add('jcd test case 1')
+// certainTests.add('set alignment')
+certainTests.add('Do not cross previous line last opener')
 
 const ignoreCertainTests = false
 const ignoreTests = new Set()
