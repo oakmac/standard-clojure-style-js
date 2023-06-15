@@ -88,13 +88,14 @@
 # jcd test case 2
 
 --Input
-[1001    "FIFTY"    :column
+[[1001    "FIFTY"    :column
  1002    "SEVENTY"  :row]
+ ]
 --Input
 
 --Expected
-[1001    "FIFTY"    :column
- 1002    "SEVENTY"  :row]
+[[1001    "FIFTY"    :column
+  1002    "SEVENTY"  :row]]
 --Expected
 
 # Preserve commas
