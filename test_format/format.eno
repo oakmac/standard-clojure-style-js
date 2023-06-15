@@ -1,0 +1,131 @@
+# Simple Indentation
+
+--Input
+(def aaa
+(bbb))
+--Input
+
+--Expected
+(def aaa
+  (bbb))
+--Expected
+
+# Multiple Indentation Levels
+
+--Input
+(def (aaa)
+      (bbb
+(ccc)))
+--Input
+
+--Expected
+(def (aaa)
+  (bbb
+    (ccc)))
+--Expected
+
+# Close Wrapping Parens
+
+--Input
+(def aaa
+(bbb)
+)
+--Input
+
+--Expected
+(def aaa
+  (bbb))
+--Expected
+
+# Close Wrapping Parens 2
+
+--Input
+(def aaa
+(bbb
+   {:a "a"
+}ccc
+)
+  )
+--Input
+
+--Expected
+(def aaa
+  (bbb
+    {:a "a"}
+    ccc))
+--Expected
+
+# Do not cross previous line last opener
+
+--Input
+(defn foo
+  ([a]
+    (foo a ""))
+  ([a b]
+    (str a "-" b)))
+--Input
+
+--Expected
+(defn foo
+  ([a]
+   (foo a ""))
+  ([a b]
+   (str a "-" b)))
+--Expected
+
+# jcd test case 1
+
+--Input
+{:this-is-a-key "fantastic"
+ :short         "sad"}
+--Input
+
+--Expected
+{:this-is-a-key "fantastic"
+ :short         "sad"}
+--Expected
+
+# jcd test case 2
+
+--Input
+[[1001    "FIFTY"    :column
+ 1002    "SEVENTY"  :row]
+ ]
+--Input
+
+--Expected
+[[1001    "FIFTY"    :column
+  1002    "SEVENTY"  :row]]
+--Expected
+
+# set alignment
+
+--Input
+#{"a"
+"b" "c"}
+--Input
+
+--Expected
+#{"a"
+  "b" "c"}
+--Expected
+
+# Preserve commas
+
+--Input
+{:a "a", :b "b"}
+--Input
+
+--Expected
+{:a "a", :b "b"}
+--Expected
+
+# TODO: Trim trailing whitespace
+
+--Input
+(def aaa)
+--Input
+
+--Expected
+(def aaa)
+--Expected

@@ -62,7 +62,7 @@ allTestCases.forEach(testCase => {
   uniqueTestCaseNames.add(testCase.name)
 })
 
-test('All test cases should have unique names', () => {
+test('All test_parser/ cases should have unique names', () => {
   expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
 })
 
