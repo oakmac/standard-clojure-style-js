@@ -129,3 +129,35 @@
 --Expected
 (def aaa)
 --Expected
+
+# Surrounding whitespace removed
+
+--Input
+( foo bar )
+[ 1 2 3 ]
+{  :x 1, :y 2 }
+--Input
+
+--Expected
+(foo bar)
+[1 2 3]
+{:x 1, :y 2}
+--Expected
+
+# Inner indentation
+
+--Input
+(letfn [(foo [x]
+(* x x))
+(bar [x]
+(+ x x))]
+(foo 5))
+--Input
+
+--Expected
+(letfn [(foo [x]
+          (* x x))
+        (bar [x]
+          (+ x x))]
+  (foo 5))
+--Expected

@@ -74,11 +74,11 @@ const certainTests = new Set()
 // certainTests.add('Close Wrapping Parens 2')
 // certainTests.add('jcd test case 1')
 // certainTests.add('set alignment')
-certainTests.add('Do not cross previous line last opener')
+certainTests.add('Inner indentation')
 
-const ignoreCertainTests = false
+const ignoreCertainTests = true
 const ignoreTests = new Set()
-// ignoreTests.add('String with emoji')
+certainTests.add('Inner indentation')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
