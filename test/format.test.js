@@ -78,7 +78,7 @@ certainTests.add('Inner indentation')
 
 const ignoreCertainTests = true
 const ignoreTests = new Set()
-certainTests.add('Inner indentation')
+// certainTests.add('Inner indentation')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
