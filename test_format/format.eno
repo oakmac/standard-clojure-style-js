@@ -186,6 +186,20 @@
     :cljs bar)
 --Expected
 
+# Add missing whitespace
+
+--Input
+(foo(bar baz)qux)
+(foo)bar(baz)
+(foo[bar]#{baz}{quz bang})
+--Input
+
+--Expected
+(foo (bar baz) qux)
+(foo) bar (baz)
+(foo [bar] #{baz} {quz bang})
+--Expected
+
 # Reader conditional whitespace
 
 --Input
