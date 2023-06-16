@@ -161,3 +161,41 @@
           (+ x x))]
   (foo 5))
 --Expected
+
+# Reader conditional standard syntax
+
+--Input
+#?(:clj foo
+:cljs bar)
+--Input
+
+--Expected
+#?(:clj foo
+   :cljs bar)
+--Expected
+
+# Reader conditional splicing syntax
+
+--Input
+#?@(:clj foo
+:cljs bar)
+--Input
+
+--Expected
+#?@(:clj foo
+    :cljs bar)
+--Expected
+
+# Reader conditional whitespace
+
+--Input
+#?(:cljs(bar 1) :clj(foo 2))
+:break!
+#?@(:cljs[foo bar] :clj[baz quux])
+--Input
+
+--Expected
+#?(:cljs (bar 1) :clj (foo 2))
+:break!
+#?@(:cljs [foo bar] :clj [baz quux])
+--Expected
