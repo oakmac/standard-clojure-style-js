@@ -1,32 +1,53 @@
 # clojurefmt-js
 
-Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
+A library to format Clojure code written in ~1000 lines of JavaScript.
 
 ## TODO
 
 - [ ] need to add additional cases for namespace maps (what is allowed?)
 - [ ] PR upstream to Clojure-Sublimed the option map for Repeat (can remove Repeat1)
 - [ ] chat with Nikita about what he wants to do about emoji length inside of Strings
-- [ ] get the printer test suite working in JS
+- [ ] add a test case for every rule
 
-## Notes
+## Formatting Rules
 
-- write the parser first, then the formatter
-- follows Simple Clojure Formatting Rules
-- alphabetically sorts namespaces
-- trims strings of trailing whitespace
-- "Remove leading and trailing newlines. Also remove some extra consecutive newlines." from [janet fmt]
-- converts all tabs to spaces
-- inserts newline at the bottom of the file
-- what to do about width?
-- should apply parinfer-style closing parens at the end of forms?
-  - I think "yes"
-  - ie: "fold"
-- should allow to skip the next form via a comment
-  - we definitely need this
-  - only allow this for top-level forms?
+- trim trailing whitespace (ie: `rtrim` every line)
+- ensure a single newline character (`\n`) at the end of the file
+- convert all tab characters to spaces (except tab characters inside of Strings)
+- [cljfmt option] `:remove-surrounding-whitespace?` = true
+- [cljfmt option] `:remove-trailing-whitespace?` = true
+- [cljfmt option] `:insert-missing-whitespace?` = true
+- [cljfmt option] `:remove-consecutive-blank-lines?` = true
+- format and sort `ns` forms according to Stuart Sierra's [how to ns]
+- indentation follows the guide from Niki Tonsky's [Better clojure formatting]
+- comments that contain the String `clojurefmt:ignore` cause the next form to be ignored by the formatter
 
-[janet fmt]:https://raw.githubusercontent.com/janet-lang/spork/master/spork/fmt.janet
+[how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
+[cljfmt option]:https://github.com/weavejester/cljfmt#formatting-options
+[Better clojure formatting]:https://tonsky.me/blog/clojurefmt/
+
+## Things that clojurefmt-js does NOT do
+
+- no config options
+  - all projects using clojurefmt-js follow the same rules
+- From cljfmt:
+  > "It is not the goal of the project to provide a one-to-one mapping between a Clojure syntax tree and formatted text; rather the intent is to correct formatting errors with minimal changes to the existing structure of the text.
+  > If you want format completely unstructured Clojure code, the [zprint project](https://github.com/kkinnear/zprint) may be more suitable.
+- no enforced max line length
+  - text editors have the ability to wrap lines if you desire
+- vertical alignment of `let` forms and map literals are allowed
+  - the choice is up to the author
+  - [cljfmt option] `:remove-multiple-non-indenting-spaces?` = false
+  - I have seen too many code examples where vertical alignment adds clarity
+- no configuration or special rules for indentation
+  - the rules from [Better clojure formatting] are simple, easy to learn, and produce consistent-looking code
+  - 100% compatible with [Parinfer] users
+  - avoids the complexity of the [cljfmt `:indents` option]
+  - avoids the complexity of different rules for different forms (ie: no [semantic indentation])
+
+[Parinfer]:https://shaunlebron.github.io/parinfer/
+[cljfmt `:indents` option]:https://github.com/weavejester/cljfmt/blob/master/docs/INDENTS.md
+[semantic indentation]:https://guide.clojure.style/#body-indentation
 
 ## References
 
@@ -41,6 +62,9 @@ Tonsky's [clojurefmt](https://tonsky.me/blog/clojurefmt/) written in JavaScript.
 ```sh
 ## run unit tests
 bun test
+
+## test a single file
+bun run jest format.test.js
 
 ## lint JS
 bun run lint
