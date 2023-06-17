@@ -68,7 +68,6 @@ test('All test_parser/ cases should have unique names', () => {
 
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('True')
 // certainTests.add('String with emoji')
 
 const ignoreCertainTests = true
@@ -83,12 +82,89 @@ allTestCases.forEach(testCase => {
   if (runThisTest) {
     test(testCase.filename + ': ' + testCase.name, () => {
       const tree = clojurefmtLib.parse(testCase.input)
-      const treeStr = clojurefmtLib.astToString(tree)
+      const treeStr = nodeToString(tree, 0)
       if (onlyRunCertainTests) {
         console.log(treeStr)
-        console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttt')
+        console.log('--------------- tree ---------------')
       }
       expect(treeStr).toBe(testCase.expected)
     })
   }
 })
+
+// -----------------------------------------------------------------------------
+// Print the node AST
+
+function isString (s) {
+  return typeof s === 'string'
+}
+
+function isInteger (x) {
+  return typeof x === 'number' &&
+         isFinite(x) &&
+         Math.floor(x) === x
+}
+
+function isPositiveInt (i) {
+  return isInteger(i) && i >= 0
+}
+
+// returns the length of an Array
+function arraySize (a) {
+  return a.length
+}
+
+function repeatString (text, n) {
+  let result = ''
+  let i = 0
+  while (i < n) {
+    result = result + text
+    i = i + 1
+  }
+  return result
+}
+
+// replaces all instances of findStr with replaceStr inside of String s
+function strReplaceAll (s, findStr, replaceStr) {
+  return s.replaceAll(findStr, replaceStr)
+}
+
+const numSpacesPerIndentLevel = 2
+
+function isWhitespaceNode (n) {
+  return n && isString(n.name) && (n.name === 'whitespace' || n.name === 'whitespace:newline')
+}
+
+// returns a String representation of an AST Node Object
+function nodeToString (node, indentLevel) {
+  // skip printing whitespace nodes for the parser test suite
+  if (isWhitespaceNode(node)) {
+    return ''
+  } else {
+    if (!isPositiveInt(indentLevel)) indentLevel = 0
+    const indentationSpaces = repeatString(' ', indentLevel * numSpacesPerIndentLevel)
+
+    let outTxt = ''
+    if (node.name !== 'source') outTxt = '\n'
+
+    outTxt = outTxt + indentationSpaces + '(' + node.name + ' ' + node.start + '..' + node.end
+
+    if (node.text && node.text !== '') {
+      const textWithNewlinesEscaped = strReplaceAll(node.text, '\n', '\\n')
+      outTxt = outTxt + " '" + textWithNewlinesEscaped + "'"
+    }
+
+    if (node.children) {
+      let i = 0
+      const numChildren = arraySize(node.children)
+      while (i < numChildren) {
+        const childNode = node.children[i]
+        outTxt = outTxt + nodeToString(childNode, indentLevel + 1)
+        i = i + 1
+      }
+    }
+
+    outTxt = outTxt + ')'
+    return outTxt
+  }
+}
