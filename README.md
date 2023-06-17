@@ -2,12 +2,11 @@
 
 A library to format Clojure code written in ~1000 lines of JavaScript.
 
-## TODO
+## Project Background and Rationale
 
-- [ ] need to add additional cases for namespace maps (what is allowed?)
-- [ ] PR upstream to Clojure-Sublimed the option map for Repeat (can remove Repeat1)
-- [ ] chat with Nikita about what he wants to do about emoji length inside of Strings
-- [ ] add a test case for every rule
+Please see [Issue #1] for an explanation of this project's genesis.
+
+[Issue #1]:https://github.com/oakmac/clojurefmt-js/issues/1
 
 ## Formatting Rules
 
@@ -69,6 +68,13 @@ bun run jest format.test.js
 ## lint JS
 bun run lint
 ```
+
+## TODO
+
+- [ ] need to add additional cases for namespace maps (what is allowed?)
+- [ ] PR upstream to Clojure-Sublimed the option map for Repeat (can remove Repeat1)
+- [ ] chat with Nikita about what he wants to do about emoji length inside of Strings
+- [ ] add a test case for every rule
 
 ## License
 
