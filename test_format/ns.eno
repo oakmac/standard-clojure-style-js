@@ -1,0 +1,35 @@
+# alphabetically sort ns requires
+
+--Input
+(ns foo
+  (:require b c a))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a]
+   [b]
+   [c]))
+--Expected
+
+# sort main clauses: refer-clojure, require, import
+
+--Input
+(ns foo
+  (:require b c a)
+  (:import (java.util Date))
+  (:refer-clojure :exclude [get])
+  )
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [get])
+  (:require
+   [a]
+   [b]
+   [c])
+  (:import
+   (java.util Date)))
+--Expected

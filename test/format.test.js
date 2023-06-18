@@ -56,7 +56,6 @@ function compareTestCases (testCaseA, testCaseB) {
 // sort the test cases by name
 allTestCases.sort(compareTestCases)
 
-// sanity-check that all of the test cases have unique names
 const uniqueTestCaseNames = new Set()
 allTestCases.forEach(testCase => {
   uniqueTestCaseNames.add(testCase.name)
@@ -70,7 +69,8 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Rule 3 Indentation 1')
+certainTests.add('Rule 3 Indentation')
+certainTests.add('alphabetically sort ns requires')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
