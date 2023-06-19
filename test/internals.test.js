@@ -5,6 +5,22 @@
 
 const clojurefmtLib = require('../lib/clojurefmt.js')
 
+if (isFn(clojurefmtLib._arrayInsert)) {
+  test('Array util: arrayInsert', () => {
+    const arr1 = []
+    clojurefmtLib._arrayInsert(arr1, 0, ['a', 'b'])
+    expect(arr1).toEqual(['a', 'b'])
+
+    const arr2 = ['c', 'd']
+    clojurefmtLib._arrayInsert(arr2, 0, ['a', 'b'])
+    expect(arr2).toEqual(['a', 'b', 'c', 'd'])
+
+    const arr3 = ['a', 'b', 'c', 'f']
+    clojurefmtLib._arrayInsert(arr3, 3, ['d', 'e'])
+    expect(arr3).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
+  })
+}
+
 if (isFn(clojurefmtLib._charAt)) {
   test('String util: charAt', () => {
     expect(clojurefmtLib._charAt('abc', 0)).toBe('a')

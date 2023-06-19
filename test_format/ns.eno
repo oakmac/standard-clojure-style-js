@@ -2,7 +2,8 @@
 
 --Input
 (ns foo
-  (:require b c a))
+  (:require b [c])
+  (:require a))
 --Input
 
 --Expected
