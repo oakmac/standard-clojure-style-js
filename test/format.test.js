@@ -92,5 +92,19 @@ allTestCases.forEach(testCase => {
       expect(result.status).toBe('success')
       expect(result.out).toBe(testCase.expected)
     })
+
+    // add one-off tests for trailing whitespace
+    // NOTE: my editor keeps trimming trailing whitespace on the format.eno file, so
+    // this test case catches when that happens
+    if (testCase.name === 'Trim trailing whitespace 1') {
+      test('Trim trailing whitespace test case should not be trimmed', () => {
+        expect(testCase.input.endsWith(')   ')).toBe(true)
+      })
+    }
+    if (testCase.name === 'Trim trailing whitespace 2') {
+      test('Trim trailing whitespace test case should not be trimmed', () => {
+        expect(testCase.input.includes('"aaa"   \n)(def')).toBe(true)
+      })
+    }
   }
 })
