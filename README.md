@@ -2,6 +2,12 @@
 
 A library to format Clojure code written in ~1000 lines of JavaScript.
 
+## Project Status (March 2024)
+
+This project is under active development and I do not recommend using it for
+your codebase at this time unless you are very adventurous. I will publish a
+release to npm when the project is stable enough for Alpha usage.
+
 ## Project Background and Rationale
 
 Please see [Issue #1] for an explanation of this project's genesis.
