@@ -62,6 +62,29 @@ Please see [Issue #1] for an explanation of this project's genesis.
 - https://github.com/parinfer/parindent
 - [emoji length article](https://hsivonen.fi/string-length/)
 
+## Coding Style
+
+The coding style for this library is intentionally very simple in order to make
+porting the algorithm to multiple languages easier. This is informed by my
+experience porting [parinfer.js] to multiple languages ([parinfer-lua], [parinfer.py],
+and others).
+
+Here are some rules to follow:
+
+* each line should be one simple statement
+* do not use ternary operators
+* do not use variadic functions
+* no `for` loops, only use `while`
+* do not use `++` or `--` operators (wrap with function calls)
+* wrap all String and Array methods with function calls
+* do not early return from functions
+
+Note: this should not be considered a definitive list. I will add to this as I come across additional cases.
+
+[parinfer.js]:https://github.com/parinfer/parinfer.js
+[parinfer.py]:https://github.com/oakmac/parinfer.py
+[parinfer-lua]:https://github.com/oakmac/parinfer-lua
+
 ## Development
 
 ```sh
