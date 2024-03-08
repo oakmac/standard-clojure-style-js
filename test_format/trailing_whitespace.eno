@@ -1,0 +1,23 @@
+# Trim trailing whitespace 1
+> NOTE: there is a test case that checks whether this test case input has trailing whitespace
+
+--Input
+(def aaa "aaa")   
+--Input
+
+--Expected
+(def aaa "aaa")
+--Expected
+
+# Trim trailing whitespace 2
+> NOTE: there is a test case that checks whether this test case input has trailing whitespace
+
+--Input
+(def aaa "aaa"   
+)(def bbb "bbb")
+--Input
+
+--Expected
+(def aaa "aaa")
+(def bbb "bbb")
+--Expected
