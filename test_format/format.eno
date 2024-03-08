@@ -204,6 +204,48 @@
 #?@(:cljs [foo bar] :clj [baz quux])
 --Expected
 
+# Remove consecutive blank lines 1
+
+--Input
+(foo)
+
+
+(bar)
+--Input
+
+--Expected
+(foo)
+
+(bar)
+--Expected
+
+# Remove consecutive blank lines 2
+
+--Input
+(foo)
+
+(bar
+
+
+  biz)
+
+
+
+(qux
+  baz)
+--Input
+
+--Expected
+(foo)
+
+(bar
+
+  biz)
+
+(qux
+  baz)
+--Expected
+
 # Rule 3 Indentation
 
 --Input
