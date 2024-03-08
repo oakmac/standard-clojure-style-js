@@ -203,3 +203,33 @@
 :break!
 #?@(:cljs [foo bar] :clj [baz quux])
 --Expected
+
+# Rule 3 Indentation
+
+--Input
+;; https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
+
+;; rule 3 triggered
+(foo bar
+     baz
+  qux)
+
+;; rule 3 not triggered
+(foo bar
+ baz
+  qux)
+--Input
+
+--Expected
+;; https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
+
+;; rule 3 triggered
+(foo bar
+     baz
+     qux)
+
+;; rule 3 not triggered
+(foo bar
+  baz
+  qux)
+--Expected
