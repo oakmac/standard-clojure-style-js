@@ -22,6 +22,33 @@ if (isFn(clojurefmtLib._substr)) {
   })
 }
 
+if (isFn(clojurefmtLib._AnyChar)) {
+  test('AnyChar parser', () => {
+    const anyCharTest1 = clojurefmtLib._AnyChar({ name: 'anychar_test1' })
+    expect(anyCharTest1.parse('a', 0).text).toBe('a')
+    expect(anyCharTest1.parse('b', 0).text).toBe('b')
+    expect(anyCharTest1.parse('b', 0).name).toBe('anychar_test1')
+    expect(anyCharTest1.parse(' ', 0).text).toBe(' ')
+    expect(anyCharTest1.parse('+', 0).text).toBe('+')
+    expect(anyCharTest1.parse('!~^', 0).text).toBe('!')
+    expect(anyCharTest1.parse('', 0)).toBe(null)
+  })
+}
+
+if (isFn(clojurefmtLib._Char)) {
+  test('Char parser', () => {
+    const charTest1 = clojurefmtLib._Char({ char: 'a', name: 'char_test_a' })
+    expect(charTest1.parse('a', 0).name).toBe('char_test_a')
+    expect(charTest1.parse('a', 0).text).toBe('a')
+    expect(charTest1.parse('=', 0)).toBe(null)
+
+    const charTest2 = clojurefmtLib._Char({ char: '=', name: 'char_test_equals' })
+    expect(charTest2.parse('=', 0).name).toBe('char_test_equals')
+    expect(charTest2.parse('=', 0).text).toBe('=')
+    expect(charTest2.parse('a', 0)).toBe(null)
+  })
+}
+
 if (isFn(clojurefmtLib._Regex)) {
   test('Regex parser', () => {
     const regexTest1 = clojurefmtLib._Regex({
@@ -154,8 +181,6 @@ if (isFn(clojurefmtLib._Repeat)) {
   })
 }
 
-// TODO: add tests for AnyChar
-// TODO: add tests for Char
 // TODO: add tests for NotChar
 // TODO: add tests for String
 // TODO: add tests for Optional
