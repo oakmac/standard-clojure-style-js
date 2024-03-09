@@ -262,7 +262,7 @@
   baz)
 --Expected
 
-# Rule 3 Indentation
+# Rule 3 Indentation 1
 
 --Input
 ;; https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
@@ -290,4 +290,39 @@
 (foo bar
   baz
   qux)
+--Expected
+
+
+# Rule 3 Indentation 2
+
+--Input
+(foo bar
+     baz
+  qux)
+
+(zap bar baz
+         qux
+      wizzle
+                     gee)
+
+(yes tam
+      bif
+     bag
+     hop)
+--Input
+
+--Expected
+(foo bar
+     baz
+     qux)
+
+(zap bar baz
+         qux
+         wizzle
+         gee)
+
+(yes tam
+  bif
+  bag
+  hop)
 --Expected
