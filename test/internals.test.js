@@ -31,7 +31,7 @@ if (isFn(clojurefmtLib._AnyChar)) {
     expect(anyCharTest1.parse(' ', 0).text).toBe(' ')
     expect(anyCharTest1.parse('+', 0).text).toBe('+')
     expect(anyCharTest1.parse('!~^', 0).text).toBe('!')
-    expect(anyCharTest1.parse('', 0)).toBe(null)
+    expect(anyCharTest1.parse('', 0)).toBeNull()
   })
 }
 
@@ -40,12 +40,12 @@ if (isFn(clojurefmtLib._Char)) {
     const charTest1 = clojurefmtLib._Char({ char: 'a', name: 'char_test_a' })
     expect(charTest1.parse('a', 0).name).toBe('char_test_a')
     expect(charTest1.parse('a', 0).text).toBe('a')
-    expect(charTest1.parse('=', 0)).toBe(null)
+    expect(charTest1.parse('=', 0)).toBeNull()
 
     const charTest2 = clojurefmtLib._Char({ char: '=', name: 'char_test_equals' })
     expect(charTest2.parse('=', 0).name).toBe('char_test_equals')
     expect(charTest2.parse('=', 0).text).toBe('=')
-    expect(charTest2.parse('a', 0)).toBe(null)
+    expect(charTest2.parse('a', 0)).toBeNull()
   })
 }
 
