@@ -24,6 +24,22 @@
     (ccc)))
 --Expected
 
+# Reduce Indentation
+
+--Input
+  (aaa)
+(bbb)
+
+    (ccc)
+--Input
+
+--Expected
+(aaa)
+(bbb)
+
+(ccc)
+--Expected
+
 # Close Wrapping Parens
 
 --Input

@@ -73,7 +73,7 @@ certainTests.add('Reader conditional splicing syntax')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
-// ignoreTests.add('Inner indentation')
+ignoreTests.add('Reduce Indentation')
 ignoreTests.add('Rule 3 Indentation')
 
 allTestCases.forEach(testCase => {
