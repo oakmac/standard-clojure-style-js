@@ -68,7 +68,7 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunCertainTests = true
+const onlyRunCertainTests = false
 const certainTests = new Set()
 certainTests.add('Rule 3 Indentation 2')
 
