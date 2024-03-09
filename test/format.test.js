@@ -66,20 +66,20 @@ test('All test_format/ cases should have unique names', () => {
   expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
 })
 
+// dev convenience: set this to true and add specific test cases
+// only those cases will run
 const onlyRunCertainTests = false
 const certainTests = new Set()
-// certainTests.add('Simple Indentation')
-certainTests.add('Reader conditional splicing syntax')
+certainTests.add('Rule 3 Indentation')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
-ignoreTests.add('Reduce Indentation')
 ignoreTests.add('Rule 3 Indentation')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
   if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
-  if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
+  else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
 
   if (runThisTest) {
     test(testCase.filename + ': ' + testCase.name, () => {
