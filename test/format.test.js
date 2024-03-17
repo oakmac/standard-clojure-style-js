@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('how to ns: use keywords, not symbols')
+certainTests.add('how to ns: use parenthesis for import')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
