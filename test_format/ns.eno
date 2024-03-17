@@ -1,0 +1,27 @@
+# how to ns: use keywords, not symbols
+
+--Input
+(ns com.example.my-application
+  (refer-clojure :exclude [get])
+  (require
+   [clojure.string :as string])
+  (import
+   (java.util Date)))
+
+(require
+  foo
+  bar)
+--Input
+
+--Expected
+(ns com.example.my-application
+  (:refer-clojure :exclude [get])
+  (:require
+    [clojure.string :as string])
+  (:import
+    (java.util Date)))
+
+(require
+  foo
+  bar)
+--Expected
