@@ -1,3 +1,21 @@
+# how to ns: use keywords, not symbols
+
+--Input
+(ns com.example.my-application
+  (require
+   [clojure.string :as string])
+  (import
+   (java.util Date)))
+--Input
+
+--Expected
+(ns com.example.my-application
+  (:require
+   [clojure.string :as string])
+  (:import
+   (java.util Date)))
+--Expected
+
 # alphabetically sort ns requires
 
 --Input

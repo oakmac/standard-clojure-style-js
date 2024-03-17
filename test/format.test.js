@@ -67,10 +67,11 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunCertainTests = false
+const onlyRunCertainTests = true
 const certainTests = new Set()
-certainTests.add('Rule 3 Indentation')
-certainTests.add('alphabetically sort ns requires')
+// certainTests.add('Rule 3 Indentation')
+// certainTests.add('alphabetically sort ns requires')
+certainTests.add('how to ns: use keywords, not symbols')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
