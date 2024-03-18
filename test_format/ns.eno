@@ -25,3 +25,63 @@
   foo
   bar)
 --Expected
+
+# how to ns: use vectors, not lists
+
+--Input
+(ns com.example.application
+  [:require
+   [clojure.string :as string]]
+  [:import
+   (java.util Date)])
+
+[:require
+  foo
+  bar]
+--Input
+
+--Expected
+(ns com.example.application
+  (:require
+    [clojure.string :as string])
+  (:import
+    (java.util Date)))
+
+[:require
+ foo
+ bar]
+--Expected
+
+# how to ns: use vectors for require
+
+--Input
+(ns com.example.application
+  (:require
+   (clojure.string :as string))
+  [:import
+   (java.util Date)])
+--Input
+
+--Expected
+(ns com.example.application
+  (:require
+    [clojure.string :as string])
+  (:import
+    (java.util Date)))
+--Expected
+
+# how to ns: use parenthesis for import
+
+--Input
+(ns com.example.application
+[:import
+ [java.util Date UUID]
+ [java.io File]])
+--Input
+
+--Expected
+(ns com.example.application
+  (:import
+    (java.util Date UUID)
+    (java.io File)))
+--Expected
