@@ -40,14 +40,36 @@
 
 --Input
 (ns com.example.my-app
-  (:require com.example.my-app.bbb [com.example.my-app.ccc])
-  (:require com.example.my-app.aaa)
+  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)
+  (:import java.io.File
+           (xxx.yyy.zzz Alpha Beta)
+           hhh.eee.Ccc
+           hhh.eee.Bbb
+           (java.util Date UUID))
   )
 --Input
 
 --Expected
 {
   "nsSymbol": "com.example.my-app",
+  "imports": [
+    {
+      "package": "hhh.eee",
+      "classes": ["Bbb", "Ccc"]
+    },
+    {
+      "package": "java.io",
+      "classes": ["File"]
+    },
+    {
+      "package": "java.util",
+      "classes": ["Date", "UUID"]
+    },
+    {
+      "package": "xxx.yyy.zzz",
+      "classes": ["Alpha", "Beta"]
+    }
+  ],
   "requires": [
     {
       "symbol": "com.example.my-app.aaa"

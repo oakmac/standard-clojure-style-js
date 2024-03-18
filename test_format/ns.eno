@@ -124,9 +124,9 @@
 (ns foo
   (:refer-clojure :exclude [get])
   (:require
-   [a]
-   [b]
-   [c])
+    [a]
+    [b]
+    [c])
   (:import
-   (java.util Date)))
+    (java.util Date)))
 --Expected

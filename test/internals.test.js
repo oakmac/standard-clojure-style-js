@@ -185,6 +185,18 @@ if (isFn(clojurefmtLib._Repeat)) {
 // TODO: add tests for String
 // TODO: add tests for Optional
 
+if (isFn(clojurefmtLib._parseJavaPackageWithClass)) {
+  test('parseJavaPackageWithClass', () => {
+    const example1 = clojurefmtLib._parseJavaPackageWithClass('aaa.bbb.ccc.Ddd')
+    expect(example1.package).toBe('aaa.bbb.ccc')
+    expect(example1.className).toBe('Ddd')
+
+    const example2 = clojurefmtLib._parseJavaPackageWithClass('aaa.bbb.ccc')
+    expect(example2.package).toBe('aaa.bbb.ccc')
+    expect(example2.className).toBe(null)
+  })
+}
+
 // -----------------------------------------------------------------------------
 // Util
 

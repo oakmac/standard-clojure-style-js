@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = true
 const certainTests = new Set()
-certainTests.add('how to ns: alphabetically sort requires')
+certainTests.add('how to ns: sort refer-clojure, require, import')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
