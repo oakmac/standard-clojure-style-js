@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = true
 const certainTests = new Set()
-certainTests.add('how to ns: sort imports')
+certainTests.add('how to ns: aaa')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()

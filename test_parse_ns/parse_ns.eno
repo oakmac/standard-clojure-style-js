@@ -1,4 +1,4 @@
-# parse ns 1
+# Parse simple namespace
 
 --Input
 (ns com.example.my-app)
@@ -10,7 +10,7 @@
 }
 --Expected
 
-# parse ns 2
+# Parse namespace with multiple :require
 
 --Input
 (ns com.example.my-app
@@ -36,7 +36,7 @@
 }
 --Expected
 
-# parse ns 3
+# Parse namespace with require + imports
 
 --Input
 (ns com.example.my-app
@@ -78,6 +78,34 @@
       "symbol": "com.example.my-app.bbb"
     },
     {
+      "symbol": "com.example.my-app.ccc"
+    }
+  ]
+}
+--Expected
+
+# Parse namespace with :require :as
+
+--Input
+(ns com.example.my-app
+  (:require com.example.my-app.bbb [com.example.my-app.ccc :as ccc])
+  (:require [com.example.my-app.aaa :as aaa)
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "as": "aaa",
+      "symbol": "com.example.my-app.aaa"
+    },
+    {
+      "symbol": "com.example.my-app.bbb"
+    },
+    {
+      "as": "ccc",
       "symbol": "com.example.my-app.ccc"
     }
   ]
