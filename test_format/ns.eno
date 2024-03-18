@@ -110,6 +110,33 @@
 (something :after)
 --Expected
 
+# how to ns: sort imports
+
+--Input
+(ns com.example.my-app
+
+  (:import java.io.File
+           (xxx.yyy.zzz Alpha Beta)
+           hhh.eee.Ccc
+           hhh.eee.Bbb
+           (java.util Date UUID))
+  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.my-app.aaa]
+    [com.example.my-app.bbb]
+    [com.example.my-app.ccc])
+  (:import
+    (hhh.eee Bbb Ccc)
+    (java.io File)
+    (java.util Date UUID)
+    (xxx.yyy.zzz Alpha Beta)))
+--Expected
+
 # how to ns: sort refer-clojure, require, import
 
 --Input
