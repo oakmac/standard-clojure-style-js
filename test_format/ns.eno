@@ -89,17 +89,25 @@
 # how to ns: alphabetically sort requires
 
 --Input
+;; something before
+
 (ns foo
   (:require b [c])
   (:require a))
+
+(something :after)
 --Input
 
 --Expected
+;; something before
+
 (ns foo
   (:require
-   [a]
-   [b]
-   [c]))
+    [a]
+    [b]
+    [c]))
+
+(something :after)
 --Expected
 
 # how to ns: sort refer-clojure, require, import

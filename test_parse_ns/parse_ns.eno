@@ -35,3 +35,29 @@
   ]
 }
 --Expected
+
+# parse ns 3
+
+--Input
+(ns com.example.my-app
+  (:require com.example.my-app.bbb [com.example.my-app.ccc])
+  (:require com.example.my-app.aaa)
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.my-app.aaa"
+    },
+    {
+      "symbol": "com.example.my-app.bbb"
+    },
+    {
+      "symbol": "com.example.my-app.ccc"
+    }
+  ]
+}
+--Expected
