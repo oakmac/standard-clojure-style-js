@@ -53,6 +53,11 @@ function compareTestCases (testCaseA, testCaseB) {
   else return 0
 }
 
+const allTestCasesMap = new Map()
+allTestCases.forEach(testCase => {
+  allTestCasesMap.set(testCase.name, testCase)
+})
+
 // sort the test cases by name
 allTestCases.sort(compareTestCases)
 
@@ -68,9 +73,9 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunCertainTests = false
+const onlyRunCertainTests = true
 const certainTests = new Set()
-certainTests.add('how to ns: use parenthesis for import')
+certainTests.add('how to ns: alphabetically sort requires')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
@@ -109,3 +114,18 @@ allTestCases.forEach(testCase => {
     }
   }
 })
+
+if (isFn(clojurefmtLib._parseNs)) {
+  test('parseNs', () => {
+    const exNs1 = allTestCasesMap.get('how to ns: alphabetically sort requires')
+
+    expect(exNs1.input).toBe(89)
+  })
+}
+
+// -----------------------------------------------------------------------------
+// Util
+
+function isFn (f) {
+  return typeof f === 'function'
+}

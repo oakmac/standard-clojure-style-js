@@ -1,0 +1,24 @@
+# parse ns 1
+
+--Input
+(ns foo
+  (:require b [c])
+  (:require a))
+--Input
+
+--Expected
+{
+  "ns": "foo",
+  "requires": [
+    {
+      "symbol": "a"
+    },
+    {
+      "symbol": "b"
+    },
+    {
+      "symbol": "c"
+    }
+  ]
+}
+--Expected
