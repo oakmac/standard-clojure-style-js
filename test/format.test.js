@@ -53,11 +53,6 @@ function compareTestCases (testCaseA, testCaseB) {
   else return 0
 }
 
-const allTestCasesMap = new Map()
-allTestCases.forEach(testCase => {
-  allTestCasesMap.set(testCase.name, testCase)
-})
-
 // sort the test cases by name
 allTestCases.sort(compareTestCases)
 
@@ -114,18 +109,3 @@ allTestCases.forEach(testCase => {
     }
   }
 })
-
-if (isFn(clojurefmtLib._parseNs)) {
-  test('parseNs', () => {
-    const exNs1 = allTestCasesMap.get('how to ns: alphabetically sort requires')
-
-    expect(exNs1.input).toBe(89)
-  })
-}
-
-// -----------------------------------------------------------------------------
-// Util
-
-function isFn (f) {
-  return typeof f === 'function'
-}
