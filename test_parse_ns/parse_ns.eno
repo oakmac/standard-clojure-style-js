@@ -1,23 +1,36 @@
 # parse ns 1
 
 --Input
-(ns foo
-  (:require b [c])
-  (:require a))
+(ns com.example.my-app)
 --Input
 
 --Expected
 {
-  "ns": "foo",
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
+# parse ns 2
+
+--Input
+(ns com.example.my-app)
+  (:require com.example.my-app.bbb [com.example.my-app.ccc])
+  (:require com.example.my-app.aaa)
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
   "requires": [
     {
-      "symbol": "a"
+      "symbol": "com.example.my-app.aaa"
     },
     {
-      "symbol": "b"
+      "symbol": "com.example.my-app.bbb"
     },
     {
-      "symbol": "c"
+      "symbol": "com.example.my-app.ccc"
     }
   ]
 }
