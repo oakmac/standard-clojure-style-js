@@ -1,5 +1,14 @@
+# simple namespace 1
 
-# how to ns: aaa
+--Input
+(ns aaa)
+--Input
+
+--Expected
+(ns aaa)
+--Expected
+
+# simple namespace 2
 
 --Input
 
@@ -11,10 +20,6 @@
 --Expected
 (ns aaa)
 --Expected
-
-
-
-
 
 # how to ns: use keywords, not symbols
 

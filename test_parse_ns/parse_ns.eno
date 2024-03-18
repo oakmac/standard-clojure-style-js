@@ -10,6 +10,21 @@
 }
 --Expected
 
+# Parse simple namespace 2
+
+--Input
+(
+  ns com.example.my-app
+
+)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
 # Parse namespace with multiple :require
 
 --Input

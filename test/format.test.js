@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = true
 const certainTests = new Set()
-certainTests.add('how to ns: aaa')
+certainTests.add('simple namespace 2')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
