@@ -13,7 +13,7 @@
 # parse ns 2
 
 --Input
-(ns com.example.my-app)
+(ns com.example.my-app
   (:require com.example.my-app.bbb [com.example.my-app.ccc])
   (:require com.example.my-app.aaa)
   )
