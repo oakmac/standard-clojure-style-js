@@ -105,8 +105,8 @@
 --Expected
 (ns com.example.application
   (:import
-    (java.util Date UUID)
-    (java.io File)))
+    (java.io File)
+    (java.util Date UUID)))
 --Expected
 
 # how to ns: alphabetically sort requires

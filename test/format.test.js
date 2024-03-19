@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('Simple namespace 2')
+certainTests.add('how to ns: use vectors, not lists')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -78,6 +78,8 @@ const ignoreTests = new Set()
 // from cljfmt test cases
 // -- C. Oakman, 19 Mar 2024
 ignoreTests.add('Surrounding newlines removed 3')
+ignoreTests.add('how to ns: sort refer-clojure, require, import')
+ignoreTests.add('how to ns: use keywords, not symbols')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
@@ -89,7 +91,7 @@ allTestCases.forEach(testCase => {
       const result = clojurefmtLib.format(testCase.input)
 
       if (onlyRunCertainTests) {
-        console.log('%%%' + result.out + '%%%')
+        console.log(result.out)
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       }
 
