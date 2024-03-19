@@ -142,3 +142,19 @@
   }
 }
 --Expected
+
+# Parse namespace with :refer-clojure :only
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [set conj number? get ==]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "only": ["==", "conj", "get", "number?", "set"]
+  }
+}
+--Expected

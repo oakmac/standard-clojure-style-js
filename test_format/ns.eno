@@ -166,17 +166,34 @@
 (ns foo
   (:require b c a)
   (:import (java.util Date))
-  (:refer-clojure :exclude [get])
+  (:refer-clojure :exclude [get ->])
   )
 --Input
 
 --Expected
 (ns foo
-  (:refer-clojure :exclude [get])
+  (:refer-clojure :exclude [-> get])
   (:require
     [a]
     [b]
     [c])
   (:import
     (java.util Date)))
+--Expected
+
+# sort refer-clojure :only symbols
+
+--Input
+(ns foo
+  (:require bbb aaa)
+  (:refer-clojure :only [get -> number? == *])
+  )
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :only [* -> == get number?])
+  (:require
+    [aaa]
+    [bbb]))
 --Expected
