@@ -1,0 +1,128 @@
+# Parse simple namespace
+
+--Input
+(ns com.example.my-app)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
+# Parse simple namespace 2
+
+--Input
+(
+  ns com.example.my-app
+
+)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
+# Parse namespace with multiple :require
+
+--Input
+(ns com.example.my-app
+  (:require com.example.my-app.bbb [com.example.my-app.ccc])
+  (:require com.example.my-app.aaa)
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.my-app.aaa"
+    },
+    {
+      "symbol": "com.example.my-app.bbb"
+    },
+    {
+      "symbol": "com.example.my-app.ccc"
+    }
+  ]
+}
+--Expected
+
+# Parse namespace with require + imports
+
+--Input
+(ns com.example.my-app
+  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)
+  (:import java.io.File
+           (xxx.yyy.zzz Alpha Beta)
+           hhh.eee.Ccc
+           hhh.eee.Bbb
+           (java.util Date UUID))
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "imports": [
+    {
+      "package": "hhh.eee",
+      "classes": ["Bbb", "Ccc"]
+    },
+    {
+      "package": "java.io",
+      "classes": ["File"]
+    },
+    {
+      "package": "java.util",
+      "classes": ["Date", "UUID"]
+    },
+    {
+      "package": "xxx.yyy.zzz",
+      "classes": ["Alpha", "Beta"]
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "com.example.my-app.aaa"
+    },
+    {
+      "symbol": "com.example.my-app.bbb"
+    },
+    {
+      "symbol": "com.example.my-app.ccc"
+    }
+  ]
+}
+--Expected
+
+# Parse namespace with :require :as
+
+--Input
+(ns com.example.my-app
+  (:require com.example.my-app.bbb [com.example.my-app.ccc :as ccc])
+  (:require [com.example.my-app.aaa :as aaa)
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "as": "aaa",
+      "symbol": "com.example.my-app.aaa"
+    },
+    {
+      "symbol": "com.example.my-app.bbb"
+    },
+    {
+      "as": "ccc",
+      "symbol": "com.example.my-app.ccc"
+    }
+  ]
+}
+--Expected

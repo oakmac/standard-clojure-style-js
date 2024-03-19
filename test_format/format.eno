@@ -150,6 +150,62 @@
 {:x 1, :y 2}
 --Expected
 
+# Surrounding newlines removed 1
+
+--Input
+(
+  aaa
+)
+(
+bbb
+)
+(ccc
+)
+(ddd
+  )
+--Input
+
+--Expected
+(aaa)
+(bbb)
+(ccc)
+(ddd)
+--Expected
+
+# Surrounding newlines removed 2
+
+--Input
+[
+1 2 3
+]
+{
+:foo "bar"
+}
+--Input
+
+--Expected
+[1 2 3]
+{:foo "bar"}
+--Expected
+
+# Surrounding newlines removed 3
+> NOTE: this test case from cljfmt
+> I am not sure if this is the desired behavior we want? Need to give it a think
+
+--Input
+( let [x 3
+y 4]
+(+ (* x x
+)(* y y)
+))
+--Input
+
+--Expected
+(let [x 3
+      y 4]
+  (+ (* x x) (* y y)))
+--Expected
+
 # Inner indentation
 
 --Input

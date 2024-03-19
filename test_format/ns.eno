@@ -1,3 +1,26 @@
+# Simple namespace
+
+--Input
+(ns aaa)
+--Input
+
+--Expected
+(ns aaa)
+--Expected
+
+# Simple namespace 2
+
+--Input
+
+(
+  ns aaa
+)
+--Input
+
+--Expected
+(ns aaa)
+--Expected
+
 # how to ns: use keywords, not symbols
 
 --Input
@@ -82,6 +105,78 @@
 --Expected
 (ns com.example.application
   (:import
+    (java.io File)
+    (java.util Date UUID)))
+--Expected
+
+# how to ns: alphabetically sort requires
+
+--Input
+;; something before
+
+(ns foo
+  (:require b [c])
+  (:require a))
+
+(something :after)
+--Input
+
+--Expected
+;; something before
+
+(ns foo
+  (:require
+    [a]
+    [b]
+    [c]))
+
+(something :after)
+--Expected
+
+# how to ns: sort imports
+
+--Input
+(ns com.example.my-app
+
+  (:import java.io.File
+           (xxx.yyy.zzz Alpha Beta)
+           hhh.eee.Ccc
+           hhh.eee.Bbb
+           (java.util Date UUID))
+  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.my-app.aaa]
+    [com.example.my-app.bbb]
+    [com.example.my-app.ccc])
+  (:import
+    (hhh.eee Bbb Ccc)
+    (java.io File)
     (java.util Date UUID)
-    (java.io File)))
+    (xxx.yyy.zzz Alpha Beta)))
+--Expected
+
+# how to ns: sort refer-clojure, require, import
+
+--Input
+(ns foo
+  (:require b c a)
+  (:import (java.util Date))
+  (:refer-clojure :exclude [get])
+  )
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [get])
+  (:require
+    [a]
+    [b]
+    [c])
+  (:import
+    (java.util Date)))
 --Expected

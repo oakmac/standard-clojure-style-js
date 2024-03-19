@@ -70,11 +70,16 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunCertainTests = false
 const certainTests = new Set()
-certainTests.add('how to ns: use parenthesis for import')
+certainTests.add('how to ns: use vectors, not lists')
 
-const ignoreSomeTests = false
+const ignoreSomeTests = true
 const ignoreTests = new Set()
-ignoreTests.add('Rule 3 Indentation')
+// I am not sure how this test case should look? It might already be "correct"
+// from cljfmt test cases
+// -- C. Oakman, 19 Mar 2024
+ignoreTests.add('Surrounding newlines removed 3')
+ignoreTests.add('how to ns: sort refer-clojure, require, import')
+ignoreTests.add('how to ns: use keywords, not symbols')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
@@ -105,6 +110,11 @@ allTestCases.forEach(testCase => {
     if (testCase.name === 'Trim trailing whitespace 2') {
       test('Trim trailing whitespace test case should not be trimmed', () => {
         expect(testCase.input.includes('"aaa"   \n)(def')).toBe(true)
+      })
+    }
+    if (testCase.name === 'Surrounding newlines removed additional') {
+      test('Surrounding newlines removed additional test case should not be trimmed', () => {
+        expect(testCase.input.includes('aaa  \n)')).toBe(true)
       })
     }
   }

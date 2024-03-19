@@ -21,3 +21,15 @@
 (def aaa "aaa")
 (def bbb "bbb")
 --Expected
+
+# Surrounding newlines removed additional
+> NOTE: there is a test case that checks whether this test case input has trailing whitespace
+
+--Input
+(aaa  
+)
+--Input
+
+--Expected
+(aaa)
+--Expected
