@@ -61,6 +61,7 @@ Please see [Issue #1] for an explanation of this project's genesis.
 - https://tonsky.me/blog/clojurefmt/
 - https://github.com/parinfer/parindent
 - [emoji length article](https://hsivonen.fi/string-length/)
+- https://github.com/weavejester/cljfmt/issues/36
 
 ## Coding Style
 

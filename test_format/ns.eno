@@ -1,4 +1,4 @@
-# simple namespace 1
+# Simple namespace
 
 --Input
 (ns aaa)
@@ -8,7 +8,7 @@
 (ns aaa)
 --Expected
 
-# simple namespace 2
+# Simple namespace 2
 
 --Input
 
