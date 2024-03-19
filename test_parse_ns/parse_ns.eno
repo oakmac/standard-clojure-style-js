@@ -158,3 +158,33 @@
   }
 }
 --Expected
+
+# Parse namespace with :refer-clojure :rename
+
+--Input
+(ns com.example.my-app
+  (:require bbb.ccc bbb, aaa)
+  (:refer-clojure :rename {print core-print get g,  number? is-number ->> thread-last}
+  )
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "rename": [["->>", "thread-last"], ["get", "g"], ["number?", "is-number"], ["print", "core-print"]]
+  },
+  "requires": [
+    {
+      "symbol": "aaa"
+    },
+    {
+      "symbol": "bbb"
+    },
+    {
+      "symbol": "bbb.ccc"
+    }
+  ]
+}
+--Expected

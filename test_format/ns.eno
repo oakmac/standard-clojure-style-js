@@ -197,3 +197,26 @@
     [aaa]
     [bbb]))
 --Expected
+
+# sort refer-clojure :rename symbols
+
+--Input
+(ns foo
+  (:require bbb.ccc bbb, aaa)
+    (:import (java.util UUID Date))
+  (:refer-clojure :rename {print core-print get g,  number? is-number
+                           ->> thread-last, -> thread-first}
+  )
+  )
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :rename {-> thread-first, ->> thread-last, get g, number? is-number, print core-print})
+  (:require
+    [aaa]
+    [bbb]
+    [bbb.ccc])
+  (:import
+    (java.util Date UUID)))
+--Expected
