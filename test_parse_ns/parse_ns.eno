@@ -126,3 +126,19 @@
   ]
 }
 --Expected
+
+# Parse namespace with :refer-clojure :exclude
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [print get nth]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "exclude": ["get", "nth", "print"]
+  }
+}
+--Expected
