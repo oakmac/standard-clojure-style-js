@@ -89,7 +89,7 @@ allTestCases.forEach(testCase => {
       const result = clojurefmtLib.format(testCase.input)
 
       if (onlyRunCertainTests) {
-        console.log('xxx' + result.out + 'xxx')
+        console.log('%%%' + result.out + '%%%')
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       }
 
