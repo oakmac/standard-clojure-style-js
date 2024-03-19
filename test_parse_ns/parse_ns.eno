@@ -126,3 +126,65 @@
   ]
 }
 --Expected
+
+# Parse namespace with :refer-clojure :exclude
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [print get nth]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "exclude": ["get", "nth", "print"]
+  }
+}
+--Expected
+
+# Parse namespace with :refer-clojure :only
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [set conj number? get ==]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "only": ["==", "conj", "get", "number?", "set"]
+  }
+}
+--Expected
+
+# Parse namespace with :refer-clojure :rename
+
+--Input
+(ns com.example.my-app
+  (:require bbb.ccc bbb, aaa)
+  (:refer-clojure :rename {print core-print get g,  number? is-number ->> thread-last}
+  )
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "rename": [["->>", "thread-last"], ["get", "g"], ["number?", "is-number"], ["print", "core-print"]]
+  },
+  "requires": [
+    {
+      "symbol": "aaa"
+    },
+    {
+      "symbol": "bbb"
+    },
+    {
+      "symbol": "bbb.ccc"
+    }
+  ]
+}
+--Expected

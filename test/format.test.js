@@ -78,8 +78,6 @@ const ignoreTests = new Set()
 // from cljfmt test cases
 // -- C. Oakman, 19 Mar 2024
 ignoreTests.add('Surrounding newlines removed 3')
-ignoreTests.add('how to ns: sort refer-clojure, require, import')
-ignoreTests.add('how to ns: use keywords, not symbols')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
