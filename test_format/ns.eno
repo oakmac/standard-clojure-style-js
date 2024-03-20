@@ -139,7 +139,7 @@
 (ns com.example.my-app
 
   (:import java.io.File
-           (xxx.yyy.zzz Alpha Beta)
+           (xxx.yyy.zzz Bravo Alpha Delta Charlie)
            hhh.eee.Ccc
            hhh.eee.Bbb
            (java.util Date UUID))
@@ -157,7 +157,7 @@
     (hhh.eee Bbb Ccc)
     (java.io File)
     (java.util Date UUID)
-    (xxx.yyy.zzz Alpha Beta)))
+    (xxx.yyy.zzz Alpha Bravo Charlie Delta)))
 --Expected
 
 # how to ns: sort refer-clojure, require, import
