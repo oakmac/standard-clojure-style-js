@@ -238,3 +238,23 @@
     [com.example.cow :as cow :refer [eat-grass moo]]
     [com.example.duck :as duck :refer [eat quack quacking sleep]]))
 --Expected
+
+# ns with :refer :all
+
+--Input
+(ns com.example.my-app
+  (:require
+    [com.example.duck :as duck :refer :all]
+    aaa.bbb
+    [com.example.cow :refer [moo eat-grass] :as cow]
+    [com.example.pig :refer :all]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [aaa.bbb]
+    [com.example.cow :as cow :refer [eat-grass moo]]
+    [com.example.duck :as duck :refer :all]
+    [com.example.pig :refer :all]))
+--Expected
