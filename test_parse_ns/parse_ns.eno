@@ -1,4 +1,4 @@
-# Parse simple namespace
+# simple namespace 1
 
 --Input
 (ns com.example.my-app)
@@ -10,7 +10,7 @@
 }
 --Expected
 
-# Parse simple namespace 2
+# simple namespace 2
 
 --Input
 (
@@ -25,7 +25,7 @@
 }
 --Expected
 
-# Parse namespace with multiple :require
+# namespace with multiple :require
 
 --Input
 (ns com.example.my-app
@@ -51,13 +51,13 @@
 }
 --Expected
 
-# Parse namespace with require + imports
+# namespace with require + imports
 
 --Input
 (ns com.example.my-app
   (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)
   (:import java.io.File
-           (xxx.yyy.zzz Alpha Beta)
+           (xxx.yyy.zzz Bravo Alpha Delta Charlie)
            hhh.eee.Ccc
            hhh.eee.Bbb
            (java.util Date UUID))
@@ -82,7 +82,7 @@
     },
     {
       "package": "xxx.yyy.zzz",
-      "classes": ["Alpha", "Beta"]
+      "classes": ["Alpha", "Bravo", "Charlie", "Delta"]
     }
   ],
   "requires": [
@@ -99,7 +99,7 @@
 }
 --Expected
 
-# Parse namespace with :require :as
+# namespace with :require :as
 
 --Input
 (ns com.example.my-app
@@ -127,7 +127,7 @@
 }
 --Expected
 
-# Parse namespace with :refer-clojure :exclude
+# namespace with :refer-clojure :exclude
 
 --Input
 (ns com.example.my-app
@@ -143,7 +143,7 @@
 }
 --Expected
 
-# Parse namespace with :refer-clojure :only
+# namespace with :refer-clojure :only
 
 --Input
 (ns com.example.my-app
@@ -159,7 +159,7 @@
 }
 --Expected
 
-# Parse namespace with :refer-clojure :rename
+# namespace with :refer-clojure :rename
 
 --Input
 (ns com.example.my-app
@@ -189,7 +189,7 @@
 }
 --Expected
 
-# Parse namespace with :require, :refer, :as
+# namespace with :require, :refer, :as
 
 --Input
 (ns com.example.my-app
@@ -220,7 +220,7 @@
 }
 --Expected
 
-# Parse namespace with :require :refer :all
+# namespace with :require :refer :all
 
 --Input
 (ns com.example.my-app
@@ -251,7 +251,7 @@
 }
 --Expected
 
-# Parse namespace with docstring
+# namespace with docstring
 
 --Input
 (ns com.example.my-app
@@ -263,5 +263,45 @@
 {
   "nsSymbol": "com.example.my-app",
   "docstring": "Mary had a little lamb\n  Its fleece was white as snow"
+}
+--Expected
+
+# namespace with comments
+
+--Input
+(ns com.example.my-app
+  (:require
+    [com.example.duck :as duck :refer [quack quacking eat sleep]] ; NOTE: this ns is primarily focused on Mallards
+    ;; include aaa.bbb for reasons
+;; please see Issue #NaN for deeper explanation
+    aaa.bbb
+    ;; the cow namespace is deprecated, please refactor
+    [com.example.cow :refer [moo eat-grass] :as cow]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "commentsAbove": [
+        ";; include aaa.bbb for reasons",
+        ";; please see Issue #NaN for deeper explanation"
+      ],
+      "symbol": "aaa.bbb"
+    },
+    {
+      "as": "cow",
+      "commentsAbove": [";; the cow namespace is deprecated, please refactor"],
+      "symbol": "com.example.cow",
+      "refer": ["eat-grass", "moo"]
+    },
+    {
+      "as": "duck",
+      "commentAfter": "; NOTE: this ns is primarily focused on Mallards",
+      "symbol": "com.example.duck",
+      "refer": ["eat", "quack", "quacking", "sleep"]
+    }
+  ]
 }
 --Expected

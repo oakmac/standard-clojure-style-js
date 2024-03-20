@@ -82,7 +82,7 @@ if (isFn(clojurefmtLib._parseNs)) {
       const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
 
       if (!resultIsTheSame) {
-        console.log('ns parsed:', nsParsed1)
+        console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
       }
 
       expect(resultIsTheSame).toBe(true)
