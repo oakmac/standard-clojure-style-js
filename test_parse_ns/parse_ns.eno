@@ -188,3 +188,34 @@
   ]
 }
 --Expected
+
+# Parse namespace with :require, :refer, :as
+
+--Input
+(ns com.example.my-app
+  (:require
+    [com.example.duck :as duck :refer [quack quacking eat sleep]]
+    aaa.bbb
+    [com.example.cow :refer [moo eat-grass] :as cow]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.bbb"
+    },
+    {
+      "as": "cow",
+      "symbol": "com.example.cow",
+      "refer": ["eat-grass", "moo"]
+    },
+    {
+      "as": "duck",
+      "symbol": "com.example.duck",
+      "refer": ["eat", "quack", "quacking", "sleep"]
+    }
+  ]
+}
+--Expected
