@@ -163,7 +163,7 @@
 # how to ns: sort refer-clojure, require, import
 
 --Input
-(ns foo
+(ns foo "bar"
   (:require b c a)
   (:import (java.util Date))
   (:refer-clojure :exclude [get ->])
@@ -172,6 +172,7 @@
 
 --Expected
 (ns foo
+  "bar"
   (:refer-clojure :exclude [-> get])
   (:require
     [a]
@@ -257,4 +258,33 @@
     [com.example.cow :as cow :refer [eat-grass moo]]
     [com.example.duck :as duck :refer :all]
     [com.example.pig :refer :all]))
+--Expected
+
+# ns with docstring
+
+--Input
+(ns com.example.my-app
+
+  "Mary had a little lamb,
+  Its fleece was white as snow.
+
+  And everywhere that Mary went,
+  The lamb was sure to go."
+  (:require
+    [com.example.duck :as duck :refer :all]
+    aaa.bbb
+    aaa))
+--Input
+
+--Expected
+(ns com.example.my-app
+  "Mary had a little lamb,
+  Its fleece was white as snow.
+
+  And everywhere that Mary went,
+  The lamb was sure to go."
+  (:require
+    [aaa]
+    [aaa.bbb]
+    [com.example.duck :as duck :refer :all]))
 --Expected

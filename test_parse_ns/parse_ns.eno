@@ -250,3 +250,18 @@
   ]
 }
 --Expected
+
+# Parse namespace with docstring
+
+--Input
+(ns com.example.my-app
+  "Mary had a little lamb
+  Its fleece was white as snow")
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "docstring": "Mary had a little lamb\n  Its fleece was white as snow"
+}
+--Expected
