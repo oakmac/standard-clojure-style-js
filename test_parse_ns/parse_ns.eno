@@ -266,7 +266,7 @@
 }
 --Expected
 
-# namespace with comments
+# namespace with require comments
 
 --Input
 (ns com.example.my-app
@@ -305,3 +305,54 @@
   ]
 }
 --Expected
+
+# namespace with import comments
+
+--Input
+(ns com.example.my-app
+  ;;; I'm a little teapot
+  ;;; Short and stout
+  (:import ; Here is my handle
+
+  ;; Here is my spout
+;; When I get all steamed up
+     (java.util Date UUID) ; Hear me shout
+     ;; Tip me over
+     ;; And pour me out!
+     aaa.bbb.Ccc ;; HTTP 418
+;; fin
+  )
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "importCommentsAbove": [
+    ";;; I'm a little teapot",
+    ";;; Short and stout"
+  ],
+  "importCommentAfter": "; Here is my handle",
+  "imports": [
+    {
+      "classes": ["Ccc"],
+      "commentsAbove": [
+        ";; Tip me over",
+        ";; And pour me out!"
+      ],
+      "commentAfter": ";; HTTP 418",
+      "package": "aaa.bbb"
+    },
+    {
+      "commentsAbove": [
+        ";; Here is my spout",
+        ";; When I get all steamed up"
+      ],
+      "commentAfter": "; Hear me shout",
+      "classes": ["Date", "UUID"],
+      "package": "java.util"
+    }
+  ]
+}
+--Expected
+
