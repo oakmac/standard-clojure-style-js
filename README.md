@@ -1,6 +1,6 @@
 # clojurefmt-js
 
-A library to format Clojure code written in ~1000 lines of JavaScript.
+A library to format Clojure code following Simple Clojure Formatting Rules.
 
 ## Project Status (March 2024)
 
