@@ -292,6 +292,8 @@
 # ns with require comments
 
 --Input
+;; before
+
 (ns com.example.my-app
 ;; foo bar
     ;; bizzle wizzle
@@ -302,9 +304,13 @@
  ccc ;; ccc
     [aaa.bbb :as ab] ; abab
     aaa)) ;;;; aaa
+
+:after
 --Input
 
 --Expected
+;; before
+
 (ns com.example.my-app
   ;; foo bar
   ;; bizzle wizzle
@@ -315,4 +321,6 @@
     ;; CC
     ;; CCC
     [ccc])) ;; ccc
+
+:after
 --Expected
