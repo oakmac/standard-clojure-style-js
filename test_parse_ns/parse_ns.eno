@@ -311,6 +311,7 @@
 # namespace with import comments
 
 > NOTE: in this test case, the ";; fin" comment is ignored by the parser
+> We should probably print it after the (ns) form
 
 --Input
 (ns com.example.my-app
