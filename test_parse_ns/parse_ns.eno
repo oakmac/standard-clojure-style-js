@@ -380,8 +380,37 @@
   "referClojureCommentAfter": "; ccc",
   "referClojure": {
     "only": ["->", "number?", "set"]
-  }
+  },
+  "commentOutsideNsForm": "; ccc"
 }
 --Expected
 
-> TODO: need a test with requireCommentsAbove
+> TODO: need a test for ns.requireCommentsAbove
+
+
+# namespace with comment outside ns form
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:require [aaa :as a])) ;; if only it were this easy
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "requires": [
+    {
+      "as": "a",
+      "commentAfter": ";; if only it were this easy",
+      "symbol": "aaa"
+    }
+  ],
+  "commentOutsideNsForm": ";; if only it were this easy"
+}
+--Expected
