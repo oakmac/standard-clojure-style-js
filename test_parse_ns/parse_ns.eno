@@ -276,7 +276,8 @@
 ;; please see Issue #NaN for deeper explanation
     aaa.bbb
     ;; the cow namespace is deprecated, please refactor
-    [com.example.cow :refer [moo eat-grass] :as cow]))
+    [com.example.cow :refer [moo eat-grass] :as cow]) ;; the cow goes "moo"
+    )
 --Input
 
 --Expected
@@ -293,6 +294,7 @@
     {
       "as": "cow",
       "commentsAbove": [";; the cow namespace is deprecated, please refactor"],
+      "commentAfter": ";; the cow goes \"moo\"",
       "symbol": "com.example.cow",
       "refer": ["eat-grass", "moo"]
     },
@@ -307,6 +309,8 @@
 --Expected
 
 # namespace with import comments
+
+> NOTE: in this test case, the ";; fin" comment is ignored by the parser
 
 --Input
 (ns com.example.my-app
@@ -353,6 +357,29 @@
       "package": "java.util"
     }
   ]
+}
+--Expected
+
+# namespace with refer-clojure comments
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set])) ; ccc
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "referClojureCommentAfter": "; ccc",
+  "referClojure": {
+    "only": ["->", "number?", "set"]
+  }
 }
 --Expected
 
