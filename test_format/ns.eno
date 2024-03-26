@@ -288,3 +288,39 @@
     [aaa.bbb]
     [com.example.duck :as duck :refer :all]))
 --Expected
+
+# ns with require comments
+
+--Input
+;; before
+
+(ns com.example.my-app
+;; foo bar
+    ;; bizzle wizzle
+  (:require
+ ;; C
+ ;; CC
+ ;; CCC
+ ccc ;; ccc
+    [aaa.bbb :as ab] ; abab
+    aaa)) ;;;; aaa
+
+:after
+--Input
+
+--Expected
+;; before
+
+(ns com.example.my-app
+  ;; foo bar
+  ;; bizzle wizzle
+  (:require
+    [aaa] ;;;; aaa
+    [aaa.bbb :as ab] ; abab
+    ;; C
+    ;; CC
+    ;; CCC
+    [ccc])) ;; ccc
+
+:after
+--Expected

@@ -1,6 +1,6 @@
 # clojurefmt-js
 
-A library to format Clojure code written in ~1000 lines of JavaScript.
+A library to format Clojure code following Simple Clojure Formatting Rules.
 
 ## Project Status (March 2024)
 
@@ -62,6 +62,8 @@ Please see [Issue #1] for an explanation of this project's genesis.
 - https://github.com/parinfer/parindent
 - [emoji length article](https://hsivonen.fi/string-length/)
 - https://github.com/weavejester/cljfmt/issues/36
+- https://github.com/weavejester/cljfmt/pull/251
+- https://github.com/weavejester/cljfmt/commit/23daaf0020526aaaaab1cd6363288e79091a97ba
 
 ## Coding Style
 
