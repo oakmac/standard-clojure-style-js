@@ -387,7 +387,6 @@
 
 > TODO: need a test for ns.requireCommentsAbove
 
-
 # namespace with comment outside ns form
 
 --Input
@@ -412,5 +411,30 @@
     }
   ],
   "commentOutsideNsForm": ";; if only it were this easy"
+}
+--Expected
+
+# expand prefix lists in require
+
+--Input
+(ns com.example.my-app
+  (:require
+    (com.example client server routes)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.client"
+    },
+    {
+      "symbol": "com.example.routes"
+    },
+    {
+      "symbol": "com.example.server"
+    }
+  ]
 }
 --Expected
