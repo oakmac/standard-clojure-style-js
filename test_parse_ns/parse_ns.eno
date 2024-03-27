@@ -18,6 +18,12 @@
       "symbol": "com.example.aaa"
     },
     {
+      "symbol": "com.example.bbb"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
       "symbol": "com.example.client"
     },
     {
@@ -25,6 +31,12 @@
     },
     {
       "symbol": "com.example.server"
+    },
+    {
+      "symbol": "com.example.xxx.yyy"
+    },
+    {
+      "symbol": "com.example.xxx.zzz"
     }
   ]
 }
