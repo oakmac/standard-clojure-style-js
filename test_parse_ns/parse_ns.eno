@@ -387,7 +387,6 @@
 
 > TODO: need a test for ns.requireCommentsAbove
 
-
 # namespace with comment outside ns form
 
 --Input
@@ -412,5 +411,85 @@
     }
   ],
   "commentOutsideNsForm": ";; if only it were this easy"
+}
+--Expected
+
+# expand prefix lists in require
+
+--Input
+(ns com.example.my-app
+  (:require
+    (com.example client server routes)
+    com.example.aaa
+    [com.example bbb ccc]
+    [com.example.xxx zzz yyy]
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.aaa"
+    },
+    {
+      "symbol": "com.example.bbb"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "symbol": "com.example.client"
+    },
+    {
+      "symbol": "com.example.routes"
+    },
+    {
+      "symbol": "com.example.server"
+    },
+    {
+      "symbol": "com.example.xxx.yyy"
+    },
+    {
+      "symbol": "com.example.xxx.zzz"
+    }
+  ]
+}
+--Expected
+
+# prefix lists with comments
+
+--Input
+(ns com.example.my-app
+  (:require
+    ;; aaa
+    ;; bbb
+    (com.example server client routes) ;; ccc
+    com.example.db))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "commentsAbove": [
+        ";; aaa",
+        ";; bbb"
+      ],
+      "commentAfter": ";; ccc",
+      "symbol": "com.example.client"
+    },
+    {
+      "symbol": "com.example.db"
+    },
+    {
+      "symbol": "com.example.routes"
+    },
+    {
+      "symbol": "com.example.server"
+    }
+  ]
 }
 --Expected
