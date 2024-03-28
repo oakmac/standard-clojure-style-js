@@ -324,3 +324,28 @@
 
 :after
 --Expected
+
+# ns with prefix list
+
+--Input
+(ns com.example.my-app
+  (:require
+ ;; aaa
+ ;; bbb
+    (com.example server client routes) ;; ccc
+    com.example.db
+    [com.example alpha bravo])) ;; ddd
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.alpha] ;; ddd
+    [com.example.bravo]
+    ;; aaa
+    ;; bbb
+    [com.example.client] ;; ccc
+    [com.example.db]
+    [com.example.routes]
+    [com.example.server]))
+--Expected

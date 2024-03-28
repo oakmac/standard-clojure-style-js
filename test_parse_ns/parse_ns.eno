@@ -460,9 +460,6 @@
 
 # prefix lists with comments
 
-> should the comments be attached to com.example.client or com.example.server here?
-> I am thinking com.example.client ...
-
 --Input
 (ns com.example.my-app
   (:require
