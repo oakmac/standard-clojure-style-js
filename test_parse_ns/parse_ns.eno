@@ -457,3 +457,42 @@
   ]
 }
 --Expected
+
+# prefix lists with comments
+
+> should the comments be attached to com.example.client or com.example.server here?
+> I am thinking com.example.client ...
+
+--Input
+(ns com.example.my-app
+  (:require
+    ;; aaa
+    ;; bbb
+    (com.example server client routes) ;; ccc
+    com.example.db))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "commentsAbove": [
+        ";; aaa",
+        ";; bbb"
+      ],
+      "commentAfter": ";; ccc",
+      "symbol": "com.example.client"
+    },
+    {
+      "symbol": "com.example.db"
+    },
+    {
+      "symbol": "com.example.routes"
+    },
+    {
+      "symbol": "com.example.server"
+    }
+  ]
+}
+--Expected
