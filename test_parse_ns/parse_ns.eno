@@ -493,3 +493,116 @@
   ]
 }
 --Expected
+
+# reader conditionals in ns 1
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd])
+    com.example.fff
+    #?(:cljs com.example.bbb)
+    com.example.ccc
+    #?(:clj com.example.aaa)
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "platform": ":clj",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.bbb"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.ddd"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "com.example.eee"
+    },
+    {
+      "symbol": "com.example.fff"
+    }
+  ]
+}
+--Expected
+
+# reader conditionals in ns 2
+
+--Input
+(ns com.example.module-test
+  (:require #?(:clj  [clojure.test :refer :all]
+               :cljs [cljs.test :refer-macros [is]])
+            #?(:cljs [cljs.test.check :refer [quick-check]])
+            #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]
+               :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])
+            #?(:clj  [clojure.test.check.properties :as prop]
+               :cljs [cljs.test.check.properties :as prop
+                       :include-macros true])
+            [schema.core :as schema :refer [check]]
+            [com.example.schema.ids :refer [Foo]]
+            [com.example.generators
+             :refer [gen-part-no gen-invalid-part-no]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.module-test",
+  "readerConditionals": [":clj", ":cljs"],
+  "requires": [
+    {
+      "refer": "all",
+      "symbol": "clojure.test"
+    },
+    {
+      "referMacros": ["is"],
+      "symbol": "cljs.test"
+    },
+    {
+      "refer": ["quick-check"],
+      "symbol": "cljs.test.check"
+    },
+    {
+      "refer": ["defspec"],
+      "symbol": "clojure.test.check.clojure-test"
+    },
+    {
+      "referMacros": ["defspec"],
+      "symbol": "cljs.test.check.cljs-test"
+    },
+    {
+      "as": "prop",
+      "symbol": "clojure.test.check.properties"
+    },
+    {
+      "as": "prop",
+      "includeMacros": true,
+      "symbol": "cljs.test.check.properties"
+    },
+    {
+      "as": "schema",
+      "refer": "check",
+      "symbol": "schema.core"
+    },
+    {
+      "refer": "Foo",
+      "symbol": "com.example.schema.ids"
+    },
+    {
+      "refer": ["gen-part-no", "get-invalid-part-no"],
+      "symbol": "com.example.generators"
+    }
+  ]
+}
+--Expected

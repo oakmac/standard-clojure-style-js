@@ -349,3 +349,31 @@
     [com.example.routes]
     [com.example.server]))
 --Expected
+
+# ns with reader conditionals 1
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd])
+    com.example.fff
+    #?(:cljs com.example.bbb)
+    com.example.ccc
+    #?(:clj com.example.aaa)
+    ))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.ccc]
+    [com.example.fff]
+    #?(:clj
+       [com.example.aaa]
+       [com.example.eee]
+
+       :cljs
+       [com.example.bbb]
+       [com.example.ddd])))
+--Expected
