@@ -355,8 +355,29 @@
 --Input
 (ns com.example.my-app
   (:require
+    com.example.bbb
+    #?(:cljs [com.example.aaa])
+    #?(:clj  [com.example.ccc])
+    com.example.ddd
+    ))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.bbb]
+    [com.example.ddd]
+    #?(:clj [com.example.ccc]
+       :cljs [com.example.aaa])))
+--Expected
+
+# ns with reader conditionals 2
+
+--Input
+(ns com.example.my-app
+  (:require
     #?(:clj  [com.example.eee]
-       :cljs [com.example.ddd])
+       :cljs [com.example.ddd :as d])
     com.example.fff
     #?(:cljs com.example.bbb)
     com.example.ccc
@@ -369,11 +390,47 @@
   (:require
     [com.example.ccc]
     [com.example.fff]
-    #?(:clj
-       [com.example.aaa]
-       [com.example.eee]
+    #?@(:clj
+        [[com.example.aaa]
+         [com.example.eee]]
 
-       :cljs
-       [com.example.bbb]
-       [com.example.ddd])))
+        :cljs
+        [[com.example.bbb]
+         [com.example.ddd :as d]])))
+--Expected
+
+# ns with reader conditionals 3
+
+--Input
+(ns com.example.module-test
+  (:require #?(:clj  [clojure.test :refer :all]
+               :cljs [cljs.test :refer-macros [is]])
+            #?(:cljs [cljs.test.check :refer [quick-check]]) ;; aaa
+            #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]
+               :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])
+            #?(:clj  [clojure.test.check.properties :as prop]
+               :cljs [cljs.test.check.properties :as prop
+                       :include-macros true])
+            [schema.core :as schema :refer [check]]
+            [com.example.schema.ids :refer [Foo]]
+            [com.example.generators
+             :refer [gen-part-no gen-invalid-part-no]]))
+--Input
+
+--Expected
+(ns com.example.module-test
+  (:require
+    [com.example.generators :refer [gen-invalid-part-no gen-part-no]]
+    [com.example.schema.ids :refer [Foo]]
+    [schema.core :as schema :refer [check]]
+    #?@(:clj
+        [[clojure.test :refer :all]
+         [clojure.test.check.clojure-test :refer [defspec]]
+         [clojure.test.check.properties :as prop]]
+
+        :cljs
+        [[cljs.test :refer-macros [is]]
+         [cljs.test.check :refer [quick-check]] ;; aaa
+         [cljs.test.check.cljs-test :refer-macros [defspec]]
+         [cljs.test.check.properties :as prop :include-macros true]])))
 --Expected

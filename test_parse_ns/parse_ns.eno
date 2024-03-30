@@ -494,7 +494,7 @@
 }
 --Expected
 
-# reader conditionals in ns 1
+# reader conditionals in ns 2
 
 --Input
 (ns com.example.my-app
@@ -538,13 +538,13 @@
 }
 --Expected
 
-# reader conditionals in ns 2
+# reader conditionals in ns 3
 
 --Input
 (ns com.example.module-test
   (:require #?(:clj  [clojure.test :refer :all]
                :cljs [cljs.test :refer-macros [is]])
-            #?(:cljs [cljs.test.check :refer [quick-check]])
+            #?(:cljs [cljs.test.check :refer [quick-check]]) ;; aaa
             #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]
                :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])
             #?(:clj  [clojure.test.check.properties :as prop]
@@ -566,6 +566,7 @@
       "symbol": "cljs.test"
     },
     {
+      "commentAfter": ";; aaa",
       "platform": ":cljs",
       "refer": ["quick-check"],
       "symbol": "cljs.test.check"
