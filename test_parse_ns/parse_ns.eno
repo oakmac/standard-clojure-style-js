@@ -559,49 +559,55 @@
 --Expected
 {
   "nsSymbol": "com.example.module-test",
-  "readerConditionals": [":clj", ":cljs"],
   "requires": [
     {
-      "refer": "all",
-      "symbol": "clojure.test"
-    },
-    {
+      "platform": ":cljs",
       "referMacros": ["is"],
       "symbol": "cljs.test"
     },
     {
+      "platform": ":cljs",
       "refer": ["quick-check"],
       "symbol": "cljs.test.check"
     },
     {
-      "refer": ["defspec"],
-      "symbol": "clojure.test.check.clojure-test"
-    },
-    {
+      "platform": ":cljs",
       "referMacros": ["defspec"],
       "symbol": "cljs.test.check.cljs-test"
     },
     {
       "as": "prop",
-      "symbol": "clojure.test.check.properties"
-    },
-    {
-      "as": "prop",
       "includeMacros": true,
+      "platform": ":cljs",
       "symbol": "cljs.test.check.properties"
     },
     {
-      "as": "schema",
-      "refer": "check",
-      "symbol": "schema.core"
+      "platform": ":clj",
+      "refer": "all",
+      "symbol": "clojure.test"
     },
     {
-      "refer": "Foo",
+      "platform": ":clj",
+      "refer": ["defspec"],
+      "symbol": "clojure.test.check.clojure-test"
+    },
+    {
+      "as": "prop",
+      "platform": ":clj",
+      "symbol": "clojure.test.check.properties"
+    },
+    {
+      "refer": ["gen-invalid-part-no", "gen-part-no"],
+      "symbol": "com.example.generators"
+    },
+    {
+      "refer": ["Foo"],
       "symbol": "com.example.schema.ids"
     },
     {
-      "refer": ["gen-part-no", "get-invalid-part-no"],
-      "symbol": "com.example.generators"
+      "as": "schema",
+      "refer": ["check"],
+      "symbol": "schema.core"
     }
   ]
 }

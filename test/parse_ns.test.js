@@ -74,7 +74,7 @@ const certainTests = new Set()
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
-ignoreTests.add('reader conditionals in ns 2')
+// ignoreTests.add('reader conditionals in ns 2')
 
 // only run these tests if the _parseNs function is exposed
 if (isFn(clojurefmtLib._parseNs)) {
