@@ -434,3 +434,231 @@
          [cljs.test.check.cljs-test :refer-macros [defspec]]
          [cljs.test.check.properties :as prop :include-macros true]])))
 --Expected
+
+# ns: figwheel.main
+
+--Input
+(ns figwheel.main
+  #?(:clj
+     (:require
+      [cljs.analyzer :as ana]
+      [cljs.analyzer.api :as ana-api]
+      [cljs.build.api :as bapi]
+      [cljs.compiler]
+      [cljs.closure]
+      [cljs.cli :as cli]
+      [cljs.env]
+      [cljs.main :as cm]
+      [cljs.repl]
+      [cljs.repl.figwheel]
+      [cljs.util]
+      [clojure.data.json :as json]
+      [clojure.java.io :as io]
+      [clojure.pprint :refer [pprint]]
+      [clojure.string :as string]
+      [clojure.edn :as edn]
+      [clojure.java.shell :as sh]
+      [clojure.tools.reader.edn :as redn]
+      [clojure.tools.reader.reader-types :as rtypes]
+      [clojure.walk :as walk]
+      [figwheel.core :as fw-core]
+      [figwheel.main.ansi-party :as ansip]
+      [figwheel.main.logging :as log]
+      [figwheel.main.util :as fw-util]
+      [figwheel.main.watching :as fww]
+      [figwheel.main.helper :as helper]
+      [figwheel.main.npm :as npm]
+      [figwheel.main.async-result :as async-result]
+      [figwheel.main.react-native :as react-native]
+      [figwheel.main.testing :as testing]
+      [figwheel.repl :as fw-repl]
+      [figwheel.main.compat.ana-api :as ana-compat]
+      [figwheel.tools.exceptions :as fig-ex]
+      [certifiable.main :as certifiable]
+      [certifiable.log]))
+  #?(:clj
+     (:import
+      [java.io StringReader]
+      java.net.InetAddress
+      java.net.URI
+      java.net.URLEncoder
+      java.nio.file.Paths))
+  #?(:cljs
+     (:require-macros [figwheel.main])))
+--Input
+
+--Expected
+(ns figwheel.main
+  (:require
+    #?@(:clj
+        [[certifiable.log]
+         [certifiable.main :as certifiable]
+         [cljs.analyzer :as ana]
+         [cljs.analyzer.api :as ana-api]
+         [cljs.build.api :as bapi]
+         [cljs.cli :as cli]
+         [cljs.closure]
+         [cljs.compiler]
+         [cljs.env]
+         [cljs.main :as cm]
+         [cljs.repl]
+         [cljs.repl.figwheel]
+         [cljs.util]
+         [clojure.data.json :as json]
+         [clojure.edn :as edn]
+         [clojure.java.io :as io]
+         [clojure.java.shell :as sh]
+         [clojure.pprint :refer [pprint]]
+         [clojure.string :as string]
+         [clojure.tools.reader.edn :as redn]
+         [clojure.tools.reader.reader-types :as rtypes]
+         [clojure.walk :as walk]
+         [figwheel.core :as fw-core]
+         [figwheel.main.ansi-party :as ansip]
+         [figwheel.main.async-result :as async-result]
+         [figwheel.main.compat.ana-api :as ana-compat]
+         [figwheel.main.helper :as helper]
+         [figwheel.main.logging :as log]
+         [figwheel.main.npm :as npm]
+         [figwheel.main.react-native :as react-native]
+         [figwheel.main.testing :as testing]
+         [figwheel.main.util :as fw-util]
+         [figwheel.main.watching :as fww]
+         [figwheel.repl :as fw-repl]
+         [figwheel.tools.exceptions :as fig-ex]])))
+  ;; FIXME: unfinished
+--Expected
+
+# ns: figwheel.main.testing
+
+--Input
+(ns figwheel.main.testing
+  (:require
+   [clojure.string :as string]
+   #?@(:cljs [[figwheel.main.async-result :as async-result]
+              [goog.dom :as gdom]
+              [cljs.test :refer [report]]]
+       :clj [[cljs.analyzer]
+             [figwheel.main.logging :as log]
+             [figwheel.main.util :as fw-util]
+             [clojure.java.io :as io]])))
+--Input
+
+--Expected
+(ns figwheel.main.testing
+  (:require
+    [clojure.string :as string]
+    #?@(:clj
+        [[cljs.analyzer]
+         [clojure.java.io :as io]
+         [figwheel.main.logging :as log]
+         [figwheel.main.util :as fw-util]]
+
+        :cljs
+        [[cljs.test :refer [report]]
+         [figwheel.main.async-result :as async-result]
+         [goog.dom :as gdom]])))
+--Expected
+
+# ns: cuerdas.core
+
+--Input
+(ns cuerdas.core
+  (:refer-clojure :exclude [contains? empty? repeat regexp?
+                            replace reverse chars keyword concat
+                            #?@(:clj [unquote format])])
+  #?(:cljs (:require-macros [cuerdas.core :refer [unsafe-concat nilv]]))
+  (:require [clojure.string :as str]
+            [clojure.set :refer [map-invert]]
+            [clojure.core :as c]
+
+            [clojure.walk :refer [stringify-keys]]
+            [cuerdas.regexp :as rx]
+
+            #?(:cljs [goog.string :as gstr])
+            #?(:cljs [cljs.reader :as edn]
+               :clj  [clojure.edn :as edn]))
+  #?(:clj (:import (java.util List Locale))))
+--Input
+
+--Expected
+(ns cuerdas.core
+  (:refer-clojure :exclude []))
+  ;; FIXME: unfinished
+--Expected
+
+# ns: metabase.util
+
+--Input
+(ns metabase.util
+  "Common utility functions useful throughout the codebase."
+  (:require
+   [camel-snake-kebab.internals.macros :as csk.macros]
+   [clojure.data :refer [diff]]
+   [clojure.pprint :as pprint]
+   [clojure.set :as set]
+   [clojure.string :as str]
+   [clojure.walk :as walk]
+   [flatland.ordered.map :refer [ordered-map]]
+   [medley.core :as m]
+   [metabase.shared.util.i18n :refer [tru] :as i18n]
+   [metabase.shared.util.namespaces :as u.ns]
+   [metabase.util.format :as u.format]
+   [metabase.util.log :as log]
+   [metabase.util.memoize :as memoize]
+   [net.cgrand.macrovich :as macros]
+   [weavejester.dependency :as dep]
+   #?@(:clj  ([clojure.math.numeric-tower :as math]
+              [me.flowthing.pp :as pp]
+              [metabase.config :as config]
+              #_{:clj-kondo/ignore [:discouraged-namespace]}
+              [metabase.util.jvm :as u.jvm]
+              [metabase.util.string :as u.str]
+              [potemkin :as p]
+              [ring.util.codec :as codec])))
+  #?(:clj (:import
+           (java.text Normalizer Normalizer$Form)
+           (java.util Locale)
+           (org.apache.commons.validator.routines RegexValidator UrlValidator)))
+  #?(:cljs (:require-macros [camel-snake-kebab.internals.macros :as csk.macros]
+                            [metabase.util])))
+--Input
+
+--Expected
+(ns metabase.util
+  "Common utility functions useful throughout the codebase."
+  (:require
+    [camel-snake-kebab.internals.macros :as csk.macros]
+    [clojure.data :refer [diff]]
+    [clojure.pprint :as pprint]
+    [clojure.set :as set]
+    [clojure.string :as str]
+    [clojure.walk :as walk]
+    [flatland.ordered.map :refer [ordered-map]]
+    [medley.core :as m]
+    [metabase.shared.util.i18n :as i18n :refer [tru]]
+    [metabase.shared.util.namespaces :as u.ns]
+    [metabase.util.format :as u.format]
+    [metabase.util.log :as log]
+    [metabase.util.memoize :as memoize]
+    [net.cgrand.macrovich :as macros]
+    [weavejester.dependency :as dep]
+    #?@(:clj
+        [[clojure.math.numeric-tower :as math]
+         [me.flowthing.pp :as pp]
+         [metabase.config :as config]
+         #_{:clj-kondo/ignore [:discouraged-namespace]}
+         [metabase.util.jvm :as u.jvm]
+         [metabase.util.string :as u.str]
+         [potemkin :as p]
+         [ring.util.codec :as codec]])
+  #?(:cljs
+     (:require-macros
+       [camel-snake-kebab.internals.macros :as csk.macros]
+       [metabase.util]))
+  (:import
+    #?@(:clj
+        [(java.text Normalizer Normalizer$Form)
+         (java.util Locale)
+         (org.apache.commons.validator.routines RegexValidator UrlValidator)]))))
+--Expected
