@@ -352,6 +352,8 @@
 
 # ns with reader conditionals 1
 
+> NOTE: use the standard reader conditional #?( when there are only one line per platform
+
 --Input
 (ns com.example.my-app
   (:require
@@ -374,18 +376,25 @@
 # ns with reader conditionals 2
 
 --Input
+;; NOTE: the :default reader conditional platform is always placed last
+
 (ns com.example.my-app
   (:require
     #?(:clj  [com.example.eee]
-       :cljs [com.example.ddd :as d])
+       :cljs [com.example.ddd :as d] ;; ddd
+       :elephant com.example.yyy)
     com.example.fff
-    #?(:cljs com.example.bbb)
+    #?@(:cljs [com.example.bbb-cljs]
+        :elephant [com.example.bbb-elephant]
+        :default [com.example.bbb-default]) ;; bbb
     com.example.ccc
     #?(:clj com.example.aaa)
     ))
 --Input
 
 --Expected
+;; NOTE: the :default reader conditional platform is always placed last
+
 (ns com.example.my-app
   (:require
     [com.example.ccc]
@@ -395,8 +404,15 @@
          [com.example.eee]]
 
         :cljs
-        [[com.example.bbb]
-         [com.example.ddd :as d]])))
+        [[com.example.bbb-cljs]
+         [com.example.ddd :as d]] ;; ddd
+
+        :elephant
+        [[com.example.bbb-elephant]
+         [com.example.yyy]]
+
+        :default
+        [[com.example.bbb-default]]))) ;; bbb
 --Expected
 
 # ns with reader conditionals 3
