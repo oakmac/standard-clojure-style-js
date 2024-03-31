@@ -674,3 +674,78 @@
   ]
 }
 --Expected
+
+
+# reader conditionals in ns 4
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd :as d] ;; ddd
+       :elephant com.example.yyy)
+    com.example.fff
+    #?@(:cljs [com.example.bbb-cljs]
+        :elephant [com.example.bbb-elephant]
+        :default [com.example.bbb-default])
+    com.example.ccc
+    #?(:clj com.example.aaa))
+
+  (:import
+    #?@(:cljs goog.fake.Ccc
+        :clj [java.net.URI]))
+
+  #?(:clj
+     (:import
+      [java.io StringReader]
+      java.net.InetAddress)
+
+     :cljs
+     (:import
+      [goog.fake Aaa Ddd]
+      goog.fake.bbb)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "platform": ":clj",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.bbb-cljs"
+    },
+    {
+      "platform": ":default",
+      "symbol": "com.example.bbb-default"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.bbb-elephant"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "as": "d",
+      "commentAfter": ";; ddd",
+      "platform": ":cljs",
+      "symbol": "com.example.ddd"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "com.example.eee"
+    },
+    {
+      "symbol": "com.example.fff"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.yyy"
+    }
+  ]
+}
+--Expected
