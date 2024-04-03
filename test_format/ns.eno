@@ -451,6 +451,72 @@
          [cljs.test.check.properties :as prop :include-macros true]])))
 --Expected
 
+# reader conditionals in ns 4
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd :as d] ;; ddd
+       :elephant com.example.yyy)
+    com.example.fff
+    #?@(:cljs [com.example.bbb-cljs]
+        :elephant [com.example.bbb-elephant]
+        :default [com.example.bbb-default])
+    com.example.ccc
+    #?(:clj com.example.aaa))
+
+  (:import
+    xxx.yyy.Zzz
+    aaa.bbb.Ccc
+    #?@(:cljs goog.string.StringBuffer
+        :clj java.net.URI))
+
+  #?(:clj
+     (:import
+      [java.io StringReader]
+      java.net.InetAddress)
+
+     :cljs
+     (:import
+      [goog.module ModuleManager]
+      (goog.events EventType EventTarget)
+      goog.Uri)))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [com.example.ccc]
+    [com.example.fff]
+    #?@(:clj
+        [[com.example.aaa]
+         [com.example.eee]]
+
+        :cljs
+        [[com.example.bbb-cljs]
+         [com.example.ddd :as d]] ;; ddd
+
+        :elephant
+        [[com.example.bbb-elephant]
+         [com.example.yyy]]
+
+        :default
+        [[com.example.bbb-default]]))
+  (:import
+    (aaa.bbb Ccc)
+    (xxx.yyy Zzz)
+    #?@(:clj
+        [(java.io StringReader)
+         (java.net InetAddress URI)]
+
+        :cljs
+        [(goog Uri)
+         (goog.events EventTarget EventType)
+         (goog.module ModuleManager)
+         (goog.string StringBuffer)])))
+--Expected
+
 # ns: figwheel.main
 
 --Input
