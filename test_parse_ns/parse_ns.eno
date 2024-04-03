@@ -791,3 +791,66 @@
   ]
 }
 --Expected
+
+# require-macros 1
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :refer [add]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "refer": ["add"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 2
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :as foo])
+  (:require [foo.core :as foo]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "as": "foo",
+      "symbol": "foo.core"
+    }
+  ],
+  "requires": [
+    {
+      "as": "foo",
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 3
+
+--Input
+(ns foo.core
+  (:require-macros foo.core))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo.core",
+  "requireMacros": [
+    {
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
