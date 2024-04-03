@@ -854,3 +854,102 @@
   ]
 }
 --Expected
+
+# require-macros 4
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :refer [add] :as quizzle])
+  (:require [foo.core :refer [subtract]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "as": "quizzle",
+      "refer": ["add"],
+      "symbol": "foo.core"
+    }
+  ],
+  "requires": [
+    {
+      "refer": ["subtract"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 5
+
+--Input
+(ns bar.core
+  (:require [foo.core :refer [subtract] :refer-macros [add]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requires": [
+    {
+      "refer": ["subtract"],
+      "referMacros": ["add"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# ClojureScript ns test 1
+
+--Input
+(ns bar.core
+  (:require [foo.core :as foo :include-macros true]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requires": [
+    {
+      "as": "foo",
+      "includeMacros": true,
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# ClojureScript ns test 2
+
+--Input
+(ns cljs.ns-test
+  (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})
+  (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always
+                                                                          when-let always-let}]
+                   [cljs.test :refer [deftest is]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "cljs.ns-test",
+  "referClojure": {
+    "exclude": ["+", "for"],
+    "rename": [["mapv", "core-mapv"]]
+  },
+  "requireMacros": [
+    {
+      "refer": ["deftest", "is"],
+      "symbol": "cljs.test"
+    },
+    {
+      "as": "lang",
+      "refer": ["when", "when-let"],
+      "rename": [["when", "always"], ["when-let", "always-let"]],
+      "symbol": "clojure.core"
+    }
+  ]
+}
+--Expected
