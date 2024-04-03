@@ -675,7 +675,6 @@
 }
 --Expected
 
-
 # reader conditionals in ns 4
 
 --Input
@@ -692,8 +691,10 @@
     #?(:clj com.example.aaa))
 
   (:import
-    #?@(:cljs goog.fake.Ccc
-        :clj [java.net.URI]))
+    xxx.yyy.Zzz
+    aaa.bbb.Ccc
+    #?@(:cljs goog.string.StringBuffer
+        :clj java.net.URI))
 
   #?(:clj
      (:import
@@ -702,13 +703,54 @@
 
      :cljs
      (:import
-      [goog.fake Aaa Ddd]
-      goog.fake.bbb)))
+      [goog.module ModuleManager]
+      (goog.events EventType EventTarget)
+      goog.Uri)))
 --Input
 
 --Expected
 {
   "nsSymbol": "com.example.my-app",
+  "imports": [
+    {
+      "classes": ["Ccc"],
+      "package": "aaa.bbb"
+    },
+    {
+      "classes": ["Uri"],
+      "package": "goog",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["EventTarget", "EventType"],
+      "package": "goog.events",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["ModuleManager"],
+      "package": "goog.module",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["StringBuffer"],
+      "package": "goog.string",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["StringReader"],
+      "package": "java.io",
+      "platform": ":clj"
+    },
+    {
+      "classes": ["InetAddress", "URI"],
+      "package": "java.net",
+      "platform": ":clj"
+    },
+    {
+      "classes": ["Zzz"],
+      "package": "xxx.yyy"
+    }
+  ],
   "requires": [
     {
       "platform": ":clj",
