@@ -66,27 +66,43 @@ test('All test_parse_ns/ cases should have unique names', () => {
   expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
 })
 
+// dev convenience: set this to true and add specific test cases
+// only those cases will run
+const onlyRunCertainTests = false
+const certainTests = new Set()
+// certainTests.add('how to ns: use vectors, not lists')
+
+const ignoreSomeTests = true
+const ignoreTests = new Set()
+// ignoreTests.add('reader conditionals in ns 2')
+
 // only run these tests if the _parseNs function is exposed
 if (isFn(clojurefmtLib._parseNs)) {
   allTestCases.forEach(testCase => {
     // FIXME: input should parse without errors
     // FIXME: Expected should be valid JSON
 
-    test(testCase.filename + ': ' + testCase.name, () => {
-      const inputNodes = clojurefmtLib.parse(testCase.input)
-      const flatNodes = clojurefmtLib._flattenTree(inputNodes)
-      const nsParsed1 = clojurefmtLib._parseNs(flatNodes)
+    let runThisTest = true
+    if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
+    else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
 
-      const nsParsed2 = immutable.fromJS(nsParsed1)
-      const nsExpected = immutable.fromJS(testCase.expected)
-      const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
+    if (runThisTest) {
+      test(testCase.filename + ': ' + testCase.name, () => {
+        const inputNodes = clojurefmtLib.parse(testCase.input)
+        const flatNodes = clojurefmtLib._flattenTree(inputNodes)
+        const nsParsed1 = clojurefmtLib._parseNs(flatNodes)
 
-      if (!resultIsTheSame) {
-        console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
-      }
+        const nsParsed2 = immutable.fromJS(nsParsed1)
+        const nsExpected = immutable.fromJS(testCase.expected)
+        const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
 
-      expect(resultIsTheSame).toBe(true)
-    })
+        if (!resultIsTheSame) {
+          console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
+        }
+
+        expect(resultIsTheSame).toBe(true)
+      })
+    }
   })
 }
 

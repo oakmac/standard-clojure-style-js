@@ -493,3 +493,301 @@
   ]
 }
 --Expected
+
+# reader conditionals in ns 1
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd])
+    com.example.fff
+    #?(:cljs com.example.bbb)
+    com.example.ccc
+    #?(:clj com.example.aaa)
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "platform": ":clj",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.bbb"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.ddd"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "com.example.eee"
+    },
+    {
+      "symbol": "com.example.fff"
+    }
+  ]
+}
+--Expected
+
+# reader conditionals in ns 2
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd :as d] ;; ddd
+       :elephant com.example.yyy)
+    com.example.fff
+    #?@(:cljs [com.example.bbb-cljs]
+        :elephant [com.example.bbb-elephant]
+        :default [com.example.bbb-default])
+    com.example.ccc
+    #?(:clj com.example.aaa)
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "platform": ":clj",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.bbb-cljs"
+    },
+    {
+      "platform": ":default",
+      "symbol": "com.example.bbb-default"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.bbb-elephant"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "as": "d",
+      "commentAfter": ";; ddd",
+      "platform": ":cljs",
+      "symbol": "com.example.ddd"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "com.example.eee"
+    },
+    {
+      "symbol": "com.example.fff"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.yyy"
+    }
+  ]
+}
+--Expected
+
+# reader conditionals in ns 3
+
+--Input
+(ns com.example.module-test
+  (:require #?(:clj  [clojure.test :refer :all]
+               :cljs [cljs.test :refer-macros [is]])
+            #?(:cljs [cljs.test.check :refer [quick-check]]) ;; aaa
+            #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]
+               :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])
+            #?(:clj  [clojure.test.check.properties :as prop]
+               :cljs [cljs.test.check.properties :as prop
+                       :include-macros true])
+            [schema.core :as schema :refer [check]]
+            [com.example.schema.ids :refer [Foo]]
+            [com.example.generators
+             :refer [gen-part-no gen-invalid-part-no]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.module-test",
+  "requires": [
+    {
+      "platform": ":cljs",
+      "referMacros": ["is"],
+      "symbol": "cljs.test"
+    },
+    {
+      "commentAfter": ";; aaa",
+      "platform": ":cljs",
+      "refer": ["quick-check"],
+      "symbol": "cljs.test.check"
+    },
+    {
+      "platform": ":cljs",
+      "referMacros": ["defspec"],
+      "symbol": "cljs.test.check.cljs-test"
+    },
+    {
+      "as": "prop",
+      "includeMacros": true,
+      "platform": ":cljs",
+      "symbol": "cljs.test.check.properties"
+    },
+    {
+      "platform": ":clj",
+      "refer": "all",
+      "symbol": "clojure.test"
+    },
+    {
+      "platform": ":clj",
+      "refer": ["defspec"],
+      "symbol": "clojure.test.check.clojure-test"
+    },
+    {
+      "as": "prop",
+      "platform": ":clj",
+      "symbol": "clojure.test.check.properties"
+    },
+    {
+      "refer": ["gen-invalid-part-no", "gen-part-no"],
+      "symbol": "com.example.generators"
+    },
+    {
+      "refer": ["Foo"],
+      "symbol": "com.example.schema.ids"
+    },
+    {
+      "as": "schema",
+      "refer": ["check"],
+      "symbol": "schema.core"
+    }
+  ]
+}
+--Expected
+
+# reader conditionals in ns 4
+
+--Input
+(ns com.example.my-app
+  (:require
+    #?(:clj  [com.example.eee]
+       :cljs [com.example.ddd :as d] ;; ddd
+       :elephant com.example.yyy)
+    com.example.fff
+    #?@(:cljs [com.example.bbb-cljs]
+        :elephant [com.example.bbb-elephant]
+        :default [com.example.bbb-default])
+    com.example.ccc
+    #?(:clj com.example.aaa))
+
+  (:import
+    xxx.yyy.Zzz
+    aaa.bbb.Ccc
+    #?@(:cljs goog.string.StringBuffer
+        :clj java.net.URI))
+
+  #?(:clj
+     (:import
+      [java.io StringReader]
+      java.net.InetAddress)
+
+     :cljs
+     (:import
+      [goog.module ModuleManager]
+      (goog.events EventType EventTarget)
+      goog.Uri)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "imports": [
+    {
+      "classes": ["Ccc"],
+      "package": "aaa.bbb"
+    },
+    {
+      "classes": ["Uri"],
+      "package": "goog",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["EventTarget", "EventType"],
+      "package": "goog.events",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["ModuleManager"],
+      "package": "goog.module",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["StringBuffer"],
+      "package": "goog.string",
+      "platform": ":cljs"
+    },
+    {
+      "classes": ["StringReader"],
+      "package": "java.io",
+      "platform": ":clj"
+    },
+    {
+      "classes": ["InetAddress", "URI"],
+      "package": "java.net",
+      "platform": ":clj"
+    },
+    {
+      "classes": ["Zzz"],
+      "package": "xxx.yyy"
+    }
+  ],
+  "requires": [
+    {
+      "platform": ":clj",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "platform": ":cljs",
+      "symbol": "com.example.bbb-cljs"
+    },
+    {
+      "platform": ":default",
+      "symbol": "com.example.bbb-default"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.bbb-elephant"
+    },
+    {
+      "symbol": "com.example.ccc"
+    },
+    {
+      "as": "d",
+      "commentAfter": ";; ddd",
+      "platform": ":cljs",
+      "symbol": "com.example.ddd"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "com.example.eee"
+    },
+    {
+      "symbol": "com.example.fff"
+    },
+    {
+      "platform": ":elephant",
+      "symbol": "com.example.yyy"
+    }
+  ]
+}
+--Expected
