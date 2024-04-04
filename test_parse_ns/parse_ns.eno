@@ -902,6 +902,53 @@
 }
 --Expected
 
+# require-macros 6
+
+--Input
+(ns bar.core
+  ;; aaa
+  ;; bbb
+  ;; ccc
+  (:require-macros [foo.core :refer [bad add cad]] ;; rad
+  ;; xxx
+  ;; yyy
+  bar.core.util ;; util util util
+        [biz.com :as bc :refer [qux zoom banana]] ;; biz-com!
+        )    )
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacrosCommentsAbove": [
+    ";; aaa",
+    ";; bbb",
+    ";; ccc"
+  ],
+  "requireMacros": [
+    {
+      "commentsAbove": [
+        ";; xxx",
+        ";; yyy"
+      ],
+      "commentAfter": ";; util util util",
+      "symbol": "bar.core.util"
+    },
+    {
+      "as": "bc",
+      "commentAfter": ";; biz-com!",
+      "refer": ["banana", "qux", "zoom"],
+      "symbol": "biz.com"
+    },
+    {
+      "commentAfter": ";; rad",
+      "refer": ["add", "bad", "cad"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
 # ClojureScript ns test 1
 
 --Input
