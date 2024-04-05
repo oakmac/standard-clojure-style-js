@@ -469,7 +469,7 @@
   (:import
     xxx.yyy.Zzz
     aaa.bbb.Ccc
-    #?@(:cljs goog.string.StringBuffer
+    #?@(:cljs goog.string.StringBuffer ;; aaa
         :clj java.net.URI))
 
   #?(:clj
@@ -514,7 +514,7 @@
         [(goog Uri)
          (goog.events EventTarget EventType)
          (goog.module ModuleManager)
-         (goog.string StringBuffer)])))
+         (goog.string StringBuffer)]))) ;; aaa
 --Expected
 
 # ns: figwheel.main
@@ -743,4 +743,21 @@
         [(java.text Normalizer Normalizer$Form)
          (java.util Locale)
          (org.apache.commons.validator.routines RegexValidator UrlValidator)]))))
+--Expected
+
+# ambiguous import comment
+
+> FIXME: how to handle this situation?
+
+--Input
+(ns com.example.my-app
+  (:import
+    java.net.URI ;; aaa
+    java.net.InetAddress)) ;; bbb
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:import
+    (java.net InetAddress URI)))
 --Expected

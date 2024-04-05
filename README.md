@@ -101,6 +101,20 @@ bun run jest format.test.js
 bun run lint
 ```
 
+## Notes / Misc
+
+* ns order is:
+  1. `:refer-clojure`
+  1. `:require-macros`
+  1. `:require`
+  1. `:import`
+* Note that [how to ns] does not include guidance for `:require-macros`
+  * ClojureScript source ([1](https://github.com/clojure/clojurescript/blob/a53e163d9c495904389bd111665e93c4ff0c398e/src/main/cljs/cljs/pprint.cljs#L11), [2](https://github.com/clojure/clojurescript/blob/a53e163d9c495904389bd111665e93c4ff0c398e/src/main/cljs/cljs/repl.cljs#L10), [3](https://github.com/clojure/clojurescript/blob/a53e163d9c495904389bd111665e93c4ff0c398e/src/main/clojure/cljs/compiler.cljc#L12)) consistently places `:require-macros` above `:require`, so let's go with that
+* reader conditionals are placed at the bottom of the relevant ns section
+  * sorted alphabetically except for `:default` (if it exists), which is last
+
+[how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
+
 ## TODO
 
 - [ ] need to add additional cases for namespace maps (what is allowed?)
