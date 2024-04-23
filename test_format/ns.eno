@@ -467,7 +467,7 @@
     #?(:clj com.example.aaa))
 
   (:import
-    xxx.yyy.Zzz
+    xxx.yyy.Zzz ;; zzz
     aaa.bbb.Ccc
     #?@(:cljs goog.string.StringBuffer ;; aaa
         :clj java.net.URI))
@@ -481,7 +481,7 @@
      (:import
       [goog.module ModuleManager]
       (goog.events EventType EventTarget)
-      goog.Uri)))
+      goog.Uri))) ;; uuu
 --Input
 
 --Expected
@@ -505,13 +505,13 @@
         [[com.example.bbb-default]]))
   (:import
     (aaa.bbb Ccc)
-    (xxx.yyy Zzz)
+    (xxx.yyy Zzz) ;; zzz
     #?@(:clj
         [(java.io StringReader)
          (java.net InetAddress URI)]
 
         :cljs
-        [(goog Uri)
+        [(goog Uri) ;; uuu
          (goog.events EventTarget EventType)
          (goog.module ModuleManager)
          (goog.string StringBuffer)]))) ;; aaa
