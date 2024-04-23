@@ -761,3 +761,45 @@
   (:import
     (java.net InetAddress URI)))
 --Expected
+
+# require-macros with no reader conditional
+
+> If :require-macros is not wrapped in a reader conditional, then it is probably inside of a .cljs file
+
+--Input
+(ns com.example.my-app
+  (:require
+    [aaa.bbb :as bbb])
+  (:require-macros
+    [ccc.ddd :as d :refer [hhh ggg]]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+    [ccc.ddd :as d :refer [ggg hhh]])
+  (:require
+    [aaa.bbb :as bbb]))
+--Expected
+
+# require-macros with reader conditional
+
+> Else wrap the entire :require-macros form inside a reader conditional
+
+--Input
+(ns com.example.my-app
+  (:require
+    [aaa.bbb :as bbb])
+  #?(:cljs
+     (:require-macros
+       [ccc.ddd :as d :refer [hhh ggg]])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:require-macros
+       [ccc.ddd :as d :refer [ggg hhh]]))
+  (:require
+    [aaa.bbb :as bbb]))
+--Expected

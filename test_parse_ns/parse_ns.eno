@@ -1044,3 +1044,34 @@
   ]
 }
 --Expected
+
+# sente example
+
+--Input
+(ns taoensso.sente
+
+  #?(:cljs (:require-macros
+             [cljs.core.async.macros :as asyncm :refer (go go-loop)]
+             [taoensso.encore :as enc :refer (have? have have-in)])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "taoensso.sente",
+  "requireMacrosInsideCLJSReaderConditional": true,
+  "requireMacros": [
+    {
+      "as": "asyncm",
+      "platform": ":cljs",
+      "refer": ["go", "go-loop"],
+      "symbol": "cljs.core.async.macros"
+    },
+    {
+      "as": "enc",
+      "platform": ":cljs",
+      "refer": ["have", "have-in", "have?"],
+      "symbol": "taoensso.encore"
+    }
+  ]
+}
+--Expected
