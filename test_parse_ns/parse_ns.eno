@@ -791,3 +791,342 @@
   ]
 }
 --Expected
+
+# require-macros 1
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :refer [add]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "refer": ["add"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 2
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :as foo])
+  (:require [foo.core :as foo]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "as": "foo",
+      "symbol": "foo.core"
+    }
+  ],
+  "requires": [
+    {
+      "as": "foo",
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 3
+
+--Input
+(ns foo.core
+  (:require-macros foo.core))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo.core",
+  "requireMacros": [
+    {
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 4
+
+--Input
+(ns bar.core
+  (:require-macros [foo.core :refer [add] :as quizzle])
+  (:require [foo.core :refer [subtract]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacros": [
+    {
+      "as": "quizzle",
+      "refer": ["add"],
+      "symbol": "foo.core"
+    }
+  ],
+  "requires": [
+    {
+      "refer": ["subtract"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 5
+
+--Input
+(ns bar.core
+  (:require [foo.core :refer [subtract] :refer-macros [add]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requires": [
+    {
+      "refer": ["subtract"],
+      "referMacros": ["add"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# require-macros 6
+
+--Input
+(ns bar.core
+  ;; aaa
+  ;; bbb
+  ;; ccc
+  (:require-macros [foo.core :refer [bad add cad]] ;; rad
+  ;; xxx
+  ;; yyy
+  bar.core.util ;; util util util
+        [biz.com :as bc :refer [qux zoom banana]] ;; biz-com!
+        )    )
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requireMacrosCommentsAbove": [
+    ";; aaa",
+    ";; bbb",
+    ";; ccc"
+  ],
+  "requireMacros": [
+    {
+      "commentsAbove": [
+        ";; xxx",
+        ";; yyy"
+      ],
+      "commentAfter": ";; util util util",
+      "symbol": "bar.core.util"
+    },
+    {
+      "as": "bc",
+      "commentAfter": ";; biz-com!",
+      "refer": ["banana", "qux", "zoom"],
+      "symbol": "biz.com"
+    },
+    {
+      "commentAfter": ";; rad",
+      "refer": ["add", "bad", "cad"],
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# ClojureScript ns test 1
+
+--Input
+(ns bar.core
+  (:require [foo.core :as foo :include-macros true]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "bar.core",
+  "requires": [
+    {
+      "as": "foo",
+      "includeMacros": true,
+      "symbol": "foo.core"
+    }
+  ]
+}
+--Expected
+
+# ClojureScript ns test 2
+
+--Input
+(ns cljs.ns-test
+  (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})
+  (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always
+                                                                          when-let always-let}]
+                   [cljs.test :refer [deftest is]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "cljs.ns-test",
+  "referClojure": {
+    "exclude": ["+", "for"],
+    "rename": [["mapv", "core-mapv"]]
+  },
+  "requireMacros": [
+    {
+      "refer": ["deftest", "is"],
+      "symbol": "cljs.test"
+    },
+    {
+      "as": "lang",
+      "refer": ["when", "when-let"],
+      "rename": [["when", "always"], ["when-let", "always-let"]],
+      "symbol": "clojure.core"
+    }
+  ]
+}
+--Expected
+
+# ClojureScript ns test 3
+
+--Input
+(ns cljs.spec.gen.alpha
+  (:refer-clojure :exclude [boolean cat hash-map list map not-empty set vector
+                            char double int keyword symbol string uuid delay shuffle])
+  (:require-macros [cljs.core :as c]
+                   [cljs.spec.gen.alpha :as gen :refer [dynaload lazy-combinators lazy-prims]])
+  (:require [cljs.core :as c])
+  (:import (goog Uri)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "cljs.spec.gen.alpha",
+  "imports": [
+    {
+      "classes": ["Uri"],
+      "package": "goog"
+    }
+  ],
+  "referClojure": {
+    "exclude": ["boolean", "cat", "char", "delay", "double", "hash-map", "int", "keyword", "list", "map", "not-empty", "set", "shuffle", "string", "symbol", "uuid", "vector"]
+  },
+  "requireMacros": [
+    {
+      "as": "c",
+      "symbol": "cljs.core"
+    },
+    {
+      "as": "gen",
+      "refer": ["dynaload", "lazy-combinators", "lazy-prims"],
+      "symbol": "cljs.spec.gen.alpha"
+    }
+  ],
+  "requires": [
+    {
+      "as": "c",
+      "symbol": "cljs.core"
+    }
+  ]
+}
+--Expected
+
+# sente example
+
+--Input
+(ns taoensso.sente
+  (:require
+    #?@(:clj  [[clojure.string :as str]
+               [clojure.core.async :as async]
+               [taoensso.encore :as enc]
+               [taoensso.timbre :as timbre]
+               [taoensso.sente.interfaces :as interfaces]]
+        :cljs [[clojure.string :as str]
+               [cljs.core.async :as async]
+               [taoensso.encore :as enc]
+               [taoensso.sente.interfaces :as interfaces]]))
+  #?(:cljs (:require-macros
+             [cljs.core.async.macros :as asyncm :refer (go go-loop)]
+             [taoensso.encore :as enc :refer (have? have have-in)])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "taoensso.sente",
+  "requires": [
+    {
+      "as": "async",
+      "platform": ":cljs",
+      "symbol": "cljs.core.async"
+    },
+    {
+      "as": "async",
+      "platform": ":clj",
+      "symbol": "clojure.core.async"
+    },
+    {
+      "as": "str",
+      "platform": ":clj",
+      "symbol": "clojure.string"
+    },
+    {
+      "as": "str",
+      "platform": ":cljs",
+      "symbol": "clojure.string"
+    },
+    {
+      "as": "enc",
+      "platform": ":clj",
+      "symbol": "taoensso.encore"
+    },
+    {
+      "as": "enc",
+      "platform": ":cljs",
+      "symbol": "taoensso.encore"
+    },
+    {
+      "as": "interfaces",
+      "platform": ":clj",
+      "symbol": "taoensso.sente.interfaces"
+    },
+    {
+      "as": "interfaces",
+      "platform": ":cljs",
+      "symbol": "taoensso.sente.interfaces"
+    },
+    {
+      "as": "timbre",
+      "platform": ":clj",
+      "symbol": "taoensso.timbre"
+    }
+  ],
+  "requireMacros": [
+    {
+      "as": "asyncm",
+      "platform": ":cljs",
+      "refer": ["go", "go-loop"],
+      "symbol": "cljs.core.async.macros"
+    },
+    {
+      "as": "enc",
+      "platform": ":cljs",
+      "refer": ["have", "have-in", "have?"],
+      "symbol": "taoensso.encore"
+    }
+  ]
+}
+--Expected

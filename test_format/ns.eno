@@ -467,9 +467,9 @@
     #?(:clj com.example.aaa))
 
   (:import
-    xxx.yyy.Zzz
+    xxx.yyy.Zzz ;; zzz
     aaa.bbb.Ccc
-    #?@(:cljs goog.string.StringBuffer
+    #?@(:cljs goog.string.StringBuffer ;; aaa
         :clj java.net.URI))
 
   #?(:clj
@@ -481,7 +481,7 @@
      (:import
       [goog.module ModuleManager]
       (goog.events EventType EventTarget)
-      goog.Uri)))
+      goog.Uri))) ;; uuu
 --Input
 
 --Expected
@@ -505,16 +505,16 @@
         [[com.example.bbb-default]]))
   (:import
     (aaa.bbb Ccc)
-    (xxx.yyy Zzz)
+    (xxx.yyy Zzz) ;; zzz
     #?@(:clj
         [(java.io StringReader)
          (java.net InetAddress URI)]
 
         :cljs
-        [(goog Uri)
+        [(goog Uri) ;; uuu
          (goog.events EventTarget EventType)
          (goog.module ModuleManager)
-         (goog.string StringBuffer)])))
+         (goog.string StringBuffer)]))) ;; aaa
 --Expected
 
 # ns: figwheel.main
@@ -743,4 +743,63 @@
         [(java.text Normalizer Normalizer$Form)
          (java.util Locale)
          (org.apache.commons.validator.routines RegexValidator UrlValidator)]))))
+--Expected
+
+# ambiguous import comment
+
+> FIXME: how to handle this situation?
+
+--Input
+(ns com.example.my-app
+  (:import
+    java.net.URI ;; aaa
+    java.net.InetAddress)) ;; bbb
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:import
+    (java.net InetAddress URI)))
+--Expected
+
+# require-macros with no reader conditional
+
+> If :require-macros is not wrapped in a reader conditional, then it is probably inside of a .cljs file
+
+--Input
+(ns com.example.my-app
+  (:require
+    [aaa.bbb :as bbb])
+  (:require-macros
+    [ccc.ddd :as d :refer [hhh ggg]]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+    [ccc.ddd :as d :refer [ggg hhh]])
+  (:require
+    [aaa.bbb :as bbb]))
+--Expected
+
+# require-macros with reader conditional
+
+> Else wrap the entire :require-macros form inside a reader conditional
+
+--Input
+(ns com.example.my-app
+  (:require
+    [aaa.bbb :as bbb])
+  #?(:cljs
+     (:require-macros
+       [ccc.ddd :as d :refer [hhh ggg]])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:require-macros
+       [ccc.ddd :as d :refer [ggg hhh]]))
+  (:require
+    [aaa.bbb :as bbb]))
 --Expected

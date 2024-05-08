@@ -83,6 +83,7 @@ ignoreTests.add('Surrounding newlines removed 3')
 ignoreTests.add('ns: figwheel.main')
 ignoreTests.add('ns: cuerdas.core')
 ignoreTests.add('ns: metabase.util')
+ignoreTests.add('ambiguous import comment')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
