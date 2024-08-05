@@ -90,6 +90,8 @@ Note: this should not be considered a definitive list. I will add to this as I c
 
 ## Development
 
+Make sure that either [Node.js] or [bun] are installed (both should work).
+
 ```sh
 ## run unit tests
 bun test
@@ -100,6 +102,9 @@ bun run jest format.test.js
 ## lint JS
 bun run lint
 ```
+
+[Node.js]:https://nodejs.org/
+[bun]:https://bun.sh/
 
 ## Notes / Misc
 
