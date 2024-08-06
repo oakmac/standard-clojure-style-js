@@ -4,7 +4,7 @@ const fs = require('fs-plus')
 const path = require('path')
 
 const enolib = require('enolib')
-const clojurefmtLib = require('../lib/clojurefmt.js')
+const scsLib = require('../lib/standard-clojure-style.js')
 
 const rootDir = path.join(__dirname, '../')
 
@@ -81,7 +81,7 @@ allTestCases.forEach(testCase => {
 
   if (runThisTest) {
     test(testCase.filename + ': ' + testCase.name, () => {
-      const tree = clojurefmtLib.parse(testCase.input)
+      const tree = scsLib.parse(testCase.input)
       const treeStr = nodeToString(tree, 0)
       if (onlyRunCertainTests) {
         console.log(treeStr)

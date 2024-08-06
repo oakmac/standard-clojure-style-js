@@ -1,8 +1,8 @@
-# clojurefmt-js
+# Standard Clojure Style in JavaScript
 
-A library to format Clojure code following Simple Clojure Formatting Rules.
+A library to format Clojure code according to Standard Clojure Style.
 
-## Project Status (March 2024)
+## Project Status (August 2024)
 
 This project is under active development and I do not recommend using it for
 your codebase at this time unless you are very adventurous. I will publish a
@@ -12,7 +12,7 @@ release to npm when the project is stable enough for Alpha usage.
 
 Please see [Issue #1] for an explanation of this project's genesis.
 
-[Issue #1]:https://github.com/oakmac/clojurefmt-js/issues/1
+[Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
 
 ## Formatting Rules
 
@@ -25,16 +25,16 @@ Please see [Issue #1] for an explanation of this project's genesis.
 - [cljfmt option] `:remove-consecutive-blank-lines?` = true
 - format and sort `ns` forms according to Stuart Sierra's [how to ns]
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
-- comments that contain the String `clojurefmt:ignore` cause the next form to be ignored by the formatter
+- comments that contain the String `standard-clojure-style:ignore` cause the next form to be ignored by the formatter
 
 [how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
 [cljfmt option]:https://github.com/weavejester/cljfmt#formatting-options
 [Better clojure formatting]:https://tonsky.me/blog/clojurefmt/
 
-## Things that clojurefmt-js does NOT do
+## Things that Standard Clojure Style does NOT do
 
 - no config options
-  - all projects using clojurefmt-js follow the same rules
+  - all projects using Standard Clojure Style follow the same rules
 - From cljfmt:
   > "It is not the goal of the project to provide a one-to-one mapping between a Clojure syntax tree and formatted text; rather the intent is to correct formatting errors with minimal changes to the existing structure of the text.
   > If you want format completely unstructured Clojure code, the [zprint project](https://github.com/kkinnear/zprint) may be more suitable.

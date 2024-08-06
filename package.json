@@ -1,16 +1,16 @@
 {
   "author": "Chris Oakman <chris@oakmac.com> (https://chrisoakman.com)",
-  "description": "Simple Clojure code formatter",
+  "description": "Standard Clojure Style - a formatter for Clojure code",
   "license": "ISC",
-  "name": "@chrisoakman/clojurefmt",
+  "name": "@chrisoakman/standard-clojure-style",
   "version": "0.0.1",
-  "homepage": "https://github.com/oakmac/clojurefmt-js",
+  "homepage": "https://github.com/oakmac/standard-clojure-style-js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oakmac/clojurefmt-js.git"
+    "url": "https://github.com/oakmac/standard-clojure-style-js.git"
   },
   "bugs": {
-    "url": "https://github.com/oakmac/clojurefmt-js/issues"
+    "url": "https://github.com/oakmac/standard-clojure-style-js/issues"
   },
   "scripts": {
     "lint": "standard --fix lib/ scripts/ test/",

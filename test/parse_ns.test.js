@@ -4,7 +4,7 @@ const enolib = require('enolib')
 const fs = require('fs-plus')
 const immutable = require('immutable')
 const path = require('path')
-const clojurefmtLib = require('../lib/clojurefmt.js')
+const scsLib = require('../lib/standard-clojure-style.js')
 
 const rootDir = path.join(__dirname, '../')
 
@@ -77,7 +77,7 @@ const ignoreTests = new Set()
 // ignoreTests.add('reader conditionals in ns 2')
 
 // only run these tests if the _parseNs function is exposed
-if (isFn(clojurefmtLib._parseNs)) {
+if (isFn(scsLib._parseNs)) {
   allTestCases.forEach(testCase => {
     // FIXME: input should parse without errors
     // FIXME: Expected should be valid JSON
@@ -88,9 +88,9 @@ if (isFn(clojurefmtLib._parseNs)) {
 
     if (runThisTest) {
       test(testCase.filename + ': ' + testCase.name, () => {
-        const inputNodes = clojurefmtLib.parse(testCase.input)
-        const flatNodes = clojurefmtLib._flattenTree(inputNodes)
-        const nsParsed1 = clojurefmtLib._parseNs(flatNodes)
+        const inputNodes = scsLib.parse(testCase.input)
+        const flatNodes = scsLib._flattenTree(inputNodes)
+        const nsParsed1 = scsLib._parseNs(flatNodes)
 
         const nsParsed2 = immutable.fromJS(nsParsed1)
         const nsExpected = immutable.fromJS(testCase.expected)

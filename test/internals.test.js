@@ -1,30 +1,30 @@
 /* global test expect */
 
-// This file tests some internal functions of lib/clojurefmt.js
-// NOTE: in lib/clojurefmt.js, exportInternalFnsForTesting must be set to true for these to run
+// This file tests some internal functions of lib/standard-clojure-style.js
+// NOTE: in lib/standard-clojure-style.js, exportInternalFnsForTesting must be set to true for these to run
 
-const clojurefmtLib = require('../lib/clojurefmt.js')
+const scsLib = require('../lib/standard-clojure-style.js')
 
-if (isFn(clojurefmtLib._charAt)) {
+if (isFn(scsLib._charAt)) {
   test('String util: charAt', () => {
-    expect(clojurefmtLib._charAt('abc', 0)).toBe('a')
-    expect(clojurefmtLib._charAt('abc', 2)).toBe('c')
+    expect(scsLib._charAt('abc', 0)).toBe('a')
+    expect(scsLib._charAt('abc', 2)).toBe('c')
     // TODO: handle out of range?
   })
 }
 
-if (isFn(clojurefmtLib._substr)) {
+if (isFn(scsLib._substr)) {
   test('String util: substr', () => {
-    expect(clojurefmtLib._substr('abcdef', 0, 0)).toBe('')
-    expect(clojurefmtLib._substr('abcdef', 0, 2)).toBe('ab')
-    expect(clojurefmtLib._substr('abcdef', 3, 5)).toBe('de')
-    expect(clojurefmtLib._substr('abcdef', 2)).toBe('cdef')
+    expect(scsLib._substr('abcdef', 0, 0)).toBe('')
+    expect(scsLib._substr('abcdef', 0, 2)).toBe('ab')
+    expect(scsLib._substr('abcdef', 3, 5)).toBe('de')
+    expect(scsLib._substr('abcdef', 2)).toBe('cdef')
   })
 }
 
-if (isFn(clojurefmtLib._AnyChar)) {
+if (isFn(scsLib._AnyChar)) {
   test('AnyChar parser', () => {
-    const anyCharTest1 = clojurefmtLib._AnyChar({ name: 'anychar_test1' })
+    const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
     expect(anyCharTest1.parse('a', 0).text).toBe('a')
     expect(anyCharTest1.parse('b', 0).text).toBe('b')
     expect(anyCharTest1.parse('b', 0).name).toBe('anychar_test1')
@@ -35,23 +35,23 @@ if (isFn(clojurefmtLib._AnyChar)) {
   })
 }
 
-if (isFn(clojurefmtLib._Char)) {
+if (isFn(scsLib._Char)) {
   test('Char parser', () => {
-    const charTest1 = clojurefmtLib._Char({ char: 'a', name: 'char_test_a' })
+    const charTest1 = scsLib._Char({ char: 'a', name: 'char_test_a' })
     expect(charTest1.parse('a', 0).name).toBe('char_test_a')
     expect(charTest1.parse('a', 0).text).toBe('a')
     expect(charTest1.parse('=', 0)).toBeNull()
 
-    const charTest2 = clojurefmtLib._Char({ char: '=', name: 'char_test_equals' })
+    const charTest2 = scsLib._Char({ char: '=', name: 'char_test_equals' })
     expect(charTest2.parse('=', 0).name).toBe('char_test_equals')
     expect(charTest2.parse('=', 0).text).toBe('=')
     expect(charTest2.parse('a', 0)).toBeNull()
   })
 }
 
-if (isFn(clojurefmtLib._Regex)) {
+if (isFn(scsLib._Regex)) {
   test('Regex parser', () => {
-    const regexTest1 = clojurefmtLib._Regex({
+    const regexTest1 = scsLib._Regex({
       regex: /(c|d)+/,
       name: 'foo'
     })
@@ -80,13 +80,13 @@ if (isFn(clojurefmtLib._Regex)) {
   })
 }
 
-if (isFn(clojurefmtLib._Choice)) {
+if (isFn(scsLib._Choice)) {
   test('Choice parser', () => {
-    const choiceTest1 = clojurefmtLib._Choice({
+    const choiceTest1 = scsLib._Choice({
       parsers: [
-        clojurefmtLib._Char({ char: 'a', name: '.a' }),
-        clojurefmtLib._Char({ char: 'b', name: '.b' }),
-        clojurefmtLib._Char({ char: 'c', name: '.c' })]
+        scsLib._Char({ char: 'a', name: '.a' }),
+        scsLib._Char({ char: 'b', name: '.b' }),
+        scsLib._Char({ char: 'c', name: '.c' })]
     })
     expect(choiceTest1.parse('a', 0).text).toBe('a')
     expect(choiceTest1.parse('b', 0).text).toBe('b')
@@ -95,14 +95,14 @@ if (isFn(clojurefmtLib._Choice)) {
   })
 }
 
-if (isFn(clojurefmtLib._Seq)) {
+if (isFn(scsLib._Seq)) {
   test('Seq parser', () => {
-    const testSeq1 = clojurefmtLib._Seq({
+    const testSeq1 = scsLib._Seq({
       name: 'seq_test_1',
       parsers: [
-        clojurefmtLib._Char({ char: 'a', name: 'AAA' }),
-        clojurefmtLib._Char({ char: 'b', name: 'BBB' }),
-        clojurefmtLib._Char({ char: 'c', name: 'CCC' })
+        scsLib._Char({ char: 'a', name: 'AAA' }),
+        scsLib._Char({ char: 'b', name: 'BBB' }),
+        scsLib._Char({ char: 'c', name: 'CCC' })
       ]
     })
 
@@ -123,11 +123,11 @@ if (isFn(clojurefmtLib._Seq)) {
   })
 }
 
-if (isFn(clojurefmtLib._Repeat)) {
+if (isFn(scsLib._Repeat)) {
   test('Repeat parser', () => {
-    const testRepeat1 = clojurefmtLib._Repeat({
+    const testRepeat1 = scsLib._Repeat({
       name: 'repeat_test_1',
-      parser: clojurefmtLib._Char({ name: 'AAA', char: 'a' })
+      parser: scsLib._Char({ name: 'AAA', char: 'a' })
     })
 
     const repeatResult1 = testRepeat1.parse('b', 0)
@@ -185,13 +185,13 @@ if (isFn(clojurefmtLib._Repeat)) {
 // TODO: add tests for String
 // TODO: add tests for Optional
 
-if (isFn(clojurefmtLib._parseJavaPackageWithClass)) {
+if (isFn(scsLib._parseJavaPackageWithClass)) {
   test('parseJavaPackageWithClass', () => {
-    const example1 = clojurefmtLib._parseJavaPackageWithClass('aaa.bbb.ccc.Ddd')
+    const example1 = scsLib._parseJavaPackageWithClass('aaa.bbb.ccc.Ddd')
     expect(example1.package).toBe('aaa.bbb.ccc')
     expect(example1.className).toBe('Ddd')
 
-    const example2 = clojurefmtLib._parseJavaPackageWithClass('aaa.bbb.ccc')
+    const example2 = scsLib._parseJavaPackageWithClass('aaa.bbb.ccc')
     expect(example2.package).toBe('aaa.bbb.ccc')
     expect(example2.className).toBe(null)
   })
