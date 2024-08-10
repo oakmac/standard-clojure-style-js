@@ -71,12 +71,13 @@ test('All test_parse_ns/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 specificTests.add('basic gen-class')
-// specificTests.add('gen-class 2')
 specificTests.add('gen-class with reader conditional')
-specificTests.add('gen-class with comments')
+specificTests.add('gen-class with reader conditional and comments')
+specificTests.add('gen-class with comments 1')
 specificTests.add('gen-class with comments 2')
+specificTests.add('gen-class with name and main')
 
-const ignoreSomeTests = true
+const ignoreSomeTests = false
 const ignoreTests = new Set()
 ignoreTests.add('gen-class with name and main')
 

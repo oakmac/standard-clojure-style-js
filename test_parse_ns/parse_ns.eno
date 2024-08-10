@@ -1238,7 +1238,7 @@
 }
 --Expected
 
-# gen-class with comments
+# gen-class with comments 1
 
 --Input
 (ns com.example.my-app
@@ -1286,6 +1286,7 @@
 (ns com.example.my-app
   (:gen-class
     :name com.hhh.jjj
+    :state state1
     :main false))
 --Input
 
@@ -1295,10 +1296,13 @@
   "genClass": {
     "isEmpty": false,
     "name": {
-      "name": "com.hhh.jjj"
+      "value": "com.hhh.jjj"
     },
     "main": {
       "value": false
+    },
+    "state": {
+      "value": "state1"
     }
   }
 }
