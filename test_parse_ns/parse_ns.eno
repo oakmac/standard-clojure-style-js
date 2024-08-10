@@ -1184,7 +1184,7 @@
 }
 --Expected
 
-# gen-class 1
+# basic gen-class
 
 --Input
 (ns com.example.my-app
@@ -1200,12 +1200,92 @@
 }
 --Expected
 
-# gen-class 2
+# gen-class with reader conditional
+
+--Input
+(ns com.example.my-app
+  #?(:clj
+     (:gen-class)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": true,
+    "platform": ":clj"
+  }
+}
+--Expected
+
+# gen-class with reader conditional and comments
+
+--Input
+(ns com.example.my-app
+  #?(:clj
+  ;; zzz
+     (:gen-class)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; zzz"],
+    "isEmpty": true,
+    "platform": ":clj"
+  }
+}
+--Expected
+
+# gen-class with comments
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:gen-class)) ;; ccc
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; aaa", ";; bbb"],
+    "commentAfter": ";; ccc",
+    "isEmpty": true
+  },
+  "commentOutsideNsForm": ";; ccc"
+}
+--Expected
+
+# gen-class with comments 2
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:gen-class) ;; ccc
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; aaa", ";; bbb"],
+    "commentAfter": ";; ccc",
+    "isEmpty": true
+  }
+}
+--Expected
+
+# gen-class with name and main
 
 --Input
 (ns com.example.my-app
   (:gen-class
-    :name com.domain.tiny
+    :name com.hhh.jjj
     :main false))
 --Input
 
@@ -1215,7 +1295,7 @@
   "genClass": {
     "isEmpty": false,
     "name": {
-      "name": "com.domain.tiny"
+      "name": "com.hhh.jjj"
     },
     "main": {
       "value": false
