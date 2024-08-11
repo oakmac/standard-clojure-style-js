@@ -1280,14 +1280,21 @@
 }
 --Expected
 
-# gen-class with name and main
+# gen-class with simple values
 
 --Input
 (ns com.example.my-app
   (:gen-class
-    :name com.hhh.jjj
-    :state state1
-    :main false))
+    :name name2
+    :extends java.lang.RuntimeException
+    :init init2
+    :post-init jjj
+    :main true
+    :factory fff
+    :state state2
+    :prefix "zzz-"
+    :impl-ns iii
+    :load-impl-ns false))
 --Input
 
 --Expected
@@ -1296,13 +1303,34 @@
   "genClass": {
     "isEmpty": false,
     "name": {
-      "value": "com.hhh.jjj"
+      "value": "name2"
+    },
+    "extends": {
+      "value": "java.lang.RuntimeException"
+    },
+    "init": {
+      "value": "init2"
+    },
+    "post-init": {
+      "value": "jjj"
     },
     "main": {
-      "value": false
+      "value": true
+    },
+    "factory": {
+      "value": "fff"
     },
     "state": {
-      "value": "state1"
+      "value": "state2"
+    },
+    "prefix": {
+      "value": "zzz-"
+    },
+    "impl-ns": {
+      "value": "iii"
+    },
+    "load-impl-ns": {
+      "value": false
     }
   }
 }
