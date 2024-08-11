@@ -926,7 +926,7 @@
     [clojure.core :as lang :refer [when when-let] :rename {when always, when-let always-let}]))
 --Expected
 
-# gen-class 1
+# basic gen-class
 
 --Input
 (ns com.example.my-app
@@ -942,17 +942,11 @@
   (:gen-class))
 --Expected
 
-# gen-class 2
+# gen-class with reader conditional
 
 --Input
 (ns com.example.my-app
-  (:gen-class)
-
-  (:gen-class
-    :name com.domain.tiny
-    :methods [#^{:static true} [binomial [int int] double]]))
-
-
+  #?(:clj (:gen-class) )
   (:require [aaa.bbb :as ab])
   )
 --Input
@@ -961,5 +955,58 @@
 (ns com.example.my-app
   (:require
     [aaa.bbb :as ab])
-  (:gen-class))
+  #?(:clj
+     (:gen-class)))
+--Expected
+
+# gen-class with simple values and comments
+
+--Input
+(ns com.example.my-app
+  "gen-class with comments and simple values"
+  ;; aaa
+  ;; bbb
+  (:gen-class ;; ccc
+
+
+    ;; fff
+    :extends java.lang.RuntimeException ;; ggg
+    :impl-ns iii
+    :post-init jjj
+    :main true
+    :state state2
+    :prefix "zzz-"
+
+    ;; ddd
+    :name name2 ;; eee
+
+    :factory fff
+    :load-impl-ns false ;; hhh
+    :init init2)
+
+
+  (:require [aaa.bbb :as ab])
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  "gen-class with comments and simple values"
+  (:require
+    [aaa.bbb :as ab])
+  ;; aaa
+  ;; bbb
+  (:gen-class ;; ccc
+    ;; ddd
+    :name name2 ;; eee
+    ;; fff
+    :extends java.lang.RuntimeException ;; ggg
+    :init init2
+    :post-init jjj
+    :main true
+    :factory fff
+    :state state2
+    :prefix "zzz-"
+    :impl-ns iii
+    :load-impl-ns false)) ;; hhh
 --Expected

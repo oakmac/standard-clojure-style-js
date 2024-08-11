@@ -1324,7 +1324,7 @@
       "value": "state2"
     },
     "prefix": {
-      "value": "zzz-"
+      "value": "\"zzz-\""
     },
     "impl-ns": {
       "value": "iii"
