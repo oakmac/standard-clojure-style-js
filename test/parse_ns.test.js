@@ -68,13 +68,19 @@ test('All test_parse_ns/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunCertainTests = false
-const certainTests = new Set()
-// certainTests.add('how to ns: use vectors, not lists')
+const onlyRunSpecificTests = false
+const specificTests = new Set()
+specificTests.add('basic gen-class')
+specificTests.add('gen-class with reader conditional')
+specificTests.add('gen-class with reader conditional and comments')
+specificTests.add('gen-class with comments 1')
+specificTests.add('gen-class with comments 2')
+specificTests.add('gen-class with simple values')
+specificTests.add('gen-class simple values with comments')
 
-const ignoreSomeTests = true
+const ignoreSomeTests = false
 const ignoreTests = new Set()
-// ignoreTests.add('reader conditionals in ns 2')
+ignoreTests.add('gen-class with name and main')
 
 // only run these tests if the _parseNs function is exposed
 if (isFn(scsLib._parseNs)) {
@@ -83,7 +89,7 @@ if (isFn(scsLib._parseNs)) {
     // FIXME: Expected should be valid JSON
 
     let runThisTest = true
-    if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
+    if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
     else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
 
     if (runThisTest) {

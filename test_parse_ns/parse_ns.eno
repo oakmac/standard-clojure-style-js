@@ -1183,3 +1183,192 @@
   ]
 }
 --Expected
+
+# basic gen-class
+
+--Input
+(ns com.example.my-app
+  (:gen-class))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": true
+  }
+}
+--Expected
+
+# gen-class with reader conditional
+
+--Input
+(ns com.example.my-app
+  #?(:clj
+     (:gen-class)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": true,
+    "platform": ":clj"
+  }
+}
+--Expected
+
+# gen-class with reader conditional and comments
+
+--Input
+(ns com.example.my-app
+  #?(:clj
+  ;; zzz
+     (:gen-class)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; zzz"],
+    "isEmpty": true,
+    "platform": ":clj"
+  }
+}
+--Expected
+
+# gen-class with comments 1
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:gen-class)) ;; ccc
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; aaa", ";; bbb"],
+    "commentAfter": ";; ccc",
+    "isEmpty": true
+  },
+  "commentOutsideNsForm": ";; ccc"
+}
+--Expected
+
+# gen-class with comments 2
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:gen-class) ;; ccc
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "commentsAbove": [";; aaa", ";; bbb"],
+    "commentAfter": ";; ccc",
+    "isEmpty": true
+  }
+}
+--Expected
+
+# gen-class with simple values
+
+--Input
+(ns com.example.my-app
+  (:gen-class
+    :name name2
+    :extends java.lang.RuntimeException
+    :init init2
+    :post-init jjj
+    :main true
+    :factory fff
+    :state state2
+    :prefix "zzz-"
+    :impl-ns iii
+    :load-impl-ns false))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "name2"
+    },
+    "extends": {
+      "value": "java.lang.RuntimeException"
+    },
+    "init": {
+      "value": "init2"
+    },
+    "post-init": {
+      "value": "jjj"
+    },
+    "main": {
+      "value": true
+    },
+    "factory": {
+      "value": "fff"
+    },
+    "state": {
+      "value": "state2"
+    },
+    "prefix": {
+      "value": "\"zzz-\""
+    },
+    "impl-ns": {
+      "value": "iii"
+    },
+    "load-impl-ns": {
+      "value": false
+    }
+  }
+}
+--Expected
+
+# gen-class simple values with comments
+
+--Input
+(ns com.example.my-app
+  (:gen-class
+    ;; aaa
+    ;; bbb
+    :name name2 ;; ccc
+    ;; ddd
+    :main false) ;; eee
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "commentsAbove": [
+        ";; aaa",
+        ";; bbb"
+      ],
+      "commentAfter": ";; ccc",
+      "value": "name2"
+    },
+    "main": {
+      "commentsAbove": [
+        ";; ddd"
+      ],
+      "commentAfter": ";; eee",
+      "value": false
+    }
+  }
+}
+--Expected

@@ -68,9 +68,11 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunCertainTests = false
-const certainTests = new Set()
-certainTests.add('how to ns: use vectors, not lists')
+const onlyRunSpecificTests = false
+const specificTests = new Set()
+specificTests.add('basic gen-class')
+specificTests.add('gen-class with reader conditional')
+specificTests.add('gen-class with simple values and comments')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -91,16 +93,18 @@ ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')
 ignoreTests.add('ClojureScript ns test 2')
 
+// ignoreTests.add('basic gen-class')
+
 allTestCases.forEach(testCase => {
   let runThisTest = true
-  if (onlyRunCertainTests && !certainTests.has(testCase.name)) runThisTest = false
+  if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
   else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
 
   if (runThisTest) {
     test(testCase.filename + ': ' + testCase.name, () => {
       const result = scsLib.format(testCase.input)
 
-      if (onlyRunCertainTests) {
+      if (onlyRunSpecificTests) {
         console.log(result.out)
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       }
