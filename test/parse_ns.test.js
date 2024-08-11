@@ -76,6 +76,7 @@ specificTests.add('gen-class with reader conditional and comments')
 specificTests.add('gen-class with comments 1')
 specificTests.add('gen-class with comments 2')
 specificTests.add('gen-class with simple values')
+specificTests.add('gen-class simple values with comments')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()

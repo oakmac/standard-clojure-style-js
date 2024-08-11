@@ -1335,3 +1335,40 @@
   }
 }
 --Expected
+
+# gen-class simple values with comments
+
+--Input
+(ns com.example.my-app
+  (:gen-class
+    ;; aaa
+    ;; bbb
+    :name name2 ;; ccc
+    ;; ddd
+    :main false) ;; eee
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "commentsAbove": [
+        ";; aaa",
+        ";; bbb"
+      ],
+      "commentAfter": ";; ccc",
+      "value": "name2"
+    },
+    "main": {
+      "commentsAbove": [
+        ";; ddd"
+      ],
+      "commentAfter": ";; eee",
+      "value": false
+    }
+  }
+}
+--Expected
