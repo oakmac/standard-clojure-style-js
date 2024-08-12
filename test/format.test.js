@@ -70,9 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('basic gen-class')
-specificTests.add('gen-class with reader conditional')
-specificTests.add('gen-class with simple values and comments')
+// specificTests.add('your test case here')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -83,7 +81,6 @@ ignoreTests.add('Surrounding newlines removed 3')
 
 // FIXME: get these tests to work
 ignoreTests.add('ns: figwheel.main')
-ignoreTests.add('ns: metabase.util')
 ignoreTests.add('ambiguous import comment')
 
 ignoreTests.add('ns: cuerdas.core')
@@ -92,8 +89,6 @@ ignoreTests.add('refer-clojure with reader conditionals 2')
 ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')
 ignoreTests.add('ClojureScript ns test 2')
-
-// ignoreTests.add('basic gen-class')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
