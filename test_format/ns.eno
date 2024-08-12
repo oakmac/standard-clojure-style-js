@@ -696,6 +696,14 @@
 (ns metabase.util
   "Common utility functions useful throughout the codebase."
   (:require
+   #?@(:clj ([clojure.math.numeric-tower :as math]
+             [me.flowthing.pp :as pp]
+             [metabase.config :as config]
+             [metabase.util.string :as u.str]
+             [potemkin :as p]
+             #_{:clj-kondo/ignore [:discouraged-namespace]}
+             [metabase.util.jvm :as u.jvm]
+             [ring.util.codec :as codec]))
    [camel-snake-kebab.internals.macros :as csk.macros]
    [clojure.data :refer [diff]]
    [clojure.pprint :as pprint]
@@ -710,26 +718,25 @@
    [metabase.util.log :as log]
    [metabase.util.memoize :as memoize]
    [net.cgrand.macrovich :as macros]
-   [weavejester.dependency :as dep]
-   #?@(:clj  ([clojure.math.numeric-tower :as math]
-              [me.flowthing.pp :as pp]
-              [metabase.config :as config]
-              #_{:clj-kondo/ignore [:discouraged-namespace]}
-              [metabase.util.jvm :as u.jvm]
-              [metabase.util.string :as u.str]
-              [potemkin :as p]
-              [ring.util.codec :as codec])))
+   [weavejester.dependency :as dep])
   #?(:clj (:import
+           (clojure.lang Reflector)
            (java.text Normalizer Normalizer$Form)
            (java.util Locale)
            (org.apache.commons.validator.routines RegexValidator UrlValidator)))
   #?(:cljs (:require-macros [camel-snake-kebab.internals.macros :as csk.macros]
                             [metabase.util])))
+
+#?(:clj (set! *warn-on-reflection* true))
 --Input
 
 --Expected
 (ns metabase.util
   "Common utility functions useful throughout the codebase."
+  #?(:cljs
+     (:require-macros
+       [camel-snake-kebab.internals.macros :as csk.macros]
+       [metabase.util]))
   (:require
     [camel-snake-kebab.internals.macros :as csk.macros]
     [clojure.data :refer [diff]]
@@ -754,16 +761,15 @@
          [metabase.util.jvm :as u.jvm]
          [metabase.util.string :as u.str]
          [potemkin :as p]
-         [ring.util.codec :as codec]])
-  #?(:cljs
-     (:require-macros
-       [camel-snake-kebab.internals.macros :as csk.macros]
-       [metabase.util]))
-  (:import
-    #?@(:clj
-        [(java.text Normalizer Normalizer$Form)
-         (java.util Locale)
-         (org.apache.commons.validator.routines RegexValidator UrlValidator)]))))
+         [ring.util.codec :as codec]]))
+  #?(:clj
+     (:import
+       (clojure.lang Reflector)
+       (java.text Normalizer Normalizer$Form)
+       (java.util Locale)
+       (org.apache.commons.validator.routines RegexValidator UrlValidator))))
+
+#?(:clj (set! *warn-on-reflection* true))
 --Expected
 
 # ambiguous import comment
