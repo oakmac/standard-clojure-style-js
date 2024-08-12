@@ -308,6 +308,34 @@
 }
 --Expected
 
+# namespace with require comments 2
+
+--Input
+(ns com.example.my-app
+  (:require
+    #_{:clj-kondo/ignore [:discouraged-namespace]}
+    [com.example.bbb :as bbb]
+    [com.example.aaa] #_ "AAA"
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "commentAfter": "#_ \"AAA\"",
+      "symbol": "com.example.aaa"
+    },
+    {
+      "as": "bbb",
+      "commentsAbove": ["#_{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "com.example.bbb"
+    }
+  ]
+}
+--Expected
+
 # namespace with import comments
 
 > NOTE: in this test case, the ";; fin" comment is ignored by the parser
