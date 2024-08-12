@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('ns: metabase.util')
+// specificTests.add('your test case here')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -89,8 +89,6 @@ ignoreTests.add('refer-clojure with reader conditionals 2')
 ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')
 ignoreTests.add('ClojureScript ns test 2')
-
-// ignoreTests.add('basic gen-class')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true

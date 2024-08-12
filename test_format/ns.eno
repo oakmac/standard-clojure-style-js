@@ -1016,3 +1016,23 @@
     :impl-ns iii
     :load-impl-ns false)) ;; hhh
 --Expected
+
+# reader macro comments
+
+--Input
+(ns com.example.my-app
+  (:require
+    ccc.ddd #_ #{"bugger"}
+    #_ {:alpha "alpha"
+        :bravo "bravo"}
+    [aaa.bbb]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    #_ {:alpha "alpha"
+        :bravo "bravo"}
+    [aaa.bbb]
+    [ccc.ddd])) #_ #{"bugger"}
+--Expected
