@@ -70,7 +70,7 @@ test('All test_parse_ns/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('namespace with require comments 2')
+specificTests.add('refer-clojure with reader conditionals 1')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()

@@ -84,7 +84,7 @@ ignoreTests.add('ns: figwheel.main')
 ignoreTests.add('ambiguous import comment')
 
 ignoreTests.add('ns: cuerdas.core')
-ignoreTests.add('refer-clojure with reader conditionals 1')
+// ignoreTests.add('refer-clojure with reader conditionals 1')
 ignoreTests.add('refer-clojure with reader conditionals 2')
 ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')

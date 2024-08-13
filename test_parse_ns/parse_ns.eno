@@ -154,7 +154,13 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "only": ["==", "conj", "get", "number?", "set"]
+    "only": [
+      {"symbol": "=="},
+      {"symbol": "conj"},
+      {"symbol": "get"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
   }
 }
 --Expected
@@ -186,6 +192,31 @@
       "symbol": "bbb.ccc"
     }
   ]
+}
+--Expected
+
+# refer-clojure with reader conditionals 1
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [#?@(:cljs [dissoc conj])]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "only": [
+      {
+        "symbol": "conj",
+        "platform": ":cljs"
+      },
+      {
+        "symbol": "dissoc",
+        "platform": ":cljs"
+      }
+    ]
+  }
 }
 --Expected
 
@@ -407,7 +438,11 @@
   ],
   "referClojureCommentAfter": "; ccc",
   "referClojure": {
-    "only": ["->", "number?", "set"]
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
   },
   "commentOutsideNsForm": "; ccc"
 }
