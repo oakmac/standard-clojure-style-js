@@ -222,6 +222,23 @@
     (java.util Date UUID)))
 --Expected
 
+# refer-clojure :rename with reader conditional
+
+> FIXME: need to check this is valid reader conditional syntax
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure
+    :rename {#?(:cljs [print core-print get g])})
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:refer-clojure :rename {get g, print core-print})))
+--Expected
+
 # how to ns: require, as, refer
 
 --Input
