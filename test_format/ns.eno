@@ -850,8 +850,8 @@
 
 # refer-clojure with reader conditionals 1
 
-> All of the :refer-clojure symbols are specific to a single platform,
-> wrap the entire :refer-clojure for that platform.
+> If all of the :refer-clojure symbols are specific to a single platform,
+> wrap the entire :refer-clojure form for that platform.
 
 --Input
 (ns com.example.my-app
@@ -877,10 +877,13 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure :only
-    [assoc get
-     #?@(:clj [conj dissoc]
-         :cljs [frequencies partition])]))
+  (:refer-clojure
+    :only [assoc get
+           #?@(:clj
+               [conj dissoc]
+
+               :cljs
+               [frequencies partition])]))
 --Expected
 
 # refer-clojure with reader conditionals 3

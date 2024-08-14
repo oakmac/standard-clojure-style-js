@@ -138,7 +138,11 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "exclude": ["get", "nth", "print"]
+    "exclude": [
+      {"symbol": "get"},
+      {"symbol": "nth"},
+      {"symbol": "print"}
+    ]
   }
 }
 --Expected
@@ -179,7 +183,24 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "rename": [["->>", "thread-last"], ["get", "g"], ["number?", "is-number"], ["print", "core-print"]]
+    "rename": [
+      {
+        "fromSymbol": "->>",
+        "toSymbol": "thread-last"
+      },
+      {
+        "fromSymbol": "get",
+        "toSymbol": "g"
+      },
+      {
+        "fromSymbol": "number?",
+        "toSymbol": "is-number"
+      },
+      {
+        "fromSymbol": "print",
+        "toSymbol": "core-print"
+      }
+    ]
   },
   "requires": [
     {
@@ -1099,8 +1120,16 @@
 {
   "nsSymbol": "cljs.ns-test",
   "referClojure": {
-    "exclude": ["+", "for"],
-    "rename": [["mapv", "core-mapv"]]
+    "exclude": [
+      {"symbol": "+"},
+      {"symbol": "for"}
+    ],
+    "rename": [
+      {
+        "fromSymbol": "mapv",
+        "toSymbol": "core-mapv"
+      }
+    ]
   },
   "requireMacros": [
     {
@@ -1110,7 +1139,16 @@
     {
       "as": "lang",
       "refer": ["when", "when-let"],
-      "rename": [["when", "always"], ["when-let", "always-let"]],
+      "rename": [
+        {
+          "fromSymbol": "when",
+          "toSymbol": "always"
+        },
+        {
+          "fromSymbol": "when-let",
+          "toSymbol": "always-let"
+        }
+      ],
       "symbol": "clojure.core"
     }
   ]
@@ -1139,7 +1177,25 @@
     }
   ],
   "referClojure": {
-    "exclude": ["boolean", "cat", "char", "delay", "double", "hash-map", "int", "keyword", "list", "map", "not-empty", "set", "shuffle", "string", "symbol", "uuid", "vector"]
+    "exclude": [
+      {"symbol": "boolean"},
+      {"symbol": "cat"},
+      {"symbol": "char"},
+      {"symbol": "delay"},
+      {"symbol": "double"},
+      {"symbol": "hash-map"},
+      {"symbol": "int"},
+      {"symbol": "keyword"},
+      {"symbol": "list"},
+      {"symbol": "map"},
+      {"symbol": "not-empty"},
+      {"symbol": "set"},
+      {"symbol": "shuffle"},
+      {"symbol": "string"},
+      {"symbol": "symbol"},
+      {"symbol": "uuid"},
+      {"symbol": "vector"}
+    ]
   },
   "requireMacros": [
     {
