@@ -848,6 +848,18 @@
     [foo.core :refer [add bad cad]])) ;; rad
 --Expected
 
+# basic refer-clojure with :only
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [dissoc conj]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure :only [conj dissoc]))
+--Expected
+
 # refer-clojure with reader conditionals 1
 
 > If all of the :refer-clojure symbols are specific to a single platform,

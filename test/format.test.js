@@ -68,10 +68,12 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = false
+const onlyRunSpecificTests = true
 const specificTests = new Set()
 // specificTests.add('your test case here')
+specificTests.add('basic refer-clojure with :only')
 specificTests.add('refer-clojure with reader conditionals 1')
+specificTests.add('refer-clojure with reader conditionals 2')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -87,9 +89,9 @@ ignoreTests.add('ambiguous import comment')
 ignoreTests.add('ns: cuerdas.core')
 
 // FIXME: get this to work on the current branch
-ignoreTests.add('refer-clojure with reader conditionals 1')
+// ignoreTests.add('refer-clojure with reader conditionals 1')
+// ignoreTests.add('refer-clojure with reader conditionals 2')
 
-ignoreTests.add('refer-clojure with reader conditionals 2')
 ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')
 ignoreTests.add('ClojureScript ns test 2')
