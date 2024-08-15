@@ -946,12 +946,14 @@
 
 # ClojureScript ns test 2
 
+> I wonder if we shouldn't do some line-breaks for this case?
+
 --Input
 (ns cljs.ns-test
   (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})
   (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always
                                                                           when-let always-let}]
-                   [cljs.test :refer [deftest is]]))
+                   [cljs.test :refer [is deftest]]))
 --Input
 
 --Expected

@@ -71,7 +71,7 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('how to ns: use keywords, not symbols')
+specificTests.add('ClojureScript ns test 2')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -91,7 +91,8 @@ ignoreTests.add('refer-clojure with reader conditionals 2')
 
 ignoreTests.add('refer-clojure with reader conditionals 3')
 ignoreTests.add('refer-clojure with multiple clauses')
-ignoreTests.add('ClojureScript ns test 2')
+
+// ignoreTests.add('ClojureScript ns test 2')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
