@@ -31,7 +31,6 @@ const parseTestFile = (txt) => {
       filename: s.filename,
       name: s._instruction.key,
       input: s.field('Input').requiredStringValue(),
-      // expectedTxt: JSON.parse(s.field('Expected').requiredStringValue())
       expectedTxt: s.field('Expected').requiredStringValue()
     })
   })
