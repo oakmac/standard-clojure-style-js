@@ -138,7 +138,11 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "exclude": ["get", "nth", "print"]
+    "exclude": [
+      {"symbol": "get"},
+      {"symbol": "nth"},
+      {"symbol": "print"}
+    ]
   }
 }
 --Expected
@@ -154,7 +158,13 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "only": ["==", "conj", "get", "number?", "set"]
+    "only": [
+      {"symbol": "=="},
+      {"symbol": "conj"},
+      {"symbol": "get"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
   }
 }
 --Expected
@@ -173,7 +183,24 @@
 {
   "nsSymbol": "com.example.my-app",
   "referClojure": {
-    "rename": [["->>", "thread-last"], ["get", "g"], ["number?", "is-number"], ["print", "core-print"]]
+    "rename": [
+      {
+        "fromSymbol": "->>",
+        "toSymbol": "thread-last"
+      },
+      {
+        "fromSymbol": "get",
+        "toSymbol": "g"
+      },
+      {
+        "fromSymbol": "number?",
+        "toSymbol": "is-number"
+      },
+      {
+        "fromSymbol": "print",
+        "toSymbol": "core-print"
+      }
+    ]
   },
   "requires": [
     {
@@ -186,6 +213,31 @@
       "symbol": "bbb.ccc"
     }
   ]
+}
+--Expected
+
+# refer-clojure with reader conditionals 1
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [#?@(:cljs [dissoc conj])]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "only": [
+      {
+        "symbol": "conj",
+        "platform": ":cljs"
+      },
+      {
+        "symbol": "dissoc",
+        "platform": ":cljs"
+      }
+    ]
+  }
 }
 --Expected
 
@@ -407,7 +459,11 @@
   ],
   "referClojureCommentAfter": "; ccc",
   "referClojure": {
-    "only": ["->", "number?", "set"]
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
   },
   "commentOutsideNsForm": "; ccc"
 }
@@ -832,7 +888,9 @@
   "nsSymbol": "bar.core",
   "requireMacros": [
     {
-      "refer": ["add"],
+      "refer": [
+        {"symbol": "add"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -897,7 +955,9 @@
   "requireMacros": [
     {
       "as": "quizzle",
-      "refer": ["add"],
+      "refer": [
+        {"symbol": "add"}
+      ],
       "symbol": "foo.core"
     }
   ],
@@ -965,12 +1025,20 @@
     {
       "as": "bc",
       "commentAfter": ";; biz-com!",
-      "refer": ["banana", "qux", "zoom"],
+      "refer": [
+        {"symbol": "banana"},
+        {"symbol": "qux"},
+        {"symbol": "zoom"}
+      ],
       "symbol": "biz.com"
     },
     {
       "commentAfter": ";; rad",
-      "refer": ["add", "bad", "cad"],
+      "refer": [
+        {"symbol": "add"},
+        {"symbol": "bad"},
+        {"symbol": "cad"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -993,12 +1061,16 @@
   "requireMacros": [
     {
       "commentAfter": ";; ddd",
-      "refer": ["ccc"],
+      "refer": [{"symbol": "ccc"}],
       "symbol": "aaa.bbb"
     },
     {
       "commentAfter": ";; rad",
-      "refer": ["add", "bad", "cad"],
+      "refer": [
+        {"symbol": "add"},
+        {"symbol": "bad"},
+        {"symbol": "cad"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -1021,7 +1093,16 @@
     {
       "as": "d",
       "commentAfter": ";; ddd",
-      "refer": ["ggg", "hhh"],
+      "refer": [
+        {
+          "symbol": "ggg",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "hhh",
+          "platform": ":cljs"
+        }
+      ],
       "platform": ":cljs",
       "symbol": "ccc.ddd"
     }
@@ -1064,18 +1145,41 @@
 {
   "nsSymbol": "cljs.ns-test",
   "referClojure": {
-    "exclude": ["+", "for"],
-    "rename": [["mapv", "core-mapv"]]
+    "exclude": [
+      {"symbol": "+"},
+      {"symbol": "for"}
+    ],
+    "rename": [
+      {
+        "fromSymbol": "mapv",
+        "toSymbol": "core-mapv"
+      }
+    ]
   },
   "requireMacros": [
     {
-      "refer": ["deftest", "is"],
+      "refer": [
+        {"symbol": "deftest"},
+        {"symbol": "is"}
+      ],
       "symbol": "cljs.test"
     },
     {
       "as": "lang",
-      "refer": ["when", "when-let"],
-      "rename": [["when", "always"], ["when-let", "always-let"]],
+      "refer": [
+        {"symbol": "when"},
+        {"symbol": "when-let"}
+      ],
+      "rename": [
+        {
+          "fromSymbol": "when",
+          "toSymbol": "always"
+        },
+        {
+          "fromSymbol": "when-let",
+          "toSymbol": "always-let"
+        }
+      ],
       "symbol": "clojure.core"
     }
   ]
@@ -1104,7 +1208,25 @@
     }
   ],
   "referClojure": {
-    "exclude": ["boolean", "cat", "char", "delay", "double", "hash-map", "int", "keyword", "list", "map", "not-empty", "set", "shuffle", "string", "symbol", "uuid", "vector"]
+    "exclude": [
+      {"symbol": "boolean"},
+      {"symbol": "cat"},
+      {"symbol": "char"},
+      {"symbol": "delay"},
+      {"symbol": "double"},
+      {"symbol": "hash-map"},
+      {"symbol": "int"},
+      {"symbol": "keyword"},
+      {"symbol": "list"},
+      {"symbol": "map"},
+      {"symbol": "not-empty"},
+      {"symbol": "set"},
+      {"symbol": "shuffle"},
+      {"symbol": "string"},
+      {"symbol": "symbol"},
+      {"symbol": "uuid"},
+      {"symbol": "vector"}
+    ]
   },
   "requireMacros": [
     {
@@ -1113,7 +1235,11 @@
     },
     {
       "as": "gen",
-      "refer": ["dynaload", "lazy-combinators", "lazy-prims"],
+      "refer": [
+        {"symbol": "dynaload"},
+        {"symbol": "lazy-combinators"},
+        {"symbol": "lazy-prims"}
+      ],
       "symbol": "cljs.spec.gen.alpha"
     }
   ],
@@ -1199,13 +1325,35 @@
     {
       "as": "asyncm",
       "platform": ":cljs",
-      "refer": ["go", "go-loop"],
+      "refer": [
+        {
+          "symbol": "go",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "go-loop",
+          "platform": ":cljs"
+        }
+      ],
       "symbol": "cljs.core.async.macros"
     },
     {
       "as": "enc",
       "platform": ":cljs",
-      "refer": ["have", "have-in", "have?"],
+      "refer": [
+        {
+          "symbol": "have",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "have-in",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "have?",
+          "platform": ":cljs"
+        }
+      ],
       "symbol": "taoensso.encore"
     }
   ]
@@ -1398,5 +1546,154 @@
       "value": false
     }
   }
+}
+--Expected
+
+# cuerdas.core example
+
+--Input
+(ns cuerdas.core
+  (:refer-clojure :exclude [contains? empty? repeat regexp?
+                            replace reverse chars keyword concat
+                            #?@(:clj [unquote format])])
+  #?(:cljs (:require-macros [cuerdas.core :refer [unsafe-concat nilv]])) ;; require-macros!
+  (:require [clojure.string :as str]
+            [clojure.set :refer [map-invert]]
+            [clojure.core :as c]
+
+            [clojure.walk :refer [stringify-keys]]
+            [cuerdas.regexp :as rx]
+
+            #?(:cljs [goog.string :as gstr]) ;; ggg
+            #?(:cljs [cljs.reader :as edn] ;; cljs-edn
+               :clj  [clojure.edn :as edn])) ;; clj-edn
+  #?(:clj (:import (java.util List Locale) ;; lll
+                   (aaa.bbb Ddd Ccc)))) ;; aaa
+--Input
+
+--Expected
+{
+  "nsSymbol": "cuerdas.core",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "chars"
+      },
+      {
+        "symbol": "concat"
+      },
+      {
+        "symbol": "contains?"
+      },
+      {
+        "symbol": "empty?"
+      },
+      {
+        "symbol": "format",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "keyword"
+      },
+      {
+        "symbol": "regexp?"
+      },
+      {
+        "symbol": "repeat"
+      },
+      {
+        "symbol": "replace"
+      },
+      {
+        "symbol": "reverse"
+      },
+      {
+        "symbol": "unquote",
+        "platform": ":clj"
+      }
+    ]
+  },
+  "requireMacros": [
+    {
+      "symbol": "cuerdas.core",
+      "platform": ":cljs",
+      "refer": [
+        {
+          "symbol": "nilv",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "unsafe-concat",
+          "platform": ":cljs"
+        }
+      ],
+      "commentAfter": ";; require-macros!"
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "cljs.reader",
+      "platform": ":cljs",
+      "as": "edn",
+      "commentAfter": ";; cljs-edn"
+    },
+    {
+      "symbol": "clojure.core",
+      "as": "c"
+    },
+    {
+      "symbol": "clojure.edn",
+      "platform": ":clj",
+      "as": "edn",
+      "commentAfter": ";; clj-edn"
+    },
+    {
+      "symbol": "clojure.set",
+      "refer": [
+        "map-invert"
+      ]
+    },
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    },
+    {
+      "symbol": "clojure.walk",
+      "refer": [
+        "stringify-keys"
+      ]
+    },
+    {
+      "symbol": "cuerdas.regexp",
+      "as": "rx"
+    },
+    {
+      "symbol": "goog.string",
+      "platform": ":cljs",
+      "as": "gstr",
+      "commentAfter": ";; ggg"
+    }
+  ],
+  "commentOutsideNsForm": ";; aaa",
+  "imports": [
+    {
+      "package": "aaa.bbb",
+      "classes": [
+        "Ccc",
+        "Ddd"
+      ],
+      "commentAfter": ";; aaa",
+      "platform": ":clj"
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "List",
+        "Locale"
+      ],
+      "commentAfter": ";; lll",
+      "platform": ":clj"
+    }
+  ]
 }
 --Expected

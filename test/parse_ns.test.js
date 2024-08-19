@@ -20,7 +20,7 @@ const enoFilesInTestFormatDir = () => {
 
 let allTestCases = []
 
-// parses a test .eno file and returns an Array of Objects like { input, expected, name }
+// parses a test .eno file and returns an Array of Objects like { input, expectedTxt, name }
 const parseTestFile = (txt) => {
   const document = enolib.parse(txt)
   const sections = document.sections()
@@ -31,7 +31,7 @@ const parseTestFile = (txt) => {
       filename: s.filename,
       name: s._instruction.key,
       input: s.field('Input').requiredStringValue(),
-      expected: JSON.parse(s.field('Expected').requiredStringValue())
+      expectedTxt: s.field('Expected').requiredStringValue()
     })
   })
   return tests
@@ -70,7 +70,7 @@ test('All test_parse_ns/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('namespace with require comments 2')
+specificTests.add('cuerdas.core example')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
@@ -80,7 +80,6 @@ ignoreTests.add('gen-class with name and main')
 if (isFn(scsLib._parseNs)) {
   allTestCases.forEach(testCase => {
     // FIXME: input should parse without errors
-    // FIXME: Expected should be valid JSON
 
     let runThisTest = true
     if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
@@ -88,12 +87,20 @@ if (isFn(scsLib._parseNs)) {
 
     if (runThisTest) {
       test(testCase.filename + ': ' + testCase.name, () => {
+        let expectedObj = null
+        try {
+          expectedObj = JSON.parse(testCase.expectedTxt)
+        } catch (e) {}
+
+        // expectedTxt should be valid JSON
+        expect(expectedObj).not.toBeNull()
+
         const inputNodes = scsLib.parse(testCase.input)
         const flatNodes = scsLib._flattenTree(inputNodes)
         const nsParsed1 = scsLib._parseNs(flatNodes)
 
         const nsParsed2 = immutable.fromJS(nsParsed1)
-        const nsExpected = immutable.fromJS(testCase.expected)
+        const nsExpected = immutable.fromJS(expectedObj)
         const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
 
         if (!resultIsTheSame) {

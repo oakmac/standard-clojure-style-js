@@ -222,6 +222,23 @@
     (java.util Date UUID)))
 --Expected
 
+# refer-clojure :rename with reader conditional
+
+> FIXME: need to check this is valid reader conditional syntax
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure
+    :rename {#?(:cljs [print core-print get g])})
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:refer-clojure :rename {get g, print core-print})))
+--Expected
+
 # how to ns: require, as, refer
 
 --Input
@@ -571,44 +588,50 @@
 
 --Expected
 (ns figwheel.main
-  (:require
-    #?@(:clj
-        [[certifiable.log]
-         [certifiable.main :as certifiable]
-         [cljs.analyzer :as ana]
-         [cljs.analyzer.api :as ana-api]
-         [cljs.build.api :as bapi]
-         [cljs.cli :as cli]
-         [cljs.closure]
-         [cljs.compiler]
-         [cljs.env]
-         [cljs.main :as cm]
-         [cljs.repl]
-         [cljs.repl.figwheel]
-         [cljs.util]
-         [clojure.data.json :as json]
-         [clojure.edn :as edn]
-         [clojure.java.io :as io]
-         [clojure.java.shell :as sh]
-         [clojure.pprint :refer [pprint]]
-         [clojure.string :as string]
-         [clojure.tools.reader.edn :as redn]
-         [clojure.tools.reader.reader-types :as rtypes]
-         [clojure.walk :as walk]
-         [figwheel.core :as fw-core]
-         [figwheel.main.ansi-party :as ansip]
-         [figwheel.main.async-result :as async-result]
-         [figwheel.main.compat.ana-api :as ana-compat]
-         [figwheel.main.helper :as helper]
-         [figwheel.main.logging :as log]
-         [figwheel.main.npm :as npm]
-         [figwheel.main.react-native :as react-native]
-         [figwheel.main.testing :as testing]
-         [figwheel.main.util :as fw-util]
-         [figwheel.main.watching :as fww]
-         [figwheel.repl :as fw-repl]
-         [figwheel.tools.exceptions :as fig-ex]])))
-  ;; FIXME: unfinished
+  #?(:cljs
+     (:require-macros [figwheel.main]))
+  #?(:clj
+     (:require
+      [certifiable.log]
+      [certifiable.main :as certifiable]
+      [cljs.analyzer :as ana]
+      [cljs.analyzer.api :as ana-api]
+      [cljs.build.api :as bapi]
+      [cljs.cli :as cli]
+      [cljs.closure]
+      [cljs.compiler]
+      [cljs.env]
+      [cljs.main :as cm]
+      [cljs.repl.figwheel]
+      [cljs.repl]
+      [cljs.util]
+      [clojure.data.json :as json]
+      [clojure.edn :as edn]
+      [clojure.java.io :as io]
+      [clojure.java.shell :as sh]
+      [clojure.pprint :refer [pprint]]
+      [clojure.string :as string]
+      [clojure.tools.reader.edn :as redn]
+      [clojure.tools.reader.reader-types :as rtypes]
+      [clojure.walk :as walk]
+      [figwheel.core :as fw-core]
+      [figwheel.main.ansi-party :as ansip]
+      [figwheel.main.async-result :as async-result]
+      [figwheel.main.compat.ana-api :as ana-compat]
+      [figwheel.main.helper :as helper]
+      [figwheel.main.logging :as log]
+      [figwheel.main.npm :as npm]
+      [figwheel.main.react-native :as react-native]
+      [figwheel.main.testing :as testing]
+      [figwheel.main.util :as fw-util]
+      [figwheel.main.watching :as fww]
+      [figwheel.repl :as fw-repl]
+      [figwheel.tools.exceptions :as fig-ex]))
+  #?(:clj
+     (:import
+       (java.io StringReader)
+       (java.net InetAddress URI URLEncoder)
+       (java.nio.file Paths))))
 --Expected
 
 # ns: figwheel.main.testing
@@ -666,9 +689,9 @@
 
 --Expected
 (ns cuerdas.core
-  (:refer-clojure :exclude
-    [chars concat contains? empty? keyword regexp? repeat replace reverse
-     #?@(:clj [format unquote])])
+  (:refer-clojure
+    :exclude [chars concat contains? empty? keyword regexp? repeat replace reverse
+              #?@(:clj [format unquote])])
   #?(:cljs
      (:require-macros
        [cuerdas.core :refer [nilv unsafe-concat]])) ;; require-macros!
@@ -848,10 +871,22 @@
     [foo.core :refer [add bad cad]])) ;; rad
 --Expected
 
+# basic refer-clojure with :only
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [dissoc conj]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure :only [conj dissoc]))
+--Expected
+
 # refer-clojure with reader conditionals 1
 
-> All of the :refer-clojure symbols are specific to a single platform,
-> wrap the entire :refer-clojure for that platform.
+> If all of the :refer-clojure symbols are specific to a single platform,
+> wrap the entire :refer-clojure form for that platform.
 
 --Input
 (ns com.example.my-app
@@ -877,13 +912,32 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure :only
-    [assoc get
-     #?@(:clj [conj dissoc]
-         :cljs [frequencies partition])]))
+  (:refer-clojure
+    :only [assoc get
+           #?@(:clj [conj dissoc]
+               :cljs [frequencies partition])]))
 --Expected
 
 # refer-clojure with reader conditionals 3
+
+> It would be nice if the formatter could do this all on one line for some cases.
+> FIXME: need to double-check this reader conditional syntax
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :only [get assoc #?@(:cljs [dissoc conj])]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :only [assoc get
+           #?@(:cljs [conj dissoc])]))
+--Expected
+
+# refer-clojure with reader conditionals 4
+
+> FIXME: need to double-check this reader conditional syntax
 
 --Input
 (ns com.example.my-app
@@ -893,9 +947,40 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure :only
-    [#?@(:clj [frequencies int partition]
-         :cljs [conj dissoc])]))
+  (:refer-clojure
+    :only #?@(:clj [frequencies int partition]
+              :cljs [conj dissoc])))
+--Expected
+
+# refer-clojure with reader conditionals 5
+
+> FIXME: need to double-check this reader conditional syntax
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [#?@(:cljs [dissoc conj]
+          :clj [partition frequencies int])]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :exclude #?@(:clj [frequencies int partition]
+                 :cljs [conj dissoc])))
+--Expected
+
+# refer-clojure with reader conditionals 6
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [get assoc #?@(:cljs [dissoc conj])]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :exclude [assoc get
+              #?@(:cljs [conj dissoc])]))
 --Expected
 
 # refer-clojure with multiple clauses
@@ -914,12 +999,14 @@
 
 # ClojureScript ns test 2
 
+> I wonder if this example should have some line breaks?
+
 --Input
 (ns cljs.ns-test
   (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})
   (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always
                                                                           when-let always-let}]
-                   [cljs.test :refer [deftest is]]))
+                   [cljs.test :refer [is deftest]]))
 --Input
 
 --Expected
