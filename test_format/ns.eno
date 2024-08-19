@@ -952,6 +952,37 @@
               :cljs [conj dissoc])))
 --Expected
 
+# refer-clojure with reader conditionals 5
+
+> FIXME: need to double-check this reader conditional syntax
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [#?@(:cljs [dissoc conj]
+          :clj [partition frequencies int])]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :exclude #?@(:clj [frequencies int partition]
+                 :cljs [conj dissoc])))
+--Expected
+
+# refer-clojure with reader conditionals 6
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :exclude [get assoc #?@(:cljs [dissoc conj])]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :exclude [assoc get
+              #?@(:cljs [conj dissoc])]))
+--Expected
+
 # refer-clojure with multiple clauses
 
 --Input
