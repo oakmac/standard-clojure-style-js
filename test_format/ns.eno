@@ -689,9 +689,9 @@
 
 --Expected
 (ns cuerdas.core
-  (:refer-clojure :exclude
-    [chars concat contains? empty? keyword regexp? repeat replace reverse
-     #?@(:clj [format unquote])])
+  (:refer-clojure
+    :exclude [chars concat contains? empty? keyword regexp? repeat replace reverse
+              #?@(:clj [format unquote])])
   #?(:cljs
      (:require-macros
        [cuerdas.core :refer [nilv unsafe-concat]])) ;; require-macros!
@@ -932,7 +932,7 @@
 (ns com.example.my-app
   (:refer-clojure
     :only [assoc get
-           #?(:cljs [conj dissoc])]))
+           #?@(:cljs [conj dissoc])]))
 --Expected
 
 # refer-clojure with reader conditionals 4

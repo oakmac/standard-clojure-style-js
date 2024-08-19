@@ -71,6 +71,11 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
+specificTests.add('refer-clojure with reader conditionals 1')
+specificTests.add('refer-clojure with reader conditionals 2')
+specificTests.add('refer-clojure with reader conditionals 3')
+specificTests.add('refer-clojure with reader conditionals 4')
+specificTests.add('ns: cuerdas.core')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -80,7 +85,7 @@ const ignoreTests = new Set()
 ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
-ignoreTests.add('ns: cuerdas.core')
+// ignoreTests.add('ns: cuerdas.core')
 ignoreTests.add('ns: figwheel.main')
 
 allTestCases.forEach(testCase => {

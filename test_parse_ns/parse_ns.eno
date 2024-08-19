@@ -888,7 +888,9 @@
   "nsSymbol": "bar.core",
   "requireMacros": [
     {
-      "refer": ["add"],
+      "refer": [
+        {"symbol": "add"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -953,7 +955,9 @@
   "requireMacros": [
     {
       "as": "quizzle",
-      "refer": ["add"],
+      "refer": [
+        {"symbol": "add"}
+      ],
       "symbol": "foo.core"
     }
   ],
@@ -1021,12 +1025,20 @@
     {
       "as": "bc",
       "commentAfter": ";; biz-com!",
-      "refer": ["banana", "qux", "zoom"],
+      "refer": [
+        {"symbol": "banana"},
+        {"symbol": "qux"},
+        {"symbol": "zoom"}
+      ],
       "symbol": "biz.com"
     },
     {
       "commentAfter": ";; rad",
-      "refer": ["add", "bad", "cad"],
+      "refer": [
+        {"symbol": "add"},
+        {"symbol": "bad"},
+        {"symbol": "cad"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -1049,12 +1061,16 @@
   "requireMacros": [
     {
       "commentAfter": ";; ddd",
-      "refer": ["ccc"],
+      "refer": [{"symbol": "ccc"}],
       "symbol": "aaa.bbb"
     },
     {
       "commentAfter": ";; rad",
-      "refer": ["add", "bad", "cad"],
+      "refer": [
+        {"symbol": "add"},
+        {"symbol": "bad"},
+        {"symbol": "cad"}
+      ],
       "symbol": "foo.core"
     }
   ]
@@ -1077,7 +1093,16 @@
     {
       "as": "d",
       "commentAfter": ";; ddd",
-      "refer": ["ggg", "hhh"],
+      "refer": [
+        {
+          "symbol": "ggg",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "hhh",
+          "platform": ":cljs"
+        }
+      ],
       "platform": ":cljs",
       "symbol": "ccc.ddd"
     }
@@ -1133,12 +1158,18 @@
   },
   "requireMacros": [
     {
-      "refer": ["deftest", "is"],
+      "refer": [
+        {"symbol": "deftest"},
+        {"symbol": "is"}
+      ],
       "symbol": "cljs.test"
     },
     {
       "as": "lang",
-      "refer": ["when", "when-let"],
+      "refer": [
+        {"symbol": "when"},
+        {"symbol": "when-let"}
+      ],
       "rename": [
         {
           "fromSymbol": "when",
@@ -1204,7 +1235,11 @@
     },
     {
       "as": "gen",
-      "refer": ["dynaload", "lazy-combinators", "lazy-prims"],
+      "refer": [
+        {"symbol": "dynaload"},
+        {"symbol": "lazy-combinators"},
+        {"symbol": "lazy-prims"}
+      ],
       "symbol": "cljs.spec.gen.alpha"
     }
   ],
@@ -1290,13 +1325,35 @@
     {
       "as": "asyncm",
       "platform": ":cljs",
-      "refer": ["go", "go-loop"],
+      "refer": [
+        {
+          "symbol": "go",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "go-loop",
+          "platform": ":cljs"
+        }
+      ],
       "symbol": "cljs.core.async.macros"
     },
     {
       "as": "enc",
       "platform": ":cljs",
-      "refer": ["have", "have-in", "have?"],
+      "refer": [
+        {
+          "symbol": "have",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "have-in",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "have?",
+          "platform": ":cljs"
+        }
+      ],
       "symbol": "taoensso.encore"
     }
   ]
@@ -1489,5 +1546,154 @@
       "value": false
     }
   }
+}
+--Expected
+
+# cuerdas.core example
+
+--Input
+(ns cuerdas.core
+  (:refer-clojure :exclude [contains? empty? repeat regexp?
+                            replace reverse chars keyword concat
+                            #?@(:clj [unquote format])])
+  #?(:cljs (:require-macros [cuerdas.core :refer [unsafe-concat nilv]])) ;; require-macros!
+  (:require [clojure.string :as str]
+            [clojure.set :refer [map-invert]]
+            [clojure.core :as c]
+
+            [clojure.walk :refer [stringify-keys]]
+            [cuerdas.regexp :as rx]
+
+            #?(:cljs [goog.string :as gstr]) ;; ggg
+            #?(:cljs [cljs.reader :as edn] ;; cljs-edn
+               :clj  [clojure.edn :as edn])) ;; clj-edn
+  #?(:clj (:import (java.util List Locale) ;; lll
+                   (aaa.bbb Ddd Ccc)))) ;; aaa
+--Input
+
+--Expected
+{
+  "nsSymbol": "cuerdas.core",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "chars"
+      },
+      {
+        "symbol": "concat"
+      },
+      {
+        "symbol": "contains?"
+      },
+      {
+        "symbol": "empty?"
+      },
+      {
+        "symbol": "format",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "keyword"
+      },
+      {
+        "symbol": "regexp?"
+      },
+      {
+        "symbol": "repeat"
+      },
+      {
+        "symbol": "replace"
+      },
+      {
+        "symbol": "reverse"
+      },
+      {
+        "symbol": "unquote",
+        "platform": ":clj"
+      }
+    ]
+  },
+  "requireMacros": [
+    {
+      "symbol": "cuerdas.core",
+      "platform": ":cljs",
+      "refer": [
+        {
+          "symbol": "nilv",
+          "platform": ":cljs"
+        },
+        {
+          "symbol": "unsafe-concat",
+          "platform": ":cljs"
+        }
+      ],
+      "commentAfter": ";; require-macros!"
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "cljs.reader",
+      "platform": ":cljs",
+      "as": "edn",
+      "commentAfter": ";; cljs-edn"
+    },
+    {
+      "symbol": "clojure.core",
+      "as": "c"
+    },
+    {
+      "symbol": "clojure.edn",
+      "platform": ":clj",
+      "as": "edn",
+      "commentAfter": ";; clj-edn"
+    },
+    {
+      "symbol": "clojure.set",
+      "refer": [
+        "map-invert"
+      ]
+    },
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    },
+    {
+      "symbol": "clojure.walk",
+      "refer": [
+        "stringify-keys"
+      ]
+    },
+    {
+      "symbol": "cuerdas.regexp",
+      "as": "rx"
+    },
+    {
+      "symbol": "goog.string",
+      "platform": ":cljs",
+      "as": "gstr",
+      "commentAfter": ";; ggg"
+    }
+  ],
+  "commentOutsideNsForm": ";; aaa",
+  "imports": [
+    {
+      "package": "aaa.bbb",
+      "classes": [
+        "Ccc",
+        "Ddd"
+      ],
+      "commentAfter": ";; aaa",
+      "platform": ":clj"
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "List",
+        "Locale"
+      ],
+      "commentAfter": ";; lll",
+      "platform": ":clj"
+    }
+  ]
 }
 --Expected
