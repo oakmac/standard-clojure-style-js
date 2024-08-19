@@ -14,6 +14,38 @@ Please see [Issue #1] for an explanation of this project's genesis.
 
 [Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
 
+## Command Line Usage
+
+This npm package exposes a simple command-line tool to help format your
+Clojure projects. You may wish to run this as a git hook, via continuous
+integration, an editor integration, etc.
+
+If you have Node.js installed on your system, you can try out Standard Clojure
+Style with the `npx` command:
+
+```sh
+## formats the file located at src/com/example/foo.clj
+npx @chrisoakman/standard-clojure-style format src/com/example/foo.clj
+
+## Format all .clj, .cljs, .cljc, .edn files found in the src/ directory
+npx @chrisoakman/standard-clojure-style format src/
+```
+
+If you plan to use the library more frequently you may wish to install it globally:
+
+```sh
+## Installs "standard-clj" globally onto your system via npm
+npm install --global @chrisoakman/standard-clojure-style
+
+## then from a Clojure project directory
+standard-clj format src/
+```
+
+#### cli todo
+
+- [ ] passing a glob argument
+- [ ] creating a `.standard-clojure-stlye.edn` file in the project root
+
 ## Formatting Rules
 
 - trim trailing whitespace (ie: `rtrim` every line)

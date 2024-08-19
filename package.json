@@ -12,9 +12,16 @@
   "bugs": {
     "url": "https://github.com/oakmac/standard-clojure-style-js/issues"
   },
+  "main": "./lib/standard-clojure-style.js",
+  "bin": {
+    "standard-clj": "./cli.js"
+  },
   "scripts": {
-    "lint": "standard --fix lib/ scripts/ test/",
+    "lint": "standard --fix lib/ scripts/ test/ ./cli.js",
     "test": "jest"
+  },
+  "dependencies": {
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "enolib": "0.8.2",
