@@ -68,11 +68,12 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('chessboard2 test case 1 - rule 3 indentation')
+// specificTests.add('chessboard2 test case 1 - rule 3 indentation')
 // specificTests.add('Rule 3 Indentation 3')
+specificTests.add('Rule 3 Indentation 4')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

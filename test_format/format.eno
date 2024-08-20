@@ -408,6 +408,18 @@ y 4]
          gee)
 --Expected
 
+# Rule 3 Indentation 4
+
+--Input
+(foo (bar)
+     (baz))
+--Input
+
+--Expected
+(foo (bar)
+     (baz))
+--Expected
+
 # chessboard2 test case 1 - rule 3 indentation
 
 --Input
