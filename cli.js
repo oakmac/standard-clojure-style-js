@@ -134,11 +134,16 @@ function processListCmd (argv) {
 }
 
 function processFormatCmd (argv) {
-  // console.log('format command:', argv)
-
   const filesToProcess = getFilesFromArgv(argv)
-  const sortedFiles = setToArray(filesToProcess).sort()
-  sortedFiles.forEach(formatFileSync)
+
+  if (filesToProcess.size === 0) {
+    // FIXME: improve verbiage here
+    console.error('No files passed to the "format" command.')
+    process.exit(1)
+  } else {
+    const sortedFiles = setToArray(filesToProcess).sort()
+    sortedFiles.forEach(formatFileSync)
+  }
 
   // FIXME: log output
 }
