@@ -382,6 +382,32 @@ y 4]
   hop)
 --Expected
 
+# Rule 3 Indentation 3
+
+--Input
+(foo bar
+     :baz
+  "qux")
+
+(zap bar baz
+         "qux"
+      :wizzle
+      ;; hello
+                     gee)
+--Input
+
+--Expected
+(foo bar
+     :baz
+     "qux")
+
+(zap bar baz
+         "qux"
+         :wizzle
+         ;; hello
+         gee)
+--Expected
+
 # chessboard2 test case 1 - rule 3 indentation
 
 --Input
@@ -400,30 +426,24 @@ y 4]
                          (safe-lower-case return-fmt)))
 --Expected
 
-# chessboard2 test case 2 - missing fn docstring
+# docstring with newlines
 
 --Input
-(defn add-or-replace-circle
-  "Adds a Circle to the board. Returns the id of the new Circle.
-  If there is already a Circle on the board on that square, it will be replaced."
-  [board-state {:keys [square] :as circle-config}]
-  (let [square->circles-map (get-circles-by-square board-state)]
-    (if-let [current-circle (get square->circles-map square)]
-      (do
-        (remove-circle-by-id board-state (:id current-circle))
-        (add-circle board-state (assoc circle-config :id (:id current-circle))))
-      (add-circle board-state circle-config))))
+(defn foo
+  "Clojure is a dynamic, general-purpose programming language,
+  combining the approachability and interactive development of
+  a scripting language with an efficient and robust infrastructure
+  for multithreaded programming."
+  [aaa bbb]
+  (bar {:aaa aaa, :bbb bbb}))
 --Input
 
 --Expected
-(defn add-or-replace-circle
-  "Adds a Circle to the board. Returns the id of the new Circle.
-  If there is already a Circle on the board on that square, it will be replaced."
-  [board-state {:keys [square] :as circle-config}]
-  (let [square->circles-map (get-circles-by-square board-state)]
-    (if-let [current-circle (get square->circles-map square)]
-      (do
-        (remove-circle-by-id board-state (:id current-circle))
-        (add-circle board-state (assoc circle-config :id (:id current-circle))))
-      (add-circle board-state circle-config))))
+(defn foo
+  "Clojure is a dynamic, general-purpose programming language,
+  combining the approachability and interactive development of
+  a scripting language with an efficient and robust infrastructure
+  for multithreaded programming."
+  [aaa bbb]
+  (bar {:aaa aaa, :bbb bbb}))
 --Expected

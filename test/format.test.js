@@ -72,7 +72,7 @@ const onlyRunSpecificTests = true
 const specificTests = new Set()
 // specificTests.add('your test case here')
 specificTests.add('chessboard2 test case 1 - rule 3 indentation')
-specificTests.add('chessboard2 test case 2 - missing fn docstring')
+// specificTests.add('Rule 3 Indentation 3')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
