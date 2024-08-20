@@ -381,3 +381,81 @@ y 4]
   bag
   hop)
 --Expected
+
+# Rule 3 Indentation 3
+
+--Input
+(foo bar
+     :baz
+  "qux")
+
+(zap bar baz
+         "qux"
+      :wizzle
+      ;; hello
+                     gee)
+--Input
+
+--Expected
+(foo bar
+     :baz
+     "qux")
+
+(zap bar baz
+         "qux"
+         :wizzle
+         ;; hello
+         gee)
+--Expected
+
+# Rule 3 Indentation 4
+
+--Input
+(foo (bar)
+     (baz))
+--Input
+
+--Expected
+(foo (bar)
+     (baz))
+--Expected
+
+# chessboard2 test case 1 - rule 3 indentation
+
+--Input
+(defn js-get-circles
+  "Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map"
+  [board-state return-fmt]
+  (map->js-return-format (api/get-items-by-type board-state "CHESSBOARD_CIRCLE")
+                         (safe-lower-case return-fmt)))
+--Input
+
+--Expected
+(defn js-get-circles
+  "Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map"
+  [board-state return-fmt]
+  (map->js-return-format (api/get-items-by-type board-state "CHESSBOARD_CIRCLE")
+                         (safe-lower-case return-fmt)))
+--Expected
+
+# docstring with newlines
+
+--Input
+(defn foo
+  "Clojure is a dynamic, general-purpose programming language,
+  combining the approachability and interactive development of
+  a scripting language with an efficient and robust infrastructure
+  for multithreaded programming."
+  [aaa bbb]
+  (bar {:aaa aaa, :bbb bbb}))
+--Input
+
+--Expected
+(defn foo
+  "Clojure is a dynamic, general-purpose programming language,
+  combining the approachability and interactive development of
+  a scripting language with an efficient and robust infrastructure
+  for multithreaded programming."
+  [aaa bbb]
+  (bar {:aaa aaa, :bbb bbb}))
+--Expected
