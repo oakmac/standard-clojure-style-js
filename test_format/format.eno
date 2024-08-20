@@ -381,3 +381,49 @@ y 4]
   bag
   hop)
 --Expected
+
+# chessboard2 test case 1 - rule 3 indentation
+
+--Input
+(defn js-get-circles
+  "Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map"
+  [board-state return-fmt]
+  (map->js-return-format (api/get-items-by-type board-state "CHESSBOARD_CIRCLE")
+                         (safe-lower-case return-fmt)))
+--Input
+
+--Expected
+(defn js-get-circles
+  "Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map"
+  [board-state return-fmt]
+  (map->js-return-format (api/get-items-by-type board-state "CHESSBOARD_CIRCLE")
+                         (safe-lower-case return-fmt)))
+--Expected
+
+# chessboard2 test case 2 - missing fn docstring
+
+--Input
+(defn add-or-replace-circle
+  "Adds a Circle to the board. Returns the id of the new Circle.
+  If there is already a Circle on the board on that square, it will be replaced."
+  [board-state {:keys [square] :as circle-config}]
+  (let [square->circles-map (get-circles-by-square board-state)]
+    (if-let [current-circle (get square->circles-map square)]
+      (do
+        (remove-circle-by-id board-state (:id current-circle))
+        (add-circle board-state (assoc circle-config :id (:id current-circle))))
+      (add-circle board-state circle-config))))
+--Input
+
+--Expected
+(defn add-or-replace-circle
+  "Adds a Circle to the board. Returns the id of the new Circle.
+  If there is already a Circle on the board on that square, it will be replaced."
+  [board-state {:keys [square] :as circle-config}]
+  (let [square->circles-map (get-circles-by-square board-state)]
+    (if-let [current-circle (get square->circles-map square)]
+      (do
+        (remove-circle-by-id board-state (:id current-circle))
+        (add-circle board-state (assoc circle-config :id (:id current-circle))))
+      (add-circle board-state circle-config))))
+--Expected
