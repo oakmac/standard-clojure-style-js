@@ -8,8 +8,10 @@
 // https://github.com/oakmac/standard-clojure-style-js/
 
 const fs = require('fs-plus')
-// const path = require('path')
+const path = require('path')
+const process = require('process')
 
+const globLib = require('glob')
 const yargs = require('yargs')
 
 const standardClj = require('./lib/standard-clojure-style.js')
@@ -28,28 +30,117 @@ const standardClj = require('./lib/standard-clojure-style.js')
 // formats the files "in-place"
 //
 
+const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
+
+// FIXME: write an async version of this that returns a Promise
+// function formatFileAsync (filename) {
+//   const fileTxt = fs.readFileSync(filename, 'utf8')
+//   const result = standardClj.format(fileTxt)
+
+//   if (result.status === 'success') {
+//     fs.writeFileSync(filename, result.out)
+//   } else {
+//     console.error('FIXME: format() returned error, need to handle this case')
+//   }
+// }
+
+// this is the directory where the script is being called from
+// in most cases, this will be a project root
+const rootDir = process.cwd()
+
+// returns a Set of files from the args passed to the "list" or "format" commands
+function getFilesFromArgv (argv) {
+  // remove the first item, which is the command
+  argv._.shift()
+  const directArgs = argv._
+
+  const fileExtensionsStr = argv['file-ext']
+
+  let files = []
+
+  directArgs.forEach(arg => {
+    let possibleFileOrDir = arg
+    if (!fs.isAbsolute(arg)) {
+      // if the argument is not an absolute path, assume it is relative to the
+      // directory where the script is being run from
+      possibleFileOrDir = path.join(rootDir, arg)
+    }
+
+    if (fs.isFileSync(possibleFileOrDir)) {
+      files.push(possibleFileOrDir)
+    } else if (fs.isDirectorySync(possibleFileOrDir)) {
+      const dirGlobStr = path.join(arg, '/**/*.{' + fileExtensionsStr + '}')
+      const filesFromGlob = globLib.globSync(dirGlobStr)
+      files = files.concat(filesFromGlob)
+    } else {
+      // FIXME: better warning verbiage here
+      console.warn('Invalid argument to "list" command:', arg)
+    }
+  })
+
+  // convert the .include argument to an array
+  if (isString(argv.include) && argv.include !== '') {
+    argv.include = [argv.include]
+  }
+
+  if (isArray(argv.include) && argv.include.length > 0) {
+    argv.include.forEach(includeStr => {
+      const filesFromGlob = globLib.globSync(includeStr)
+      files = files.concat(filesFromGlob)
+    })
+  }
+
+  // FIXME: handle --exclude files here
+
+  // return the files as a Set
+  return new Set(files)
+}
+
 function formatFileSync (filename) {
+  // FIXME: wrap this in try/catch
   const fileTxt = fs.readFileSync(filename, 'utf8')
   const result = standardClj.format(fileTxt)
 
   if (result.status === 'success') {
     fs.writeFileSync(filename, result.out)
   } else {
-    console.error('FIXME: format() returned error, need to handle this case')
+    console.error('FIXME: format() returned error, need to handle this case', filename)
   }
 }
 
+// -----------------------------------------------------------------------------
+// yargs commands
+
+function processListCmd (argv) {
+  const filesSet = getFilesFromArgv(argv)
+  const sortedFiles = setToArray(filesSet).sort()
+
+  if (argv.output === 'json') {
+    console.log(JSON.stringify(sortedFiles))
+  } else if (argv.output === 'json-pretty') {
+    console.log(JSON.stringify(sortedFiles, null, 2))
+  } else if (argv.output === 'edn') {
+    const jsonOutput = JSON.stringify(sortedFiles)
+    console.log(jsonOutput.replaceAll(/","/g, '" "'))
+  } else if (argv.output === 'edn-pretty') {
+    // NOTE: this is hacky, but it works 🤷‍♂️
+    const jsonOutput = JSON.stringify(sortedFiles)
+    console.log(jsonOutput.replaceAll(/","/g, '"\n "'))
+  } else {
+    sortedFiles.forEach(f => console.log(f))
+  }
+
+  process.exit(0)
+}
+
 function processFormatCmd (argv) {
-  console.log('processFormatCmd!!!!!')
-  console.log(argv)
+  // console.log('format command:', argv)
 
-  // TODO: get this via argv, glob pattern?
-  const filesToFormat = [
+  const filesToProcess = getFilesFromArgv(argv)
+  const sortedFiles = setToArray(filesToProcess).sort()
+  sortedFiles.forEach(formatFileSync)
 
-    './test.clj'
-  ]
-
-  filesToFormat.forEach(formatFileSync)
+  // FIXME: log output
 }
 
 const yargsFormatCommand = {
@@ -58,12 +149,24 @@ const yargsFormatCommand = {
   handler: processFormatCmd
 }
 
+const yargsListCommand = {
+  command: 'list',
+  describe: 'Prints a list of files that will be formatted. Useful for debugging your .standard-clojure-style.edn file or glob patterns.',
+  handler: processListCmd
+}
+
 yargs.scriptName('standard-clj')
   .usage('$0 <cmd> [args]')
   .command(yargsFormatCommand)
-  .alias('f', 'file')
-  .nargs('f', 1)
-  .describe('f', 'Load a file')
+  .command(yargsListCommand)
+
+  .alias('i', 'include')
+  .alias('e', 'exclude')
+
+  .default('file-ext', defaultFileExtensions.join(','))
+
+// .nargs('f', 1)
+// .describe('f', 'Load a file')
 
   // .command('format [name]', 'welcome ter yargs!', (yargs) => {
   //   yargs.positional('name', {
@@ -76,7 +179,22 @@ yargs.scriptName('standard-clj')
   // })
   .demandCommand() // show them --help if they do not pass a valid command
   .help()
-  .argv
+  .parse()
 
 // if they pass in multiple files, then those should be formatted
-// if they pass in multiple directories, then those should be recurisvely formatted
+// if they pass in multiple directories, then those should be recursively formatted
+
+// -----------------------------------------------------------------------------
+// Util
+
+function isString (s) {
+  return typeof s === 'string'
+}
+
+function isArray (a) {
+  return Array.isArray(a)
+}
+
+function setToArray (s) {
+  return Array.from(s)
+}

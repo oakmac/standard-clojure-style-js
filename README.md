@@ -16,9 +16,9 @@ Please see [Issue #1] for an explanation of this project's genesis.
 
 ## Command Line Usage
 
-This npm package exposes a simple command-line tool to help format your
-Clojure projects. You may wish to run this as a git hook, via continuous
-integration, an editor integration, etc.
+This npm package exposes a command-line tool to help format your Clojure
+projects. You may wish to run this as a git hook, via continuous integration,
+an editor integration, etc.
 
 If you have Node.js installed on your system, you can try out Standard Clojure
 Style with the `npx` command:
@@ -27,7 +27,8 @@ Style with the `npx` command:
 ## formats the file located at src/com/example/foo.clj
 npx @chrisoakman/standard-clojure-style format src/com/example/foo.clj
 
-## Format all .clj, .cljs, .cljc, .edn files found in the src/ directory
+## formats all .clj, .cljs, .cljc, .edn files found in the src/ directory
+## and subdirectories (ie: recursive)
 npx @chrisoakman/standard-clojure-style format src/
 ```
 
@@ -39,6 +40,28 @@ npm install --global @chrisoakman/standard-clojure-style
 
 ## then from a Clojure project directory
 standard-clj format src/
+
+## you can pass a glob pattern for more control over which files are formatted
+standard-clj format --include "src/**/*.clj"
+
+## standard-clj will look for a .standard-clojure-style.json or .standard-clojure-style.edn file
+## in the project root
+standard-clj format
+
+## TODO:
+## --include ""
+## -i ""
+
+## --exclude ""
+## -e ""
+
+## --file-ext="clj,cljs,cljc,edn"
+
+## TODO: document --output
+## --output json, json-pretty, edn, edn-pretty
+
+## create a "check" command that just checks file syntax, does no formatting
+## useful for a fast CI check
 ```
 
 #### cli todo
