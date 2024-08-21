@@ -459,3 +459,43 @@ y 4]
   [aaa bbb]
   (bar {:aaa aaa, :bbb bbb}))
 --Expected
+
+# rule 3 - threading macro example
+
+--Input
+(->> @foo
+     :bar
+     vals
+  (filter my-pred?))
+--Input
+
+--Expected
+(->> @foo
+     :bar
+     vals
+     (filter my-pred?))
+--Expected
+
+# chessboard2 test case 2 - rule 3 indentation
+
+--Input
+(defn get-circles-by-square
+  "Returns a Map of Circles with their square as the key."
+  [board-state]
+  (let [circles (->> @board-state
+                     :items
+                     vals
+                   (filter circle-item?))]
+    (zipmap (map :square circles) circles)))
+--Input
+
+--Expected
+(defn get-circles-by-square
+  "Returns a Map of Circles with their square as the key."
+  [board-state]
+  (let [circles (->> @board-state
+                     :items
+                     vals
+                     (filter circle-item?))]
+    (zipmap (map :square circles) circles)))
+--Expected
