@@ -515,3 +515,77 @@ y 4]
   "biz" #() ;; aaa
   "baz" nil)
 --Expected
+
+# chessboard2 test case 4
+
+> comments that are aligned with the form on the line above them should stay that way
+
+--Input
+(defn toggle-coordinates!
+  [board-state]
+  (swap! board-state update :show-coords? not))
+  ; (if (:show-notation? @board-state)
+  ;   (hide-coordinates! board-state)
+  ;   (show-coordinates! board-state)))
+--Input
+
+--Expected
+(defn toggle-coordinates!
+  [board-state]
+  (swap! board-state update :show-coords? not))
+  ; (if (:show-notation? @board-state)
+  ;   (hide-coordinates! board-state)
+  ;   (show-coordinates! board-state)))
+--Expected
+
+# comment alignment 1
+
+> comments that are aligned with the form on the line above them should stay that way
+
+--Input
+(foo bar
+  baz
+  biz)
+  ; aaa
+  ; bbb
+--Input
+
+--Expected
+(foo bar
+  baz
+  biz)
+  ; aaa
+  ; bbb
+--Expected
+
+# comment alignment 2
+
+> comments that seem to be part of the form should align with the form
+
+--Input
+(foo bar
+     baz
+  ;; aaa
+  biz)
+--Input
+
+--Expected
+(foo bar
+     baz
+     ;; aaa
+     biz)
+--Expected
+
+# comment alignment 3
+
+--Input
+(def default-add-piece-config
+  {:animate? true})
+   ;; TODO: onAnimationComplete callback here
+--Input
+
+--Expected
+(def default-add-piece-config
+  {:animate? true})
+  ;; TODO: onAnimationComplete callback here
+--Expected
