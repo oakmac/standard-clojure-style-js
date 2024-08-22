@@ -499,3 +499,19 @@ y 4]
                      (filter circle-item?))]
     (zipmap (map :square circles) circles)))
 --Expected
+
+# chessboard2 test case 3
+
+--Input
+(js-obj
+  "foo" bar
+  "biz" #() ;; aaa
+  "baz" nil )
+--Input
+
+--Expected
+(js-obj
+  "foo" bar
+  "biz" #() ;; aaa
+  "baz" nil)
+--Expected
