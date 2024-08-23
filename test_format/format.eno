@@ -582,10 +582,38 @@ y 4]
 (def default-add-piece-config
   {:animate? true})
    ;; TODO: onAnimationComplete callback here
+
+(defn my-func []
+   (+ 2 4))
+;; something!
 --Input
 
 --Expected
 (def default-add-piece-config
   {:animate? true})
-  ;; TODO: onAnimationComplete callback here
+   ;; TODO: onAnimationComplete callback here
+
+(defn my-func []
+  (+ 2 4))
+;; something!
+--Expected
+
+# comment alignment 4
+
+--Input
+(wizzle quizzle
+        fizzle
+            sizzle
+            ;; twizzle
+          gizzle)
+          ;; shmizzle
+--Input
+
+--Expected
+(wizzle quizzle
+        fizzle
+        sizzle
+        ;; twizzle
+        gizzle)
+        ;; shmizzle
 --Expected

@@ -72,7 +72,7 @@ const onlyRunSpecificTests = true
 const specificTests = new Set()
 // specificTests.add('your test case here')
 // specificTests.add('chessboard2 test case 4')
-specificTests.add('comment alignment 1')
+specificTests.add('comment alignment 4')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
