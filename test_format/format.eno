@@ -617,3 +617,17 @@ y 4]
         gizzle)
         ;; shmizzle
 --Expected
+
+# comment alignment 5
+
+--Input
+(aaa
+ bbb)
+ ;; ccc
+--Input
+
+--Expected
+(aaa
+  bbb)
+  ;; ccc
+--Expected
