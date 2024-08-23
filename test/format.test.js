@@ -71,10 +71,6 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-// specificTests.add('chessboard2 test case 4')
-// specificTests.add('comment alignment 3')
-specificTests.add('comment alignment 4')
-// specificTests.add('comment alignment 5')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
