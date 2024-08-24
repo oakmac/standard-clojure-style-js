@@ -631,3 +631,79 @@ y 4]
   bbb)
   ;; ccc
 --Expected
+
+# whitespace before comment lines 1
+
+--Input
+(aaa bbb
+  (ccc))
+   ;; gobble gobble
+
+    ;; aaa
+      ;; bbb
+--Input
+
+--Expected
+(aaa bbb
+  (ccc))
+   ;; gobble gobble
+
+    ;; aaa
+      ;; bbb
+--Expected
+
+# whitespace before comment lines 2
+
+--Input
+(aaa bbb
+  (ccc
+   ;; gobble gobble
+    (ddd eee
+         fff)
+      ))
+      ;; aaa
+      ;; bbb
+--Input
+
+--Expected
+(aaa bbb
+  (ccc
+    ;; gobble gobble
+    (ddd eee
+         fff)))
+      ;; aaa
+      ;; bbb
+--Expected
+
+# whitespace before comment lines 3
+
+--Input
+(defn zomg!
+  "I am a function docstring."
+  [some-map]
+  (let [{:keys [x y]} some-map]
+    ;; gobble gobble
+    (when-not (even? x)
+      (let [a "a"]
+        ;; banana
+        (foo bar :alpha "alpha"
+                 :bravo "bravo")
+        ))))
+        ;; aaa
+        ;; bbb
+--Input
+
+--Expected
+(defn zomg!
+  "I am a function docstring."
+  [some-map]
+  (let [{:keys [x y]} some-map]
+    ;; gobble gobble
+    (when-not (even? x)
+      (let [a "a"]
+        ;; banana
+        (foo bar :alpha "alpha"
+                 :bravo "bravo")))))
+        ;; aaa
+        ;; bbb
+--Expected
