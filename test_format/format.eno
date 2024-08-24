@@ -632,9 +632,6 @@ y 4]
   ;; ccc
 --Expected
 
-
-
-
 # whitespace before comment lines 1
 
 --Input
@@ -654,8 +651,6 @@ y 4]
     ;; aaa
       ;; bbb
 --Expected
-
-
 
 # whitespace before comment lines 2
 
