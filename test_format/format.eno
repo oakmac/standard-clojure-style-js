@@ -632,7 +632,32 @@ y 4]
   ;; ccc
 --Expected
 
-# whitespace before comment lines
+
+
+
+# whitespace before comment lines 1
+
+--Input
+(aaa bbb
+  (ccc))
+   ;; gobble gobble
+
+    ;; aaa
+      ;; bbb
+--Input
+
+--Expected
+(aaa bbb
+  (ccc))
+   ;; gobble gobble
+
+    ;; aaa
+      ;; bbb
+--Expected
+
+
+
+# whitespace before comment lines 2
 
 --Input
 (aaa bbb
@@ -655,7 +680,7 @@ y 4]
       ;; bbb
 --Expected
 
-# whitespace before comment lines 2
+# whitespace before comment lines 3
 
 --Input
 (defn zomg!
