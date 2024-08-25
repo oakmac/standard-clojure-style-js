@@ -53,25 +53,16 @@ standard-clj format src/
 ## you can pass a glob pattern for more control over which files are formatted
 standard-clj format --include "src/**/*.clj"
 
-## standard-clj will look for a .standard-clojure-style.json or .standard-clojure-style.edn file
-## in the project root
+## standard-clj will look for a .standard-clj.json or .standard-clj.edn file in the directory where
+## the command is run from (likely the root directory for your project)
+echo '{:include "src/**/*.clj"}' > .standard-clj.edn
 standard-clj format
 
+## or pass a config file explicitly using the --config argument
+standard-clj list --config /home/user1/my-project/.standard-clj.json
 
-
-## format files using
-
-## TODO:
-## --include ""
-## -i ""
-
-## --exclude ""
-## -e ""
-
-## --file-ext="clj,cljs,cljc,edn"
-
-## TODO: document --output
-## --output json, json-pretty, edn, edn-pretty
+## TODO: document --exclude, -e
+## TODO: document --file-ext, -ext
 
 ## create a "check" command that just checks file syntax, does no formatting
 ## useful for a fast CI check

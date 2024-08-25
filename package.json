@@ -21,9 +21,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "edn-data": "1.1.2",
     "fs-plus": "3.1.1",
     "glob": "11.0.0",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "yoctocolors": "2.1.1"
   },
   "devDependencies": {
     "enolib": "0.8.2",
