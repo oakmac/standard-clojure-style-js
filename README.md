@@ -38,7 +38,16 @@ If you plan to use the library more frequently you may wish to install it global
 ## Installs "standard-clj" globally onto your system via npm
 npm install --global @chrisoakman/standard-clojure-style
 
-## then from a Clojure project directory
+## use the "list" command to see which files standard-clj will format
+standard-clj list src/
+
+standard-clj list src/ --output json
+standard-clj list src/ --output json-pretty
+standard-clj list src/ --output edn
+standard-clj list src/ --output edn-pretty
+
+## use the "format" command to format files on disk
+## NOTE: this will change your files! so please ensure a clean git working tree or branch as needed
 standard-clj format src/
 
 ## you can pass a glob pattern for more control over which files are formatted
@@ -47,6 +56,10 @@ standard-clj format --include "src/**/*.clj"
 ## standard-clj will look for a .standard-clojure-style.json or .standard-clojure-style.edn file
 ## in the project root
 standard-clj format
+
+
+
+## format files using
 
 ## TODO:
 ## --include ""
@@ -67,7 +80,7 @@ standard-clj format
 #### cli todo
 
 - [ ] passing a glob argument
-- [ ] creating a `.standard-clojure-stlye.edn` file in the project root
+- [ ] creating a `.standard-clojure-style.edn` file in the project root
 
 ## Formatting Rules
 

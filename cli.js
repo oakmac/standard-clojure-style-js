@@ -17,7 +17,10 @@ const yargs = require('yargs')
 const standardClj = require('./lib/standard-clojure-style.js')
 
 // https://clig.dev/#the-basics
-// Return zero exit code on success, non-zero on failure. Exit codes are how scripts determine whether a program succeeded or failed, so you should report this correctly. Map the non-zero exit codes to the most important failure modes.
+// Return zero exit code on success, non-zero on failure. Exit codes are how
+// scripts determine whether a program succeeded or failed, so you should
+// report this correctly. Map the non-zero exit codes to the most important
+// failure modes.
 
 // command: list
 // lists the files that would be formatted
@@ -34,14 +37,6 @@ const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 
 // FIXME: write an async version of this that returns a Promise
 // function formatFileAsync (filename) {
-//   const fileTxt = fs.readFileSync(filename, 'utf8')
-//   const result = standardClj.format(fileTxt)
-
-//   if (result.status === 'success') {
-//     fs.writeFileSync(filename, result.out)
-//   } else {
-//     console.error('FIXME: format() returned error, need to handle this case')
-//   }
 // }
 
 // this is the directory where the script is being called from
@@ -49,7 +44,7 @@ const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 const rootDir = process.cwd()
 
 // returns a Set of files from the args passed to the "list" or "format" commands
-function getFilesFromArgv (argv) {
+function getFilesFromArgv (argv, cmd) {
   // remove the first item, which is the command
   argv._.shift()
   const directArgs = argv._
@@ -73,8 +68,7 @@ function getFilesFromArgv (argv) {
       const filesFromGlob = globLib.globSync(dirGlobStr)
       files = files.concat(filesFromGlob)
     } else {
-      // FIXME: better warning verbiage here
-      console.warn('Invalid argument to "list" command:', arg)
+      printToStderr('Please pass a filename or a directory to the ' + cmd + ' command: ' + arg)
     }
   })
 
@@ -97,14 +91,29 @@ function getFilesFromArgv (argv) {
 }
 
 function formatFileSync (filename) {
-  // FIXME: wrap this in try/catch
-  const fileTxt = fs.readFileSync(filename, 'utf8')
+  let fileTxt = null
+  try {
+    fileTxt = fs.readFileSync(filename, 'utf8')
+  } catch (e) {
+    printToStderr('Unable to read file: ' + filename)
+    return null
+  }
+
   const result = standardClj.format(fileTxt)
 
-  if (result.status === 'success') {
-    fs.writeFileSync(filename, result.out)
+  if (result && result.status === 'success') {
+    // FIXME: should we do this here or upstream in the format() function?
+    // add a single newline to the end of the file
+    const outTxtWithNewline = result.out + '\n'
+    fs.writeFileSync(filename, outTxtWithNewline)
+  } else if (result && result.status === 'error') {
+    const errMsg = 'Failed to format file ' + filename + ': ' + result.reason
+    printToStderr(errMsg)
   } else {
-    console.error('FIXME: format() returned error, need to handle this case', filename)
+    printToStderr('Unknown error when formatting file ' + filename)
+    printToStderr('Please report this upstream to the standard-clj project:')
+    printToStderr(result)
+    dieSad()
   }
 }
 
@@ -112,40 +121,37 @@ function formatFileSync (filename) {
 // yargs commands
 
 function processListCmd (argv) {
-  const filesSet = getFilesFromArgv(argv)
+  const filesSet = getFilesFromArgv(argv, 'list')
   const sortedFiles = setToArray(filesSet).sort()
 
   if (argv.output === 'json') {
-    console.log(JSON.stringify(sortedFiles))
+    printToStdout(JSON.stringify(sortedFiles))
   } else if (argv.output === 'json-pretty') {
-    console.log(JSON.stringify(sortedFiles, null, 2))
+    printToStdout(JSON.stringify(sortedFiles, null, 2))
   } else if (argv.output === 'edn') {
     const jsonOutput = JSON.stringify(sortedFiles)
-    console.log(jsonOutput.replaceAll(/","/g, '" "'))
+    printToStdout(jsonOutput.replaceAll(/","/g, '" "'))
   } else if (argv.output === 'edn-pretty') {
     // NOTE: this is hacky, but it works 🤷‍♂️
     const jsonOutput = JSON.stringify(sortedFiles)
-    console.log(jsonOutput.replaceAll(/","/g, '"\n "'))
+    printToStdout(jsonOutput.replaceAll(/","/g, '"\n "'))
   } else {
-    sortedFiles.forEach(f => console.log(f))
+    sortedFiles.forEach(printToStdout)
   }
 
-  process.exit(0)
+  dieHappy()
 }
 
 function processFormatCmd (argv) {
-  const filesToProcess = getFilesFromArgv(argv)
+  const filesToProcess = getFilesFromArgv(argv, 'format')
 
   if (filesToProcess.size === 0) {
-    // FIXME: improve verbiage here
-    console.error('No files passed to the "format" command.')
-    process.exit(1)
+    dieSad('No files were passed to the "format" command. Please pass a filename, directory, or --include glob string.')
   } else {
     const sortedFiles = setToArray(filesToProcess).sort()
     sortedFiles.forEach(formatFileSync)
+    dieHappy()
   }
-
-  // FIXME: log output
 }
 
 const yargsFormatCommand = {
@@ -202,4 +208,26 @@ function isArray (a) {
 
 function setToArray (s) {
   return Array.from(s)
+}
+
+function printToStdout (s) {
+  console.log(s)
+}
+
+function printToStderr (s) {
+  console.error(s)
+}
+
+function dieHappy (s) {
+  if (isString(s)) {
+    printToStdout(s)
+  }
+  process.exit(0)
+}
+
+function dieSad (s) {
+  if (isString(s)) {
+    printToStderr(s)
+  }
+  process.exit(1)
 }
