@@ -124,6 +124,11 @@ standard-clj fix src/ test/ deps.edn
 1 - pass a [glob pattern] with the `--include` option
 
 ```sh
+# will fix:
+# - dev/user.clj (single file argument)
+# - project.clj (single file argument)
+# - all .clj, .cljs, .cljc, .edn files in the src-clj/ directory and subdirectories (directory argument)
+# - all .edn files in the resources/ directory and subdirectories (glob pattern argument)
 standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**/*.edn"
 ```
 
@@ -141,6 +146,28 @@ standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**
   - `"quiet"` or `5` - will not print anything to stdout or stderr for the `check` or `fix` commands
 
 [glob pattern]:https://github.com/isaacs/node-glob?tab=readme-ov-file#glob-primer
+
+#### Options via config file
+
+By default, `standard-clj` will look for a `.standard-clj.edn` or
+`.standard-clj.json` file located in the directory where the command is
+called (often a project root directory). Most of the time you will want to
+create this file and commit it directly to your git repo.
+
+```sh
+# create a .standard-clj.edn file
+echo '{:include ["src-clj/**/*.clj" "src-cljs/**/*.cljs"]}' > .standard-clj.edn
+
+# run the "fix" command with options from that file
+standard-clj fix
+```
+
+You can use the `--config` or `-c` flag to specify a different file location:
+
+```sh
+# run the "fix" command with options from ./my-config-file.edn
+standard-clj fix --config ./my-config-file.edn
+```
 
 ## Formatting Rules
 

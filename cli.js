@@ -413,7 +413,6 @@ yargs.scriptName('standard-clj')
   .alias('ig', 'ignore')
   .alias('in', 'include')
   .alias('l', 'log-level')
-  .alias('q', 'quiet')
 
   .default('file-ext', defaultFileExtensions.join(','))
 
