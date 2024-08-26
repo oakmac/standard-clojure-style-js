@@ -150,9 +150,9 @@ standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**
 #### Options via config file
 
 By default, `standard-clj` will look for a `.standard-clj.edn` or
-`.standard-clj.json` file located in the directory where the command is
-called (often a project root directory). Most of the time you will want to
-create this file and commit it directly to your git repo.
+`.standard-clj.json` file located in the directory where the command is run.
+Most projects that use `standard-clj` regularly will want to commit this file
+to their git repo for convenience.
 
 ```sh
 # create a .standard-clj.edn file

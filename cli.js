@@ -33,25 +33,13 @@ let atLeastOneFilePrinted = false
 // this is the directory where the script is being called from
 // in most cases, this will be a project root
 const rootDir = process.cwd()
-// const cfgJSONFile = path.join(rootDir, '.standard-clj.json')
-// const cfgEDNFile = path.join(rootDir, '.standard-clj.edn')
+const defaultConfigJSONFile = path.join(rootDir, '.standard-clj.json')
+const defaultConfigEDNFile = path.join(rootDir, '.standard-clj.edn')
 
-// look for a .standard-clj.json or .standard-clj.edn file
-// function readConfigFile (filename) {
-
-// }
-
-// let configFile = null
-// try {
-//   configFile = JSON.parse(fs.readFileSync(cfgJSONFile, 'utf8'))
-// } catch (e) {}
-// try {
-//   const parseEDNOptions = {
-//     keywordAs: 'string',
-//     mapAs: 'object'
-//   }
-//   configFile = ednLib.parseEDNString(fs.readFileSync(cfgEDNFile, 'utf8'), parseEDNOptions)
-// } catch (e) {}
+const parseEDNOptions = {
+  keywordAs: 'string',
+  mapAs: 'object'
+}
 
 // returns a Set of files from the args passed to the "list", "check", or "fix" commands
 function getFilesFromArgv (argv, cmd) {
@@ -63,6 +51,7 @@ function getFilesFromArgv (argv, cmd) {
 
   let includeFiles = []
 
+  // process the direct arguments
   directArgs.forEach(arg => {
     let possibleFileOrDir = arg
     if (!fs.isAbsolute(arg)) {
@@ -82,21 +71,12 @@ function getFilesFromArgv (argv, cmd) {
     }
   })
 
-  // convert the --include argument to an array
-  if (isString(argv.include) && argv.include !== '') {
-    argv.include = [argv.include]
-  }
-
+  // process the --include glob patterns
   if (isArray(argv.include)) {
     argv.include.forEach(includeStr => {
       const filesFromGlob = globLib.globSync(includeStr)
       includeFiles = includeFiles.concat(filesFromGlob)
     })
-  }
-
-  // convert the --ignore argument to an array
-  if (isString(argv.ignore) && argv.ignore !== '') {
-    argv.ignore = [argv.ignore]
   }
 
   // exclude files if necessary
@@ -256,15 +236,90 @@ function printProgramInfo (opts) {
   printToStdout('')
 }
 
-// -----------------------------------------------------------------------------
-// yargs commands
-
 function setLogLevel (level) {
   level = '' + level
   if (level === 'ignore-already-formatted' || level === '1') logLevel = 'ignore-already-formatted'
   else if (level === 'quiet' || level === '5') logLevel = 'quiet'
   else logLevel = 'everything'
 }
+
+function injectConfigFile (argv) {
+  let config = null
+
+  // load the default config files
+  try {
+    config = JSON.parse(fs.readFileSync(defaultConfigJSONFile, 'utf8'))
+  } catch (e) {}
+  try {
+    config = ednLib.parseEDNString(fs.readFileSync(defaultConfigEDNFile, 'utf8'), parseEDNOptions)
+  } catch (e) {}
+
+  // try to read their custom config file
+  if (isString(argv.config) && argv.config !== '') {
+    const isJSON = argv.config.endsWith('.json')
+    const isEDN = argv.config.endsWith('.edn')
+
+    if (isJSON) {
+      try {
+        config = JSON.parse(fs.readFileSync(argv.config, 'utf8'))
+      } catch (e) {}
+    } else if (isEDN) {
+      try {
+        config = ednLib.parseEDNString(fs.readFileSync(argv.config, 'utf8'), parseEDNOptions)
+      } catch (e) {}
+    }
+
+    if (!config) {
+      printToStderr('Unable to load config file: ' + argv.config)
+    }
+  }
+
+  // apply the config options if found
+  if (config) {
+    // log level
+    if (!argv['log-level']) {
+      if (config['log-level']) {
+        argv['log-level'] = config['log-level']
+      }
+    }
+
+    // include
+    if (!argv.include) {
+      if (isString(config.include)) {
+        argv.include = [config.include]
+      } else if (isArray(config.include)) {
+        argv.include = config.include
+      }
+    }
+
+    // ignores
+    if (!argv.ignore) {
+      if (isString(config.ignore)) {
+        argv.ignore = [config.ignore]
+      } else if (isArray(config.ignore)) {
+        argv.ignore = config.ignore
+      }
+    }
+  }
+
+  return argv
+}
+
+// convert String arguments into Arrays
+function convertStringsToArrays (argv) {
+  if (isString(argv.ignore)) {
+    argv.ignore = [argv.ignore]
+  }
+
+  if (isString(argv.include)) {
+    argv.include = [argv.include]
+  }
+
+  return argv
+}
+
+// -----------------------------------------------------------------------------
+// yargs commands
 
 function processCheckCmd (argv) {
   setLogLevel(argv['log-level'])
@@ -408,6 +463,8 @@ yargs.scriptName('standard-clj')
   .command(yargsCheckCommand)
   .command(yargsFixCommand)
   .command(yargsListCommand)
+
+  .middleware([injectConfigFile, convertStringsToArrays])
 
   .alias('c', 'config')
   .alias('ig', 'ignore')
