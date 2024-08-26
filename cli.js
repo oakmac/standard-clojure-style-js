@@ -54,7 +54,7 @@ const rootDir = process.cwd()
 //   configFile = ednLib.parseEDNString(fs.readFileSync(cfgEDNFile, 'utf8'), parseEDNOptions)
 // } catch (e) {}
 
-// returns a Set of files from the args passed to the "list" or "format" commands
+// returns a Set of files from the args passed to the "list", "check", or "fix" commands
 function getFilesFromArgv (argv, cmd) {
   // remove the first item, which is the command
   argv._.shift()
@@ -83,7 +83,7 @@ function getFilesFromArgv (argv, cmd) {
     }
   })
 
-  // convert the .include argument to an array
+  // convert the --include argument to an array
   if (isString(argv.include) && argv.include !== '') {
     argv.include = [argv.include]
   }
@@ -116,8 +116,8 @@ function formatFileSync (formatResult, filename) {
   const result = standardClj.format(fileTxt)
 
   if (result && result.status === 'success') {
-    // FIXME: should we do this here or upstream in the format() function?
     // add a single newline to the end of the file
+    // FIXME: should we do this here or upstream in the format() function?
     const outTxtWithNewline = result.out + '\n'
 
     // write the file to disk if necessary
@@ -132,20 +132,21 @@ function formatFileSync (formatResult, filename) {
 
     const formatSingleFileEndTime = performance.now()
     const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
+
     printToStdout(yocto.green(statusEmoji) + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(formatDurationMs))
-    return formatResult
-  } else if (result && result.status === 'error') {
-    formatResult.filesWithErrors.push(filename)
-    const formatSingleFileEndTime = performance.now()
-    const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
-    printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + result.reason + ' ' + formatDuration(formatDurationMs))
     return formatResult
   } else {
     formatResult.filesWithErrors.push(filename)
-    const unknownErrorMsg = 'Unknown error! Please help the standard-clj project by opening an issue to report this 🙏'
+
+    let errMsg = 'Unknown error! Please help the standard-clj project by opening an issue to report this 🙏'
+    if (result && result.status === 'error' && isString(result.reason)) {
+      errMsg = result.reason
+    }
+
     const formatSingleFileEndTime = performance.now()
     const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
-    printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + unknownErrorMsg + ' ' + formatDuration(formatDurationMs))
+
+    printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + errMsg + ' ' + formatDuration(formatDurationMs))
     return formatResult
   }
 }
@@ -218,10 +219,10 @@ function printProgramInfo (opts) {
 function processCheckCmd (argv) {
   printProgramInfo({ command: 'check' })
 
-  const filesToProcess = getFilesFromArgv(argv, 'format')
+  const filesToProcess = getFilesFromArgv(argv, 'check')
 
   if (filesToProcess.size === 0) {
-    exitSad('No files were passed to the "check" command. Please pass a filename, directory, or --include glob string.')
+    exitSad('No files were passed to the "check" command. Please pass a filename, directory, or --include glob pattern.')
   } else {
     const sortedFiles = setToArray(filesToProcess).sort()
 
@@ -267,7 +268,7 @@ function processFixCmd (argv) {
   const filesToProcess = getFilesFromArgv(argv, 'fix')
 
   if (filesToProcess.size === 0) {
-    exitSad('No files were passed to the "fix" command. Please pass a filename, directory, or --include glob string.')
+    exitSad('No files were passed to the "fix" command. Please pass a filename, directory, or --include glob pattern.')
   } else {
     const sortedFiles = setToArray(filesToProcess).sort()
 
@@ -324,19 +325,24 @@ function processListCmd (argv) {
 
 const yargsCheckCommand = {
   command: 'check',
-  describe: 'Checks that your files are formatted according to Standard Clojure Style. This command will not modify your files, it only checks them.',
+  describe: 'Checks if files are formatted according to Standard Clojure Style. ' +
+            'This command does not modify files. ' +
+            'Returns exit code 0 if all files are formatted, 1 otherwise.',
   handler: processCheckCmd
 }
 
 const yargsFixCommand = {
   command: 'fix',
-  describe: 'Formats files according to Standard Clojure Style. This command will modify your files on disk.',
+  describe: 'Formats files according to Standard Clojure Style. ' +
+            'This command will modify your files on disk. ' +
+            'Returns exit code 0 if all files are formatted, 1 otherwise.',
   handler: processFixCmd
 }
 
 const yargsListCommand = {
   command: 'list',
-  describe: 'Prints a list of files that will be formatted. Useful for debugging your .standard-clj.edn file or glob patterns.',
+  describe: 'Prints a list of files that will be used by the "check" or "fix" commands. ' +
+            'Useful for debugging your .standard-clj.edn file or glob patterns.',
   handler: processListCmd
 }
 
@@ -347,8 +353,10 @@ yargs.scriptName('standard-clj')
   .command(yargsFixCommand)
   .command(yargsListCommand)
 
-  .alias('i', 'include')
-  .alias('e', 'exclude')
+  // .alias('c', 'config') // FIXME: write this
+  .alias('ex', 'exclude')
+  .alias('in', 'include')
+  // .alias('q', 'quiet') // FIXME: write this
 
   .default('file-ext', defaultFileExtensions.join(','))
 
