@@ -14,10 +14,10 @@
   },
   "main": "./lib/standard-clojure-style.js",
   "bin": {
-    "standard-clj": "./cli.js"
+    "standard-clj": "./cli.mjs"
   },
   "scripts": {
-    "lint": "standard --fix lib/ scripts/ test/ ./cli.js",
+    "lint": "standard --fix lib/ scripts/ test/ ./cli.mjs",
     "test": "jest"
   },
   "dependencies": {

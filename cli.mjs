@@ -7,22 +7,23 @@
 // Copyright © 2024, Chris Oakman
 // https://github.com/oakmac/standard-clojure-style-js/
 
-// const yocto = require('yoctocolors')
+// node.js imports
+import fs from 'fs-plus'
+import path from 'path'
+import { performance } from 'node:perf_hooks'
+import process from 'process'
+
+// npm imports
+import { parseEDNString, toEDNStringFromSimpleObject } from 'edn-data'
+import { globSync } from 'glob'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
 import yocto from 'yoctocolors'
 
-const fs = require('fs-plus')
-const path = require('path')
-const { performance } = require('node:perf_hooks')
-const process = require('process')
-
-const ednLib = require('edn-data')
-const globLib = require('glob')
-const yargs = require('yargs')
+// Standard Clojure Style
+import standardClj from './lib/standard-clojure-style.js'
 
 const scriptStartTime = performance.now()
-
-const standardClj = require('./lib/standard-clojure-style.js')
-
 const programVersion = 'v0.1.0'
 
 const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
@@ -64,7 +65,7 @@ function getFilesFromArgv (argv, cmd) {
       includeFiles.push(possibleFileOrDir)
     } else if (fs.isDirectorySync(possibleFileOrDir)) {
       const dirGlobStr = path.join(arg, '/**/*.{' + fileExtensionsStr + '}')
-      const filesFromGlob = globLib.globSync(dirGlobStr)
+      const filesFromGlob = globSync(dirGlobStr)
       includeFiles = includeFiles.concat(filesFromGlob)
     } else {
       printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory at "' + arg + '"')
@@ -74,13 +75,13 @@ function getFilesFromArgv (argv, cmd) {
   // process the --include glob patterns
   if (isArray(argv.include)) {
     argv.include.forEach(includeStr => {
-      const filesFromGlob = globLib.globSync(includeStr)
+      const filesFromGlob = globSync(includeStr)
       includeFiles = includeFiles.concat(filesFromGlob)
     })
   }
 
   // exclude files if necessary
-  let ignoreFiles = new Set()
+  let ignoreFiles = []
   if (isArray(argv.ignore)) {
     argv.ignore.forEach(ignoreStr => {
       let possibleFileOrDir = ignoreStr
@@ -91,18 +92,21 @@ function getFilesFromArgv (argv, cmd) {
       }
 
       if (fs.isFileSync(possibleFileOrDir)) {
-        ignoreFiles.add(possibleFileOrDir)
+        ignoreFiles.push(possibleFileOrDir)
       } else if (fs.isDirectorySync(possibleFileOrDir)) {
         const dirGlobStr = path.join(ignoreStr, '/**/*.{' + fileExtensionsStr + '}')
-        const filesFromGlob = globLib.globSync(dirGlobStr)
-        ignoreFiles = ignoreFiles.union(new Set(filesFromGlob))
+        const filesFromGlob = globSync(dirGlobStr)
+        ignoreFiles = ignoreFiles.concat(filesFromGlob)
       } else {
         printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to ignore at "' + ignoreStr + '"')
       }
     })
   }
 
-  return new Set(includeFiles).difference(ignoreFiles)
+  const includeFilesSet = new Set(includeFiles)
+  const ignoreFileSet = new Set(ignoreFiles)
+
+  return setDifference(includeFilesSet, ignoreFileSet)
 }
 
 function formatFileSync (formatResult, filename) {
@@ -251,7 +255,7 @@ function injectConfigFile (argv) {
     config = JSON.parse(fs.readFileSync(defaultConfigJSONFile, 'utf8'))
   } catch (e) {}
   try {
-    config = ednLib.parseEDNString(fs.readFileSync(defaultConfigEDNFile, 'utf8'), parseEDNOptions)
+    config = parseEDNString(fs.readFileSync(defaultConfigEDNFile, 'utf8'), parseEDNOptions)
   } catch (e) {}
 
   // try to read their custom config file
@@ -265,7 +269,7 @@ function injectConfigFile (argv) {
       } catch (e) {}
     } else if (isEDN) {
       try {
-        config = ednLib.parseEDNString(fs.readFileSync(argv.config, 'utf8'), parseEDNOptions)
+        config = parseEDNString(fs.readFileSync(argv.config, 'utf8'), parseEDNOptions)
       } catch (e) {}
     }
 
@@ -422,7 +426,7 @@ function processListCmd (argv) {
   } else if (argv.output === 'json-pretty') {
     printToStdout(JSON.stringify(sortedFiles, null, 2))
   } else if (argv.output === 'edn') {
-    printToStdout(ednLib.toEDNStringFromSimpleObject(sortedFiles))
+    printToStdout(toEDNStringFromSimpleObject(sortedFiles))
   } else if (argv.output === 'edn-pretty') {
     // NOTE: this is hacky, but it works 🤷‍♂️
     const jsonOutput = JSON.stringify(sortedFiles)
@@ -457,7 +461,8 @@ const yargsListCommand = {
   handler: processListCmd
 }
 
-yargs.scriptName('standard-clj')
+yargs(hideBin(process.argv))
+  .scriptName('standard-clj')
   .usage('$0 <cmd> [args]')
 
   .command(yargsCheckCommand)
@@ -491,6 +496,23 @@ function isArray (a) {
 
 function setToArray (s) {
   return Array.from(s)
+}
+
+// some older versions of node.js do not have Set.difference
+function setDifference (setA, setB) {
+  if (typeof Set.prototype.difference === 'function') {
+    return setA.difference(setB)
+  } else {
+    const returnSet = new Set()
+
+    setA.forEach(itm => {
+      if (!setB.has(itm)) {
+        returnSet.add(itm)
+      }
+    })
+
+    return returnSet
+  }
 }
 
 function printToStdout (s) {

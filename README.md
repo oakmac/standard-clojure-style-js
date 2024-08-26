@@ -67,8 +67,6 @@ standard-clj fix
 
 ## or pass a config file explicitly using the --config argument
 standard-clj list --config /home/user1/my-project/.standard-clj.json
-
-## TODO: document --file-ext, -ext
 ```
 
 #### `list` command
@@ -119,9 +117,9 @@ standard-clj fix src/ test/ deps.edn
 
 `standard-clj` accepts several ways to know which files to format:
 
-1 - pass filenames directly as arguments
-1 - pass directories directly as arguments
-1 - pass a [glob pattern] with the `--include` option
+* pass filenames directly as arguments
+* pass directories directly as arguments
+* pass a [glob pattern] with the `--include` option
 
 ```sh
 # will fix:
