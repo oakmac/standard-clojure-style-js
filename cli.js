@@ -9,6 +9,7 @@
 
 // const yocto = require('yoctocolors')
 import yocto from 'yoctocolors'
+
 const fs = require('fs-plus')
 const path = require('path')
 const { performance } = require('node:perf_hooks')
@@ -18,6 +19,8 @@ const ednLib = require('edn-data')
 const globLib = require('glob')
 const yargs = require('yargs')
 
+const scriptStartTime = performance.now()
+
 const standardClj = require('./lib/standard-clojure-style.js')
 
 const programVersion = 'v0.1.0'
@@ -25,10 +28,6 @@ const programVersion = 'v0.1.0'
 //
 // --verbose, --chatty-kathy
 // provide lots of information about what the script is doing
-//
-// command: format
-// formats the files "in-place"
-//
 
 const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 
@@ -102,13 +101,16 @@ function getFilesFromArgv (argv, cmd) {
   return new Set(files)
 }
 
-function formatFileSync (filename) {
+function formatFileSync (formatResult, filename) {
+  const formatSingleFileStartTime = performance.now()
+
   let fileTxt = null
   try {
     fileTxt = fs.readFileSync(filename, 'utf8')
   } catch (e) {
     printToStderr('Unable to read file: ' + filename)
-    return null
+    formatResult.filesWithErrors.push(filename)
+    return formatResult
   }
 
   const result = standardClj.format(fileTxt)
@@ -117,15 +119,34 @@ function formatFileSync (filename) {
     // FIXME: should we do this here or upstream in the format() function?
     // add a single newline to the end of the file
     const outTxtWithNewline = result.out + '\n'
-    fs.writeFileSync(filename, outTxtWithNewline)
+
+    // write the file to disk if necessary
+    let statusEmoji = '✓'
+    if (outTxtWithNewline !== fileTxt) {
+      fs.writeFileSync(filename, outTxtWithNewline)
+      formatResult.filesThatWereFormatted.push(filename)
+      statusEmoji = 'F'
+    } else {
+      formatResult.filesThatDidNotRequireFormatting.push(filename)
+    }
+
+    const formatSingleFileEndTime = performance.now()
+    const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
+    printToStdout(yocto.green(statusEmoji) + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(formatDurationMs))
+    return formatResult
   } else if (result && result.status === 'error') {
-    const errMsg = 'Failed to format file ' + filename + ': ' + result.reason
-    printToStderr(errMsg)
+    formatResult.filesWithErrors.push(filename)
+    const formatSingleFileEndTime = performance.now()
+    const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
+    printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + result.reason + ' ' + formatDuration(formatDurationMs))
+    return formatResult
   } else {
-    printToStderr('Unknown error when formatting file ' + filename)
-    printToStderr('Please report this upstream to the standard-clj project:')
-    printToStderr(result)
-    dieSad()
+    formatResult.filesWithErrors.push(filename)
+    const unknownErrorMsg = 'Unknown error! Please help the standard-clj project by opening an issue to report this 🙏'
+    const formatSingleFileEndTime = performance.now()
+    const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
+    printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + unknownErrorMsg + ' ' + formatDuration(formatDurationMs))
+    return formatResult
   }
 }
 
@@ -165,7 +186,6 @@ function checkFileSync (checkResult, filename) {
 
     if (isString(fileTxt) && fileTxt === outTxtWithNewline) {
       printToStdout(yocto.green('✓') + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(durationMs))
-
       checkResult.filesThatDidNotRequireFormatting.push(filename)
     } else {
       printToStderr(yocto.red('✗') + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(durationMs))
@@ -196,14 +216,12 @@ function printProgramInfo (opts) {
 // yargs commands
 
 function processCheckCmd (argv) {
-  const checkCommandStartTime = performance.now()
-
   printProgramInfo({ command: 'check' })
 
   const filesToProcess = getFilesFromArgv(argv, 'format')
 
   if (filesToProcess.size === 0) {
-    dieSad('No files were passed to the "check" command. Please pass a filename, directory, or --include glob string.')
+    exitSad('No files were passed to the "check" command. Please pass a filename, directory, or --include glob string.')
   } else {
     const sortedFiles = setToArray(filesToProcess).sort()
 
@@ -221,34 +239,65 @@ function processCheckCmd (argv) {
                               checkResult.filesWithErrors.length
     console.assert(sortedFiles.length === numFilesProcessed, 'checkFileSync missed a file?')
 
+    const allFilesFormatted = checkResult.filesThatDidNotRequireFormatting.length === sortedFiles.length
+
     const checkCommandEndTime = performance.now()
-    const checkCommandDurationMs = checkCommandEndTime - checkCommandStartTime
+    const scriptDurationMs = checkCommandEndTime - scriptStartTime
 
     printToStdout('')
-    printToStdout(yocto.green(checkResult.filesThatDidNotRequireFormatting.length + ' pass'))
-    printToStdout(yocto.red(checkResult.filesThatDidRequireFormatting.length + ' fail'))
-    printToStdout('Checked ' + numFilesProcessed + ' files. ' + formatDuration(checkCommandDurationMs))
+    if (allFilesFormatted) {
+      printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+    } else {
+      printToStdout(yocto.green(checkResult.filesThatDidNotRequireFormatting.length + ' files formatted with Standard Clojure Style'))
+      printToStdout(yocto.red(checkResult.filesThatDidRequireFormatting.length + ' files require formatting'))
+      printToStdout('Checked ' + numFilesProcessed + ' files. ' + formatDuration(scriptDurationMs))
+    }
 
     if (checkResult.filesThatDidNotRequireFormatting.length === sortedFiles.length) {
-      // dieHappy('Checked ' + sortedFiles.length + ' files. All formatted according to Standard Clojure Style 👍')
-      dieHappy()
+      exitHappy()
     } else {
-      dieSad()
+      exitSad()
     }
   }
 }
 
-function processFormatCmd (argv) {
-  printProgramInfo({ command: 'format' })
+function processFixCmd (argv) {
+  printProgramInfo({ command: 'fix' })
 
-  const filesToProcess = getFilesFromArgv(argv, 'format')
+  const filesToProcess = getFilesFromArgv(argv, 'fix')
 
   if (filesToProcess.size === 0) {
-    dieSad('No files were passed to the "format" command. Please pass a filename, directory, or --include glob string.')
+    exitSad('No files were passed to the "fix" command. Please pass a filename, directory, or --include glob string.')
   } else {
     const sortedFiles = setToArray(filesToProcess).sort()
-    sortedFiles.forEach(formatFileSync)
-    dieHappy()
+
+    const initialResult = {
+      filesThatDidNotRequireFormatting: [],
+      filesThatWereFormatted: [],
+      filesWithErrors: [],
+      numFilesTotal: sortedFiles.length
+    }
+    const formatResult = sortedFiles.reduce(formatFileSync, initialResult)
+    const numFormattedFiles = formatResult.filesThatDidNotRequireFormatting.length + formatResult.filesThatWereFormatted.length
+    const allFilesFormatted = numFormattedFiles === sortedFiles.length
+
+    const formatCommandEndTime = performance.now()
+    const scriptDurationMs = formatCommandEndTime - scriptStartTime
+
+    printToStdout('')
+    if (allFilesFormatted) {
+      printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+    } else {
+      printToStdout(yocto.green(numFormattedFiles + ' files formatted with Standard Clojure Style'))
+      printToStdout(yocto.red(formatResult.filesWithErrors.length + ' files with errors'))
+      printToStdout('Checked ' + sortedFiles.length + ' files. ' + formatDuration(scriptDurationMs))
+    }
+
+    if (allFilesFormatted) {
+      exitHappy()
+    } else {
+      exitSad()
+    }
   }
 }
 
@@ -270,7 +319,7 @@ function processListCmd (argv) {
     sortedFiles.forEach(printToStdout)
   }
 
-  dieHappy()
+  exitHappy()
 }
 
 const yargsCheckCommand = {
@@ -279,10 +328,10 @@ const yargsCheckCommand = {
   handler: processCheckCmd
 }
 
-const yargsFormatCommand = {
-  command: 'format',
+const yargsFixCommand = {
+  command: 'fix',
   describe: 'Formats files according to Standard Clojure Style. This command will modify your files on disk.',
-  handler: processFormatCmd
+  handler: processFixCmd
 }
 
 const yargsListCommand = {
@@ -295,7 +344,7 @@ yargs.scriptName('standard-clj')
   .usage('$0 <cmd> [args]')
 
   .command(yargsCheckCommand)
-  .command(yargsFormatCommand)
+  .command(yargsFixCommand)
   .command(yargsListCommand)
 
   .alias('i', 'include')
@@ -331,14 +380,14 @@ function printToStderr (s) {
   console.error(s)
 }
 
-function dieHappy (s) {
+function exitHappy (s) {
   if (isString(s)) {
     printToStdout(s)
   }
   process.exit(0)
 }
 
-function dieSad (s) {
+function exitSad (s) {
   if (isString(s)) {
     printToStderr(s)
   }

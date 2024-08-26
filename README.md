@@ -24,51 +24,87 @@ If you have Node.js installed on your system, you can try out Standard Clojure
 Style with the `npx` command:
 
 ```sh
-## formats the file located at src/com/example/foo.clj
+# formats the file located at src/com/example/foo.clj
 npx @chrisoakman/standard-clojure-style format src/com/example/foo.clj
 
-## formats all .clj, .cljs, .cljc, .edn files found in the src/ directory
-## and subdirectories (ie: recursive)
+# formats all .clj, .cljs, .cljc, .edn files found in the src/ directory
+# and subdirectories (ie: recursive)
 npx @chrisoakman/standard-clojure-style format src/
 ```
 
-If you plan to use the library more frequently you may wish to install it globally:
+If you plan to use the library frequently you may wish to install it globally:
 
 ```sh
-## Installs "standard-clj" globally onto your system via npm
+# Installs "standard-clj" globally onto your system via npm
 npm install --global @chrisoakman/standard-clojure-style
+```
 
-## use the "list" command to see which files standard-clj will format
+#### Quick Reference
+
+```sh
+# use the "list" command to see which files standard-clj will format
 standard-clj list src/
 
-standard-clj list src/ --output json
-standard-clj list src/ --output json-pretty
-standard-clj list src/ --output edn
-standard-clj list src/ --output edn-pretty
-
-## use the "format" command to format files on disk
+## use the "fix" command to format files on disk
 ## NOTE: this will change your files! so please ensure a clean git working tree or branch as needed
-standard-clj format src/
+standard-clj fix src/
 
 ## you can pass a glob pattern for more control over which files are formatted
-standard-clj format --include "src/**/*.clj"
+standard-clj fix --include "src/**/*.clj"
 
 ## standard-clj will look for a .standard-clj.json or .standard-clj.edn file in the directory where
 ## the command is run from (likely the root directory for your project)
 echo '{:include "src/**/*.clj"}' > .standard-clj.edn
-standard-clj format
+standard-clj fix
 
 ## or pass a config file explicitly using the --config argument
 standard-clj list --config /home/user1/my-project/.standard-clj.json
 
 ## TODO: document --exclude, -e
 ## TODO: document --file-ext, -ext
-
-## create a "check" command that just checks file syntax, does no formatting
-## useful for a fast CI check
 ```
 
-#### cli todo
+#### "list" command
+
+Use `standard-clj list` to see which files will be effected by the `check` and
+`format` commands. This command is useful in order to test your `--include`
+glob strings or `.standard-clj.edn` config files.
+
+```sh
+# prints each filename that will be effected by the "check" and "format" commands
+standard-clj list src/
+
+# output the same file list in various data formats
+standard-clj list src/ --output json
+standard-clj list src/ --output json-pretty
+standard-clj list src/ --output edn
+standard-clj list src/ --output edn-pretty
+```
+
+#### "check" command
+
+Use `standard-clj check` to see if files are already formatted with Standard
+Clojure Style. Useful for continuous integration. This command will **not** write
+to any files on disk.
+
+Returns exit code 0 if all files are already formatted, 1 otherwise.
+
+#### "fix" command
+
+Use `standard-clj fix` to format files according to Standard Clojure Style.
+This command **will** write to files on disk, so please ensure a clean git
+working tree or new branch as necessary. The changes made by this command
+cannot be undone by this program.
+
+Returns exit code 0 if all files have been formatted, 1 otherwise.
+
+#### Which files will be formatted?
+
+`standard-clj` accepts several ways to know which files to format.
+
+1 - pass filenames directly as arguments
+1 - pass directories directly as arguments
+1 - use a glob pattern
 
 - [ ] passing a glob argument
 - [ ] creating a `.standard-clojure-style.edn` file in the project root
