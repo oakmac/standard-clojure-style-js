@@ -27,6 +27,9 @@ const programVersion = 'v0.1.0'
 
 const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 
+let logLevel = 'everything'
+let atLeastOneFilePrinted = false
+
 // this is the directory where the script is being called from
 // in most cases, this will be a project root
 const rootDir = process.cwd()
@@ -91,35 +94,35 @@ function getFilesFromArgv (argv, cmd) {
     })
   }
 
-  // convert the --exclude argument to an array
-  if (isString(argv.exclude) && argv.exclude !== '') {
-    argv.exclude = [argv.exclude]
+  // convert the --ignore argument to an array
+  if (isString(argv.ignore) && argv.ignore !== '') {
+    argv.ignore = [argv.ignore]
   }
 
   // exclude files if necessary
-  let excludeFiles = new Set()
-  if (isArray(argv.exclude)) {
-    argv.exclude.forEach(excludeStr => {
-      let possibleFileOrDir = excludeStr
-      if (!fs.isAbsolute(excludeStr)) {
+  let ignoreFiles = new Set()
+  if (isArray(argv.ignore)) {
+    argv.ignore.forEach(ignoreStr => {
+      let possibleFileOrDir = ignoreStr
+      if (!fs.isAbsolute(ignoreStr)) {
       // if the argument is not an absolute path, assume it is relative to the
       // directory where the script is being run from
-        possibleFileOrDir = path.join(rootDir, excludeStr)
+        possibleFileOrDir = path.join(rootDir, ignoreStr)
       }
 
       if (fs.isFileSync(possibleFileOrDir)) {
-        excludeFiles.add(possibleFileOrDir)
+        ignoreFiles.add(possibleFileOrDir)
       } else if (fs.isDirectorySync(possibleFileOrDir)) {
-        const dirGlobStr = path.join(excludeStr, '/**/*.{' + fileExtensionsStr + '}')
+        const dirGlobStr = path.join(ignoreStr, '/**/*.{' + fileExtensionsStr + '}')
         const filesFromGlob = globLib.globSync(dirGlobStr)
-        excludeFiles = excludeFiles.union(new Set(filesFromGlob))
+        ignoreFiles = ignoreFiles.union(new Set(filesFromGlob))
       } else {
-        printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to exclude at "' + excludeStr + '"')
+        printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to ignore at "' + ignoreStr + '"')
       }
     })
   }
 
-  return new Set(includeFiles).difference(excludeFiles)
+  return new Set(includeFiles).difference(ignoreFiles)
 }
 
 function formatFileSync (formatResult, filename) {
@@ -129,7 +132,9 @@ function formatFileSync (formatResult, filename) {
   try {
     fileTxt = fs.readFileSync(filename, 'utf8')
   } catch (e) {
+    // FIXME: this should match the error format below
     printToStderr('Unable to read file: ' + filename)
+    atLeastOneFilePrinted = true
     formatResult.filesWithErrors.push(filename)
     return formatResult
   }
@@ -154,7 +159,15 @@ function formatFileSync (formatResult, filename) {
     const formatSingleFileEndTime = performance.now()
     const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
 
-    printToStdout(yocto.green(statusEmoji) + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(formatDurationMs))
+    if (statusEmoji === 'F') {
+      printToStdout(yocto.green(statusEmoji) + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(formatDurationMs))
+      atLeastOneFilePrinted = true
+    } else {
+      if (logLevel !== 'ignore-already-formatted') {
+        printToStdout(yocto.green(statusEmoji) + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(formatDurationMs))
+        atLeastOneFilePrinted = true
+      }
+    }
     return formatResult
   } else {
     formatResult.filesWithErrors.push(filename)
@@ -168,6 +181,7 @@ function formatFileSync (formatResult, filename) {
     const formatDurationMs = formatSingleFileEndTime - formatSingleFileStartTime
 
     printToStderr(yocto.red('E') + ' ' + yocto.bold(yocto.red(relativeFilename(filename))) + ' - ' + errMsg + ' ' + formatDuration(formatDurationMs))
+    atLeastOneFilePrinted = true
     return formatResult
   }
 }
@@ -191,7 +205,9 @@ function checkFileSync (checkResult, filename) {
   try {
     fileTxt = fs.readFileSync(filename, 'utf8')
   } catch (e) {
+    // FIXME: this should match the error format below
     printToStderr('Unable to read file: ' + filename)
+    atLeastOneFilePrinted = true
     checkResult.filesWithErrors.push(filename)
     return checkResult
   }
@@ -207,21 +223,27 @@ function checkFileSync (checkResult, filename) {
     const outTxtWithNewline = result.out + '\n'
 
     if (isString(fileTxt) && fileTxt === outTxtWithNewline) {
-      printToStdout(yocto.green('✓') + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(durationMs))
+      if (logLevel !== 'ignore-already-formatted') {
+        printToStdout(yocto.green('✓') + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(durationMs))
+        atLeastOneFilePrinted = true
+      }
       checkResult.filesThatDidNotRequireFormatting.push(filename)
     } else {
       printToStderr(yocto.red('✗') + ' ' + yocto.bold(relativeFilename(filename)) + ' ' + formatDuration(durationMs))
+      atLeastOneFilePrinted = true
       checkResult.filesThatDidRequireFormatting.push(filename)
     }
   } else if (result && result.status === 'error') {
     const errMsg = 'Failed to format file ' + filename + ': ' + result.reason
     printToStderr(errMsg)
+    atLeastOneFilePrinted = true
 
     checkResult.filesWithErrors.push(filename)
   } else {
     printToStderr('Unknown error when formatting file ' + filename)
     printToStderr('Please report this upstream to the standard-clj project:')
     printToStderr(result)
+    atLeastOneFilePrinted = true
 
     checkResult.filesWithErrors.push(filename)
   }
@@ -237,7 +259,16 @@ function printProgramInfo (opts) {
 // -----------------------------------------------------------------------------
 // yargs commands
 
+function setLogLevel (level) {
+  level = '' + level
+  if (level === 'ignore-already-formatted' || level === '1') logLevel = 'ignore-already-formatted'
+  else if (level === 'quiet' || level === '5') logLevel = 'quiet'
+  else logLevel = 'everything'
+}
+
 function processCheckCmd (argv) {
+  setLogLevel(argv['log-level'])
+
   printProgramInfo({ command: 'check' })
 
   const filesToProcess = getFilesFromArgv(argv, 'check')
@@ -266,13 +297,14 @@ function processCheckCmd (argv) {
     const checkCommandEndTime = performance.now()
     const scriptDurationMs = checkCommandEndTime - scriptStartTime
 
-    printToStdout('')
+    if (atLeastOneFilePrinted) printToStdout('')
+
     if (allFilesFormatted) {
-      printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      printToStdout(yocto.green('All ' + sortedFiles.length + ' ' + fileStr(sortedFiles.length) + ' formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
     } else {
-      printToStdout(yocto.green(checkResult.filesThatDidNotRequireFormatting.length + ' files formatted with Standard Clojure Style'))
-      printToStdout(yocto.red(checkResult.filesThatDidRequireFormatting.length + ' files require formatting'))
-      printToStdout('Checked ' + numFilesProcessed + ' files. ' + formatDuration(scriptDurationMs))
+      printToStdout(yocto.green(checkResult.filesThatDidNotRequireFormatting.length + ' ' + fileStr(checkResult.filesThatDidNotRequireFormatting.length) + ' formatted with Standard Clojure Style'))
+      printToStdout(yocto.red(checkResult.filesThatDidRequireFormatting.length + ' ' + fileStr(checkResult.filesThatDidRequireFormatting.length) + ' require formatting'))
+      printToStdout('Checked ' + numFilesProcessed + ' ' + fileStr(numFilesProcessed) + '. ' + formatDuration(scriptDurationMs))
     }
 
     if (checkResult.filesThatDidNotRequireFormatting.length === sortedFiles.length) {
@@ -284,6 +316,8 @@ function processCheckCmd (argv) {
 }
 
 function processFixCmd (argv) {
+  setLogLevel(argv['log-level'])
+
   printProgramInfo({ command: 'fix' })
 
   const filesToProcess = getFilesFromArgv(argv, 'fix')
@@ -306,7 +340,8 @@ function processFixCmd (argv) {
     const formatCommandEndTime = performance.now()
     const scriptDurationMs = formatCommandEndTime - scriptStartTime
 
-    printToStdout('')
+    if (atLeastOneFilePrinted) printToStdout('')
+
     if (allFilesFormatted) {
       printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
     } else {
@@ -375,9 +410,10 @@ yargs.scriptName('standard-clj')
   .command(yargsListCommand)
 
   .alias('c', 'config')
-  .alias('ex', 'exclude') // FIXME: change this to "ignore"
+  .alias('ig', 'ignore')
   .alias('in', 'include')
-  // .alias('q', 'quiet') // FIXME: write this
+  .alias('l', 'log-level')
+  .alias('q', 'quiet')
 
   .default('file-ext', defaultFileExtensions.join(','))
 
@@ -402,11 +438,15 @@ function setToArray (s) {
 }
 
 function printToStdout (s) {
-  console.log(s)
+  if (logLevel !== 'quiet') {
+    console.log(s)
+  }
 }
 
 function printToStderr (s) {
-  console.error(s)
+  if (logLevel !== 'quiet') {
+    console.error(s)
+  }
 }
 
 function exitHappy (s) {
@@ -421,4 +461,9 @@ function exitSad (s) {
     printToStderr(s)
   }
   process.exit(1)
+}
+
+function fileStr (numFiles) {
+  if (numFiles === 1) return 'file'
+  else return 'files'
 }

@@ -24,6 +24,9 @@ If you have Node.js installed on your system, you can try out Standard Clojure
 Style with the `npx` command:
 
 ```sh
+## NOTE: the "fix" command will change your files on disk!
+## Please ensure a clean git working tree or new branch as necessary
+
 # formats the file located at src/com/example/foo.clj
 npx @chrisoakman/standard-clojure-style fix src/com/example/foo.clj
 
@@ -49,11 +52,13 @@ standard-clj list src/
 standard-clj check src-clj/ src-cljs/
 
 ## use the "fix" command to format files on disk
-## NOTE: this will change your files! so please ensure a clean git working tree or new branch as needed
 standard-clj fix src/
 
 ## you can pass a glob pattern for more control over which files are formatted
 standard-clj fix --include "src/**/*.{clj,cljs,cljc}"
+
+## ignore files or folders with the --ignore flag
+standard-clj fix --include "src/**/*.{clj,cljs,cljc}" --ignore "src/com/example/some_weird_file.clj"
 
 ## standard-clj will look for a .standard-clj.json or .standard-clj.edn file in the directory where
 ## the command is run from (likely the root directory for your project)
@@ -63,7 +68,6 @@ standard-clj fix
 ## or pass a config file explicitly using the --config argument
 standard-clj list --config /home/user1/my-project/.standard-clj.json
 
-## TODO: document --exclude, -e
 ## TODO: document --file-ext, -ext
 ```
 
@@ -126,9 +130,15 @@ standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**
 #### Other options
 
 - `--config` or `-c` - pass a filepath of a config file to use for options to the `standard-clj` program.
-- `--exclude` or `-ex` - exclude files from `list`, `check`, or `fix` commands. Accepts individual files or directories.
+- `--ignore` or `-ig` - exclude files from `list`, `check`, or `fix` commands. Accepts individual files or directories.
 - `--include` or `-in` - include files for the `list`, `check`, or `fix` commands. Accepts a [glob pattern].
-- `--quiet` or `-q` - will not print anything to stdout or stderr
+- `--log-level` or `-l` - specify a logging level
+  - `"everything"` or `0` - prints everything to either stdout or stderr. This is the default.
+  - `"ignore-already-formatted"` or `1`
+    - For the `check` command, will only print files that need formatting.
+    - For the `fix` command, will only print files that were formatted or have errors.
+    - This option can be less noisy in your terminal if you have a project with many files and only want to see the ones that need formatting.
+  - `"quiet"` or `5` - will not print anything to stdout or stderr for the `check` or `fix` commands
 
 [glob pattern]:https://github.com/isaacs/node-glob?tab=readme-ov-file#glob-primer
 
