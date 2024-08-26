@@ -3,8 +3,8 @@
 // The purpose of this file is to handle everything related to running
 // Standard Clojure Style via the command line.
 //
-// Copyright 2023 © Chris Oakman
 // ISC License
+// Copyright © 2024, Chris Oakman
 // https://github.com/oakmac/standard-clojure-style-js/
 
 // const yocto = require('yoctocolors')
@@ -24,10 +24,6 @@ const scriptStartTime = performance.now()
 const standardClj = require('./lib/standard-clojure-style.js')
 
 const programVersion = 'v0.1.0'
-
-//
-// --verbose, --chatty-kathy
-// provide lots of information about what the script is doing
 
 const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 
@@ -62,7 +58,7 @@ function getFilesFromArgv (argv, cmd) {
 
   const fileExtensionsStr = argv['file-ext']
 
-  let files = []
+  let includeFiles = []
 
   directArgs.forEach(arg => {
     let possibleFileOrDir = arg
@@ -73,13 +69,13 @@ function getFilesFromArgv (argv, cmd) {
     }
 
     if (fs.isFileSync(possibleFileOrDir)) {
-      files.push(possibleFileOrDir)
+      includeFiles.push(possibleFileOrDir)
     } else if (fs.isDirectorySync(possibleFileOrDir)) {
       const dirGlobStr = path.join(arg, '/**/*.{' + fileExtensionsStr + '}')
       const filesFromGlob = globLib.globSync(dirGlobStr)
-      files = files.concat(filesFromGlob)
+      includeFiles = includeFiles.concat(filesFromGlob)
     } else {
-      printToStderr('Please pass a filename or a directory to the ' + cmd + ' command: ' + arg)
+      printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory at "' + arg + '"')
     }
   })
 
@@ -88,17 +84,42 @@ function getFilesFromArgv (argv, cmd) {
     argv.include = [argv.include]
   }
 
-  if (isArray(argv.include) && argv.include.length > 0) {
+  if (isArray(argv.include)) {
     argv.include.forEach(includeStr => {
       const filesFromGlob = globLib.globSync(includeStr)
-      files = files.concat(filesFromGlob)
+      includeFiles = includeFiles.concat(filesFromGlob)
     })
   }
 
-  // FIXME: handle --exclude files here
+  // convert the --exclude argument to an array
+  if (isString(argv.exclude) && argv.exclude !== '') {
+    argv.exclude = [argv.exclude]
+  }
 
-  // return the files as a Set
-  return new Set(files)
+  // exclude files if necessary
+  let excludeFiles = new Set()
+  if (isArray(argv.exclude)) {
+    argv.exclude.forEach(excludeStr => {
+      let possibleFileOrDir = excludeStr
+      if (!fs.isAbsolute(excludeStr)) {
+      // if the argument is not an absolute path, assume it is relative to the
+      // directory where the script is being run from
+        possibleFileOrDir = path.join(rootDir, excludeStr)
+      }
+
+      if (fs.isFileSync(possibleFileOrDir)) {
+        excludeFiles.add(possibleFileOrDir)
+      } else if (fs.isDirectorySync(possibleFileOrDir)) {
+        const dirGlobStr = path.join(excludeStr, '/**/*.{' + fileExtensionsStr + '}')
+        const filesFromGlob = globLib.globSync(dirGlobStr)
+        excludeFiles = excludeFiles.union(new Set(filesFromGlob))
+      } else {
+        printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to exclude at "' + excludeStr + '"')
+      }
+    })
+  }
+
+  return new Set(includeFiles).difference(excludeFiles)
 }
 
 function formatFileSync (formatResult, filename) {
@@ -353,8 +374,8 @@ yargs.scriptName('standard-clj')
   .command(yargsFixCommand)
   .command(yargsListCommand)
 
-  // .alias('c', 'config') // FIXME: write this
-  .alias('ex', 'exclude')
+  .alias('c', 'config')
+  .alias('ex', 'exclude') // FIXME: change this to "ignore"
   .alias('in', 'include')
   // .alias('q', 'quiet') // FIXME: write this
 

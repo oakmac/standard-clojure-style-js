@@ -67,7 +67,7 @@ standard-clj list --config /home/user1/my-project/.standard-clj.json
 ## TODO: document --file-ext, -ext
 ```
 
-#### "list" command
+#### `list` command
 
 Use `standard-clj list` to see which files will be effected by the `check` and
 `fix` commands. This command is useful in order to test your `--include`
@@ -84,7 +84,7 @@ standard-clj list src/ --output edn
 standard-clj list src/ --output edn-pretty
 ```
 
-#### "check" command
+#### `check` command
 
 Use `standard-clj check` to see if files are already formatted with Standard
 Clojure Style. Useful for continuous integration. This command will **not** write
@@ -97,7 +97,7 @@ Returns exit code 0 if all files are already formatted, 1 otherwise.
 standard-clj check src-clj/ src-cljs/ test/
 ```
 
-#### "fix" command
+#### `fix` command
 
 Use `standard-clj fix` to format files according to Standard Clojure Style.
 This command **will** write to files on disk, so please ensure a clean git
@@ -113,16 +113,20 @@ standard-clj fix src/ test/ deps.edn
 
 #### Which files will be formatted?
 
-`standard-clj` accepts several ways to know which files to format.
+`standard-clj` accepts several ways to know which files to format:
 
 1 - pass filenames directly as arguments
 1 - pass directories directly as arguments
 1 - pass a [glob pattern] with the `--include` option
 
+```sh
+standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**/*.edn"
+```
+
 #### Other options
 
 - `--config` or `-c` - pass a filepath of a config file to use for options to the `standard-clj` program.
-- `--exclude` or `-ex` - exclude files from `list`, `check`, or `fix` commands
+- `--exclude` or `-ex` - exclude files from `list`, `check`, or `fix` commands. Accepts individual files or directories.
 - `--include` or `-in` - include files for the `list`, `check`, or `fix` commands. Accepts a [glob pattern].
 - `--quiet` or `-q` - will not print anything to stdout or stderr
 
