@@ -12,13 +12,23 @@
   "bugs": {
     "url": "https://github.com/oakmac/standard-clojure-style-js/issues"
   },
+  "main": "./lib/standard-clojure-style.js",
+  "bin": {
+    "standard-clj": "./cli.mjs"
+  },
   "scripts": {
-    "lint": "standard --fix lib/ scripts/ test/",
+    "lint": "standard --fix lib/ scripts/ test/ ./cli.mjs",
     "test": "jest"
+  },
+  "dependencies": {
+    "edn-data": "1.1.2",
+    "fs-plus": "3.1.1",
+    "glob": "11.0.0",
+    "yargs": "17.7.2",
+    "yoctocolors": "2.1.1"
   },
   "devDependencies": {
     "enolib": "0.8.2",
-    "fs-plus": "3.1.1",
     "immutable": "4.3.5",
     "jest": "29.7.0",
     "standard": "17.1.0"
