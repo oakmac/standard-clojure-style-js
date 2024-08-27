@@ -70,11 +70,11 @@ test('All test_parse_ns/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-// specificTests.add('namespace docstring 2')
+// specificTests.add('your test case here')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()
-ignoreTests.add('gen-class with name and main')
+// ignoreTests.add('your test case here')
 
 // only run these tests if the _parseNs function is exposed
 if (isFn(scsLib._parseNs)) {
