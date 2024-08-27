@@ -721,3 +721,21 @@ y 4]
        baz)
      zzz)
 --Expected
+
+# nested rule 3 with comments
+
+--Input
+   (foo (bar biz
+           baz)
+        zzz)
+        ;; aaa
+        ;; bbb
+--Input
+
+--Expected
+(foo (bar biz
+       baz)
+     zzz)
+     ;; aaa
+     ;; bbb
+--Expected
