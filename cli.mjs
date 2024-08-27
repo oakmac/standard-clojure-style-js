@@ -86,8 +86,8 @@ function getFilesFromArgv (argv, cmd) {
     argv.ignore.forEach(ignoreStr => {
       let possibleFileOrDir = ignoreStr
       if (!fs.isAbsolute(ignoreStr)) {
-      // if the argument is not an absolute path, assume it is relative to the
-      // directory where the script is being run from
+        // if the argument is not an absolute path, assume it is relative to the
+        // directory where the script is being run from
         possibleFileOrDir = path.join(rootDir, ignoreStr)
       }
 
