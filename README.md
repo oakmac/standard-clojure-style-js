@@ -16,9 +16,9 @@ Please see [Issue #1] for an explanation of this project's genesis.
 
 ## Command Line Usage
 
-This npm package exposes a command-line tool to help format your Clojure
-projects. You may wish to run this as a git hook, via continuous integration,
-an editor integration, etc.
+The `@chrisoakman/standard-clojure-style` npm package exposes a command-line
+tool to help format your Clojure projects. You may wish to run this as a git
+hook, via continuous integration, an editor integration, etc.
 
 If you have Node.js installed on your system, you can try out Standard Clojure
 Style with the `npx` command:
@@ -60,13 +60,13 @@ standard-clj fix --include "src/**/*.{clj,cljs,cljc}"
 ## ignore files or folders with the --ignore flag
 standard-clj fix --include "src/**/*.{clj,cljs,cljc}" --ignore "src/com/example/some_weird_file.clj"
 
-## standard-clj will look for a .standard-clj.json or .standard-clj.edn file in the directory where
+## standard-clj will look for a .standard-clj.edn or .standard-clj.json file in the directory where
 ## the command is run from (likely the root directory for your project)
 echo '{:include ["src-clj/**/*.clj" "src-cljs/**/*.cljs"]}' > .standard-clj.edn
 standard-clj fix
 
 ## or pass a config file explicitly using the --config argument
-standard-clj list --config /home/user1/my-project/.standard-clj.json
+standard-clj list --config /home/user1/my-project/my-standard-cfg.json
 ```
 
 #### `list` command
@@ -140,7 +140,8 @@ standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**
   - `"ignore-already-formatted"` or `1`
     - For the `check` command, will only print files that need formatting.
     - For the `fix` command, will only print files that were formatted or have errors.
-    - This option can be less noisy in your terminal if you have a project with many files and only want to see the ones that need formatting.
+    - This option can be less noisy in your terminal if you have a project with many files and only
+      want to see the ones that need formatting.
   - `"quiet"` or `5` - will not print anything to stdout or stderr for the `check` or `fix` commands
 
 [glob pattern]:https://github.com/isaacs/node-glob?tab=readme-ov-file#glob-primer
