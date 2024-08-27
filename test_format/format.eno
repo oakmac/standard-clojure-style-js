@@ -707,3 +707,17 @@ y 4]
         ;; aaa
         ;; bbb
 --Expected
+
+# nested rule 3
+
+--Input
+(foo (bar biz
+        baz)
+     zzz)
+--Input
+
+--Expected
+(foo (bar biz
+       baz)
+     zzz)
+--Expected
