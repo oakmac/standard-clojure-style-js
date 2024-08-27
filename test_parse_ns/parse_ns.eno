@@ -1722,3 +1722,63 @@
   "nsSymbol": "com.oakmac.chessboard2.util.base58"
 }
 --Expected
+
+# metabase example 1
+
+--Input
+(ns metabase.shared.util.i18n
+  (:require
+   ["ttag" :as ttag]
+   [clojure.string :as str])
+  (:require-macros
+   [metabase.shared.util.i18n]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "metabase.shared.util.i18n",
+  "requires": [
+    {
+      "symbol": "\"ttag\"",
+      "symbolIsString": true,
+      "as": "ttag"
+    },
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    }
+  ],
+  "requireMacros": [
+    {
+      "symbol": "metabase.shared.util.i18n"
+    }
+  ]
+}
+--Expected
+
+# reader macro comments
+
+--Input
+(ns com.example.my-app
+  (:require
+    ccc.ddd #_ #{"bugger"}
+    #_ {:alpha "alpha"
+        :bravo "bravo"}
+    [aaa.bbb]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "commentsAbove": ["#_ {:alpha \"alpha\"\n        :bravo \"bravo\"}"],
+      "symbol": "aaa.bbb"
+    },
+    {
+      "commentAfter": "#_ #{\"bugger\"}",
+      "symbol": "ccc.ddd"
+    }
+  ]
+}
+--Expected
