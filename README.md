@@ -45,14 +45,14 @@ npm install --global @chrisoakman/standard-clojure-style
 #### Quick Reference
 
 ```sh
-# use the "list" command to see which files standard-clj will format
+# use the "list" command to see which files standard-clj will analyze
 standard-clj list src/
 
-# use the "check" command to see which files are already formatted
+# use the "check" command to see which files need formatting
 standard-clj check src-clj/ src-cljs/
 
-## use the "fix" command to format files on disk
-standard-clj fix src/
+## use the "fix" command to format files with Standard Clojure Style
+standard-clj fix src/ test/ project.clj
 
 ## you can pass a glob pattern for more control over which files are formatted
 standard-clj fix --include "src/**/*.{clj,cljs,cljc}"
