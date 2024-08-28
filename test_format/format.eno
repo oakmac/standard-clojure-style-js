@@ -708,7 +708,7 @@ y 4]
         ;; bbb
 --Expected
 
-# nested rule 3
+# nested rule 3 - example 1
 
 --Input
 (foo (bar biz
@@ -720,6 +720,23 @@ y 4]
 (foo (bar biz
        baz)
      zzz)
+--Expected
+
+# nested rule 3 - example 2
+
+--Input
+  (foo (bar biz
+            (fn []
+              (ccc))
+          )
+      zzz)
+--Input
+
+--Expected
+(foo (bar biz
+          (fn []
+            (ccc)))
+  zzz)
 --Expected
 
 # nested rule 3 with comments
