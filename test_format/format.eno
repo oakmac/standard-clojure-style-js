@@ -739,7 +739,7 @@ y 4]
   zzz)
 --Expected
 
-# nested rule 3 with comments
+# nested rule 3 with comments - example 1
 
 --Input
    (foo (bar biz
@@ -755,4 +755,105 @@ y 4]
      zzz)
      ;; aaa
      ;; bbb
+--Expected
+
+# chessboard2 test case 5 - rule 3 comment alignment
+
+--Input
+(defn on-touch-start
+  "This function fires on every 'touchstart' event inside the root DOM element"
+  [board-state js-evt]
+  ;; prevent "double-tap to zoom"
+  (dom-util/safe-prevent-default js-evt)
+  (let [{:keys [draggable onTouchSquare orientation position
+                square->square-ids touchDraggable touchMove]}
+        @board-state
+        js-first-touch (aget (gobj/get js-evt "touches") 0)
+        clientX (gobj/get js-first-touch "clientX")
+        clientY (gobj/get js-first-touch "clientY")
+
+        square (xy->square clientX clientY square->square-ids)
+
+        _ (when flags/runtime-checks?
+            (when-not (valid-square? square)
+              (error-log "Invalid square in on-touch-start:" square)))
+
+        ;; NOTE: piece may be nil if there is no piece on the square they touched
+        piece (get position square)
+
+        ;; call their onTouchSquare function if provided
+        on-touchsquare-result (when (fn? onTouchSquare)
+                                (let [js-board-info (js-obj "orientation" orientation
+                                                            "position" (clj->js position))]
+                                                            ;; FIXME: add square, piece here
+                                                            ;; what else?
+                                  (onTouchSquare square piece js-board-info)))]
+
+    ;; begin dragging if configured
+    (when (and piece
+               (or (true? draggable) (true? touchDraggable)))
+      (begin-dragging! board-state square piece clientX clientY))
+
+    ;; highlight the square and queue a move if touchmove is enabled
+    (when (and (true? touchMove)
+               (not (false? on-touchsquare-result))
+               piece))
+      ;; FIXME:
+      ;; - highlight the square here?
+      ;; - or should this be their responsibility?
+      ;; queue their touchmove
+      ; (swap! board-state assoc :touch-move-queue1 {:piece piece, :square square}))
+
+    ;; return null
+    nil))
+--Input
+
+
+--Expected
+(defn on-touch-start
+  "This function fires on every 'touchstart' event inside the root DOM element"
+  [board-state js-evt]
+  ;; prevent "double-tap to zoom"
+  (dom-util/safe-prevent-default js-evt)
+  (let [{:keys [draggable onTouchSquare orientation position
+                square->square-ids touchDraggable touchMove]}
+        @board-state
+        js-first-touch (aget (gobj/get js-evt "touches") 0)
+        clientX (gobj/get js-first-touch "clientX")
+        clientY (gobj/get js-first-touch "clientY")
+
+        square (xy->square clientX clientY square->square-ids)
+
+        _ (when flags/runtime-checks?
+            (when-not (valid-square? square)
+              (error-log "Invalid square in on-touch-start:" square)))
+
+        ;; NOTE: piece may be nil if there is no piece on the square they touched
+        piece (get position square)
+
+        ;; call their onTouchSquare function if provided
+        on-touchsquare-result (when (fn? onTouchSquare)
+                                (let [js-board-info (js-obj "orientation" orientation
+                                                            "position" (clj->js position))]
+                                                            ;; FIXME: add square, piece here
+                                                            ;; what else?
+                                  (onTouchSquare square piece js-board-info)))]
+
+    ;; begin dragging if configured
+    (when (and piece
+               (or (true? draggable) (true? touchDraggable)))
+      (begin-dragging! board-state square piece clientX clientY))
+
+    ;; highlight the square and queue a move if touchmove is enabled
+    (when (and (true? touchMove)
+               (not (false? on-touchsquare-result))
+               piece))
+    ;; FIXME:
+    ;; - highlight the square here?
+    ;; - or should this be their responsibility?
+    ;; queue their touchmove
+    ; (swap! board-state assoc :touch-move-queue1 {:piece piece, :square square}))
+
+    ;; return null
+    nil))
 --Expected
