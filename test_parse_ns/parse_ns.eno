@@ -1782,3 +1782,49 @@
   ]
 }
 --Expected
+
+# comment above ns form 1
+
+--Input
+;; aaa
+(ns com.example.foo
+  "bar")
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.foo",
+  "docstring": "bar"
+}
+--Expected
+
+# comment above ns form 2
+
+--Input
+;; abc
+;; def
+
+(ns metabase.api.common
+  "Dynamic variables and utility functions/macros for writing API functions."
+  (:require
+    [clojure.set :as set]
+    [potemkin :as p]
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "metabase.api.common",
+  "docstring": "Dynamic variables and utility functions/macros for writing API functions.",
+  "requires": [
+    {
+      "as": "set",
+      "symbol": "clojure.set"
+    },
+    {
+      "as": "p",
+      "symbol": "potemkin"
+    }
+  ]
+}
+--Expected
