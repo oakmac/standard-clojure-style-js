@@ -68,11 +68,10 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = false
+const onlyRunSpecificTests = true
 const specificTests = new Set()
 // specificTests.add('your test case here')
-// specificTests.add('nested rule 3 with comments - example 2')
-specificTests.add('whitespace before comment lines 2')
+specificTests.add('wrap closers around comment lines')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
