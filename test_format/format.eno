@@ -911,7 +911,6 @@ y 4]
 "hhh"
 --Expected
 
-
 # wrap closers around comments 2
 
 --Input
@@ -938,6 +937,20 @@ y 4]
 "ggg"
 --Expected
 
+# wrap closers around comments 3
+
+--Input
+(aaa
+  ;; bbb
+  ;; ccc
+  )
+--Input
+
+--Expected
+(aaa)
+  ;; bbb
+  ;; ccc
+--Expected
 
 
 

@@ -72,7 +72,8 @@ const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
 specificTests.add('wrap closers around comments 1')
-// specificTests.add('wrap closers around comments 2')
+specificTests.add('wrap closers around comments 2')
+specificTests.add('wrap closers around comments 3')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
