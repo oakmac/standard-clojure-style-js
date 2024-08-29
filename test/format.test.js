@@ -71,9 +71,6 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('wrap closers around comments 1')
-specificTests.add('wrap closers around comments 2')
-specificTests.add('wrap closers around comments 3')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -84,10 +81,6 @@ ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
 ignoreTests.add('ns: figwheel.main')
-
-// ignoreTests.add('wrap closers around comments 1')
-// ignoreTests.add('wrap closers around comments 2')
-// ignoreTests.add('metabase wrapping closers example')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
