@@ -179,6 +179,7 @@ standard-clj fix --config ./my-config-file.edn
 - [cljfmt option] `:remove-consecutive-blank-lines?` = true
 - format and sort `ns` forms according to Stuart Sierra's [how to ns]
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
+  - with the addition of [Rule 3](https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649) as proposed by Shaun Lebron
 - comments that contain the String `standard-clojure-style:ignore` cause the next form to be ignored by the formatter
 
 [how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
