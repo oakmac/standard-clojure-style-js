@@ -882,7 +882,7 @@ y 4]
     [potemkin :as p]))
 --Expected
 
-# wrap closers around comment lines
+# wrap closers around comments 1
 
 --Input
 (aaa
@@ -908,7 +908,38 @@ y 4]
 "ggg"
 --Expected
 
-# wrapping closers 2
+
+# wrap closers around comments 2
+
+--Input
+(aaa
+  [bbb
+   [ccc
+    ddd
+    ;; eee
+    ]
+   fff
+   ])
+
+"ggg"
+--Input
+
+--Expected
+(aaa
+  [bbb
+   [ccc
+    ddd]
+    ;; eee
+   fff])
+
+"ggg"
+--Expected
+
+
+
+
+
+# metabase wrapping closers example
 
 --Input
 (mr/def ::stage.native
