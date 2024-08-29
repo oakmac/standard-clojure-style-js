@@ -975,7 +975,7 @@ y 4]
     ddd]] ;; eee
     ;; fff
     ;; ggg
-   hhh)
+  hhh)
 
 "iii"
 --Expected
