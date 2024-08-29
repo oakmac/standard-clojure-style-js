@@ -952,8 +952,33 @@ y 4]
   ;; ccc
 --Expected
 
+# wrap closers around comments 4
 
+--Input
+(aaa
+  [bbb
+   [ccc
+    ddd ;; eee
+    ;; fff
+    ;; ggg
+    ] ]
+   hhh
+   )
 
+"iii"
+--Input
+
+--Expected
+(aaa
+  [bbb
+   [ccc
+    ddd]] ;; eee
+    ;; fff
+    ;; ggg
+   hhh)
+
+"iii"
+--Expected
 
 # metabase wrapping closers example
 
