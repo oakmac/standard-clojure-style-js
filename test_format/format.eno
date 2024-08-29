@@ -634,6 +634,9 @@ y 4]
 
 # whitespace before comment lines 1
 
+> NOTE: is "gobble gobble" correctly aligned in this test case?
+> Do we allow a comment to align to the first symbol after an opener? Before any spaces?
+
 --Input
 (aaa bbb
   (ccc))
@@ -888,24 +891,24 @@ y 4]
 (aaa
   [bbb
    [ccc
-    ddd
-    ;; eee
+    ddd ;; eee
+    ;; fff
     ]
-   fff
+   ggg
    ])
 
-"ggg"
+"hhh"
 --Input
 
 --Expected
 (aaa
   [bbb
    [ccc
-    ddd]
-    ;; eee
-   fff])
+    ddd] ;; eee
+    ;; fff
+   ggg])
 
-"ggg"
+"hhh"
 --Expected
 
 
