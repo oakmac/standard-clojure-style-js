@@ -168,6 +168,24 @@ You can use the `--config` or `-c` flag to specify a different file location:
 standard-clj fix --config ./my-config-file.edn
 ```
 
+## Creating a binary
+
+[Bun] has a neat feature where you can [create an executable binary] from JavaScript source:
+
+```sh
+## create a binary for Standard Clojure Style
+bun build ./cli.mjs --compile --outfile standard-clj
+
+## run your binary
+./standard-clj check /home/user1/my-project/src
+
+## move the binary to somewhere on your path
+mv standard-clj /usr/local/bin
+```
+
+[Bun]:https://bun.sh/
+[create an executable binary]:https://bun.sh/docs/bundler/executables
+
 ## Formatting Rules
 
 - trim trailing whitespace (ie: `rtrim` every line)
