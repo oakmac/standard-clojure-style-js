@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
-// This file creates a release in the dist/ folder
-//
 // ISC License
 // Copyright © 2024, Chris Oakman
 // https://github.com/oakmac/standard-clojure-style-js/
+//
+// This file creates a release in the dist/ folder, ready for publishing to npm.
 
 const assert = require('assert')
 const fs = require('fs-plus')
@@ -15,9 +15,9 @@ const rootDir = path.join(__dirname, '../')
 const libFilename = path.join(rootDir, 'lib/standard-clojure-style.js')
 const lib = require(libFilename)
 
-// ensure the dev flags have been disabled
-assert(lib, 'lib not found?')
-assert(!isFunction(lib._charAt), 'please disable the dev flags before publishing')
+// sanity-checks
+assert(lib, libFilename + ' source file not found?')
+assert(!isFunction(lib._charAt), 'please disable the exportInternalFnsForTesting flag before publishing')
 
 const encoding = { encoding: 'utf8' }
 
@@ -28,7 +28,14 @@ const version = packageJSON.version
 // update cli.mjs to import from dist/ instead of lib/
 const cliFilename = path.join(rootDir, 'cli.mjs')
 const cliSrc = fs.readFileSync(cliFilename, 'utf8')
-const updatedCliSrc = cliSrc.replace("import standardClj from './lib/standard-clojure-style.js'", "import standardClj from './dist/standard-clojure-style.js'")
+
+const importLineToReplace = "import standardClj from './lib/standard-clojure-style.js' // 7b323d1c-2984-4bd1-9304-d62d8dee9a1f"
+const importFromDistLine = "import standardClj from './dist/standard-clojure-style.js'"
+
+// fail if we do not see the import line we are expecting here
+assert(cliSrc.includes(importLineToReplace), 'cli.mjs script is missing the import line we expect! something is off')
+
+const updatedCliSrc = cliSrc.replace(importLineToReplace, importFromDistLine)
 fs.writeFileSync(cliFilename, updatedCliSrc)
 infoLog('Updated cli.mjs to import from dist/ instead of lib/')
 

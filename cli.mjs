@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-// The purpose of this file is to handle everything related to running
-// Standard Clojure Style via the command line.
-//
 // ISC License
 // Copyright © 2024, Chris Oakman
 // https://github.com/oakmac/standard-clojure-style-js/
+//
+// The purpose of this file is to handle everything related to running
+// Standard Clojure Style via the command line.
 
 // node.js imports
 import fs from 'fs-plus'
@@ -20,8 +20,10 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import yocto from 'yoctocolors'
 
-// Standard Clojure Style
-import standardClj from './lib/standard-clojure-style.js'
+// import Standard Clojure Style
+// NOTE: the line below (including the UUID) gets replaced by script/build-release.js
+// script before publishing to npm
+import standardClj from './lib/standard-clojure-style.js' // 7b323d1c-2984-4bd1-9304-d62d8dee9a1f
 
 const scriptStartTime = performance.now()
 const programVersion = 'v0.1.0'
