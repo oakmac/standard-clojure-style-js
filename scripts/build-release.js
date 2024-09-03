@@ -8,9 +8,12 @@
 
 const assert = require('assert')
 const fs = require('fs-plus')
+const path = require('path')
 const terser = require('terser')
 
-const lib = require('../lib/standard-clojure-style.js')
+const rootDir = path.join(__dirname, '../')
+const libFilename = path.join(rootDir, 'lib/standard-clojure-style.js')
+const lib = require(libFilename)
 
 // ensure the dev flags have been disabled
 assert(lib, 'lib not found?')
@@ -18,11 +21,18 @@ assert(!isFunction(lib._charAt), 'please disable the dev flags before publishing
 
 const encoding = { encoding: 'utf8' }
 
-const copyrightYear = '2024'
-const packageJSON = JSON.parse(fs.readFileSync('package.json', encoding))
+const copyrightYear = '2023'
+const packageJSON = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), encoding))
 const version = packageJSON.version
 
-const libSrc = fs.readFileSync('lib/standard-clojure-style.js', 'utf8')
+// update cli.mjs to import from dist/ instead of lib/
+const cliFilename = path.join(rootDir, 'cli.mjs')
+const cliSrc = fs.readFileSync(cliFilename, 'utf8')
+const updatedCliSrc = cliSrc.replace("import standardClj from './lib/standard-clojure-style.js'", "import standardClj from './dist/standard-clojure-style.js'")
+fs.writeFileSync(cliFilename, updatedCliSrc)
+infoLog('Updated cli.mjs to import from dist/ instead of lib/')
+
+const libSrc = fs.readFileSync(libFilename, 'utf8')
   .replace('/* global define */', '')
   .replace('@@VERSION@@', 'v' + version)
   .trim()
@@ -41,11 +51,11 @@ infoLog('Creating dist/ folder for version ' + version)
 // add license to the top of minified files
 const minifiedJSWithBanner = banner() + minifiedSrc
 
-const distReadableFile = 'dist/standard-clojure-style.js'
+const distReadableFile = path.join(rootDir, 'dist/standard-clojure-style.js')
 fs.writeFileSync(distReadableFile, libSrc, encoding)
 infoLog('Wrote ' + distReadableFile)
 
-const distMinifiedFile = 'dist/standard-clojure-style.min.js'
+const distMinifiedFile = path.join(rootDir, 'dist/standard-clojure-style.min.js')
 fs.writeFileSync(distMinifiedFile, minifiedJSWithBanner, encoding)
 infoLog('Wrote ' + distMinifiedFile)
 
