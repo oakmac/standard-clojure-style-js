@@ -10,6 +10,12 @@ const assert = require('assert')
 const fs = require('fs-plus')
 const terser = require('terser')
 
+const lib = require('../lib/standard-clojure-style.js')
+
+// ensure the dev flags have been disabled
+assert(lib, 'lib not found?')
+assert(!isFunction(lib._charAt), 'please disable the dev flags before publishing')
+
 const encoding = { encoding: 'utf8' }
 
 const copyrightYear = '2024'
@@ -55,6 +61,10 @@ function banner () {
 
 function isString (s) {
   return typeof s === 'string'
+}
+
+function isFunction (f) {
+  return typeof f === 'function'
 }
 
 function infoLog (msg) {
