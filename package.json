@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/oakmac/standard-clojure-style-js/issues"
   },
-  "main": "./lib/standard-clojure-style.js",
+  "main": "./dist/standard-clojure-style.js",
   "bin": {
     "standard-clj": "./cli.mjs"
   },
@@ -31,6 +31,7 @@
     "enolib": "0.8.2",
     "immutable": "4.3.5",
     "jest": "29.7.0",
-    "standard": "17.1.0"
+    "standard": "17.1.0",
+    "terser": "5.31.6"
   }
 }

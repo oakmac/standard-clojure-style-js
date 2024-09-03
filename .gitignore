@@ -1,4 +1,5 @@
 .clj-kondo/
 .lsp/
+dist/
 node_modules/
 *.diff

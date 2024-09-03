@@ -1,6 +1,7 @@
 .clj-kondo/
 .github/
 .lsp/
+lib/
 scripts/
 test/
 test_format/
