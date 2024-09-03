@@ -1828,3 +1828,32 @@
   ]
 }
 --Expected
+
+# refer-clojure rename with comment and reader conditional
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure
+    :rename  {get core-get
+              #?@(:clj [conj core-conj])}))
+                  ;:cljs [conj core-conj2])}))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "rename": [
+      {
+        "fromSymbol": "conj",
+        "toSymbol": "core-conj",
+        "platform": ":clj"
+      },
+      {
+        "fromSymbol": "get",
+        "toSymbol": "core-get"
+      }
+    ]
+  }
+}
+--Expected
