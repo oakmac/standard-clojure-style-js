@@ -1,12 +1,32 @@
-# Standard Clojure Style in JavaScript
+# Standard Clojure Style [![npm](https://img.shields.io/npm/v/@chrisoakman/standard-clojure-style)](https://www.npmjs.com/package/@chrisoakman/standard-clojure-style) [![ISC License](https://img.shields.io/npm/l/@chrisoakman/standard-clojure-style)](https://github.com/oakmac/standard-clojure-style-js/blob/master/LICENSE.md)
 
-A library to format Clojure code according to Standard Clojure Style.
+A JavaScript library to format Clojure code according to Standard Clojure Style.
 
-## Project Status (August 2024)
+## Project Status (September 2024)
 
-This project is under active development and I do not recommend using it for
-your codebase at this time unless you are very adventurous. I will publish a
-release to npm when the project is stable enough for Alpha usage.
+This project is under active development in preparation for [Clojure/conj 2024]. Please expect changes!
+
+[Clojure/conj 2024]:https://2024.clojure-conj.org/
+
+## I want YOU for alpha testing :cowboy_hat_face:
+
+Calling all adventurous Clojure developers! Please run this library on your codebase and report bugs.
+
+```sh
+# go to a Clojure project directory
+cd your-clojure-project/
+
+# IMPORTANT: check out a clean branch so you don't break everything
+git checkout -b standard-clojure-style-testing
+
+# run it!
+# NOTE: your directory names may be different, please adjust accordingly
+npx @chrisoakman/standard-clojure-style check src-clj/ src-cljs/ test/
+
+npx @chrisoakman/standard-clojure-style fix src-clj/ src-cljs/ test/
+```
+
+Please see the **Command Line Usage** section below for more options.
 
 ## Project Background and Rationale
 
