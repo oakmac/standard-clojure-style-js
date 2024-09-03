@@ -1054,21 +1054,3 @@ y 4]
     {:error/message ":source-card is not allowed in a native query stage."}
     #(not (contains? % :source-card))]])
 --Expected
-
-# refer-clojure rename with comment and reader conditional
-
---Input
-(ns com.example.my-app
-  (:refer-clojure
-    :rename  {get core-get
-              #?@(:clj [conj core-conj])}))
-                  ;:cljs [conj core-conj2])}))
---Input
-
---Expected
-(ns com.example.my-app
-  (:refer-clojure
-    :rename  {get core-get
-              #?@(:clj [conj core-conj])}))
-                  ;:cljs [conj core-conj2])}))
---Expected

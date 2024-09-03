@@ -68,11 +68,10 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('refer-clojure rename with comment and reader conditional')
-
+// specificTests.add('refer-clojure rename with comment and reader conditional')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -80,6 +79,9 @@ const ignoreTests = new Set()
 // from cljfmt test cases
 // -- C. Oakman, 19 Mar 2024
 ignoreTests.add('Surrounding newlines removed 3')
+
+// https://github.com/oakmac/standard-clojure-style-js/issues/48
+ignoreTests.add('refer-clojure rename with comment and reader conditional')
 
 ignoreTests.add('ambiguous import comment')
 ignoreTests.add('ns: figwheel.main')
