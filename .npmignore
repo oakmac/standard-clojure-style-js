@@ -1,0 +1,14 @@
+.clj-kondo/
+.github/
+.lsp/
+scripts/
+test/
+test_format/
+test_parse_ns/
+test_parser/
+test_perf/
+*.diff
+.editorconfig
+.standard-clj.edn
+.standard-clj.json
+bun.lockb
