@@ -3,3 +3,4 @@
 dist/
 node_modules/
 *.diff
+.standard-clj.edn
