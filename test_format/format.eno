@@ -1054,3 +1054,19 @@ y 4]
     {:error/message ":source-card is not allowed in a native query stage."}
     #(not (contains? % :source-card))]])
 --Expected
+
+# tag literals
+
+--Input
+{:url #join ["jdbc:postgresql://psq-prod/prod?user="
+             #env PROD_USER
+             "&password="
+               #env PROD_PASSWD]}
+--Input
+
+--Expected
+{:url #join ["jdbc:postgresql://psq-prod/prod?user="
+             #env PROD_USER
+             "&password="
+             #env PROD_PASSWD]}
+--Expected
