@@ -25,17 +25,22 @@ const copyrightYear = '2023'
 const packageJSON = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), encoding))
 const version = packageJSON.version
 
-// update cli.mjs to import from dist/ instead of lib/
+// update cli.mjs to import from dist/ instead of lib/ and inject the version number
 const cliFilename = path.join(rootDir, 'cli.mjs')
 const cliSrc = fs.readFileSync(cliFilename, 'utf8')
 
 const importLineToReplace = "import standardClj from './lib/standard-clojure-style.js' // 7b323d1c-2984-4bd1-9304-d62d8dee9a1f"
 const importFromDistLine = "import standardClj from './dist/standard-clojure-style.js'"
 
-// fail if we do not see the import line we are expecting here
+const versionLineToReplace = "const programVersion = '[dev]' // 6444ef98-c603-42ca-97e7-ebe5c60382de"
+const distVersionLine = "const programVersion = 'v" + version + "'"
+
+// fail if we do not see the lines we expect
 assert(cliSrc.includes(importLineToReplace), 'cli.mjs script is missing the import line we expect! something is off')
+assert(cliSrc.includes(versionLineToReplace), 'cli.mjs script is missing the version line we expect! something is off')
 
 const updatedCliSrc = cliSrc.replace(importLineToReplace, importFromDistLine)
+  .replace(versionLineToReplace, distVersionLine)
 fs.writeFileSync(cliFilename, updatedCliSrc)
 infoLog('Updated cli.mjs to import from dist/ instead of lib/')
 
