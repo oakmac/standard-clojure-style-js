@@ -26,7 +26,10 @@ import yocto from 'yoctocolors'
 import standardClj from './lib/standard-clojure-style.js' // 7b323d1c-2984-4bd1-9304-d62d8dee9a1f
 
 const scriptStartTime = performance.now()
-const programVersion = 'v0.1.0'
+
+// NOTE: the line below (including the UUID) gets replaced by script/build-release.js
+// script before publishing to npm
+const programVersion = '[dev]' // 6444ef98-c603-42ca-97e7-ebe5c60382de
 
 const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
 
