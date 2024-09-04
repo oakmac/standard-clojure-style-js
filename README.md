@@ -16,7 +16,7 @@ Calling all adventurous Clojure developers! Please run this library on your code
 # go to a Clojure project directory
 cd your-clojure-project/
 
-# IMPORTANT: check out a clean branch so you don't break everything
+# IMPORTANT: check out a clean git branch so you can revert any changes made by the tool
 git checkout -b standard-clojure-style-testing
 
 # run it!
