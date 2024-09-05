@@ -1157,7 +1157,7 @@
     [aaa]))
 --Expected
 
-# bug with :refer :all
+# support :refer :exclude
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/74
 

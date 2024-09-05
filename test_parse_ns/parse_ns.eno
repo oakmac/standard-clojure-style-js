@@ -301,8 +301,8 @@
       "as": "cow",
       "symbol": "com.example.cow",
       "refer": [
-        {"symbol":"eat-grass"},
-        {"symbol":"moo"}
+        {"symbol": "eat-grass"},
+        {"symbol": "moo"}
       ]
     },
     {
