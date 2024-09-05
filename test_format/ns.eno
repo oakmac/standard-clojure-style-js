@@ -1123,3 +1123,36 @@
     [aaa.bbb]
     [ccc.ddd])) #_ #{"bugger"}
 --Expected
+
+# require-macros wrapped in reader conditional, last main form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/76
+
+--Input
+(ns com.example.my-app
+  #?(:cljs (:require-macros [bar :refer [baz]])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:require-macros
+       [bar :refer [baz]])))
+--Expected
+
+# require-macros wrapped in reader conditional, not last main form
+
+--Input
+(ns com.example.my-app
+  (:require [aaa])
+  #?(:cljs (:require-macros [bar :refer [baz]])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:require-macros
+       [bar :refer [baz]]))
+  (:require
+    [aaa]))
+--Expected
