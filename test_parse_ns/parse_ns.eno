@@ -1868,3 +1868,37 @@
   ]
 }
 --Expected
+
+# comments after ns form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/75
+
+--Input
+(ns foo.bar
+  (:require baz.core
+            ))
+
+(comment
+  ;; foo
+  )
+
+
+(comment
+  ;; bar
+  )
+
+(comment
+  ;; baz
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo.bar",
+  "requires": [
+    {
+      "symbol": "baz.core"
+    }
+  ]
+}
+--Expected

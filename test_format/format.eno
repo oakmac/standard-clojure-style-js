@@ -1070,3 +1070,41 @@ y 4]
              "&password="
              #env PROD_PASSWD]}
 --Expected
+
+# comments after ns form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/75
+
+--Input
+(ns foo.bar
+  (:require baz.core
+            ))
+
+(comment
+  ;; foo
+  )
+
+
+(comment
+  ;; bar
+  )
+
+(comment
+  ;; baz
+  )
+--Input
+
+--Expected
+(ns foo.bar
+  (:require
+    [baz.core]))
+
+(comment)
+  ;; foo
+
+(comment)
+  ;; bar
+
+(comment)
+  ;; baz
+--Expected
