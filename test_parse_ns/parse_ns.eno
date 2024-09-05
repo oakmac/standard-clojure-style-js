@@ -261,12 +261,20 @@
     {
       "as": "cow",
       "symbol": "com.example.cow",
-      "refer": ["eat-grass", "moo"]
+      "refer": [
+        {"symbol": "eat-grass"},
+        {"symbol": "moo"}
+      ]
     },
     {
       "as": "duck",
       "symbol": "com.example.duck",
-      "refer": ["eat", "quack", "quacking", "sleep"]
+      "refer": [
+        {"symbol": "eat"},
+        {"symbol": "quack"},
+        {"symbol": "quacking"},
+        {"symbol": "sleep"}
+      ]
     }
   ]
 }
@@ -292,7 +300,10 @@
     {
       "as": "cow",
       "symbol": "com.example.cow",
-      "refer": ["eat-grass", "moo"]
+      "refer": [
+        {"symbol": "eat-grass"},
+        {"symbol": "moo"}
+      ]
     },
     {
       "as": "duck",
@@ -348,13 +359,21 @@
       "commentsAbove": [";; the cow namespace is deprecated, please refactor"],
       "commentAfter": ";; the cow goes \"moo\"",
       "symbol": "com.example.cow",
-      "refer": ["eat-grass", "moo"]
+      "refer": [
+        {"symbol": "eat-grass"},
+        {"symbol": "moo"}
+      ]
     },
     {
       "as": "duck",
       "commentAfter": "; NOTE: this ns is primarily focused on Mallards",
       "symbol": "com.example.duck",
-      "refer": ["eat", "quack", "quacking", "sleep"]
+      "refer": [
+        {"symbol": "eat"},
+        {"symbol": "quack"},
+        {"symbol": "quacking"},
+        {"symbol": "sleep"}
+      ]
     }
   ]
 }
@@ -713,7 +732,7 @@
     {
       "commentAfter": ";; aaa",
       "platform": ":cljs",
-      "refer": ["quick-check"],
+      "refer": [{"symbol": "quick-check"}],
       "symbol": "cljs.test.check"
     },
     {
@@ -734,7 +753,7 @@
     },
     {
       "platform": ":clj",
-      "refer": ["defspec"],
+      "refer": [{"symbol": "defspec"}],
       "symbol": "clojure.test.check.clojure-test"
     },
     {
@@ -743,16 +762,19 @@
       "symbol": "clojure.test.check.properties"
     },
     {
-      "refer": ["gen-invalid-part-no", "gen-part-no"],
+      "refer": [
+        {"symbol": "gen-invalid-part-no"},
+        {"symbol": "gen-part-no"}
+      ],
       "symbol": "com.example.generators"
     },
     {
-      "refer": ["Foo"],
+      "refer": [{"symbol": "Foo"}],
       "symbol": "com.example.schema.ids"
     },
     {
       "as": "schema",
-      "refer": ["check"],
+      "refer": [{"symbol": "check"}],
       "symbol": "schema.core"
     }
   ]
@@ -963,7 +985,7 @@
   ],
   "requires": [
     {
-      "refer": ["subtract"],
+      "refer": [{"symbol":"subtract"}],
       "symbol": "foo.core"
     }
   ]
@@ -982,7 +1004,7 @@
   "nsSymbol": "bar.core",
   "requires": [
     {
-      "refer": ["subtract"],
+      "refer": [{"symbol":"subtract"}],
       "referMacros": ["add"],
       "symbol": "foo.core"
     }
@@ -1649,9 +1671,7 @@
     },
     {
       "symbol": "clojure.set",
-      "refer": [
-        "map-invert"
-      ]
+      "refer": [{"symbol": "map-invert"}]
     },
     {
       "symbol": "clojure.string",
@@ -1659,9 +1679,7 @@
     },
     {
       "symbol": "clojure.walk",
-      "refer": [
-        "stringify-keys"
-      ]
+      "refer": [{"symbol": "stringify-keys"}]
     },
     {
       "symbol": "cuerdas.regexp",
@@ -1824,6 +1842,28 @@
     {
       "as": "p",
       "symbol": "potemkin"
+    }
+  ]
+}
+--Expected
+
+# :refer :all with :exclude
+
+--Input
+(ns com.example.my-app
+  (:require
+    [incanter.core :refer :all :exclude [abs]])
+    )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "exclude": [{"symbol": "abs"}],
+      "refer": "all",
+      "symbol": "incanter.core"
     }
   ]
 }
