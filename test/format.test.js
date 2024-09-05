@@ -72,6 +72,8 @@ const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
 
+specificTests.add('bug with :refer :all')
+
 const ignoreSomeTests = true
 const ignoreTests = new Set()
 // I am not sure how this test case should look? It might already be "correct"

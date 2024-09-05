@@ -1156,3 +1156,20 @@
   (:require
     [aaa]))
 --Expected
+
+# bug with :refer :all
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/74
+
+--Input
+(ns com.example.my-app
+  (:require
+    [incanter.core :refer :all :exclude [ggg zzz abs]])
+    )
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [incanter.core :refer :all :exclude [abs ggg zzz]]))
+--Expected
