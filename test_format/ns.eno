@@ -854,21 +854,53 @@
     [aaa.bbb :as bbb]))
 --Expected
 
-# ns: require-macros comments
+# ns: require-macros comments 1
 
 --Input
+;; alpha
+
 (ns bar.core
   (:require-macros
     [foo.core :refer [bad add cad]] ;; rad
     [aaa.bbb :refer [ccc]] ;; ddd
     ))
+
+;; bravo
 --Input
 
 --Expected
+;; alpha
+
 (ns bar.core
   (:require-macros
     [aaa.bbb :refer [ccc]] ;; ddd
     [foo.core :refer [add bad cad]])) ;; rad
+
+;; bravo
+--Expected
+
+# ns: require-macros comments 2
+
+--Input
+;; alpha
+
+(ns bar.core
+  (:require-macros
+    [foo.core :refer [bad add cad]] ;; rad
+    [aaa.bbb :refer [ccc]])) ;; ddd
+
+;; bravo
+--Input
+
+--Expected
+;; alpha
+
+(ns bar.core
+  (:require-macros
+    [aaa.bbb :refer [ccc]] ;; ddd
+    [foo.core :refer [add bad cad]])) ;; rad
+
+;; bravo
 --Expected
 
 # basic refer-clojure with :only
