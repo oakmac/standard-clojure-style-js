@@ -1164,12 +1164,14 @@
 --Input
 (ns com.example.my-app
   (:require
-    [incanter.core :refer :all :exclude [ggg zzz abs]])
-    )
+    [incanter.core :refer :all :exclude [ggg zzz abs]]
+    [bbb.ccc :exclude [yyy hhh eee] :refer :all]
+    ) )
 --Input
 
 --Expected
 (ns com.example.my-app
   (:require
+    [bbb.ccc :refer :all :exclude [eee hhh yyy]]
     [incanter.core :refer :all :exclude [abs ggg zzz]]))
 --Expected
