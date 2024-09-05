@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - [Issue #68] - support tag literals ([PR-72])
 - [Issue #76] - bug with :require-macros wrapped in reader conditional ([PR-79])
+- [Issue #74] - support :refer :exclude ([PR-80])
 
 ## [0.1.2] - 2024-09-04
 
@@ -30,7 +31,9 @@ All notable changes to this project will be documented in this file.
 
 [Issue #67]:https://github.com/oakmac/standard-clojure-style-js/issues/67
 [Issue #68]:https://github.com/oakmac/standard-clojure-style-js/issues/68
+[Issue #74]:https://github.com/oakmac/standard-clojure-style-js/issues/74
 [Issue #76]:https://github.com/oakmac/standard-clojure-style-js/issues/76
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
+[PR-80]:https://github.com/oakmac/standard-clojure-style-js/pull/80
