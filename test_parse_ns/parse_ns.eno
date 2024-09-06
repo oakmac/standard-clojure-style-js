@@ -1909,7 +1909,9 @@
 
 --Input
 (ns com.example.my-app
-  (require [foo :as-alias bar])
+  (require [foo :as-alias bar]
+[aaa :as-alias bbb :exclude [yyy ttt]]
+  )
 )
 --Input
 
@@ -1917,6 +1919,14 @@
 {
   "nsSymbol": "com.example.my-app",
   "requires": [
+    {
+      "asAlias": "bbb",
+      "exclude": [
+        {"symbol": "ttt"},
+        {"symbol": "yyy"}
+      ],
+      "symbol": "aaa"
+    },
     {
       "asAlias": "bar",
       "symbol": "foo"
