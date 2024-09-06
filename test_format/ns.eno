@@ -1207,3 +1207,22 @@
     [bbb.ccc :refer :all :exclude [eee hhh yyy]]
     [incanter.core :refer :all :exclude [abs ggg zzz]]))
 --Expected
+
+# :require :as-alias
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/69
+
+--Input
+(ns com.example.my-app
+  (:require
+    [incanter.core :as-alias ic]
+    [bbb.ccc :exclude [yyy hhh eee] :refer :all]
+    ) )
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+    [bbb.ccc :refer :all :exclude [eee hhh yyy]]
+    [incanter.core :as-alias ic]))
+--Expected
