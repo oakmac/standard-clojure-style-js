@@ -22,6 +22,20 @@ if (isFn(scsLib._substr)) {
   })
 }
 
+if (isFn(scsLib._commentNeedsSpaceInside)) {
+  test('commentNeedsSpaceInside', () => {
+    expect(scsLib._commentNeedsSpaceInside(';foo')).toBe(true)
+    expect(scsLib._commentNeedsSpaceInside(';;foo')).toBe(true)
+    expect(scsLib._commentNeedsSpaceInside(';;;;;;;foo')).toBe(true)
+    expect(scsLib._commentNeedsSpaceInside(';; foo')).toBe(false)
+    expect(scsLib._commentNeedsSpaceInside('; foo')).toBe(false)
+    expect(scsLib._commentNeedsSpaceInside(';      foo')).toBe(false)
+    expect(scsLib._commentNeedsSpaceInside(';')).toBe(false)
+    expect(scsLib._commentNeedsSpaceInside(';;')).toBe(false)
+    expect(scsLib._commentNeedsSpaceInside(';;;;;;')).toBe(false)
+  })
+}
+
 if (isFn(scsLib._AnyChar)) {
   test('AnyChar parser', () => {
     const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
