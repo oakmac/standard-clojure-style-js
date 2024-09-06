@@ -1902,3 +1902,25 @@
   ]
 }
 --Expected
+
+# :refer :as-alias
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/69
+
+--Input
+(ns com.example.my-app
+  (require [foo :as-alias bar])
+)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "asAlias": "bar",
+      "symbol": "foo"
+    }
+  ]
+}
+--Expected
