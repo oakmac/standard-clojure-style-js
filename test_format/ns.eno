@@ -1226,3 +1226,41 @@
     [bbb.ccc :refer :all :exclude [eee hhh yyy]]
     [incanter.core :as-alias ic]))
 --Expected
+
+# refer-clojure rename with comment and reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/48
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :rename
+    {get core-get
+     #?@(:clj [conj core-conj])}))
+     ;:cljs [conj core-conj2])}))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :rename {get core-get
+             #?@(:clj [conj core-conj])}))
+     ;:cljs [conj core-conj2])}))
+--Expected
+
+# refer-clojure rename with reader conditional and multiple platforms
+
+--Input
+(ns com.example.my-app
+  (:refer-clojure :rename
+    {get core-get
+     #?@(:clj [conj core-conj]
+              :cljs [conj core-conj2])}))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :rename {get core-get
+             #?@(:clj [conj core-conj]
+                 :cljs [conj core-conj2])}))
+--Expected
