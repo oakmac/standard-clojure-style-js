@@ -1108,3 +1108,19 @@ y 4]
 (comment)
   ;; baz
 --Expected
+
+# spaces around comments
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/62
+
+--Input
+(aaa);;bbb
+(ccc);ddd
+(eee) ;;;;fff
+--Input
+
+--Expected
+(aaa) ;; bbb
+(ccc) ; ddd
+(eee) ;;;; fff
+--Expected
