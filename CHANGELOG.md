@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.3.0] - 2024-09-06
 
 ### Added
 - [Issue #62] - add spaces around comments if necessary ([PR-85])
@@ -34,7 +34,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.2.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.3.0...HEAD
+[0.3.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.3.0
 [0.2.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.2.0
 [0.1.2]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.2
 [0.1.1]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.1
