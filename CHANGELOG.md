@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- [Issue #62] - add spaces around comments if necessary ([PR-85])
+
 ### Fixed
 - [Issue #69] - support :require :as-alias ([PR-83])
 - [Issue #48] - support :refer-clojure :rename with multiple reader conditionals ([PR-84])
@@ -38,6 +41,7 @@ All notable changes to this project will be documented in this file.
 [0.1.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.0
 
 [Issue #48]:https://github.com/oakmac/standard-clojure-style-js/issues/48
+[Issue #62]:https://github.com/oakmac/standard-clojure-style-js/issues/62
 [Issue #67]:https://github.com/oakmac/standard-clojure-style-js/issues/67
 [Issue #68]:https://github.com/oakmac/standard-clojure-style-js/issues/68
 [Issue #69]:https://github.com/oakmac/standard-clojure-style-js/issues/69
@@ -51,3 +55,4 @@ All notable changes to this project will be documented in this file.
 [PR-82]:https://github.com/oakmac/standard-clojure-style-js/pull/82
 [PR-83]:https://github.com/oakmac/standard-clojure-style-js/pull/83
 [PR-84]:https://github.com/oakmac/standard-clojure-style-js/pull/84
+[PR-85]:https://github.com/oakmac/standard-clojure-style-js/pull/85
