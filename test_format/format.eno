@@ -1143,7 +1143,7 @@ y 4]
        (group-by even?))) ; and sort them by parity
 --Expected
 
-# respect commas to "hold" parens
+# respect commas to hold parens 1
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/60#issuecomment-2342314213
 
@@ -1152,6 +1152,27 @@ y 4]
   (ccc
     (ddd) ;; eee
     (fff) ;; ggg
+    ,))
+--Input
+
+--Expected
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+    ,))
+--Expected
+
+# respect commas to hold parens 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/60#issuecomment-2342314213
+
+--Input
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+
     ,))
 --Input
 
