@@ -1124,3 +1124,41 @@ y 4]
 (ccc) ; ddd
 (eee) ;;;; fff
 --Expected
+
+# example code from Issue #60
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/60#issuecomment-2340644974
+
+--Input
+(defn classify-squares [n]
+  (->> (range n)          ; generate a bunch of numbers
+       (map #(* % %))     ; calculate their squares
+       (group-by even?))) ; and sort them by parity
+--Input
+
+--Expected
+(defn classify-squares [n]
+  (->> (range n)          ; generate a bunch of numbers
+       (map #(* % %))     ; calculate their squares
+       (group-by even?))) ; and sort them by parity
+--Expected
+
+# respect commas to "hold" parens
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/60#issuecomment-2342314213
+
+--Input
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+    ,))
+--Input
+
+--Expected
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+    ,))
+--Expected
