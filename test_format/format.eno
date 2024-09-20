@@ -1210,3 +1210,16 @@ y 4]
 (aaa
   ,,, ,,)
 --Expected
+
+# respect commas to hold parens 4
+
+--Input
+(aaa
+  , ;; foo
+  )
+--Input
+
+--Expected
+(aaa
+  ,) ;; foo
+--Expected
