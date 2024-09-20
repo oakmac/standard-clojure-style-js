@@ -885,7 +885,7 @@ y 4]
     [potemkin :as p]))
 --Expected
 
-# wrap closers around comments 1
+# slurp closing parens around comments 1
 
 --Input
 (aaa
@@ -911,7 +911,7 @@ y 4]
 "hhh"
 --Expected
 
-# wrap closers around comments 2
+# slurp closing parens around comments 2
 
 --Input
 (aaa
@@ -937,7 +937,7 @@ y 4]
 "ggg"
 --Expected
 
-# wrap closers around comments 3
+# slurp closing parens around comments 3
 
 --Input
 (aaa
@@ -952,7 +952,7 @@ y 4]
   ;; ccc
 --Expected
 
-# wrap closers around comments 4
+# slurp closing parens around comments 4
 
 --Input
 (aaa
@@ -980,7 +980,7 @@ y 4]
 "iii"
 --Expected
 
-# metabase wrapping closers example
+# slurp closing parens around comments - metabase example
 
 --Input
 (mr/def ::stage.native
@@ -1173,6 +1173,8 @@ y 4]
     (ddd) ;; eee
     (fff) ;; ggg
 
+
+
     ,))
 --Input
 
@@ -1181,5 +1183,24 @@ y 4]
   (ccc
     (ddd) ;; eee
     (fff) ;; ggg
+
     ,))
+--Expected
+
+# respect commas to hold parens 3
+
+--Input
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+    ,,, ,))
+--Input
+
+--Expected
+(aaa bbb
+  (ccc
+    (ddd) ;; eee
+    (fff) ;; ggg
+    ,,, ,))
 --Expected
