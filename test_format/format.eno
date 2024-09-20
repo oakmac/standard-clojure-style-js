@@ -1194,7 +1194,10 @@ y 4]
   (ccc
     (ddd) ;; eee
     (fff) ;; ggg
-    ,,, ,))
+    ,,, , ))
+
+(aaa
+  ,,, ,,  )
 --Input
 
 --Expected
@@ -1203,4 +1206,7 @@ y 4]
     (ddd) ;; eee
     (fff) ;; ggg
     ,,, ,))
+
+(aaa
+  ,,, ,,)
 --Expected
