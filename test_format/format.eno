@@ -1109,7 +1109,7 @@ y 4]
   ;; baz
 --Expected
 
-# spaces around comments
+# spaces around comments 1
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/62
 
@@ -1123,6 +1123,22 @@ y 4]
 (aaa) ;; bbb
 (ccc) ; ddd
 (eee) ;;;; fff
+--Expected
+
+# spaces around comments 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/62#issuecomment-2334589873
+
+--Input
+(let [;;foo
+      a "a"
+      b "b"]);;bar
+--Input
+
+--Expected
+(let [;; foo
+      a "a"
+      b "b"]) ;; bar
 --Expected
 
 # example code from Issue #60
