@@ -512,6 +512,7 @@ yargs(hideBin(process.argv))
   .alias('in', 'include')
   .alias('l', 'log-level')
   .alias('v', 'version')
+  .alias('h', 'help')
 
   .default('file-ext', defaultFileExtensions.join(','))
 
