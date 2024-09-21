@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2024-09-21
+
+### Fixed
+- [Issue #93] - broader platform support for `objectForEach` function ([PR-95])
+- [Issue #94] - bring back shebang line ([PR-96])
+
 ## [0.4.0] - 2024-09-21
 
 ### Added
@@ -46,7 +52,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.4.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.4.1...HEAD
+[0.4.1]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.4.1
 [0.4.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.4.0
 [0.3.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.3.0
 [0.2.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.2.0
@@ -64,6 +71,8 @@ All notable changes to this project will be documented in this file.
 [Issue #75]:https://github.com/oakmac/standard-clojure-style-js/issues/75
 [Issue #76]:https://github.com/oakmac/standard-clojure-style-js/issues/76
 [Issue #86]:https://github.com/oakmac/standard-clojure-style-js/issues/86
+[Issue #93]:https://github.com/oakmac/standard-clojure-style-js/issues/93
+[Issue #94]:https://github.com/oakmac/standard-clojure-style-js/issues/94
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -76,3 +85,5 @@ All notable changes to this project will be documented in this file.
 [PR-90]:https://github.com/oakmac/standard-clojure-style-js/pull/90
 [PR-91]:https://github.com/oakmac/standard-clojure-style-js/pull/91
 [PR-92]:https://github.com/oakmac/standard-clojure-style-js/pull/92
+[PR-95]:https://github.com/oakmac/standard-clojure-style-js/pull/95
+[PR-96]:https://github.com/oakmac/standard-clojure-style-js/pull/96
