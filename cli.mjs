@@ -377,7 +377,8 @@ function processCheckCmd (argv) {
   }
 }
 
-function processFixCmd (argv) {
+// this is the fix command when not reading input from stdin
+function processFixCmdNotStdin (argv) {
   setLogLevel(argv['log-level'])
 
   printProgramInfo({ command: 'fix' })
@@ -417,6 +418,38 @@ function processFixCmd (argv) {
     } else {
       exitSad()
     }
+  }
+}
+
+// fix command when reading input from stdin
+async function processFixCmdStdin (argv) {
+  const stdinStr = await readStream(process.stdin)
+
+  if (!isString(stdinStr) || stdinStr === '') {
+    exitSad('Nothing found on stdin. Please pipe some Clojure code to stdin when using "standard-clj fix -"')
+  } else {
+    let formatResult = null
+    try {
+      formatResult = standardClj.format(stdinStr)
+    } catch (e) {}
+
+    if (formatResult && formatResult.status === 'success') {
+      console.log(formatResult.out)
+      exitHappy()
+    } else if (formatResult && formatResult.status === 'error' && isString(formatResult.reason)) {
+      exitSad('Failed to format code: ' + formatResult.reason)
+    } else {
+      exitSad('Failed to format your code due to unknown error with the format() function. Please help the standard-clj project by opening an issue to report this 🙏')
+    }
+  }
+}
+
+function processFixCmd (argv) {
+  const lastArg = getLastItemInArray(argv._)
+  if (lastArg === '-') {
+    processFixCmdStdin(argv)
+  } else {
+    processFixCmdNotStdin(argv)
   }
 }
 
@@ -501,6 +534,16 @@ function setToArray (s) {
   return Array.from(s)
 }
 
+// returns the last item in an Array, or null if the Array is empty
+function getLastItemInArray (a) {
+  const size = a.length
+  if (size === 0) {
+    return null
+  } else {
+    return a[size - 1]
+  }
+}
+
 // some older versions of node.js do not have Set.difference
 function setDifference (setA, setB) {
   if (typeof Set.prototype.difference === 'function') {
@@ -547,4 +590,11 @@ function exitSad (s) {
 function fileStr (numFiles) {
   if (numFiles === 1) return 'file'
   else return 'files'
+}
+
+// https://stackoverflow.com/a/54565854
+async function readStream (stream) {
+  const chunks = []
+  for await (const chunk of stream) { chunks.push(chunk) }
+  return Buffer.concat(chunks).toString('utf8')
 }
