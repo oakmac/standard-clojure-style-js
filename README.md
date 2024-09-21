@@ -91,6 +91,9 @@ standard-clj fix
 
 ## or pass a config file explicitly using the --config argument
 standard-clj list --config /home/user1/my-project/my-standard-cfg.json
+
+## pipe code directly to the fix command using "-"
+echo '(ns my.company.core (:require [clojure.string :as str]))' | standard-clj fix -
 ```
 
 #### `list` command
@@ -135,6 +138,17 @@ Returns exit code 0 if all files have been formatted, 1 otherwise.
 ```sh
 # format files according to Standard Clojure Style
 standard-clj fix src/ test/ deps.edn
+```
+
+#### `fix -` command (stdin / stdout)
+
+Use `standard-clj fix -` to pipe code directly via stdin.
+
+Prints the formatted code to stdout with error code 0 if successful. Prints an
+error message to stderr with error code 1 otherwise.
+
+```sh
+echo '(ns my.company.core (:require [clojure.string :as str]))' | standard-clj fix -
 ```
 
 #### Which files will be formatted?
