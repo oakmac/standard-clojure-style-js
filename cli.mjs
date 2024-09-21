@@ -511,10 +511,12 @@ yargs(hideBin(process.argv))
   .alias('ig', 'ignore')
   .alias('in', 'include')
   .alias('l', 'log-level')
+  .alias('v', 'version')
 
   .default('file-ext', defaultFileExtensions.join(','))
 
   .demandCommand() // show them --help if they do not pass a valid command
+  .version(programVersion)
 
   .help()
   .parse()
