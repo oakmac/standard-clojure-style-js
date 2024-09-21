@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2024-09-21
+
+### Added
+- [Issue #86] - allow passing code via stdin with `standard-clj fix -` ([PR-91])
+
+### Changed
+- [Issue #62] - do not add a space after a paren opener for `;` comments ([PR-90])
+
+### Fixed
+- [Issue #60] - respect commas to hold closing paren trails ([PR-89])
+- [Issue #71] - support --version, -v, -h flags on CLI ([PR-92])
+
 ## [0.3.0] - 2024-09-06
 
 ### Added
@@ -34,7 +46,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.3.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.4.0...HEAD
+[0.4.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.4.0
 [0.3.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.3.0
 [0.2.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.2.0
 [0.1.2]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.2
@@ -46,9 +59,11 @@ All notable changes to this project will be documented in this file.
 [Issue #67]:https://github.com/oakmac/standard-clojure-style-js/issues/67
 [Issue #68]:https://github.com/oakmac/standard-clojure-style-js/issues/68
 [Issue #69]:https://github.com/oakmac/standard-clojure-style-js/issues/69
+[Issue #71]:https://github.com/oakmac/standard-clojure-style-js/issues/71
 [Issue #74]:https://github.com/oakmac/standard-clojure-style-js/issues/74
 [Issue #75]:https://github.com/oakmac/standard-clojure-style-js/issues/75
 [Issue #76]:https://github.com/oakmac/standard-clojure-style-js/issues/76
+[Issue #86]:https://github.com/oakmac/standard-clojure-style-js/issues/86
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -57,3 +72,7 @@ All notable changes to this project will be documented in this file.
 [PR-83]:https://github.com/oakmac/standard-clojure-style-js/pull/83
 [PR-84]:https://github.com/oakmac/standard-clojure-style-js/pull/84
 [PR-85]:https://github.com/oakmac/standard-clojure-style-js/pull/85
+[PR-89]:https://github.com/oakmac/standard-clojure-style-js/pull/89
+[PR-90]:https://github.com/oakmac/standard-clojure-style-js/pull/90
+[PR-91]:https://github.com/oakmac/standard-clojure-style-js/pull/91
+[PR-92]:https://github.com/oakmac/standard-clojure-style-js/pull/92
