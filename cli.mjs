@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // ISC License
 // Copyright © 2024, Chris Oakman
 // https://github.com/oakmac/standard-clojure-style-js/
