@@ -17,7 +17,7 @@ const lib = require(libFilename)
 
 // sanity-checks
 assert(lib, libFilename + ' source file not found?')
-assert(!isFunction(lib._charAt), 'please disable the exportInternalFnsForTesting flag before publishing')
+assert(isFunction(lib._charAt), 'please ensure that exportInternalFnsForTesting = true before publishing')
 
 const encoding = { encoding: 'utf8' }
 
@@ -45,11 +45,16 @@ fs.writeFileSync(cliFilename, updatedCliSrc)
 infoLog('Updated cli.mjs to import from dist/ instead of lib/')
 
 const libSrc = fs.readFileSync(libFilename, 'utf8')
-  .replace('/* global define */', '')
+
+assert(libSrc.includes('// standard-clojure-style @@VERSION@@'), '@@VERSION@@ template not found!')
+assert(libSrc.includes('const exportInternalFnsForTesting = true // 24d4533f-0f94-4d9c-85f9-048aca1e19b6'), 'exportInternalFnsForTesting flag not found!')
+
+const adjustedLibSrc = libSrc.replace('/* global define */', '')
   .replace('@@VERSION@@', 'v' + version)
+  .replace('const exportInternalFnsForTesting = true // 24d4533f-0f94-4d9c-85f9-048aca1e19b6', 'const exportInternalFnsForTesting = false')
   .trim()
 
-const terserResult = terser.minify_sync(libSrc)
+const terserResult = terser.minify_sync(adjustedLibSrc)
 const minifiedSrc = terserResult.code
 
 // sanity-check that minification succeeded
@@ -64,7 +69,7 @@ infoLog('Creating dist/ folder for version ' + version)
 const minifiedJSWithBanner = banner() + minifiedSrc
 
 const distReadableFile = path.join(rootDir, 'dist/standard-clojure-style.js')
-fs.writeFileSync(distReadableFile, libSrc, encoding)
+fs.writeFileSync(distReadableFile, adjustedLibSrc, encoding)
 infoLog('Wrote ' + distReadableFile)
 
 const distMinifiedFile = path.join(rootDir, 'dist/standard-clojure-style.min.js')
