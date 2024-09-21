@@ -26,7 +26,11 @@ npx @chrisoakman/standard-clojure-style check src-clj/ src-cljs/ test/
 npx @chrisoakman/standard-clojure-style fix src-clj/ src-cljs/ test/
 ```
 
-Please see the **Command Line Usage** section below for more options.
+See the **Command Line Usage** section below for more options.
+
+Please [open an issue] when Standard Clojure Style breaks your code :upside_down_face:
+
+[open an issue]:https://github.com/oakmac/standard-clojure-style-js/issues/new
 
 ## Project Background and Rationale
 
@@ -208,6 +212,8 @@ mv standard-clj /usr/local/bin
 
 ## Formatting Rules
 
+> NOTE: this is an incomplete list. I am working on a website that will document all of the formatting rules. 20 Sep 2024
+
 - trim trailing whitespace (ie: `rtrim` every line)
 - ensure a single newline character (`\n`) at the end of the file
 - convert all tab characters to spaces (except tab characters inside of Strings)
@@ -218,7 +224,7 @@ mv standard-clj /usr/local/bin
 - format and sort `ns` forms according to Stuart Sierra's [how to ns]
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
   - with the addition of [Rule 3](https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649) as proposed by Shaun Lebron
-- comments that contain the String `standard-clojure-style:ignore` cause the next form to be ignored by the formatter
+- (unfinished) comments that contain the String `standard-clojure-style:ignore` cause the next form to be ignored by the formatter
 
 [how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
 [cljfmt option]:https://github.com/weavejester/cljfmt#formatting-options
@@ -312,13 +318,6 @@ bun run lint
   * sorted alphabetically except for `:default` (if it exists), which is last
 
 [how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
-
-## TODO
-
-- [ ] need to add additional cases for namespace maps (what is allowed?)
-- [ ] PR upstream to Clojure-Sublimed the option map for Repeat (can remove Repeat1)
-- [ ] chat with Nikita about what he wants to do about emoji length inside of Strings
-- [ ] add a test case for every rule
 
 ## License
 
