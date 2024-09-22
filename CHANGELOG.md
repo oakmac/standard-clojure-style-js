@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- [Issue #97] - fix parser bug with `\ ` characters ([PR-98])
+
 ## [0.4.1] - 2024-09-21
 
 ### Fixed
@@ -73,6 +78,7 @@ All notable changes to this project will be documented in this file.
 [Issue #86]:https://github.com/oakmac/standard-clojure-style-js/issues/86
 [Issue #93]:https://github.com/oakmac/standard-clojure-style-js/issues/93
 [Issue #94]:https://github.com/oakmac/standard-clojure-style-js/issues/94
+[Issue #97]:https://github.com/oakmac/standard-clojure-style-js/issues/97
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -87,3 +93,4 @@ All notable changes to this project will be documented in this file.
 [PR-92]:https://github.com/oakmac/standard-clojure-style-js/pull/92
 [PR-95]:https://github.com/oakmac/standard-clojure-style-js/pull/95
 [PR-96]:https://github.com/oakmac/standard-clojure-style-js/pull/96
+[PR-98]:https://github.com/oakmac/standard-clojure-style-js/pull/98
