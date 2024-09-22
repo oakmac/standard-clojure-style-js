@@ -1239,3 +1239,21 @@ y 4]
 (aaa
   ,) ;; foo
 --Expected
+
+# Issue 97 - whitespace character
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/97
+
+--Input
+(def test-spaces []
+  (str " " \space \ ))
+
+(test-spaces) ;; => "   "
+--Input
+
+--Expected
+(def test-spaces []
+  (str " " \space \ ))
+
+(test-spaces) ;; => "   "
+--Expected
