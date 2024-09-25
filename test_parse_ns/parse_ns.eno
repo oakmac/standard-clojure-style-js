@@ -2070,3 +2070,23 @@
   }
 }
 --Expected
+
+# GitHub Issue #55 metadata in ns 1
+
+--Input
+(ns ^{:deprecated "0.1.0", :aaaaaaa
+
+;; foo
+
+"aaaaaa"} com.example.my-app)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "metadata": "^{:deprecated \"0.1.0\"}"
+}
+--Expected
+
+> https://stackoverflow.com/questions/18861584/clojure-namespace-metadata
+> https://grep.app/search?q=ns%20%5E%7B%3A&filter[lang][0]=Clojure

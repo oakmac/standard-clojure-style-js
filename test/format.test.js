@@ -8,10 +8,6 @@ const scsLib = require('../lib/standard-clojure-style.js')
 
 const rootDir = path.join(__dirname, '../')
 
-const isEnoFile = (f) => {
-  return path.extname(f) === '.eno'
-}
-
 // returns an Array of all the .eno files in the test_format/ folder
 const enoFilesInTestFormatDir = () => {
   const allFiles = fs.readdirSync(path.join(rootDir, 'test_format/'))
@@ -71,8 +67,6 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = true
 const specificTests = new Set()
 
-
-
 specificTests.add('metadata in ns 1')
 
 const ignoreSomeTests = true
@@ -123,3 +117,10 @@ allTestCases.forEach(testCase => {
     }
   }
 })
+
+// -----------------------------------------------------------------------------
+// Util
+
+function isEnoFile (f) {
+  return path.extname(f) === '.eno'
+}
