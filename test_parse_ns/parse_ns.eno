@@ -1965,3 +1965,20 @@
   }
 }
 --Expected
+
+# metadata in ns 1
+
+--Input
+(ns ^{:deprecated "0.1.0"} com.example.my-app
+  (:refer
+    [clojure.string]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
+> https://stackoverflow.com/questions/18861584/clojure-namespace-metadata
+> https://grep.app/search?q=ns%20%5E%7B%3A&filter[lang][0]=Clojure
