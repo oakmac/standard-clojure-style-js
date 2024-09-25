@@ -1353,3 +1353,16 @@
     :exclude #?@(:clj [aaa bbb ccc]
                  :cljs [aaa ddd])))
 --Expected
+
+# GitHub Issue #55 metadata in ns 1
+
+--Input
+(ns ^{:deprecated "0.1.0"} com.example.my-app
+  (:refer [clojure.string]))
+--Input
+
+--Expected
+(ns ^{:deprecated "0.1.0"} com.example.my-app
+  (:refer
+    [clojure.string]))
+--Expected
