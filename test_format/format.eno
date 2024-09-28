@@ -1257,3 +1257,19 @@ y 4]
 
 (test-spaces) ;; => "   "
 --Expected
+
+# GitHub Issue #99 - indentation bug
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/99
+
+--Input
+(defn rgb->css
+  ([r g b] (str "rgb(" r "," g "," b ")"))
+  ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
+--Input
+
+--Expected
+(defn rgb->css
+  ([r g b] (str "rgb(" r "," g "," b ")"))
+  ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
+--Expected
