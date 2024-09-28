@@ -1240,7 +1240,7 @@ y 4]
   ,) ;; foo
 --Expected
 
-# Issue 97 - whitespace character
+# GitHub Issue #97 - whitespace character
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/97
 
@@ -1258,7 +1258,7 @@ y 4]
 (test-spaces) ;; => "   "
 --Expected
 
-# GitHub Issue #99 - indentation bug
+# GitHub Issue #99 - bug with parens inside string literals
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/99
 
