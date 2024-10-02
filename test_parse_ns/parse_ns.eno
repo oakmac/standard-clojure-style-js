@@ -1969,14 +1969,17 @@
 # metadata in ns 1
 
 --Input
-(ns ^{:deprecated "0.1.0"} com.example.my-app
-  (:refer
-    [clojure.string]))
+(ns ^{:deprecated "0.1.0", :aaaaaaa
+
+;; foo
+
+"aaaaaa"} com.example.my-app)
 --Input
 
 --Expected
 {
-  "nsSymbol": "com.example.my-app"
+  "nsSymbol": "com.example.my-app",
+  "metadata": "^{:deprecated \"0.1.0\"}"
 }
 --Expected
 
