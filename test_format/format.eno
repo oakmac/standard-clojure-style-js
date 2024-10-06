@@ -1273,3 +1273,94 @@ y 4]
   ([r g b] (str "rgb(" r "," g "," b ")"))
   ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
 --Expected
+
+# GitHub Issue #104 - spaces between top-level forms
+
+--Input
+(ns wolframite.base.convert
+  "Convert a Clojure expression into a Wolfram JLink expression"
+  (:require [wolframite.impl.jlink-instance :as jlink-instance]
+            [wolframite.impl.protocols :as proto]
+            [wolframite.impl.wolfram-syms.intern :as intern]
+            [wolframite.lib.options :as options]
+            [wolframite.base.express :as express]
+            [wolframite.base.expr :as expr]
+            [wolframite.runtime.defaults :as defaults]))
+
+;; (remove-ns 'wolframite.base.convert)
+
+;; * defmulti and dispatch
+
+(defn- primitive?
+  "Is `x` a 'primitive' value that can be directly turned into an Expr?"
+  [x]
+  (or (number? x)
+      (string? x)))
+
+(defn- supported-primitive-array? [xs]
+  ;; See jlink.Expr constructor for the types actually supported
+  (some-> xs .getClass .componentType (#{Byte/TYPE Double/TYPE Integer/TYPE Long/TYPE Short/TYPE})))
+
+(defn- dispatch [obj]
+  (cond (and (list? obj)
+             (empty? obj)) :null
+        (seq? obj) :expr
+        (or (vector? obj)
+            (list? obj)) :list
+        (ratio? obj) :rational
+        (primitive? obj) :primitive
+        (map? obj) :hash-map
+        (symbol? obj) :symbol
+        (nil? obj) :null
+        (fn? obj) :fn-obj
+        :else nil))
+
+(defmulti convert
+  "Convert a Wolframite clj expression into a JLink object representation"
+  (fn [clj-expr _opts] (dispatch clj-expr))) ; TODO Pass jlink-instance in explicitly inst. of fetching from the global
+--Input
+
+--Expected
+(ns wolframite.base.convert
+  "Convert a Clojure expression into a Wolfram JLink expression"
+  (:require
+    [wolframite.base.expr :as expr]
+    [wolframite.base.express :as express]
+    [wolframite.impl.jlink-instance :as jlink-instance]
+    [wolframite.impl.protocols :as proto]
+    [wolframite.impl.wolfram-syms.intern :as intern]
+    [wolframite.lib.options :as options]
+    [wolframite.runtime.defaults :as defaults]))
+
+;; (remove-ns 'wolframite.base.convert)
+
+;; * defmulti and dispatch
+
+(defn- primitive?
+  "Is `x` a 'primitive' value that can be directly turned into an Expr?"
+  [x]
+  (or (number? x)
+      (string? x)))
+
+(defn- supported-primitive-array? [xs]
+  ;; See jlink.Expr constructor for the types actually supported
+  (some-> xs .getClass .componentType (#{Byte/TYPE Double/TYPE Integer/TYPE Long/TYPE Short/TYPE})))
+
+(defn- dispatch [obj]
+  (cond (and (list? obj)
+             (empty? obj)) :null
+        (seq? obj) :expr
+        (or (vector? obj)
+            (list? obj)) :list
+        (ratio? obj) :rational
+        (primitive? obj) :primitive
+        (map? obj) :hash-map
+        (symbol? obj) :symbol
+        (nil? obj) :null
+        (fn? obj) :fn-obj
+        :else nil))
+
+(defmulti convert
+  "Convert a Wolframite clj expression into a JLink object representation"
+  (fn [clj-expr _opts] (dispatch clj-expr))) ; TODO Pass jlink-instance in explicitly inst. of fetching from the global
+--Expected
