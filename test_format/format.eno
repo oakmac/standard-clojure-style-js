@@ -1273,3 +1273,19 @@ y 4]
   ([r g b] (str "rgb(" r "," g "," b ")"))
   ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
 --Expected
+
+# GitHub Issue #104 - bug with eol commas
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/104
+
+> FIXME: test this with multiple commas at the end of a line
+
+--Input
+(aaa [bbb,
+  ccc, ddd])
+--Input
+
+--Expected
+(aaa [bbb,
+      ccc, ddd])
+--Expected

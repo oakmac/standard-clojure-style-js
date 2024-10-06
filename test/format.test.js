@@ -70,7 +70,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-// specificTests.add('your test case here')
+specificTests.add('GitHub Issue #104 - bug with eol commas')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

@@ -47,6 +47,19 @@ test('commentNeedsSpaceInside', () => {
   expect(scsLib._commentNeedsSpaceInside(';;;;;;')).toBe(false)
 })
 
+test('numCommas', () => {
+  expect(scsLib._numCommasAtBeginningStr('')).toBe(0)
+  expect(scsLib._numCommasAtBeginningStr(',a')).toBe(1)
+  expect(scsLib._numCommasAtBeginningStr(',,')).toBe(2)
+  expect(scsLib._numCommasAtBeginningStr(',,cc,')).toBe(2)
+
+  expect(scsLib._numCommasAtEndOfStr('')).toBe(0)
+  expect(scsLib._numCommasAtEndOfStr(',')).toBe(1)
+  expect(scsLib._numCommasAtEndOfStr('a,,')).toBe(2)
+  expect(scsLib._numCommasAtEndOfStr(',,cc,')).toBe(1)
+  expect(scsLib._numCommasAtEndOfStr(',,cc  ,,')).toBe(2)
+})
+
 test('AnyChar parser', () => {
   const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
   expect(anyCharTest1.parse('a', 0).text).toBe('a')
