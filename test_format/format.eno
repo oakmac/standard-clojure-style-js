@@ -1321,3 +1321,24 @@ eee)
 (-> #js ddd
   eee)
 --Expected
+
+# GitHub Issue #104 - treat eol commas as trailing whitespace
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/104
+
+--Input
+(aaa,
+   bbb),
+
+(ccc ,,
+  :ddd
+  )   ,
+--Input
+
+--Expected
+(aaa
+  bbb)
+
+(ccc
+  :ddd)
+--Expected
