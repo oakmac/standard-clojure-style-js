@@ -53,14 +53,6 @@ test('numCommas', () => {
   expect(scsLib._numCommasAtBeginningStr(',,')).toBe(2)
   expect(scsLib._numCommasAtBeginningStr(',,cc,')).toBe(2)
   expect(scsLib._numCommasAtBeginningStr(' , ')).toBe(0)
-
-  // expect(scsLib._numCommasAtEndOfStr('')).toBe(0)
-  // expect(scsLib._numCommasAtEndOfStr(',')).toBe(1)
-  // expect(scsLib._numCommasAtEndOfStr('a,,')).toBe(2)
-  // expect(scsLib._numCommasAtEndOfStr(',,cc,')).toBe(1)
-  // expect(scsLib._numCommasAtEndOfStr(',,cc  ,,')).toBe(2)
-  // expect(scsLib._numCommasAtEndOfStr(',,cc  , ,')).toBe(1)
-  // expect(scsLib._numCommasAtEndOfStr('    ,,, , ')).toBe(0)
 })
 
 test('AnyChar parser', () => {
