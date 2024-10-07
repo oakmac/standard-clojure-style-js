@@ -1278,14 +1278,18 @@ y 4]
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/104
 
-> FIXME: test this with multiple commas at the end of a line
-
 --Input
 (aaa [bbb,
   ccc, ddd])
+
+(eee,,,
+      ,)
 --Input
 
 --Expected
 (aaa [bbb,
       ccc, ddd])
+
+(eee,,,
+  ,)
 --Expected
