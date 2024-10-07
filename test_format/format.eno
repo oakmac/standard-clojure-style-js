@@ -1293,3 +1293,21 @@ y 4]
 (eee,,,
   ,)
 --Expected
+
+# issue104 - trailing whitespace example
+
+--Input
+(aaa [bbb,    
+  ccc, ddd])
+
+(eee,,,
+      ,)
+--Input
+
+--Expected
+(aaa [bbb,
+      ccc, ddd])
+
+(eee,,,
+  ,)
+--Expected
