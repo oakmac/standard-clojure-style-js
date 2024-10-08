@@ -47,6 +47,15 @@ test('commentNeedsSpaceInside', () => {
   expect(scsLib._commentNeedsSpaceInside(';;;;;;')).toBe(false)
 })
 
+test('removeLeadingWhitespace', () => {
+  expect(scsLib._removeLeadingWhitespace('\n ,,')).toBe(',,')
+  expect(scsLib._removeLeadingWhitespace(' \n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace('  \n\n  ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n\n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n\n')).toBe('')
+})
+
 test('AnyChar parser', () => {
   const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
   expect(anyCharTest1.parse('a', 0).text).toBe('a')

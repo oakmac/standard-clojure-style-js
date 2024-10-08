@@ -1273,3 +1273,24 @@ y 4]
   ([r g b] (str "rgb(" r "," g "," b ")"))
   ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
 --Expected
+
+# GitHub Issue #104 - treat eol commas as trailing whitespace
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/104
+
+--Input
+(aaa,
+   bbb),
+
+(ccc ,,
+  :ddd
+  )   ,
+--Input
+
+--Expected
+(aaa
+  bbb)
+
+(ccc
+  :ddd)
+--Expected
