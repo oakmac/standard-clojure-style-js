@@ -68,9 +68,9 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = false
+const onlyRunSpecificTests = true
 const specificTests = new Set()
-// specificTests.add('your test case here')
+specificTests.add('Trim trailing whitespace 2')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -110,7 +110,7 @@ allTestCases.forEach(testCase => {
     }
     if (testCase.name === 'Trim trailing whitespace 2') {
       test('Trim trailing whitespace test case should not be trimmed', () => {
-        expect(testCase.input.includes('"aaa"   \n)(def')).toBe(true)
+        expect(testCase.input.includes('"aaa",   \n)(def')).toBe(true)
       })
     }
     if (testCase.name === 'Surrounding newlines removed additional') {
