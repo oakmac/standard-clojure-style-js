@@ -47,6 +47,24 @@ test('commentNeedsSpaceInside', () => {
   expect(scsLib._commentNeedsSpaceInside(';;;;;;')).toBe(false)
 })
 
+test('removeLeadingWhitespace', () => {
+  expect(scsLib._removeLeadingWhitespace('\n ,,')).toBe(',,')
+  expect(scsLib._removeLeadingWhitespace(' \n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace('  \n\n  ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n\n ')).toBe('')
+  expect(scsLib._removeLeadingWhitespace(',, \n\n')).toBe('')
+})
+
+test('txtHasCommasAfterNewline', () => {
+  expect(scsLib._txtHasCommasAfterNewline('\n ,,')).toBe(true)
+  expect(scsLib._txtHasCommasAfterNewline('\n\n  ,')).toBe(true)
+  expect(scsLib._txtHasCommasAfterNewline(' \n ')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline('  \n\n  ')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline(',, \n ')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline(',, \n\n ')).toBe(false)
+})
+
 test('AnyChar parser', () => {
   const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
   expect(anyCharTest1.parse('a', 0).text).toBe('a')

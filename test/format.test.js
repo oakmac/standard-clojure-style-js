@@ -110,7 +110,7 @@ allTestCases.forEach(testCase => {
     }
     if (testCase.name === 'Trim trailing whitespace 2') {
       test('Trim trailing whitespace test case should not be trimmed', () => {
-        expect(testCase.input.includes('"aaa"   \n)(def')).toBe(true)
+        expect(testCase.input.includes('"aaa",   \n)(def')).toBe(true)
       })
     }
     if (testCase.name === 'Surrounding newlines removed additional') {

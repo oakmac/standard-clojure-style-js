@@ -13,7 +13,7 @@
 > NOTE: there is a test case that checks whether this test case input has trailing whitespace
 
 --Input
-(def aaa "aaa"   
+(def aaa "aaa",   
 )(def bbb "bbb")
 --Input
 
