@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - [Issue #108] - fix anonymous function indentation ([PR-116])
 - [Issue #112] - support `:rename` in `:require` forms ([PR-117])
 - [Issue #110] - fix bug with tagged literal indentation ([PR-118])
+- [Issue #114] - fix bug with `:refer-clojure` and reader conditionals ([PR-119])
 
 ## [0.5.0] - 2024-09-28
 
@@ -94,6 +95,7 @@ All notable changes to this project will be documented in this file.
 [Issue #110]:https://github.com/oakmac/standard-clojure-style-js/issues/110
 [Issue #111]:https://github.com/oakmac/standard-clojure-style-js/issues/111
 [Issue #112]:https://github.com/oakmac/standard-clojure-style-js/issues/112
+[Issue #114]:https://github.com/oakmac/standard-clojure-style-js/issues/114
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -114,3 +116,4 @@ All notable changes to this project will be documented in this file.
 [PR-116]:https://github.com/oakmac/standard-clojure-style-js/pull/116
 [PR-117]:https://github.com/oakmac/standard-clojure-style-js/pull/117
 [PR-118]:https://github.com/oakmac/standard-clojure-style-js/pull/118
+[PR-119]:https://github.com/oakmac/standard-clojure-style-js/pull/119
