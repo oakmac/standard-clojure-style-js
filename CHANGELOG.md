@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.6.0] - 2024-10-12
 
 ### Fixed
 - [Issue #111] - print comments above `:require-macros` ([PR-115])
@@ -70,7 +70,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.5.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.6.0...HEAD
+[0.6.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.6.0
 [0.5.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.5.0
 [0.4.1]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.4.1
 [0.4.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.4.0
