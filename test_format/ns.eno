@@ -1295,14 +1295,13 @@
 
 --Input
 (ns com.example.my-app
+  (:require [aaa :as bbb] )
 #?(:cljs
   ;; comment1
   #_{:clj-kondo/ignore [:unused-referred-var]}
   (:require-macros [other.ns :refer [one two]])
   )
-  (:require
-    [aaa :as bbb]
-    ))
+  )
 --Input
 
 --Expected
