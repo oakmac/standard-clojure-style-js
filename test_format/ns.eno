@@ -1332,3 +1332,24 @@
   (:require
     ["@foo/bar" :rename {Alpha Bravo, Charlie Delta}]))
 --Expected
+
+# GitHub Issue #114 - refer-clojure with reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/114
+
+--Input
+(ns com.example.my-app
+#?(:clj
+   (:refer-clojure :exclude [aaa ccc bbb])
+
+   :cljs
+   (:refer-clojure :exclude [ddd aaa])
+   ,))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer-clojure
+    :exclude #?@(:clj [aaa bbb ccc]
+                 :cljs [aaa ddd])))
+--Expected
