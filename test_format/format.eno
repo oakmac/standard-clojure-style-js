@@ -1305,6 +1305,9 @@ y 4]
 
 (-> #uuid "15adfdf0-2e6b-410e-a489-f71d1dd17642"
     str)
+
+(-> #js ddd
+eee)
 --Input
 
 --Expected
@@ -1314,4 +1317,7 @@ y 4]
 
 (-> #uuid "15adfdf0-2e6b-410e-a489-f71d1dd17642"
     str)
+
+(-> #js ddd
+  eee)
 --Expected
