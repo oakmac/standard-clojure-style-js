@@ -1264,3 +1264,53 @@
              #?@(:clj [conj core-conj]
                  :cljs [conj core-conj2])}))
 --Expected
+
+# GitHub Issue #111 - comments above :require-macros
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/111
+
+--Input
+(ns com.example.my-app
+  ;; comment1
+  #_{:clj-kondo/ignore [:unused-referred-var]}
+  (:require-macros [other.ns :refer [one two]])
+  (:require
+    [aaa :as bbb]
+    ))
+--Input
+
+--Expected
+(ns com.example.my-app
+  ;; comment1
+  #_{:clj-kondo/ignore [:unused-referred-var]}
+  (:require-macros
+    [other.ns :refer [one two]])
+  (:require
+    [aaa :as bbb]))
+--Expected
+
+# GitHub Issue #111 - comments above :require-macros with reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/111
+
+--Input
+(ns com.example.my-app
+  (:require [aaa :as bbb] )
+#?(:cljs
+  ;; comment1
+  #_{:clj-kondo/ignore [:unused-referred-var]}
+  (:require-macros [other.ns :refer [one two]])
+  )
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     ;; comment1
+     #_{:clj-kondo/ignore [:unused-referred-var]}
+     (:require-macros
+       [other.ns :refer [one two]]))
+  (:require
+    [aaa :as bbb]))
+--Expected
