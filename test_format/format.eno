@@ -1299,6 +1299,22 @@ y 4]
 > https://github.com/oakmac/standard-clojure-style-js/issues/110
 
 --Input
+(-> #js aaa
+    bbb
+    ccc)
+--Input
+
+--Expected
+(-> #js aaa
+    bbb
+    ccc)
+--Expected
+
+# GitHub Issue #110 - tagged literal indentation ORIG
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/110
+
+--Input
 (-> #js [(one-promise)
          (another-promise)]
     (js/Promise.all)
