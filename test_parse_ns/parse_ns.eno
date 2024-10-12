@@ -1965,3 +1965,46 @@
   }
 }
 --Expected
+
+# GitHub Issue #111 - comments above :require-macros
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/111
+
+--Input
+(ns com.example.my-app
+  ;; comment1
+  #_{:clj-kondo/ignore [:unused-referred-var]}
+  (:require-macros [other.ns :refer [one two]])
+  (:require
+    [aaa :as bbb]
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacrosCommentsAbove": [
+    ";; comment1",
+    "#_{:clj-kondo/ignore [:unused-referred-var]}"
+  ],
+  "requireMacros": [
+    {
+      "refer": [
+        {
+          "symbol": "one"
+        },
+        {
+          "symbol": "two"
+        }
+      ],
+      "symbol": "other.ns"
+    }
+  ],
+  "requires": [
+    {
+      "as": "bbb",
+      "symbol": "aaa"
+    }
+  ]
+}
+--Expected
