@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - [Issue #111] - print comments above `:require-macros` ([PR-115])
 - [Issue #108] - fix anonymous function indentation ([PR-116])
+- [Issue #112] - support `:rename` in `:require` forms ([PR-117])
 
 ## [0.5.0] - 2024-09-28
 
@@ -90,6 +91,7 @@ All notable changes to this project will be documented in this file.
 [Issue #99]:https://github.com/oakmac/standard-clojure-style-js/issues/99
 [Issue #108]:https://github.com/oakmac/standard-clojure-style-js/issues/108
 [Issue #111]:https://github.com/oakmac/standard-clojure-style-js/issues/111
+[Issue #112]:https://github.com/oakmac/standard-clojure-style-js/issues/112
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -108,3 +110,4 @@ All notable changes to this project will be documented in this file.
 [PR-100]:https://github.com/oakmac/standard-clojure-style-js/pull/100
 [PR-115]:https://github.com/oakmac/standard-clojure-style-js/pull/115
 [PR-116]:https://github.com/oakmac/standard-clojure-style-js/pull/116
+[PR-117]:https://github.com/oakmac/standard-clojure-style-js/pull/117
