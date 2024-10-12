@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - [Issue #110] - fix bug with tagged literal indentation ([PR-118])
 - [Issue #114] - fix bug with `:refer-clojure` and reader conditionals ([PR-119])
 
+### Changed
+- [Issue #104] - trim eol commas as whitespace ([PR-107])
+
 ## [0.5.0] - 2024-09-28
 
 ### Fixed
@@ -91,6 +94,7 @@ All notable changes to this project will be documented in this file.
 [Issue #94]:https://github.com/oakmac/standard-clojure-style-js/issues/94
 [Issue #97]:https://github.com/oakmac/standard-clojure-style-js/issues/97
 [Issue #99]:https://github.com/oakmac/standard-clojure-style-js/issues/99
+[Issue #104]:https://github.com/oakmac/standard-clojure-style-js/issues/104
 [Issue #108]:https://github.com/oakmac/standard-clojure-style-js/issues/108
 [Issue #110]:https://github.com/oakmac/standard-clojure-style-js/issues/110
 [Issue #111]:https://github.com/oakmac/standard-clojure-style-js/issues/111
@@ -112,6 +116,7 @@ All notable changes to this project will be documented in this file.
 [PR-96]:https://github.com/oakmac/standard-clojure-style-js/pull/96
 [PR-98]:https://github.com/oakmac/standard-clojure-style-js/pull/98
 [PR-100]:https://github.com/oakmac/standard-clojure-style-js/pull/100
+[PR-107]:https://github.com/oakmac/standard-clojure-style-js/pull/107
 [PR-115]:https://github.com/oakmac/standard-clojure-style-js/pull/115
 [PR-116]:https://github.com/oakmac/standard-clojure-style-js/pull/116
 [PR-117]:https://github.com/oakmac/standard-clojure-style-js/pull/117
