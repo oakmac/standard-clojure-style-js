@@ -1273,3 +1273,23 @@ y 4]
   ([r g b] (str "rgb(" r "," g "," b ")"))
   ([r g b a] (str "rgba(" r "," g "," b "," a ")")))
 --Expected
+
+# GitHub Issue #108 - anonymous function indentation
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/108
+
+--Input
+(when :foo
+:bar)
+
+#(when :foo
+:bar)
+--Input
+
+--Expected
+(when :foo
+  :bar)
+
+#(when :foo
+   :bar)
+--Expected
