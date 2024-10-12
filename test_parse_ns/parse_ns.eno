@@ -2008,3 +2008,36 @@
   ]
 }
 --Expected
+
+# GitHub Issue #112 - extra options in JS requires
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/112
+
+--Input
+(ns com.example.my-app
+  (:require
+    ["@foo/bar" :rename {Charlie Delta Alpha Bravo }]
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "\"@foo/bar\"",
+      "symbolIsString": true,
+      "rename": [
+        {
+          "fromSymbol": "Alpha",
+          "toSymbol": "Bravo"
+        },
+        {
+          "fromSymbol": "Charlie",
+          "toSymbol": "Delta"
+        }
+      ]
+    }
+  ]
+}
+--Expected
