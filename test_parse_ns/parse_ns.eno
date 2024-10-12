@@ -2041,3 +2041,32 @@
   ]
 }
 --Expected
+
+# GitHub Issue #114 - refer-clojure with reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/114
+
+--Input
+(ns com.example.my-app
+#?(:clj
+   (:refer-clojure :exclude [aaa ccc bbb])
+
+   :cljs
+   (:refer-clojure :exclude [ddd aaa])
+   ,))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "exclude": [
+      {"symbol": "aaa", "platform": ":clj"},
+      {"symbol": "aaa", "platform": ":cljs"},
+      {"symbol": "bbb", "platform": ":clj"},
+      {"symbol": "ccc", "platform": ":clj"},
+      {"symbol": "ddd", "platform": ":cljs"}
+    ]
+  }
+}
+--Expected
