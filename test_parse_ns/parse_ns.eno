@@ -2071,22 +2071,69 @@
 }
 --Expected
 
-# GitHub Issue #55 metadata in ns 1
+# GitHub Issue #55 - metadata in ns 1
 
 --Input
-(ns ^{:deprecated "0.1.0", :aaaaaaa
-
-;; foo
-
-"aaaaaa"} com.example.my-app)
+(ns ^{:deprecated "0.1.0", :aaa "aaa"} com.example.my-app)
 --Input
 
 --Expected
 {
   "nsSymbol": "com.example.my-app",
-  "metadata": "^{:deprecated \"0.1.0\"}"
+  "nsMetadata": [
+    {"key": ":deprecated", "value": "\"0.1.0\""},
+    {"key": ":aaa", "value": "\"aaa\""}
+  ]
 }
 --Expected
 
 > https://stackoverflow.com/questions/18861584/clojure-namespace-metadata
 > https://grep.app/search?q=ns%20%5E%7B%3A&filter[lang][0]=Clojure
+
+# GitHub Issue #55 - metadata in ns 2
+
+--Input
+(ns ^:foo/bar com.example.my-app)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "nsMetadata": [
+    {"key": ":foo/bar", "value": "true"}
+  ]
+}
+--Expected
+
+# GitHub Issue #55 - metadata in ns 3
+
+--Input
+(ns com.example.my-app {:foo 45, :bar [:a :b :c {}]})
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "nsMetadata": [
+    {"key": ":foo", "value": "45"},
+    {"key": ":bar", "value": "[:a :b :c {}]"}
+  ]
+}
+--Expected
+
+# GitHub Issue #55 - metadata in ns 4
+
+> https://github.com/clojure/clojurescript/blob/b7ede4bce3e273ab85155fdd8463c291a6f81d43/src/test/clojure/cljs/analyzer_tests.clj#L249-L277
+
+--Input
+(ns ^{:foo bar} weeble.ns {:foo baz})
+--Input
+
+--Expected
+{
+  "nsSymbol": "weeble.ns",
+  "nsMetadata": [
+    {"key": ":foo", "value": "baz"}
+  ]
+}
+--Expected
