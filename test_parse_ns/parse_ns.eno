@@ -2074,7 +2074,8 @@
 # GitHub Issue #55 - metadata in ns 1
 
 --Input
-(ns ^{:deprecated "0.1.0", :aaa "aaa"} com.example.my-app)
+(ns ^{:deprecated "0.1.0", :aaa "aaa"} com.example.my-app
+  (:require [clojure.string :as str]))
 --Input
 
 --Expected
@@ -2083,6 +2084,12 @@
   "nsMetadata": [
     {"key": ":deprecated", "value": "\"0.1.0\""},
     {"key": ":aaa", "value": "\"aaa\""}
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    }
   ]
 }
 --Expected
