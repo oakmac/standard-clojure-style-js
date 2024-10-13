@@ -62,11 +62,6 @@ const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
 
-specificTests.add('GitHub Issue #55 - metadata in ns 1')
-specificTests.add('GitHub Issue #55 - metadata in ns 2')
-specificTests.add('GitHub Issue #55 - metadata in ns 3')
-specificTests.add('GitHub Issue #55 - metadata in ns 4')
-
 const ignoreSomeTests = false
 const ignoreTests = new Set()
 // ignoreTests.add('your test case here')
