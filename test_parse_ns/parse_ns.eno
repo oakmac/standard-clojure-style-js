@@ -2156,7 +2156,7 @@
 
 --Input
 (ns com.example.my-app
-  (:refer [clojure.string]))
+  (:require [clojure.string]))
 --Input
 
 --Expected

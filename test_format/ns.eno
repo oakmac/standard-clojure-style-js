@@ -1357,28 +1357,50 @@
 # GitHub Issue #55 - metadata in ns 1
 
 --Input
-(ns com.example.my-app
-  (:refer [clojure.string]))
---Input
-
---Expected
-(ns com.example.my-app
-  (:refer
-    [clojure.string]))
---Expected
-
-
-
-# GitHub Issue #55 - metadata in ns 1  hhhh
-
---Input
 (ns ^{:deprecated "0.1.0"} com.example.my-app
-  (:refer [clojure.string]))
+  (:require [clojure.string]))
 --Input
 
 --Expected
 (ns com.example.my-app
   {:deprecated "0.1.0"}
-  (:refer
+  (:require
+    [clojure.string]))
+--Expected
+
+# GitHub Issue #55 - metadata in ns 2
+
+--Input
+(ns ^:foo/bar com.example.my-app)
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:foo/bar true})
+--Expected
+
+# GitHub Issue #55 - metadata in ns 3
+
+--Input
+(ns com.example.my-app {:foo 45, :bar [:a :b :c {}]})
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:foo 45
+   :bar [:a :b :c {}]})
+--Expected
+
+# GitHub Issue #55 - metadata in ns 4
+
+--Input
+(ns ^{:foo bar} weeble.ns {:foo baz}
+  (:require [clojure.string]))
+--Input
+
+--Expected
+(ns weeble.ns
+  {:foo baz}
+  (:require
     [clojure.string]))
 --Expected
