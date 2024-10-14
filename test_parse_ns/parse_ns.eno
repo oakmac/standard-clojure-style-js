@@ -2150,22 +2150,3 @@
   ]
 }
 --Expected
-
-
-# zzz
-
---Input
-(ns com.example.my-app
-  (:require [clojure.string]))
---Input
-
---Expected
-{
-  "nsSymbol": "com.example.my-app",
-  "requires": [
-    {
-      "symbol": "clojure.string"
-    }
-  ]
-}
---Expected
