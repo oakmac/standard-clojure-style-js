@@ -64,10 +64,10 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = false
+const onlyRunSpecificTests = true
 const specificTests = new Set()
 
-// specificTests.add('GitHub Issue #55 - metadata in ns 1')
+specificTests.add('GitHub Issue #55 - metadata in ns 1')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -78,8 +78,6 @@ ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
 ignoreTests.add('ns: figwheel.main')
-
-ignoreTests.add('GitHub Issue #55 - metadata in ns 1')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true

@@ -2133,7 +2133,8 @@
 > https://github.com/clojure/clojurescript/blob/b7ede4bce3e273ab85155fdd8463c291a6f81d43/src/test/clojure/cljs/analyzer_tests.clj#L249-L277
 
 --Input
-(ns ^{:foo bar} weeble.ns {:foo baz})
+(ns ^{:foo bar} weeble.ns {:foo baz}
+  (:require [clojure.string]))
 --Input
 
 --Expected
@@ -2141,6 +2142,30 @@
   "nsSymbol": "weeble.ns",
   "nsMetadata": [
     {"key": ":foo", "value": "baz"}
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string"
+    }
+  ]
+}
+--Expected
+
+
+# zzz
+
+--Input
+(ns com.example.my-app
+  (:refer [clojure.string]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "clojure.string"
+    }
   ]
 }
 --Expected

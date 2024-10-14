@@ -1357,12 +1357,28 @@
 # GitHub Issue #55 - metadata in ns 1
 
 --Input
+(ns com.example.my-app
+  (:refer [clojure.string]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:refer
+    [clojure.string]))
+--Expected
+
+
+
+# GitHub Issue #55 - metadata in ns 1  hhhh
+
+--Input
 (ns ^{:deprecated "0.1.0"} com.example.my-app
   (:refer [clojure.string]))
 --Input
 
 --Expected
-(ns ^{:deprecated "0.1.0"} com.example.my-app
+(ns com.example.my-app
+  {:deprecated "0.1.0"}
   (:refer
     [clojure.string]))
 --Expected
