@@ -8,10 +8,6 @@ const scsLib = require('../lib/standard-clojure-style.js')
 
 const rootDir = path.join(__dirname, '../')
 
-const isEnoFile = (f) => {
-  return path.extname(f) === '.eno'
-}
-
 // returns an Array of all the .eno files in the test_parse_ns/ folder
 const enoFilesInTestFormatDir = () => {
   const allFiles = fs.readdirSync(path.join(rootDir, 'test_parse_ns/'))
@@ -47,12 +43,6 @@ enoFilesInTestFormatDir().forEach((f) => {
   allTestCases = allTestCases.concat(testsWithFilename)
 })
 
-function compareTestCases (testCaseA, testCaseB) {
-  if (testCaseB.name > testCaseA.name) return -1
-  else if (testCaseB.name < testCaseA.name) return 1
-  else return 0
-}
-
 // sort the test cases by name
 allTestCases.sort(compareTestCases)
 
@@ -76,46 +66,49 @@ const ignoreSomeTests = false
 const ignoreTests = new Set()
 // ignoreTests.add('your test case here')
 
-// only run these tests if the _parseNs function is exposed
-if (isFn(scsLib._parseNs)) {
-  allTestCases.forEach(testCase => {
-    // FIXME: input should parse without errors
+allTestCases.forEach(testCase => {
+  // FIXME: input should parse without errors
 
-    let runThisTest = true
-    if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
-    else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
+  let runThisTest = true
+  if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
+  else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
 
-    if (runThisTest) {
-      test(testCase.filename + ': ' + testCase.name, () => {
-        let expectedObj = null
-        try {
-          expectedObj = JSON.parse(testCase.expectedTxt)
-        } catch (e) {}
+  if (runThisTest) {
+    test(testCase.filename + ': ' + testCase.name, () => {
+      let expectedObj = null
+      try {
+        expectedObj = JSON.parse(testCase.expectedTxt)
+      } catch (e) {}
 
-        // expectedTxt should be valid JSON
-        expect(expectedObj).not.toBeNull()
+      // expectedTxt should be valid JSON
+      expect(expectedObj).not.toBeNull()
 
-        const inputNodes = scsLib.parse(testCase.input)
-        const flatNodes = scsLib._flattenTree(inputNodes)
-        const nsParsed1 = scsLib._parseNs(flatNodes)
+      const inputNodes = scsLib.parse(testCase.input)
+      const flatNodes = scsLib._flattenTree(inputNodes)
+      const nsParsed1 = scsLib._parseNs(flatNodes)
 
-        const nsParsed2 = immutable.fromJS(nsParsed1)
-        const nsExpected = immutable.fromJS(expectedObj)
-        const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
+      const nsParsed2 = immutable.fromJS(nsParsed1)
+      const nsExpected = immutable.fromJS(expectedObj)
+      const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
 
-        if (!resultIsTheSame) {
-          console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
-        }
+      if (!resultIsTheSame) {
+        console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
+      }
 
-        expect(resultIsTheSame).toBe(true)
-      })
-    }
-  })
-}
+      expect(resultIsTheSame).toBe(true)
+    })
+  }
+})
 
 // -----------------------------------------------------------------------------
 // Util
 
-function isFn (f) {
-  return typeof f === 'function'
+function isEnoFile (f) {
+  return path.extname(f) === '.eno'
+}
+
+function compareTestCases (testCaseA, testCaseB) {
+  if (testCaseB.name > testCaseA.name) return -1
+  else if (testCaseB.name < testCaseA.name) return 1
+  else return 0
 }
