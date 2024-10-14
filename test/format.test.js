@@ -64,13 +64,9 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
-
-specificTests.add('GitHub Issue #55 - metadata in ns 1')
-specificTests.add('GitHub Issue #55 - metadata in ns 2')
-specificTests.add('GitHub Issue #55 - metadata in ns 3')
-specificTests.add('GitHub Issue #55 - metadata in ns 4')
+// specificTests.add('your test case here')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
