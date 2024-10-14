@@ -1404,3 +1404,43 @@
   (:require
     [clojure.string]))
 --Expected
+
+# GitHub Issue #113 - metadata in ns 5
+
+--Input
+(ns com.example.my-app {:dev/always true}
+  (:require [clojure.string]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:dev/always true}
+  (:require
+    [clojure.string]))
+--Expected
+
+# GitHub Issue #113 - metadata in ns 6
+
+--Input
+(ns ^:dev/always com.example.my-app (:require [clojure.string]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:dev/always true}
+  (:require
+    [clojure.string]))
+--Expected
+
+# GitHub Issue #113 - metadata in ns 7
+
+--Input
+(ns ^{:dev/always true} com.example.my-app (:require [clojure.string]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:dev/always true}
+  (:require
+    [clojure.string]))
+--Expected
