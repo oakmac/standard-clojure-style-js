@@ -1342,3 +1342,31 @@ eee)
 (ccc
   :ddd)
 --Expected
+
+# GitHub Issue #6 - ignore forms
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/6
+
+--Input
+(aaa
+bbb)
+
+#_:standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+fff)
+--Input
+
+--Expected
+(aaa
+  bbb)
+
+#_ :standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+  fff)
+--Expected
