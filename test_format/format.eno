@@ -1408,19 +1408,56 @@ ddd)
 # ignore forms 4
 
 --Input
-(aaa
-bbb)
+[aaa
+bbb]
 #_:standard-clj/ignore
    :foo
-(ccc
-ddd)
+{ccc
+ddd}
 --Input
 
 --Expected
-(aaa
-  bbb)
+[aaa
+ bbb]
 #_:standard-clj/ignore
    :foo
-(ccc
-  ddd)
+{ccc
+ ddd}
+--Expected
+
+# ignore forms 5
+
+--Input
+#_{:standard-clj/ignore true}
+   [:foo]
+   :bar
+--Input
+
+--Expected
+#_{:standard-clj/ignore true}
+   [:foo]
+:bar
+--Expected
+
+# ignore forms 6
+
+--Input
+(let [aaa "aaa"
+      bbb #_ :standard-clj/ignore [     [   "bbb"
+
+  :ccc
+           ]      :ddd  ,,
+           ]
+      eee "eee"
+      ])
+--Input
+
+--Expected
+(let [aaa "aaa"
+      bbb #_ :standard-clj/ignore [     [   "bbb"
+
+  :ccc
+           ]      :ddd  ,,
+           ]
+      eee "eee"])
 --Expected
