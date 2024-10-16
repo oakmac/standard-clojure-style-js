@@ -67,6 +67,7 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
+specificTests.add(':standard-clj/ignore-file 7')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

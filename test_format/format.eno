@@ -1499,3 +1499,204 @@ ddd}
 
 "aaa"
 --Expected
+
+# :standard-clj/ignore-file 1
+
+--Input
+#_ :standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_ :standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Expected
+
+# :standard-clj/ignore-file 2
+
+--Input
+;; :standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+;; :standard-clj/ignore-file
+(ns com.example
+  (:require
+    [clojure.string]))
+
+"aaa"
+--Expected
+
+# :standard-clj/ignore-file 3
+
+--Input
+:standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+:standard-clj/ignore-file
+(ns com.example
+  (:require
+    [clojure.string]))
+
+"aaa"
+--Expected
+
+# :standard-clj/ignore-file 4
+
+--Input
+#_ :aaa
+:standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_ :aaa
+:standard-clj/ignore-file
+(ns com.example
+  (:require
+    [clojure.string]))
+
+"aaa"
+--Expected
+
+# :standard-clj/ignore-file 5
+
+--Input
+#_
+:standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_
+:standard-clj/ignore-file
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Expected
+
+# :standard-clj/ignore-file 6
+
+--Input
+#_ {:standard-clj/ignore-file true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_ {:standard-clj/ignore-file true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Expected
+
+# :standard-clj/ignore-file 7
+
+--Input
+#_ {:standard-clj/ignore-file false}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_ {:standard-clj/ignore-file false}
+(ns com.example
+  (:require
+    [clojure.string]))
+
+"aaa"
+--Expected
+
+# :standard-clj/ignore-file 8
+
+--Input
+#_{:standard-clj/ignore-file,
+true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_{:standard-clj/ignore-file,
+true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Expected
+
+# :standard-clj/ignore-file 9
+
+--Input
+#_{:standard-clj/ignore-file,
+false}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_{:standard-clj/ignore-file
+   false}
+(ns com.example
+  (:require
+    [clojure.string]))
+
+"aaa"
+--Expected
