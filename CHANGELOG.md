@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2024-10-16
+
+### Added
+- [Issue #6] - add ability to ignore a form using `:standard-clj/ignore` ([PR-120])
+- [Issue #6] - add ability to ignore a file using `:standard-clj/ignore-file` ([PR-122])
+
 ## [0.7.0] - 2024-10-14
 
 ### Fixed
@@ -75,7 +81,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.7.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.8.0...HEAD
+[0.8.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.8.0
 [0.7.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.7.0
 [0.6.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.6.0
 [0.5.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.5.0
@@ -87,6 +94,7 @@ All notable changes to this project will be documented in this file.
 [0.1.1]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.1
 [0.1.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.0
 
+[Issue #6]:https://github.com/oakmac/standard-clojure-style-js/issues/6
 [Issue #48]:https://github.com/oakmac/standard-clojure-style-js/issues/48
 [Issue #55]:https://github.com/oakmac/standard-clojure-style-js/issues/55
 [Issue #62]:https://github.com/oakmac/standard-clojure-style-js/issues/62
@@ -132,3 +140,5 @@ All notable changes to this project will be documented in this file.
 [PR-117]:https://github.com/oakmac/standard-clojure-style-js/pull/117
 [PR-118]:https://github.com/oakmac/standard-clojure-style-js/pull/118
 [PR-119]:https://github.com/oakmac/standard-clojure-style-js/pull/119
+[PR-120]:https://github.com/oakmac/standard-clojure-style-js/pull/120
+[PR-122]:https://github.com/oakmac/standard-clojure-style-js/pull/122
