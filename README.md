@@ -2,7 +2,7 @@
 
 A JavaScript library to format Clojure code according to Standard Clojure Style.
 
-## Project Status (September 2024)
+## Project Status (October 2024)
 
 This project is under active development in preparation for [Clojure/conj 2024]. Please expect changes!
 
@@ -204,6 +204,31 @@ You can use the `--config` or `-c` flag to specify a different file location:
 ```sh
 # run the "fix" command with options from ./my-config-file.edn
 standard-clj fix --config ./my-config-file.edn
+```
+
+## Ignore a file or form
+
+You can instruct Standard Clojure Style to ignore the next form by using `#_:standard-clj/ignore`
+
+```clj
+#_:standard-clj/ignore
+    [:the
+:formatter
+  :will    :ignore
+
+ :me
+
+]
+```
+
+Or ignore an entire file by placing `#_:standard-clj/ignore-file` before the `(ns)` form.
+
+```clj
+#_:standard-clj/ignore-file
+
+(ns com.example.some-weird-file)
+
+;; ...
 ```
 
 ## Creating a binary
