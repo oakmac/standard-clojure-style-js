@@ -1342,3 +1342,160 @@ eee)
 (ccc
   :ddd)
 --Expected
+
+# GitHub Issue #6 - ignore forms
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/6
+
+--Input
+(aaa
+bbb)
+
+#_ :standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+fff)
+--Input
+
+--Expected
+(aaa
+  bbb)
+
+#_ :standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+  fff)
+--Expected
+
+# ignore forms 2
+
+--Input
+#_:standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+fff)
+--Input
+
+--Expected
+#_:standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+  fff)
+--Expected
+
+# ignore forms 3
+
+--Input
+#_ :standard-clj/ignore
+   :foo
+   :bar
+--Input
+
+--Expected
+#_ :standard-clj/ignore
+   :foo
+:bar
+--Expected
+
+# ignore forms 4
+
+--Input
+[aaa
+bbb]
+#_:standard-clj/ignore
+   :foo
+{ccc
+ddd}
+--Input
+
+--Expected
+[aaa
+ bbb]
+#_:standard-clj/ignore
+   :foo
+{ccc
+ ddd}
+--Expected
+
+# ignore forms 5
+
+--Input
+#_{:standard-clj/ignore true}
+   [:foo]
+   :bar
+--Input
+
+--Expected
+#_{:standard-clj/ignore true}
+   [:foo]
+:bar
+--Expected
+
+# ignore forms 6
+
+--Input
+(let [aaa "aaa"
+      bbb #_ :standard-clj/ignore [     [   "bbb"
+
+  :ccc
+           ]      :ddd  ,,
+           ]
+      eee "eee"
+      ])
+--Input
+
+--Expected
+(let [aaa "aaa"
+      bbb #_ :standard-clj/ignore [     [   "bbb"
+
+  :ccc
+           ]      :ddd  ,,
+           ]
+      eee "eee"])
+--Expected
+
+# ignore forms 7
+
+--Input
+#_:standard-clj/ignore
+(ns com.example (:require [clojure.string]))
+
+  "aaa"
+--Input
+
+--Expected
+#_:standard-clj/ignore
+(ns com.example (:require [clojure.string]))
+
+"aaa"
+--Expected
+
+# ignore forms 8
+
+--Input
+#_{:standard-clj/ignore true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_{:standard-clj/ignore true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+"aaa"
+--Expected
