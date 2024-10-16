@@ -1477,3 +1477,25 @@ ddd}
 
 "aaa"
 --Expected
+
+# ignore forms 8
+
+--Input
+#_{:standard-clj/ignore true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+  "aaa"
+--Input
+
+--Expected
+#_{:standard-clj/ignore true}
+(ns com.example
+(:require [clojure.string]
+)
+  )
+
+"aaa"
+--Expected
