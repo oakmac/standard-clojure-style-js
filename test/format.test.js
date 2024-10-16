@@ -67,7 +67,7 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('GitHub Issue #6 - ignore forms')
+specificTests.add('ignore forms 3')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

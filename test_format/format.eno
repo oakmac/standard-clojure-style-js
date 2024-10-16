@@ -1370,3 +1370,57 @@ ddd)
 (eee
   fff)
 --Expected
+
+# ignore forms 2
+
+--Input
+#_:standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+fff)
+--Input
+
+--Expected
+#_:standard-clj/ignore
+(ccc
+ddd)
+
+(eee
+  fff)
+--Expected
+
+# ignore forms 3
+
+--Input
+#_ :standard-clj/ignore
+   :foo
+   :bar
+--Input
+
+--Expected
+#_ :standard-clj/ignore
+   :foo
+:bar
+--Expected
+
+# ignore forms 4
+
+--Input
+(aaa
+bbb)
+#_:standard-clj/ignore
+   :foo
+(ccc
+ddd)
+--Input
+
+--Expected
+(aaa
+  bbb)
+#_:standard-clj/ignore
+   :foo
+(ccc
+  ddd)
+--Expected
