@@ -1700,3 +1700,19 @@ false}
 
 "aaa"
 --Expected
+
+# GitHub Issue #123 - eol commas inside comments
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/123
+
+--Input
+;; foo, bar,
+;; biz, baz,
+wizzle
+--Input
+
+--Expected
+;; foo, bar,
+;; biz, baz,
+wizzle
+--Expected
