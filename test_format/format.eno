@@ -1708,11 +1708,13 @@ false}
 --Input
 ;; foo, bar,
 ;; biz, baz,
-wizzle
+gee, gaz,
+hee, haz,
 --Input
 
 --Expected
 ;; foo, bar,
 ;; biz, baz,
-wizzle
+gee, gaz
+hee, haz
 --Expected
