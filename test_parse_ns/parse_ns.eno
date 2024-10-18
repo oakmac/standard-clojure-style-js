@@ -2150,3 +2150,51 @@
   ]
 }
 --Expected
+
+# GitHub Issue #126 - metadata in ns 8
+
+--Input
+(ns ^{:added "0.12.0"} com.example.my-app
+  "some docstring!"
+  (:require [clojure.string]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "docstring": "some docstring!",
+  "nsMetadata": [
+    {"key": ":added", "value": "\"0.12.0\""}
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #126 - metadata in ns 9
+
+--Input
+(ns com.example.my-app
+  "some docstring!"
+  {:added "0.12.0"}
+  (:require
+    [clojure.string]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "docstring": "some docstring!",
+  "nsMetadata": [
+    {"key": ":added", "value": "\"0.12.0\""}
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string"
+    }
+  ]
+}
+--Expected
