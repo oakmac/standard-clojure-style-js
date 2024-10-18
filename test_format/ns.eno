@@ -810,7 +810,7 @@
 --Expected
 (ns com.example.my-app
   (:import
-    (java.net InetAddress URI)))
+   (java.net InetAddress URI)))
 --Expected
 
 # require-macros with no reader conditional
@@ -1125,18 +1125,18 @@
   ;; aaa
   ;; bbb
   (:gen-class ;; ccc
-    ;; ddd
-    :name name2 ;; eee
-    ;; fff
-    :extends java.lang.RuntimeException ;; ggg
-    :init init2
-    :post-init jjj
-    :main true
-    :factory fff
-    :state state2
-    :prefix "zzz-"
-    :impl-ns iii
-    :load-impl-ns false)) ;; hhh
+   ;; ddd
+   :name name2 ;; eee
+   ;; fff
+   :extends java.lang.RuntimeException ;; ggg
+   :init init2
+   :post-init jjj
+   :main true
+   :factory fff
+   :state state2
+   :prefix "zzz-"
+   :impl-ns iii
+   :load-impl-ns false)) ;; hhh
 --Expected
 
 # reader macro comments
