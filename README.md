@@ -168,6 +168,11 @@ echo '(ns my.company.core (:require [clojure.string :as str]))' | standard-clj f
 standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**/*.edn"
 ```
 
+`--include` or `--ignore` arguments passed via command line will supercede any
+`--include` or `--ignore` arguments found via config file.
+
+You can always use the `list` command to see which files will be formatted by `standard-clj`.
+
 #### Other options
 
 - `--config` or `-c` - pass a filepath of a config file to use for options to the `standard-clj` program.
