@@ -275,7 +275,6 @@ column 0, like `defn` or `ns`), instead of "some formatted outside, some ignored
 ```clj
 ;; not recommended:
 
-#_:standard-clj/ignore
 (defn some-weird-fn []
   (let [a "a"
         b "b"]
