@@ -85,10 +85,28 @@ function getFilesFromArgv (argv, cmd) {
     })
   }
 
+  // load --include files via config file if the user did not pass any direct arguments
+  const filesIncludedFromDirectArgs = includeFiles.length > 0
+  if (!filesIncludedFromDirectArgs && argv._optionsLoadedViaConfigFile && isArray(argv.includeFromConfig)) {
+    argv.includeFromConfig.forEach(includeStr => {
+      const filesFromGlob = globSync(includeStr)
+      includeFiles = includeFiles.concat(filesFromGlob)
+    })
+  }
+
   // exclude files if necessary
   let ignoreFiles = []
+  let ignorePatterns = null
+  // use --ignore from CLI argument
   if (isArray(argv.ignore)) {
-    argv.ignore.forEach(ignoreStr => {
+    ignorePatterns = argv.ignore
+    // or from config file if present
+  } else if (argv._optionsLoadedViaConfigFile && isArray(argv.ignoreFromConfig)) {
+    ignorePatterns = argv.ignoreFromConfig
+  }
+
+  if (ignorePatterns) {
+    ignorePatterns.forEach(ignoreStr => {
       let possibleFileOrDir = ignoreStr
       if (!fs.isAbsolute(ignoreStr)) {
         // if the argument is not an absolute path, assume it is relative to the
@@ -255,16 +273,8 @@ function setLogLevel (level) {
 function injectConfigFile (argv) {
   let config = null
 
-  // load the default config files
-  try {
-    config = JSON.parse(fs.readFileSync(defaultConfigJSONFile, 'utf8'))
-  } catch (e) {}
-  try {
-    config = parseEDNString(fs.readFileSync(defaultConfigEDNFile, 'utf8'), parseEDNOptions)
-  } catch (e) {}
-
-  // try to read their custom config file
-  if (isString(argv.config) && argv.config !== '') {
+  const userPassedConfigArgument = isString(argv.config) && argv.config !== ''
+  if (userPassedConfigArgument) {
     const isJSON = argv.config.endsWith('.json')
     const isEDN = argv.config.endsWith('.edn')
 
@@ -278,13 +288,32 @@ function injectConfigFile (argv) {
       } catch (e) {}
     }
 
+    // exit if they passed a config file argument, but we are unable to read it
     if (!config) {
       printToStderr('Unable to load config file: ' + argv.config)
+      if (isJSON) {
+        printToStderr('Maybe the file is invalid JSON?')
+      } else if (isEDN) {
+        printToStderr('Maybe the file is invalid EDN?')
+      } else {
+        printToStderr('The filename does not end in .json or .edn. That is probably wrong.')
+      }
+      exitSad()
     }
+  } else {
+    // try to load the default config file
+    try {
+      config = JSON.parse(fs.readFileSync(defaultConfigJSONFile, 'utf8'))
+    } catch (e) {}
+    try {
+      config = parseEDNString(fs.readFileSync(defaultConfigEDNFile, 'utf8'), parseEDNOptions)
+    } catch (e) {}
   }
 
   // apply the config options if found
   if (config) {
+    argv._optionsLoadedViaConfigFile = true
+
     // log level
     if (!argv['log-level']) {
       if (config['log-level']) {
@@ -293,21 +322,17 @@ function injectConfigFile (argv) {
     }
 
     // include
-    if (!argv.include) {
-      if (isString(config.include)) {
-        argv.include = [config.include]
-      } else if (isArray(config.include)) {
-        argv.include = config.include
-      }
+    if (isString(config.include)) {
+      argv.includeFromConfig = [config.include]
+    } else if (isArray(config.include)) {
+      argv.includeFromConfig = config.include
     }
 
     // ignores
-    if (!argv.ignore) {
-      if (isString(config.ignore)) {
-        argv.ignore = [config.ignore]
-      } else if (isArray(config.ignore)) {
-        argv.ignore = config.ignore
-      }
+    if (isString(config.ignore)) {
+      argv.ignoreFromConfig = [config.ignore]
+    } else if (isArray(config.ignore)) {
+      argv.ignoreFromConfig = config.ignore
     }
   }
 
