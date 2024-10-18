@@ -236,6 +236,52 @@ Or ignore an entire file by placing `#_:standard-clj/ignore-file` before the `(n
 ;; ...
 ```
 
+Please note that `#_:standard-clj/ignore` will not work **inside** of the `ns` form, but it can be used
+to tell Standard Clojure Style to "ignore the ns form entirely":
+
+```clj
+;; this will NOT work
+
+(ns com.example.my-app
+  (:require
+    #_:standard-clj/ignore
+          [clojure.string         :as   string]))
+```
+
+```clj
+;; this WILL work
+
+#_:standard-clj/ignore
+(ns com.example.my-app
+  (:require
+          [clojure.string         :as   string]))
+```
+
+It is recommended to use `#_:standard-clj/ignore` sparingly, and ideally not
+at all. However, there are always edge case exceptions where it makes sense
+to ignore formatting.
+
+I recommend ignoring whole forms at the top-level (ie: forms that start on
+column 0, like `defn` or `ns`), instead of "some formatted outside, some ignored inside".
+
+```clj
+;; recommended, sparingly:
+
+#_:standard-clj/ignore
+(defn some-weird-fn []
+  ...)
+```
+
+```clj
+;; not recommended:
+
+#_:standard-clj/ignore
+(defn some-weird-fn []
+  (let [a "a"
+        b "b"]
+    #_:standard-clj/ignore ...))
+```
+
 ## Creating a binary
 
 [Bun] has a neat feature where you can [create an executable binary] from JavaScript source:
