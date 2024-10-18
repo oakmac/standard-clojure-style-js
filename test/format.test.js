@@ -66,7 +66,7 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('reader macro comments')
+// specificTests.add('ns: figwheel.main')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
@@ -76,7 +76,6 @@ const ignoreTests = new Set()
 ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
-ignoreTests.add('ns: figwheel.main') // FIXME: see if this works now
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
