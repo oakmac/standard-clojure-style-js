@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- [Issue #123] - do not remove eol commas inside comments ([PR-124])
+- [Issue #126] - fix bug with parsing ns metadata ([PR-127])
+
 ## [0.8.0] - 2024-10-16
 
 ### Added
@@ -117,6 +123,8 @@ All notable changes to this project will be documented in this file.
 [Issue #112]:https://github.com/oakmac/standard-clojure-style-js/issues/112
 [Issue #113]:https://github.com/oakmac/standard-clojure-style-js/issues/113
 [Issue #114]:https://github.com/oakmac/standard-clojure-style-js/issues/114
+[Issue #123]:https://github.com/oakmac/standard-clojure-style-js/issues/123
+[Issue #126]:https://github.com/oakmac/standard-clojure-style-js/issues/126
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -142,3 +150,5 @@ All notable changes to this project will be documented in this file.
 [PR-119]:https://github.com/oakmac/standard-clojure-style-js/pull/119
 [PR-120]:https://github.com/oakmac/standard-clojure-style-js/pull/120
 [PR-122]:https://github.com/oakmac/standard-clojure-style-js/pull/122
+[PR-124]:https://github.com/oakmac/standard-clojure-style-js/pull/124
+[PR-127]:https://github.com/oakmac/standard-clojure-style-js/pull/127
