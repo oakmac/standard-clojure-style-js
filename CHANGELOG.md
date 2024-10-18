@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.0] - 2024-10-18
+
+### Changed
+- [Issue #52] - `--include` and `--ignore` arguments pass via command line supercede config file ([PR-128])
+
 ### Fixed
 - [Issue #123] - do not remove eol commas inside comments ([PR-124])
 - [Issue #126] - fix bug with parsing ns metadata ([PR-127])
@@ -87,7 +92,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.8.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.9.0...HEAD
+[0.9.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.9.0
 [0.8.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.8.0
 [0.7.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.7.0
 [0.6.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.6.0
@@ -102,6 +108,7 @@ All notable changes to this project will be documented in this file.
 
 [Issue #6]:https://github.com/oakmac/standard-clojure-style-js/issues/6
 [Issue #48]:https://github.com/oakmac/standard-clojure-style-js/issues/48
+[Issue #52]:https://github.com/oakmac/standard-clojure-style-js/issues/52
 [Issue #55]:https://github.com/oakmac/standard-clojure-style-js/issues/55
 [Issue #62]:https://github.com/oakmac/standard-clojure-style-js/issues/62
 [Issue #67]:https://github.com/oakmac/standard-clojure-style-js/issues/67
@@ -152,3 +159,4 @@ All notable changes to this project will be documented in this file.
 [PR-122]:https://github.com/oakmac/standard-clojure-style-js/pull/122
 [PR-124]:https://github.com/oakmac/standard-clojure-style-js/pull/124
 [PR-127]:https://github.com/oakmac/standard-clojure-style-js/pull/127
+[PR-128]:https://github.com/oakmac/standard-clojure-style-js/pull/128
