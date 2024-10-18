@@ -534,6 +534,26 @@
         (goog.string StringBuffer)]))) ;; aaa
 --Expected
 
+# all requires on one platform
+
+--Input
+(ns com.example.my-app
+  ;; comment 1
+  (:require ;; comment 2
+    #?@(:clj
+        [[bbb] ;; bbb
+         [aaa]]))) ;; aaa
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:clj
+     ;; comment 1
+     (:require ;; comment 2
+      [aaa] ;; aaa
+      [bbb]))) ;; bbb
+--Expected
+
 # ns: figwheel.main
 
 --Input
@@ -591,43 +611,43 @@
   #?(:cljs
      (:require-macros
       [figwheel.main]))
-  (:require
-   #?@(:clj
-       [[certifiable.log]
-        [certifiable.main :as certifiable]
-        [cljs.analyzer :as ana]
-        [cljs.analyzer.api :as ana-api]
-        [cljs.build.api :as bapi]
-        [cljs.cli :as cli]
-        [cljs.closure]
-        [cljs.compiler]
-        [cljs.env]
-        [cljs.main :as cm]
-        [cljs.repl]
-        [cljs.repl.figwheel]
-        [cljs.util]
-        [clojure.data.json :as json]
-        [clojure.edn :as edn]
-        [clojure.java.io :as io]
-        [clojure.java.shell :as sh]
-        [clojure.pprint :refer [pprint]]
-        [clojure.string :as string]
-        [clojure.tools.reader.edn :as redn]
-        [clojure.tools.reader.reader-types :as rtypes]
-        [clojure.walk :as walk]
-        [figwheel.core :as fw-core]
-        [figwheel.main.ansi-party :as ansip]
-        [figwheel.main.async-result :as async-result]
-        [figwheel.main.compat.ana-api :as ana-compat]
-        [figwheel.main.helper :as helper]
-        [figwheel.main.logging :as log]
-        [figwheel.main.npm :as npm]
-        [figwheel.main.react-native :as react-native]
-        [figwheel.main.testing :as testing]
-        [figwheel.main.util :as fw-util]
-        [figwheel.main.watching :as fww]
-        [figwheel.repl :as fw-repl]
-        [figwheel.tools.exceptions :as fig-ex]]))
+  #?(:clj
+     (:require
+      [certifiable.log]
+      [certifiable.main :as certifiable]
+      [cljs.analyzer :as ana]
+      [cljs.analyzer.api :as ana-api]
+      [cljs.build.api :as bapi]
+      [cljs.cli :as cli]
+      [cljs.closure]
+      [cljs.compiler]
+      [cljs.env]
+      [cljs.main :as cm]
+      [cljs.repl]
+      [cljs.repl.figwheel]
+      [cljs.util]
+      [clojure.data.json :as json]
+      [clojure.edn :as edn]
+      [clojure.java.io :as io]
+      [clojure.java.shell :as sh]
+      [clojure.pprint :refer [pprint]]
+      [clojure.string :as string]
+      [clojure.tools.reader.edn :as redn]
+      [clojure.tools.reader.reader-types :as rtypes]
+      [clojure.walk :as walk]
+      [figwheel.core :as fw-core]
+      [figwheel.main.ansi-party :as ansip]
+      [figwheel.main.async-result :as async-result]
+      [figwheel.main.compat.ana-api :as ana-compat]
+      [figwheel.main.helper :as helper]
+      [figwheel.main.logging :as log]
+      [figwheel.main.npm :as npm]
+      [figwheel.main.react-native :as react-native]
+      [figwheel.main.testing :as testing]
+      [figwheel.main.util :as fw-util]
+      [figwheel.main.watching :as fww]
+      [figwheel.repl :as fw-repl]
+      [figwheel.tools.exceptions :as fig-ex]))
   #?(:clj
      (:import
       (java.io StringReader)
