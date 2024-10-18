@@ -40,9 +40,9 @@
 (ns com.example.my-application
   (:refer-clojure :exclude [get])
   (:require
-    [clojure.string :as string])
+   [clojure.string :as string])
   (:import
-    (java.util Date)))
+   (java.util Date)))
 
 (require
   foo
@@ -66,9 +66,9 @@
 --Expected
 (ns com.example.application
   (:require
-    [clojure.string :as string])
+   [clojure.string :as string])
   (:import
-    (java.util Date)))
+   (java.util Date)))
 
 [:require
  foo
@@ -88,9 +88,9 @@
 --Expected
 (ns com.example.application
   (:require
-    [clojure.string :as string])
+   [clojure.string :as string])
   (:import
-    (java.util Date)))
+   (java.util Date)))
 --Expected
 
 # how to ns: use parenthesis for import
@@ -105,8 +105,8 @@
 --Expected
 (ns com.example.application
   (:import
-    (java.io File)
-    (java.util Date UUID)))
+   (java.io File)
+   (java.util Date UUID)))
 --Expected
 
 # how to ns: alphabetically sort requires
@@ -126,9 +126,9 @@
 
 (ns foo
   (:require
-    [a]
-    [b]
-    [c]))
+   [a]
+   [b]
+   [c]))
 
 (something :after)
 --Expected
@@ -150,14 +150,14 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [com.example.my-app.aaa]
-    [com.example.my-app.bbb]
-    [com.example.my-app.ccc])
+   [com.example.my-app.aaa]
+   [com.example.my-app.bbb]
+   [com.example.my-app.ccc])
   (:import
-    (hhh.eee Bbb Ccc)
-    (java.io File)
-    (java.util Date UUID)
-    (xxx.yyy.zzz Alpha Bravo Charlie Delta)))
+   (hhh.eee Bbb Ccc)
+   (java.io File)
+   (java.util Date UUID)
+   (xxx.yyy.zzz Alpha Bravo Charlie Delta)))
 --Expected
 
 # how to ns: sort refer-clojure, require, import
@@ -175,11 +175,11 @@
   "bar"
   (:refer-clojure :exclude [-> get])
   (:require
-    [a]
-    [b]
-    [c])
+   [a]
+   [b]
+   [c])
   (:import
-    (java.util Date)))
+   (java.util Date)))
 --Expected
 
 # sort refer-clojure :only symbols
@@ -195,8 +195,8 @@
 (ns foo
   (:refer-clojure :only [* -> == get number?])
   (:require
-    [aaa]
-    [bbb]))
+   [aaa]
+   [bbb]))
 --Expected
 
 # sort refer-clojure :rename symbols
@@ -215,11 +215,11 @@
 (ns foo
   (:refer-clojure :rename {-> thread-first, ->> thread-last, get g, number? is-number, print core-print})
   (:require
-    [aaa]
-    [bbb]
-    [bbb.ccc])
+   [aaa]
+   [bbb]
+   [bbb.ccc])
   (:import
-    (java.util Date UUID)))
+   (java.util Date UUID)))
 --Expected
 
 # refer-clojure :rename with reader conditional
@@ -252,9 +252,9 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [aaa.bbb]
-    [com.example.cow :as cow :refer [eat-grass moo]]
-    [com.example.duck :as duck :refer [eat quack quacking sleep]]))
+   [aaa.bbb]
+   [com.example.cow :as cow :refer [eat-grass moo]]
+   [com.example.duck :as duck :refer [eat quack quacking sleep]]))
 --Expected
 
 # ns with :refer :all
@@ -271,10 +271,10 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [aaa.bbb]
-    [com.example.cow :as cow :refer [eat-grass moo]]
-    [com.example.duck :as duck :refer :all]
-    [com.example.pig :refer :all]))
+   [aaa.bbb]
+   [com.example.cow :as cow :refer [eat-grass moo]]
+   [com.example.duck :as duck :refer :all]
+   [com.example.pig :refer :all]))
 --Expected
 
 # ns with docstring
@@ -301,9 +301,9 @@
   And everywhere that Mary went,
   The lamb was sure to go."
   (:require
-    [aaa]
-    [aaa.bbb]
-    [com.example.duck :as duck :refer :all]))
+   [aaa]
+   [aaa.bbb]
+   [com.example.duck :as duck :refer :all]))
 --Expected
 
 # ns with require comments
@@ -332,12 +332,12 @@
   ;; foo bar
   ;; bizzle wizzle
   (:require
-    [aaa] ;;;; aaa
-    [aaa.bbb :as ab] ; abab
-    ;; C
-    ;; CC
-    ;; CCC
-    [ccc])) ;; ccc
+   [aaa] ;;;; aaa
+   [aaa.bbb :as ab] ; abab
+   ;; C
+   ;; CC
+   ;; CCC
+   [ccc])) ;; ccc
 
 :after
 --Expected
@@ -357,14 +357,14 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [com.example.alpha] ;; ddd
-    [com.example.bravo]
-    ;; aaa
-    ;; bbb
-    [com.example.client] ;; ccc
-    [com.example.db]
-    [com.example.routes]
-    [com.example.server]))
+   [com.example.alpha] ;; ddd
+   [com.example.bravo]
+   ;; aaa
+   ;; bbb
+   [com.example.client] ;; ccc
+   [com.example.db]
+   [com.example.routes]
+   [com.example.server]))
 --Expected
 
 # ns with reader conditionals 1
@@ -384,10 +384,10 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [com.example.bbb]
-    [com.example.ddd]
-    #?(:clj [com.example.ccc]
-       :cljs [com.example.aaa])))
+   [com.example.bbb]
+   [com.example.ddd]
+   #?(:clj [com.example.ccc]
+      :cljs [com.example.aaa])))
 --Expected
 
 # ns with reader conditionals 2
@@ -414,22 +414,22 @@
 
 (ns com.example.my-app
   (:require
-    [com.example.ccc]
-    [com.example.fff]
-    #?@(:clj
-        [[com.example.aaa]
-         [com.example.eee]]
+   [com.example.ccc]
+   [com.example.fff]
+   #?@(:clj
+       [[com.example.aaa]
+        [com.example.eee]]
 
-        :cljs
-        [[com.example.bbb-cljs]
-         [com.example.ddd :as d]] ;; ddd
+       :cljs
+       [[com.example.bbb-cljs]
+        [com.example.ddd :as d]] ;; ddd
 
-        :elephant
-        [[com.example.bbb-elephant]
-         [com.example.yyy]]
+       :elephant
+       [[com.example.bbb-elephant]
+        [com.example.yyy]]
 
-        :default
-        [[com.example.bbb-default]]))) ;; bbb
+       :default
+       [[com.example.bbb-default]]))) ;; bbb
 --Expected
 
 # ns with reader conditionals 3
@@ -453,19 +453,19 @@
 --Expected
 (ns com.example.module-test
   (:require
-    [com.example.generators :refer [gen-invalid-part-no gen-part-no]]
-    [com.example.schema.ids :refer [Foo]]
-    [schema.core :as schema :refer [check]]
-    #?@(:clj
-        [[clojure.test :refer :all]
-         [clojure.test.check.clojure-test :refer [defspec]]
-         [clojure.test.check.properties :as prop]]
+   [com.example.generators :refer [gen-invalid-part-no gen-part-no]]
+   [com.example.schema.ids :refer [Foo]]
+   [schema.core :as schema :refer [check]]
+   #?@(:clj
+       [[clojure.test :refer :all]
+        [clojure.test.check.clojure-test :refer [defspec]]
+        [clojure.test.check.properties :as prop]]
 
-        :cljs
-        [[cljs.test :refer-macros [is]]
-         [cljs.test.check :refer [quick-check]] ;; aaa
-         [cljs.test.check.cljs-test :refer-macros [defspec]]
-         [cljs.test.check.properties :as prop :include-macros true]])))
+       :cljs
+       [[cljs.test :refer-macros [is]]
+        [cljs.test.check :refer [quick-check]] ;; aaa
+        [cljs.test.check.cljs-test :refer-macros [defspec]]
+        [cljs.test.check.properties :as prop :include-macros true]])))
 --Expected
 
 # reader conditionals in ns 4
@@ -504,34 +504,54 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [com.example.ccc]
-    [com.example.fff]
-    #?@(:clj
-        [[com.example.aaa]
-         [com.example.eee]]
+   [com.example.ccc]
+   [com.example.fff]
+   #?@(:clj
+       [[com.example.aaa]
+        [com.example.eee]]
 
-        :cljs
-        [[com.example.bbb-cljs]
-         [com.example.ddd :as d]] ;; ddd
+       :cljs
+       [[com.example.bbb-cljs]
+        [com.example.ddd :as d]] ;; ddd
 
-        :elephant
-        [[com.example.bbb-elephant]
-         [com.example.yyy]]
+       :elephant
+       [[com.example.bbb-elephant]
+        [com.example.yyy]]
 
-        :default
-        [[com.example.bbb-default]]))
+       :default
+       [[com.example.bbb-default]]))
   (:import
-    (aaa.bbb Ccc)
-    (xxx.yyy Zzz) ;; zzz
-    #?@(:clj
-        [(java.io StringReader)
-         (java.net InetAddress URI)]
+   (aaa.bbb Ccc)
+   (xxx.yyy Zzz) ;; zzz
+   #?@(:clj
+       [(java.io StringReader)
+        (java.net InetAddress URI)]
 
-        :cljs
-        [(goog Uri) ;; uuu
-         (goog.events EventTarget EventType)
-         (goog.module ModuleManager)
-         (goog.string StringBuffer)]))) ;; aaa
+       :cljs
+       [(goog Uri) ;; uuu
+        (goog.events EventTarget EventType)
+        (goog.module ModuleManager)
+        (goog.string StringBuffer)]))) ;; aaa
+--Expected
+
+# all requires on one platform
+
+--Input
+(ns com.example.my-app
+  ;; comment 1
+  (:require ;; comment 2
+    #?@(:clj
+        [[bbb] ;; bbb
+         [aaa]]))) ;; aaa
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:clj
+     ;; comment 1
+     (:require ;; comment 2
+      [aaa] ;; aaa
+      [bbb]))) ;; bbb
 --Expected
 
 # ns: figwheel.main
@@ -589,7 +609,8 @@
 --Expected
 (ns figwheel.main
   #?(:cljs
-     (:require-macros [figwheel.main]))
+     (:require-macros
+      [figwheel.main]))
   #?(:clj
      (:require
       [certifiable.log]
@@ -602,8 +623,8 @@
       [cljs.compiler]
       [cljs.env]
       [cljs.main :as cm]
-      [cljs.repl.figwheel]
       [cljs.repl]
+      [cljs.repl.figwheel]
       [cljs.util]
       [clojure.data.json :as json]
       [clojure.edn :as edn]
@@ -629,9 +650,9 @@
       [figwheel.tools.exceptions :as fig-ex]))
   #?(:clj
      (:import
-       (java.io StringReader)
-       (java.net InetAddress URI URLEncoder)
-       (java.nio.file Paths))))
+      (java.io StringReader)
+      (java.net InetAddress URI URLEncoder)
+      (java.nio.file Paths))))
 --Expected
 
 # ns: figwheel.main.testing
@@ -652,17 +673,17 @@
 --Expected
 (ns figwheel.main.testing
   (:require
-    [clojure.string :as string]
-    #?@(:clj
-        [[cljs.analyzer]
-         [clojure.java.io :as io]
-         [figwheel.main.logging :as log]
-         [figwheel.main.util :as fw-util]]
+   [clojure.string :as string]
+   #?@(:clj
+       [[cljs.analyzer]
+        [clojure.java.io :as io]
+        [figwheel.main.logging :as log]
+        [figwheel.main.util :as fw-util]]
 
-        :cljs
-        [[cljs.test :refer [report]]
-         [figwheel.main.async-result :as async-result]
-         [goog.dom :as gdom]])))
+       :cljs
+       [[cljs.test :refer [report]]
+        [figwheel.main.async-result :as async-result]
+        [goog.dom :as gdom]])))
 --Expected
 
 # ns: cuerdas.core
@@ -694,23 +715,23 @@
               #?@(:clj [format unquote])])
   #?(:cljs
      (:require-macros
-       [cuerdas.core :refer [nilv unsafe-concat]])) ;; require-macros!
+      [cuerdas.core :refer [nilv unsafe-concat]])) ;; require-macros!
   (:require
-    [clojure.core :as c]
-    [clojure.set :refer [map-invert]]
-    [clojure.string :as str]
-    [clojure.walk :refer [stringify-keys]]
-    [cuerdas.regexp :as rx]
-    #?@(:clj
-        [[clojure.edn :as edn]] ;; clj-edn
+   [clojure.core :as c]
+   [clojure.set :refer [map-invert]]
+   [clojure.string :as str]
+   [clojure.walk :refer [stringify-keys]]
+   [cuerdas.regexp :as rx]
+   #?@(:clj
+       [[clojure.edn :as edn]] ;; clj-edn
 
-        :cljs
-        [[cljs.reader :as edn] ;; cljs-edn
-         [goog.string :as gstr]])) ;; ggg
+       :cljs
+       [[cljs.reader :as edn] ;; cljs-edn
+        [goog.string :as gstr]])) ;; ggg
   #?(:clj
      (:import
-       (aaa.bbb Ccc Ddd) ;; aaa
-       (java.util List Locale)))) ;; lll
+      (aaa.bbb Ccc Ddd) ;; aaa
+      (java.util List Locale)))) ;; lll
 --Expected
 
 # ns: metabase.util
@@ -758,39 +779,39 @@
   "Common utility functions useful throughout the codebase."
   #?(:cljs
      (:require-macros
-       [camel-snake-kebab.internals.macros :as csk.macros]
-       [metabase.util]))
+      [camel-snake-kebab.internals.macros :as csk.macros]
+      [metabase.util]))
   (:require
-    [camel-snake-kebab.internals.macros :as csk.macros]
-    [clojure.data :refer [diff]]
-    [clojure.pprint :as pprint]
-    [clojure.set :as set]
-    [clojure.string :as str]
-    [clojure.walk :as walk]
-    [flatland.ordered.map :refer [ordered-map]]
-    [medley.core :as m]
-    [metabase.shared.util.i18n :as i18n :refer [tru]]
-    [metabase.shared.util.namespaces :as u.ns]
-    [metabase.util.format :as u.format]
-    [metabase.util.log :as log]
-    [metabase.util.memoize :as memoize]
-    [net.cgrand.macrovich :as macros]
-    [weavejester.dependency :as dep]
-    #?@(:clj
-        [[clojure.math.numeric-tower :as math]
-         [me.flowthing.pp :as pp]
-         [metabase.config :as config]
-         #_{:clj-kondo/ignore [:discouraged-namespace]}
-         [metabase.util.jvm :as u.jvm]
-         [metabase.util.string :as u.str]
-         [potemkin :as p]
-         [ring.util.codec :as codec]]))
+   [camel-snake-kebab.internals.macros :as csk.macros]
+   [clojure.data :refer [diff]]
+   [clojure.pprint :as pprint]
+   [clojure.set :as set]
+   [clojure.string :as str]
+   [clojure.walk :as walk]
+   [flatland.ordered.map :refer [ordered-map]]
+   [medley.core :as m]
+   [metabase.shared.util.i18n :as i18n :refer [tru]]
+   [metabase.shared.util.namespaces :as u.ns]
+   [metabase.util.format :as u.format]
+   [metabase.util.log :as log]
+   [metabase.util.memoize :as memoize]
+   [net.cgrand.macrovich :as macros]
+   [weavejester.dependency :as dep]
+   #?@(:clj
+       [[clojure.math.numeric-tower :as math]
+        [me.flowthing.pp :as pp]
+        [metabase.config :as config]
+        #_{:clj-kondo/ignore [:discouraged-namespace]}
+        [metabase.util.jvm :as u.jvm]
+        [metabase.util.string :as u.str]
+        [potemkin :as p]
+        [ring.util.codec :as codec]]))
   #?(:clj
      (:import
-       (clojure.lang Reflector)
-       (java.text Normalizer Normalizer$Form)
-       (java.util Locale)
-       (org.apache.commons.validator.routines RegexValidator UrlValidator))))
+      (clojure.lang Reflector)
+      (java.text Normalizer Normalizer$Form)
+      (java.util Locale)
+      (org.apache.commons.validator.routines RegexValidator UrlValidator))))
 
 #?(:clj (set! *warn-on-reflection* true))
 --Expected
@@ -809,7 +830,7 @@
 --Expected
 (ns com.example.my-app
   (:import
-    (java.net InetAddress URI)))
+   (java.net InetAddress URI)))
 --Expected
 
 # require-macros with no reader conditional
@@ -827,9 +848,9 @@
 --Expected
 (ns com.example.my-app
   (:require-macros
-    [ccc.ddd :as d :refer [ggg hhh]])
+   [ccc.ddd :as d :refer [ggg hhh]])
   (:require
-    [aaa.bbb :as bbb]))
+   [aaa.bbb :as bbb]))
 --Expected
 
 # require-macros with reader conditional
@@ -849,9 +870,9 @@
 (ns com.example.my-app
   #?(:cljs
      (:require-macros
-       [ccc.ddd :as d :refer [ggg hhh]])) ;; ddd
+      [ccc.ddd :as d :refer [ggg hhh]])) ;; ddd
   (:require
-    [aaa.bbb :as bbb]))
+   [aaa.bbb :as bbb]))
 --Expected
 
 # ns: require-macros comments 1
@@ -873,8 +894,8 @@
 
 (ns bar.core
   (:require-macros
-    [aaa.bbb :refer [ccc]] ;; ddd
-    [foo.core :refer [add bad cad]])) ;; rad
+   [aaa.bbb :refer [ccc]] ;; ddd
+   [foo.core :refer [add bad cad]])) ;; rad
 
 ;; bravo
 --Expected
@@ -897,8 +918,8 @@
 
 (ns bar.core
   (:require-macros
-    [aaa.bbb :refer [ccc]] ;; ddd
-    [foo.core :refer [add bad cad]])) ;; rad
+   [aaa.bbb :refer [ccc]] ;; ddd
+   [foo.core :refer [add bad cad]])) ;; rad
 
 ;; bravo
 --Expected
@@ -1047,8 +1068,8 @@
     :exclude [+ for]
     :rename {mapv core-mapv})
   (:require-macros
-    [cljs.test :refer [deftest is]]
-    [clojure.core :as lang :refer [when when-let] :rename {when always, when-let always-let}]))
+   [cljs.test :refer [deftest is]]
+   [clojure.core :as lang :refer [when when-let] :rename {when always, when-let always-let}]))
 --Expected
 
 # basic gen-class
@@ -1063,7 +1084,7 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [aaa.bbb :as ab])
+   [aaa.bbb :as ab])
   (:gen-class))
 --Expected
 
@@ -1079,12 +1100,14 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [aaa.bbb :as ab])
+   [aaa.bbb :as ab])
   #?(:clj
      (:gen-class)))
 --Expected
 
 # gen-class with simple values and comments
+
+> TODO: is the indentation for :gen-class what we want here?
 
 --Input
 (ns com.example.my-app
@@ -1118,25 +1141,27 @@
 (ns com.example.my-app
   "gen-class with comments and simple values"
   (:require
-    [aaa.bbb :as ab])
+   [aaa.bbb :as ab])
   ;; aaa
   ;; bbb
   (:gen-class ;; ccc
-    ;; ddd
-    :name name2 ;; eee
-    ;; fff
-    :extends java.lang.RuntimeException ;; ggg
-    :init init2
-    :post-init jjj
-    :main true
-    :factory fff
-    :state state2
-    :prefix "zzz-"
-    :impl-ns iii
-    :load-impl-ns false)) ;; hhh
+   ;; ddd
+   :name name2 ;; eee
+   ;; fff
+   :extends java.lang.RuntimeException ;; ggg
+   :init init2
+   :post-init jjj
+   :main true
+   :factory fff
+   :state state2
+   :prefix "zzz-"
+   :impl-ns iii
+   :load-impl-ns false)) ;; hhh
 --Expected
 
 # reader macro comments
+
+> FIXME: this is a tricky case
 
 --Input
 (ns com.example.my-app
@@ -1150,10 +1175,10 @@
 --Expected
 (ns com.example.my-app
   (:require
-    #_ {:alpha "alpha"
+   #_ {:alpha "alpha"
         :bravo "bravo"}
-    [aaa.bbb]
-    [ccc.ddd])) #_ #{"bugger"}
+   [aaa.bbb]
+   [ccc.ddd])) #_ #{"bugger"}
 --Expected
 
 # require-macros wrapped in reader conditional, last main form
@@ -1169,7 +1194,7 @@
 (ns com.example.my-app
   #?(:cljs
      (:require-macros
-       [bar :refer [baz]])))
+      [bar :refer [baz]])))
 --Expected
 
 # require-macros wrapped in reader conditional, not last main form
@@ -1184,9 +1209,9 @@
 (ns com.example.my-app
   #?(:cljs
      (:require-macros
-       [bar :refer [baz]]))
+      [bar :refer [baz]]))
   (:require
-    [aaa]))
+   [aaa]))
 --Expected
 
 # support :refer :exclude
@@ -1204,8 +1229,8 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [bbb.ccc :refer :all :exclude [eee hhh yyy]]
-    [incanter.core :refer :all :exclude [abs ggg zzz]]))
+   [bbb.ccc :refer :all :exclude [eee hhh yyy]]
+   [incanter.core :refer :all :exclude [abs ggg zzz]]))
 --Expected
 
 # :require :as-alias
@@ -1223,8 +1248,8 @@
 --Expected
 (ns com.example.my-app
   (:require
-    [bbb.ccc :refer :all :exclude [eee hhh yyy]]
-    [incanter.core :as-alias ic]))
+   [bbb.ccc :refer :all :exclude [eee hhh yyy]]
+   [incanter.core :as-alias ic]))
 --Expected
 
 # refer-clojure rename with comment and reader conditional
@@ -1284,9 +1309,9 @@
   ;; comment1
   #_{:clj-kondo/ignore [:unused-referred-var]}
   (:require-macros
-    [other.ns :refer [one two]])
+   [other.ns :refer [one two]])
   (:require
-    [aaa :as bbb]))
+   [aaa :as bbb]))
 --Expected
 
 # GitHub Issue #111 - comments above :require-macros with reader conditional
@@ -1310,9 +1335,9 @@
      ;; comment1
      #_{:clj-kondo/ignore [:unused-referred-var]}
      (:require-macros
-       [other.ns :refer [one two]]))
+      [other.ns :refer [one two]]))
   (:require
-    [aaa :as bbb]))
+   [aaa :as bbb]))
 --Expected
 
 # GitHub Issue #112 - extra options in JS requires
@@ -1330,7 +1355,7 @@
 --Expected
 (ns com.example.my-app
   (:require
-    ["@foo/bar" :rename {Alpha Bravo, Charlie Delta}]))
+   ["@foo/bar" :rename {Alpha Bravo, Charlie Delta}]))
 --Expected
 
 # GitHub Issue #114 - refer-clojure with reader conditional
@@ -1365,7 +1390,7 @@
 (ns com.example.my-app
   {:deprecated "0.1.0"}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected
 
 # GitHub Issue #55 - metadata in ns 2
@@ -1402,7 +1427,7 @@
 (ns weeble.ns
   {:foo baz}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected
 
 # GitHub Issue #113 - metadata in ns 5
@@ -1416,7 +1441,7 @@
 (ns com.example.my-app
   {:dev/always true}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected
 
 # GitHub Issue #113 - metadata in ns 6
@@ -1429,7 +1454,7 @@
 (ns com.example.my-app
   {:dev/always true}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected
 
 # GitHub Issue #113 - metadata in ns 7
@@ -1442,7 +1467,7 @@
 (ns com.example.my-app
   {:dev/always true}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected
 
 # GitHub Issue #126 - metadata in ns 8
@@ -1458,5 +1483,5 @@
   "some docstring!"
   {:added "0.12.0"}
   (:require
-    [clojure.string]))
+   [clojure.string]))
 --Expected

@@ -76,7 +76,6 @@ const ignoreTests = new Set()
 ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
-ignoreTests.add('ns: figwheel.main')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true

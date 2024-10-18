@@ -881,8 +881,8 @@ y 4]
 (ns metabase.api.common
   "Dynamic variables and utility functions/macros for writing API functions."
   (:require
-    [clojure.set :as set]
-    [potemkin :as p]))
+   [clojure.set :as set]
+   [potemkin :as p]))
 --Expected
 
 # slurp closing parens around comments 1
@@ -1097,7 +1097,7 @@ y 4]
 --Expected
 (ns foo.bar
   (:require
-    [baz.core]))
+   [baz.core]))
 
 (comment)
   ;; foo
@@ -1538,7 +1538,7 @@ ddd}
 ;; :standard-clj/ignore-file
 (ns com.example
   (:require
-    [clojure.string]))
+   [clojure.string]))
 
 "aaa"
 --Expected
@@ -1559,7 +1559,7 @@ ddd}
 :standard-clj/ignore-file
 (ns com.example
   (:require
-    [clojure.string]))
+   [clojure.string]))
 
 "aaa"
 --Expected
@@ -1582,7 +1582,7 @@ ddd}
 :standard-clj/ignore-file
 (ns com.example
   (:require
-    [clojure.string]))
+   [clojure.string]))
 
 "aaa"
 --Expected
@@ -1649,7 +1649,7 @@ ddd}
 #_ {:standard-clj/ignore-file false}
 (ns com.example
   (:require
-    [clojure.string]))
+   [clojure.string]))
 
 "aaa"
 --Expected
@@ -1696,7 +1696,7 @@ false}
    false}
 (ns com.example
   (:require
-    [clojure.string]))
+   [clojure.string]))
 
 "aaa"
 --Expected
