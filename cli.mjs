@@ -546,6 +546,18 @@ yargs(hideBin(process.argv))
   .demandCommand() // show them --help if they do not pass a valid command
   .version(programVersion)
 
+  .example([
+    ['$0 list src/', 'List files that will be formatted in the src/ directory (recursive)'],
+    ['$0 check src/', 'Check if files are already formatted in src/'],
+    ['$0 fix src/', 'Format all files in src/'],
+    ['$0 fix -', 'Reads from stdin, prints a formatted file to stdout']
+  ])
+
+  .describe('l', 'Set the logging level: "everything", "ignore-already-formatted", "quiet"')
+
+  .epilogue('For more information, see the README at https://github.com/oakmac/standard-clojure-style-js')
+
+  .wrap(100)
   .help()
   .parse()
 
