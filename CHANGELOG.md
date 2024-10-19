@@ -4,9 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.10.0] - 2024-10-19
+
+### Added
+- [Issue #53] - improve CLI help output ([PR-131])
+
 ### Changed
 - [Issue #87] - adjust `ns` indentation to match common community style ([PR-130])
-- [Issue #53] - improve CLI help output ([PR-131])
+
+### Fixed
+- [Issue #103] - convert CRLF to LF line endings ([PR-133])
 
 ## [0.9.0] - 2024-10-18
 
@@ -96,7 +103,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.9.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.10.0...HEAD
+[0.10.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.10.0
 [0.9.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.9.0
 [0.8.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.8.0
 [0.7.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.7.0
@@ -129,6 +137,7 @@ All notable changes to this project will be documented in this file.
 [Issue #94]:https://github.com/oakmac/standard-clojure-style-js/issues/94
 [Issue #97]:https://github.com/oakmac/standard-clojure-style-js/issues/97
 [Issue #99]:https://github.com/oakmac/standard-clojure-style-js/issues/99
+[Issue #103]:https://github.com/oakmac/standard-clojure-style-js/issues/103
 [Issue #104]:https://github.com/oakmac/standard-clojure-style-js/issues/104
 [Issue #108]:https://github.com/oakmac/standard-clojure-style-js/issues/108
 [Issue #110]:https://github.com/oakmac/standard-clojure-style-js/issues/110
@@ -168,3 +177,4 @@ All notable changes to this project will be documented in this file.
 [PR-128]:https://github.com/oakmac/standard-clojure-style-js/pull/128
 [PR-130]:https://github.com/oakmac/standard-clojure-style-js/pull/130
 [PR-131]:https://github.com/oakmac/standard-clojure-style-js/pull/131
+[PR-133]:https://github.com/oakmac/standard-clojure-style-js/pull/133
