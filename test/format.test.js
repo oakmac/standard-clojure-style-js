@@ -116,8 +116,8 @@ allTestCases.forEach(testCase => {
   }
 })
 
-const inputFileWithCRLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/input.clj'), 'utf8')
-const outputFileWithLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/output.clj'), 'utf8')
+const inputFileWithCRLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/crlf_input.clj'), 'utf8')
+const outputFileWithLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/lf_output.clj'), 'utf8')
 
 test('crlf to lf', () => {
   expect(isString(inputFileWithCRLF)).toBe(true)
