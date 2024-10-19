@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - [Issue #87] - adjust `ns` indentation to match common community style ([PR-130])
+- [Issue #53] - improve CLI help output ([PR-131])
 
 ## [0.9.0] - 2024-10-18
 
@@ -112,6 +113,7 @@ All notable changes to this project will be documented in this file.
 [Issue #6]:https://github.com/oakmac/standard-clojure-style-js/issues/6
 [Issue #48]:https://github.com/oakmac/standard-clojure-style-js/issues/48
 [Issue #52]:https://github.com/oakmac/standard-clojure-style-js/issues/52
+[Issue #53]:https://github.com/oakmac/standard-clojure-style-js/issues/53
 [Issue #55]:https://github.com/oakmac/standard-clojure-style-js/issues/55
 [Issue #62]:https://github.com/oakmac/standard-clojure-style-js/issues/62
 [Issue #67]:https://github.com/oakmac/standard-clojure-style-js/issues/67
@@ -165,3 +167,4 @@ All notable changes to this project will be documented in this file.
 [PR-127]:https://github.com/oakmac/standard-clojure-style-js/pull/127
 [PR-128]:https://github.com/oakmac/standard-clojure-style-js/pull/128
 [PR-130]:https://github.com/oakmac/standard-clojure-style-js/pull/130
+[PR-131]:https://github.com/oakmac/standard-clojure-style-js/pull/131
