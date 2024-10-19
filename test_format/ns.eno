@@ -1161,7 +1161,7 @@
 
 # reader macro comments
 
-> FIXME: this is a tricky case
+> FIXME: this is a tricky case, need to think of a way to improve the spacing for the discard map
 
 --Input
 (ns com.example.my-app
