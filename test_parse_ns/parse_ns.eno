@@ -2476,7 +2476,7 @@
 }
 --Expected
 
-# portal.runtime.cson before
+# GitHub Issue #135 - portal.runtime.cson before
 
 --Input
 (ns ^:no-doc portal.runtime.cson
@@ -2598,8 +2598,7 @@
 }
 --Expected
 
-
-# portal.runtime.cson after
+# GitHub Issue #135 - portal.runtime.cson after
 
 --Input
 (ns portal.runtime.cson
