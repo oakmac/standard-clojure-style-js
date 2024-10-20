@@ -2541,6 +2541,11 @@
     },
     {
       "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljs",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
       "platform": ":joyride",
       "as": "json"
     },
@@ -2550,9 +2555,9 @@
       "as": "json"
     },
     {
-      "symbol": "portal.runtime.json-buffer",
+      "symbol": "portal.runtime.macros",
       "platform": ":cljs",
-      "as": "json"
+      "as": "m"
     },
     {
       "symbol": "portal.runtime.macros",
@@ -2562,11 +2567,6 @@
     {
       "symbol": "portal.runtime.macros",
       "platform": ":org.babashka/nbb",
-      "as": "m"
-    },
-    {
-      "symbol": "portal.runtime.macros",
-      "platform": ":cljs",
       "as": "m"
     }
   ],
@@ -2671,6 +2671,11 @@
     },
     {
       "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljs",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
       "platform": ":joyride",
       "as": "json"
     },
@@ -2680,9 +2685,9 @@
       "as": "json"
     },
     {
-      "symbol": "portal.runtime.json-buffer",
+      "symbol": "portal.runtime.macros",
       "platform": ":cljs",
-      "as": "json"
+      "as": "m"
     },
     {
       "symbol": "portal.runtime.macros",
@@ -2692,11 +2697,6 @@
     {
       "symbol": "portal.runtime.macros",
       "platform": ":org.babashka/nbb",
-      "as": "m"
-    },
-    {
-      "symbol": "portal.runtime.macros",
-      "platform": ":cljs",
       "as": "m"
     }
   ],
