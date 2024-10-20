@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- [Issue #135] - fix bug with `:import` and multiple reader conditionals ([PR-134])
+
 ## [0.10.0] - 2024-10-19
 
 ### Added
@@ -147,6 +150,7 @@ All notable changes to this project will be documented in this file.
 [Issue #114]:https://github.com/oakmac/standard-clojure-style-js/issues/114
 [Issue #123]:https://github.com/oakmac/standard-clojure-style-js/issues/123
 [Issue #126]:https://github.com/oakmac/standard-clojure-style-js/issues/126
+[Issue #135]:https://github.com/oakmac/standard-clojure-style-js/issues/135
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -178,3 +182,4 @@ All notable changes to this project will be documented in this file.
 [PR-130]:https://github.com/oakmac/standard-clojure-style-js/pull/130
 [PR-131]:https://github.com/oakmac/standard-clojure-style-js/pull/131
 [PR-133]:https://github.com/oakmac/standard-clojure-style-js/pull/133
+[PR-134]:https://github.com/oakmac/standard-clojure-style-js/pull/134
