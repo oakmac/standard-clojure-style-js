@@ -2475,3 +2475,254 @@
   ]
 }
 --Expected
+
+# GitHub Issue #135 - portal.runtime.cson before
+
+--Input
+(ns ^:no-doc portal.runtime.cson
+  "Clojure/Script Object Notation"
+  (:refer-clojure :exclude [read])
+  #?(:clj  (:require [portal.runtime.json-buffer :as json])
+     :cljr (:require [portal.runtime.json-buffer :as json])
+     :joyride
+     (:require
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m])
+     :org.babashka/nbb
+     (:require
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m])
+     :cljs
+     (:require
+      [goog.crypt.base64 :as Base64]
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m]))
+  #?(:clj  (:import [java.net URL]
+                    [java.util Base64 Date UUID])
+     :joyride (:import)
+     :org.babashka/nbb (:import)
+     :cljs (:import [goog.math Long])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "portal.runtime.cson",
+  "nsMetadata": [
+    {
+      "key": ":no-doc",
+      "value": "true"
+    }
+  ],
+  "docstring": "Clojure/Script Object Notation",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "read"
+      }
+    ]
+  },
+  "requires": [
+    {
+      "symbol": "goog.crypt.base64",
+      "platform": ":cljs",
+      "as": "Base64"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":clj",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljr",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljs",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":joyride",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":org.babashka/nbb",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":cljs",
+      "as": "m"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":joyride",
+      "as": "m"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":org.babashka/nbb",
+      "as": "m"
+    }
+  ],
+  "imports": [
+    {
+      "package": "goog.math",
+      "classes": [
+        "Long"
+      ],
+      "platform": ":cljs"
+    },
+    {
+      "package": "java.net",
+      "classes": [
+        "URL"
+      ],
+      "platform": ":clj"
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "Base64",
+        "Date",
+        "UUID"
+      ],
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #135 - portal.runtime.cson after
+
+--Input
+(ns portal.runtime.cson
+  "Clojure/Script Object Notation"
+  {:no-doc true}
+  (:refer-clojure :exclude [read])
+  (:require
+   #?@(:clj
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljr
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljs
+       [[goog.crypt.base64 :as Base64]
+        [portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :joyride
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :org.babashka/nbb
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]))
+  (:import
+   #?@(:clj
+       [(java.net URL)
+        (java.util Base64 Date UUID)]
+
+       :cljs
+       [(goog.math Long)])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "portal.runtime.cson",
+  "nsMetadata": [
+    {
+      "key": ":no-doc",
+      "value": "true"
+    }
+  ],
+  "docstring": "Clojure/Script Object Notation",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "read"
+      }
+    ]
+  },
+  "requires": [
+    {
+      "symbol": "goog.crypt.base64",
+      "platform": ":cljs",
+      "as": "Base64"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":clj",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljr",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":cljs",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":joyride",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.json-buffer",
+      "platform": ":org.babashka/nbb",
+      "as": "json"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":cljs",
+      "as": "m"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":joyride",
+      "as": "m"
+    },
+    {
+      "symbol": "portal.runtime.macros",
+      "platform": ":org.babashka/nbb",
+      "as": "m"
+    }
+  ],
+  "imports": [
+    {
+      "package": "goog.math",
+      "classes": [
+        "Long"
+      ],
+      "platform": ":cljs"
+    },
+    {
+      "package": "java.net",
+      "classes": [
+        "URL"
+      ],
+      "platform": ":clj"
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "Base64",
+        "Date",
+        "UUID"
+      ],
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected

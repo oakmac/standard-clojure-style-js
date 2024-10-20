@@ -1590,3 +1590,140 @@
 #?(:clj (def ^:dynamic *unchecked-if* false))
 #?(:clj (def ^:dynamic *unchecked-arrays* false))
 --Expected
+
+# GitHub Issue #135 - portal.runtime.cson before
+
+--Input
+(ns ^:no-doc portal.runtime.cson
+  "Clojure/Script Object Notation"
+  (:refer-clojure :exclude [read])
+  #?(:clj  (:require [portal.runtime.json-buffer :as json])
+     :cljr (:require [portal.runtime.json-buffer :as json])
+     :joyride
+     (:require
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m])
+     :org.babashka/nbb
+     (:require
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m])
+     :cljs
+     (:require
+      [goog.crypt.base64 :as Base64]
+      [portal.runtime.json-buffer :as json]
+      [portal.runtime.macros :as m]))
+  #?(:clj  (:import [java.net URL]
+                    [java.util Base64 Date UUID])
+     :joyride (:import)
+     :org.babashka/nbb (:import)
+     :cljs (:import [goog.math Long])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Input
+
+--Expected
+(ns portal.runtime.cson
+  "Clojure/Script Object Notation"
+  {:no-doc true}
+  (:refer-clojure :exclude [read])
+  (:require
+   #?@(:clj
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljr
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljs
+       [[goog.crypt.base64 :as Base64]
+        [portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :joyride
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :org.babashka/nbb
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]))
+  (:import
+   #?@(:clj
+       [(java.net URL)
+        (java.util Base64 Date UUID)]
+
+       :cljs
+       [(goog.math Long)])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Expected
+
+# GitHub Issue #135 - portal.runtime.cson after
+
+--Input
+(ns portal.runtime.cson
+  "Clojure/Script Object Notation"
+  {:no-doc true}
+  (:refer-clojure :exclude [read])
+  (:require
+   #?@(:clj
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljr
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljs
+       [[goog.crypt.base64 :as Base64]
+        [portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :joyride
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :org.babashka/nbb
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]))
+  (:import
+   #?@(:clj
+       [(java.net URL)
+        (java.util Base64 Date UUID)]
+
+       :cljs
+       [(goog.math Long)])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Input
+
+--Expected
+(ns portal.runtime.cson
+  "Clojure/Script Object Notation"
+  {:no-doc true}
+  (:refer-clojure :exclude [read])
+  (:require
+   #?@(:clj
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljr
+       [[portal.runtime.json-buffer :as json]]
+
+       :cljs
+       [[goog.crypt.base64 :as Base64]
+        [portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :joyride
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]
+
+       :org.babashka/nbb
+       [[portal.runtime.json-buffer :as json]
+        [portal.runtime.macros :as m]]))
+  (:import
+   #?@(:clj
+       [(java.net URL)
+        (java.util Base64 Date UUID)]
+
+       :cljs
+       [(goog.math Long)])))
+
+(defprotocol ToJson (-to-json [value buffer]))
+--Expected
