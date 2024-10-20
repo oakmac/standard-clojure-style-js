@@ -2745,6 +2745,7 @@
   "referClojure": {
     "exclude": [
       {
+        "platform": ":clj",
         "symbol": "alter-var-root"
       }
     ]
