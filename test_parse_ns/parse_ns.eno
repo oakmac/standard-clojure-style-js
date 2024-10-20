@@ -2726,3 +2726,50 @@
   ]
 }
 --Expected
+
+# GitHub Issue #38 - reader conditionals
+
+--Input
+(ns com.example.my-app
+  #?(:clj (:refer-clojure :exclude [alter-var-root]))
+  (#?(:clj :require :cljs :require-macros) [alter-cljs.core :refer [alter-var-root]]))
+
+(alter-var-root whatever
+  (fn [x]
+    (do-something-to x)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "alter-var-root"
+      }
+    ]
+  },
+  "requires": [
+    {
+      "symbol": "alter-cljs.core",
+      "refer": [
+        {
+          "symbol": "alter-var-root"
+        }
+      ],
+      "platform": ":clj"
+    }
+  ],
+  "requireMacros": [
+    {
+      "symbol": "alter-cljs.core",
+      "refer": [
+        {
+          "symbol": "alter-var-root"
+        }
+      ],
+      "platform": ":cljs"
+    }
+  ]
+}
+--Expected
