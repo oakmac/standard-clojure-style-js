@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.12.0] - 2024-10-22
+
+### Fixed
+- [Issue #137] - only process the first `ns` form ([PR-138])
+
 ## [0.11.0] - 2024-10-21
 
 ### Fixed
@@ -154,6 +159,7 @@ All notable changes to this project will be documented in this file.
 [Issue #123]:https://github.com/oakmac/standard-clojure-style-js/issues/123
 [Issue #126]:https://github.com/oakmac/standard-clojure-style-js/issues/126
 [Issue #135]:https://github.com/oakmac/standard-clojure-style-js/issues/135
+[Issue #137]:https://github.com/oakmac/standard-clojure-style-js/issues/137
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -186,3 +192,4 @@ All notable changes to this project will be documented in this file.
 [PR-131]:https://github.com/oakmac/standard-clojure-style-js/pull/131
 [PR-133]:https://github.com/oakmac/standard-clojure-style-js/pull/133
 [PR-134]:https://github.com/oakmac/standard-clojure-style-js/pull/134
+[PR-138]:https://github.com/oakmac/standard-clojure-style-js/pull/138
