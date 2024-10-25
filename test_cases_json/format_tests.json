@@ -1,0 +1,902 @@
+[
+  {
+    "filename": "format.eno",
+    "name": "Simple Indentation",
+    "input": "(def aaa\n(bbb))",
+    "expected": "(def aaa\n  (bbb))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Multiple Indentation Levels",
+    "input": "(def (aaa)\n      (bbb\n(ccc)))",
+    "expected": "(def (aaa)\n  (bbb\n    (ccc)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Reduce Indentation",
+    "input": "  (aaa)\n(bbb)\n\n    (ccc)",
+    "expected": "(aaa)\n(bbb)\n\n(ccc)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Close Wrapping Parens",
+    "input": "(def aaa\n(bbb)\n)",
+    "expected": "(def aaa\n  (bbb))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Close Wrapping Parens 2",
+    "input": "(def aaa\n(bbb\n   {:a \"a\"\n}ccc\n)\n  )",
+    "expected": "(def aaa\n  (bbb\n    {:a \"a\"}\n    ccc))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Do not cross previous line last opener",
+    "input": "(defn foo\n  ([a]\n    (foo a \"\"))\n  ([a b]\n    (str a \"-\" b)))",
+    "expected": "(defn foo\n  ([a]\n   (foo a \"\"))\n  ([a b]\n   (str a \"-\" b)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "jcd test case 1",
+    "input": "{:this-is-a-key \"fantastic\"\n :short         \"sad\"}",
+    "expected": "{:this-is-a-key \"fantastic\"\n :short         \"sad\"}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "jcd test case 2",
+    "input": "[[1001    \"FIFTY\"    :column\n 1002    \"SEVENTY\"  :row]\n ]",
+    "expected": "[[1001    \"FIFTY\"    :column\n  1002    \"SEVENTY\"  :row]]"
+  },
+  {
+    "filename": "format.eno",
+    "name": "set alignment",
+    "input": "#{\"a\"\n\"b\" \"c\"}",
+    "expected": "#{\"a\"\n  \"b\" \"c\"}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Preserve commas",
+    "input": "{:a \"a\", :b \"b\"}",
+    "expected": "{:a \"a\", :b \"b\"}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Surrounding whitespace removed",
+    "input": "( foo bar )\n[ 1 2 3 ]\n{  :x 1, :y 2 }",
+    "expected": "(foo bar)\n[1 2 3]\n{:x 1, :y 2}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Surrounding newlines removed 1",
+    "input": "(\n  aaa\n)\n(\nbbb\n)\n(ccc\n)\n(ddd\n  )",
+    "expected": "(aaa)\n(bbb)\n(ccc)\n(ddd)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Surrounding newlines removed 2",
+    "input": "[\n1 2 3\n]\n{\n:foo \"bar\"\n}",
+    "expected": "[1 2 3]\n{:foo \"bar\"}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Surrounding newlines removed 3",
+    "input": "( let [x 3\ny 4]\n(+ (* x x\n)(* y y)\n))",
+    "expected": "(let [x 3\n      y 4]\n  (+ (* x x) (* y y)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Inner indentation",
+    "input": "(letfn [(foo [x]\n(* x x))\n(bar [x]\n(+ x x))]\n(foo 5))",
+    "expected": "(letfn [(foo [x]\n          (* x x))\n        (bar [x]\n          (+ x x))]\n  (foo 5))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Reader conditional standard syntax",
+    "input": "#?(:clj foo\n:cljs bar)",
+    "expected": "#?(:clj foo\n   :cljs bar)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Reader conditional splicing syntax",
+    "input": "#?@(:clj foo\n:cljs bar)",
+    "expected": "#?@(:clj foo\n    :cljs bar)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Add missing whitespace",
+    "input": "(foo(bar baz)qux)\n(foo)bar(baz)\n(foo[bar]#{baz}{quz bang})",
+    "expected": "(foo (bar baz) qux)\n(foo) bar (baz)\n(foo [bar] #{baz} {quz bang})"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Reader conditional whitespace",
+    "input": "#?(:cljs(bar 1) :clj(foo 2))\n:break!\n#?@(:cljs[foo bar] :clj[baz quux])",
+    "expected": "#?(:cljs (bar 1) :clj (foo 2))\n:break!\n#?@(:cljs [foo bar] :clj [baz quux])"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Remove consecutive blank lines 1",
+    "input": "(foo)\n\n\n(bar)",
+    "expected": "(foo)\n\n(bar)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Remove consecutive blank lines 2",
+    "input": "(foo)\n\n(bar\n\n\n  biz)\n\n\n\n(qux\n  baz)",
+    "expected": "(foo)\n\n(bar\n\n  biz)\n\n(qux\n  baz)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Rule 3 Indentation 1",
+    "input": ";; https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649\n\n;; rule 3 triggered\n(foo bar\n     baz\n  qux)\n\n;; rule 3 not triggered\n(foo bar\n baz\n  qux)",
+    "expected": ";; https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649\n\n;; rule 3 triggered\n(foo bar\n     baz\n     qux)\n\n;; rule 3 not triggered\n(foo bar\n  baz\n  qux)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Rule 3 Indentation 2",
+    "input": "(foo bar\n     baz\n  qux)\n\n(zap bar baz\n         qux\n      wizzle\n                     gee)\n\n(yes tam\n      bif\n     bag\n     hop)",
+    "expected": "(foo bar\n     baz\n     qux)\n\n(zap bar baz\n         qux\n         wizzle\n         gee)\n\n(yes tam\n  bif\n  bag\n  hop)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Rule 3 Indentation 3",
+    "input": "(foo bar\n     :baz\n  \"qux\")\n\n(zap bar baz\n         \"qux\"\n      :wizzle\n      ;; hello\n                     gee)",
+    "expected": "(foo bar\n     :baz\n     \"qux\")\n\n(zap bar baz\n         \"qux\"\n         :wizzle\n         ;; hello\n         gee)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "Rule 3 Indentation 4",
+    "input": "(foo (bar)\n     (baz))",
+    "expected": "(foo (bar)\n     (baz))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "chessboard2 test case 1 - rule 3 indentation",
+    "input": "(defn js-get-circles\n  \"Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map\"\n  [board-state return-fmt]\n  (map->js-return-format (api/get-items-by-type board-state \"CHESSBOARD_CIRCLE\")\n                         (safe-lower-case return-fmt)))",
+    "expected": "(defn js-get-circles\n  \"Returns the Circle Items on the board as either a JS Array (default), JS Object, or JS Map\"\n  [board-state return-fmt]\n  (map->js-return-format (api/get-items-by-type board-state \"CHESSBOARD_CIRCLE\")\n                         (safe-lower-case return-fmt)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "docstring with newlines",
+    "input": "(defn foo\n  \"Clojure is a dynamic, general-purpose programming language,\n  combining the approachability and interactive development of\n  a scripting language with an efficient and robust infrastructure\n  for multithreaded programming.\"\n  [aaa bbb]\n  (bar {:aaa aaa, :bbb bbb}))",
+    "expected": "(defn foo\n  \"Clojure is a dynamic, general-purpose programming language,\n  combining the approachability and interactive development of\n  a scripting language with an efficient and robust infrastructure\n  for multithreaded programming.\"\n  [aaa bbb]\n  (bar {:aaa aaa, :bbb bbb}))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "rule 3 - threading macro example",
+    "input": "(->> @foo\n     :bar\n     vals\n  (filter my-pred?))",
+    "expected": "(->> @foo\n     :bar\n     vals\n     (filter my-pred?))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "chessboard2 test case 2 - rule 3 indentation",
+    "input": "(defn get-circles-by-square\n  \"Returns a Map of Circles with their square as the key.\"\n  [board-state]\n  (let [circles (->> @board-state\n                     :items\n                     vals\n                   (filter circle-item?))]\n    (zipmap (map :square circles) circles)))",
+    "expected": "(defn get-circles-by-square\n  \"Returns a Map of Circles with their square as the key.\"\n  [board-state]\n  (let [circles (->> @board-state\n                     :items\n                     vals\n                     (filter circle-item?))]\n    (zipmap (map :square circles) circles)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "chessboard2 test case 3",
+    "input": "(js-obj\n  \"foo\" bar\n  \"biz\" #() ;; aaa\n  \"baz\" nil )",
+    "expected": "(js-obj\n  \"foo\" bar\n  \"biz\" #() ;; aaa\n  \"baz\" nil)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "chessboard2 test case 4",
+    "input": "(defn toggle-coordinates!\n  [board-state]\n  (swap! board-state update :show-coords? not))\n  ; (if (:show-notation? @board-state)\n  ;   (hide-coordinates! board-state)\n  ;   (show-coordinates! board-state)))",
+    "expected": "(defn toggle-coordinates!\n  [board-state]\n  (swap! board-state update :show-coords? not))\n  ; (if (:show-notation? @board-state)\n  ;   (hide-coordinates! board-state)\n  ;   (show-coordinates! board-state)))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comment alignment 1",
+    "input": "(foo bar\n  baz\n  biz)\n  ; aaa\n  ; bbb",
+    "expected": "(foo bar\n  baz\n  biz)\n  ; aaa\n  ; bbb"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comment alignment 2",
+    "input": "(foo bar\n     baz\n  ;; aaa\n  biz)",
+    "expected": "(foo bar\n     baz\n     ;; aaa\n     biz)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comment alignment 3",
+    "input": "(def default-add-piece-config\n  {:animate? true})\n   ;; TODO: onAnimationComplete callback here\n\n(defn my-func []\n   (+ 2 4))\n;; something!",
+    "expected": "(def default-add-piece-config\n  {:animate? true})\n   ;; TODO: onAnimationComplete callback here\n\n(defn my-func []\n  (+ 2 4))\n;; something!"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comment alignment 4",
+    "input": "(wizzle quizzle\n        fizzle\n            sizzle\n            ;; twizzle\n          gizzle)\n          ;; shmizzle",
+    "expected": "(wizzle quizzle\n        fizzle\n        sizzle\n        ;; twizzle\n        gizzle)\n        ;; shmizzle"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comment alignment 5",
+    "input": "(aaa\n bbb)\n ;; ccc",
+    "expected": "(aaa\n  bbb)\n  ;; ccc"
+  },
+  {
+    "filename": "format.eno",
+    "name": "whitespace before comment lines 1",
+    "input": "(aaa bbb\n  (ccc))\n   ;; gobble gobble\n\n    ;; aaa\n      ;; bbb",
+    "expected": "(aaa bbb\n  (ccc))\n   ;; gobble gobble\n\n    ;; aaa\n      ;; bbb"
+  },
+  {
+    "filename": "format.eno",
+    "name": "whitespace before comment lines 2",
+    "input": "(aaa bbb\n  (ccc\n   ;; gobble gobble\n    (ddd eee\n         fff)\n      ))\n      ;; aaa\n      ;; bbb",
+    "expected": "(aaa bbb\n  (ccc\n    ;; gobble gobble\n    (ddd eee\n         fff)))\n      ;; aaa\n      ;; bbb"
+  },
+  {
+    "filename": "format.eno",
+    "name": "whitespace before comment lines 3",
+    "input": "(defn zomg!\n  \"I am a function docstring.\"\n  [some-map]\n  (let [{:keys [x y]} some-map]\n    ;; gobble gobble\n    (when-not (even? x)\n      (let [a \"a\"]\n        ;; banana\n        (foo bar :alpha \"alpha\"\n                 :bravo \"bravo\")\n        ))))\n        ;; aaa\n        ;; bbb",
+    "expected": "(defn zomg!\n  \"I am a function docstring.\"\n  [some-map]\n  (let [{:keys [x y]} some-map]\n    ;; gobble gobble\n    (when-not (even? x)\n      (let [a \"a\"]\n        ;; banana\n        (foo bar :alpha \"alpha\"\n                 :bravo \"bravo\")))))\n        ;; aaa\n        ;; bbb"
+  },
+  {
+    "filename": "format.eno",
+    "name": "nested rule 3 - example 1",
+    "input": "(foo (bar biz\n        baz)\n     zzz)",
+    "expected": "(foo (bar biz\n       baz)\n     zzz)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "nested rule 3 - example 2",
+    "input": "  (foo (bar biz\n            (fn []\n              (ccc))\n          )\n      zzz)",
+    "expected": "(foo (bar biz\n          (fn []\n            (ccc)))\n  zzz)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "nested rule 3 with comments - example 1",
+    "input": "   (foo (bar biz\n           baz)\n        zzz)\n        ;; aaa\n        ;; bbb",
+    "expected": "(foo (bar biz\n       baz)\n     zzz)\n     ;; aaa\n     ;; bbb"
+  },
+  {
+    "filename": "format.eno",
+    "name": "chessboard2 test case 5 - rule 3 comment alignment",
+    "input": "(defn on-touch-start\n  \"This function fires on every 'touchstart' event inside the root DOM element\"\n  [board-state js-evt]\n  ;; prevent \"double-tap to zoom\"\n  (dom-util/safe-prevent-default js-evt)\n  (let [{:keys [draggable onTouchSquare orientation position\n                square->square-ids touchDraggable touchMove]}\n        @board-state\n        js-first-touch (aget (gobj/get js-evt \"touches\") 0)\n        clientX (gobj/get js-first-touch \"clientX\")\n        clientY (gobj/get js-first-touch \"clientY\")\n\n        square (xy->square clientX clientY square->square-ids)\n\n        _ (when flags/runtime-checks?\n            (when-not (valid-square? square)\n              (error-log \"Invalid square in on-touch-start:\" square)))\n\n        ;; NOTE: piece may be nil if there is no piece on the square they touched\n        piece (get position square)\n\n        ;; call their onTouchSquare function if provided\n        on-touchsquare-result (when (fn? onTouchSquare)\n                                (let [js-board-info (js-obj \"orientation\" orientation\n                                                            \"position\" (clj->js position))]\n                                                            ;; FIXME: add square, piece here\n                                                            ;; what else?\n                                  (onTouchSquare square piece js-board-info)))]\n\n    ;; begin dragging if configured\n    (when (and piece\n               (or (true? draggable) (true? touchDraggable)))\n      (begin-dragging! board-state square piece clientX clientY))\n\n    ;; highlight the square and queue a move if touchmove is enabled\n    (when (and (true? touchMove)\n               (not (false? on-touchsquare-result))\n               piece))\n      ;; FIXME:\n      ;; - highlight the square here?\n      ;; - or should this be their responsibility?\n      ;; queue their touchmove\n      ; (swap! board-state assoc :touch-move-queue1 {:piece piece, :square square}))\n\n    ;; return null\n    nil))",
+    "expected": "(defn on-touch-start\n  \"This function fires on every 'touchstart' event inside the root DOM element\"\n  [board-state js-evt]\n  ;; prevent \"double-tap to zoom\"\n  (dom-util/safe-prevent-default js-evt)\n  (let [{:keys [draggable onTouchSquare orientation position\n                square->square-ids touchDraggable touchMove]}\n        @board-state\n        js-first-touch (aget (gobj/get js-evt \"touches\") 0)\n        clientX (gobj/get js-first-touch \"clientX\")\n        clientY (gobj/get js-first-touch \"clientY\")\n\n        square (xy->square clientX clientY square->square-ids)\n\n        _ (when flags/runtime-checks?\n            (when-not (valid-square? square)\n              (error-log \"Invalid square in on-touch-start:\" square)))\n\n        ;; NOTE: piece may be nil if there is no piece on the square they touched\n        piece (get position square)\n\n        ;; call their onTouchSquare function if provided\n        on-touchsquare-result (when (fn? onTouchSquare)\n                                (let [js-board-info (js-obj \"orientation\" orientation\n                                                            \"position\" (clj->js position))]\n                                                            ;; FIXME: add square, piece here\n                                                            ;; what else?\n                                  (onTouchSquare square piece js-board-info)))]\n\n    ;; begin dragging if configured\n    (when (and piece\n               (or (true? draggable) (true? touchDraggable)))\n      (begin-dragging! board-state square piece clientX clientY))\n\n    ;; highlight the square and queue a move if touchmove is enabled\n    (when (and (true? touchMove)\n               (not (false? on-touchsquare-result))\n               piece))\n    ;; FIXME:\n    ;; - highlight the square here?\n    ;; - or should this be their responsibility?\n    ;; queue their touchmove\n    ; (swap! board-state assoc :touch-move-queue1 {:piece piece, :square square}))\n\n    ;; return null\n    nil))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "metabase ns comment example",
+    "input": ";; abc\n;; def\n\n(ns metabase.api.common\n  \"Dynamic variables and utility functions/macros for writing API functions.\"\n  (:require\n    [clojure.set :as set]\n    [potemkin :as p]\n    ))",
+    "expected": ";; abc\n;; def\n\n(ns metabase.api.common\n  \"Dynamic variables and utility functions/macros for writing API functions.\"\n  (:require\n   [clojure.set :as set]\n   [potemkin :as p]))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "slurp closing parens around comments 1",
+    "input": "(aaa\n  [bbb\n   [ccc\n    ddd ;; eee\n    ;; fff\n    ]\n   ggg\n   ])\n\n\"hhh\"",
+    "expected": "(aaa\n  [bbb\n   [ccc\n    ddd] ;; eee\n    ;; fff\n   ggg])\n\n\"hhh\""
+  },
+  {
+    "filename": "format.eno",
+    "name": "slurp closing parens around comments 2",
+    "input": "(aaa\n  [bbb\n   [ccc\n    ddd\n    ;; eee\n    ]\n   fff\n   ])\n\n\"ggg\"",
+    "expected": "(aaa\n  [bbb\n   [ccc\n    ddd]\n    ;; eee\n   fff])\n\n\"ggg\""
+  },
+  {
+    "filename": "format.eno",
+    "name": "slurp closing parens around comments 3",
+    "input": "(aaa\n  ;; bbb\n  ;; ccc\n  )",
+    "expected": "(aaa)\n  ;; bbb\n  ;; ccc"
+  },
+  {
+    "filename": "format.eno",
+    "name": "slurp closing parens around comments 4",
+    "input": "(aaa\n  [bbb\n   [ccc\n    ddd ;; eee\n    ;; fff\n    ;; ggg\n    ] ]\n   hhh\n   )\n\n\"iii\"",
+    "expected": "(aaa\n  [bbb\n   [ccc\n    ddd]] ;; eee\n    ;; fff\n    ;; ggg\n  hhh)\n\n\"iii\""
+  },
+  {
+    "filename": "format.eno",
+    "name": "slurp closing parens around comments - metabase example",
+    "input": "(mr/def ::stage.native\n  [:and\n   [:map\n    {:decode/normalize common/normalize-map}\n    [:lib/type [:= {:decode/normalize common/normalize-keyword} :mbql.stage/native]]\n    ;; the actual native query, depends on the underlying database. Could be a raw SQL string or something like that.\n    ;; Only restriction is that it is non-nil.\n    [:native some?]\n    ;; any parameters that should be passed in along with the query to the underlying query engine, e.g. for JDBC these\n    ;; are the parameters we pass in for a `PreparedStatement` for `?` placeholders. These can be anything, including\n    ;; nil.\n    ;;\n    ;; TODO -- pretty sure this is supposed to be `:params`, not `:args`, and this is allowed to be anything rather\n    ;; than just `literal`... I think we're using the `literal` schema tho for either normalization or serialization\n    [:args {:optional true} [:sequential ::literal/literal]]\n    ;; the Table/Collection/etc. that this query should be executed against; currently only used for MongoDB, where it\n    ;; is required.\n    [:collection {:optional true} ::common/non-blank-string]\n    ;; optional template tag declarations. Template tags are things like `{{x}}` in the query (the value of the\n    ;; `:native` key), but their definition lives under this key.\n    [:template-tags {:optional true} [:ref ::template-tag/template-tag-map]]\n    ;; optional, set of Card IDs referenced by this query in `:card` template tags like `{{card}}`. This is added\n    ;; automatically during parameter expansion. To run a native query you must have native query permissions as well\n    ;; as permissions for any Cards' parent Collections used in `:card` template tag parameters.\n    [:metabase.models.query.permissions/referenced-card-ids {:optional true} [:maybe [:set ::id/card]]]\n    ;;\n    ;; TODO -- parameters??\n    ]\n   [:fn\n    {:error/message \":source-table is not allowed in a native query stage.\"}\n    #(not (contains? % :source-table))]\n   [:fn\n    {:error/message \":source-card is not allowed in a native query stage.\"}\n    #(not (contains? % :source-card))]])",
+    "expected": "(mr/def ::stage.native\n  [:and\n   [:map\n    {:decode/normalize common/normalize-map}\n    [:lib/type [:= {:decode/normalize common/normalize-keyword} :mbql.stage/native]]\n    ;; the actual native query, depends on the underlying database. Could be a raw SQL string or something like that.\n    ;; Only restriction is that it is non-nil.\n    [:native some?]\n    ;; any parameters that should be passed in along with the query to the underlying query engine, e.g. for JDBC these\n    ;; are the parameters we pass in for a `PreparedStatement` for `?` placeholders. These can be anything, including\n    ;; nil.\n    ;;\n    ;; TODO -- pretty sure this is supposed to be `:params`, not `:args`, and this is allowed to be anything rather\n    ;; than just `literal`... I think we're using the `literal` schema tho for either normalization or serialization\n    [:args {:optional true} [:sequential ::literal/literal]]\n    ;; the Table/Collection/etc. that this query should be executed against; currently only used for MongoDB, where it\n    ;; is required.\n    [:collection {:optional true} ::common/non-blank-string]\n    ;; optional template tag declarations. Template tags are things like `{{x}}` in the query (the value of the\n    ;; `:native` key), but their definition lives under this key.\n    [:template-tags {:optional true} [:ref ::template-tag/template-tag-map]]\n    ;; optional, set of Card IDs referenced by this query in `:card` template tags like `{{card}}`. This is added\n    ;; automatically during parameter expansion. To run a native query you must have native query permissions as well\n    ;; as permissions for any Cards' parent Collections used in `:card` template tag parameters.\n    [:metabase.models.query.permissions/referenced-card-ids {:optional true} [:maybe [:set ::id/card]]]]\n    ;;\n    ;; TODO -- parameters??\n   [:fn\n    {:error/message \":source-table is not allowed in a native query stage.\"}\n    #(not (contains? % :source-table))]\n   [:fn\n    {:error/message \":source-card is not allowed in a native query stage.\"}\n    #(not (contains? % :source-card))]])"
+  },
+  {
+    "filename": "format.eno",
+    "name": "tag literals",
+    "input": "{:url #join [\"jdbc:postgresql://psq-prod/prod?user=\"\n             #env PROD_USER\n             \"&password=\"\n               #env PROD_PASSWD]}",
+    "expected": "{:url #join [\"jdbc:postgresql://psq-prod/prod?user=\"\n             #env PROD_USER\n             \"&password=\"\n             #env PROD_PASSWD]}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "comments after ns form",
+    "input": "(ns foo.bar\n  (:require baz.core\n            ))\n\n(comment\n  ;; foo\n  )\n\n\n(comment\n  ;; bar\n  )\n\n(comment\n  ;; baz\n  )",
+    "expected": "(ns foo.bar\n  (:require\n   [baz.core]))\n\n(comment)\n  ;; foo\n\n(comment)\n  ;; bar\n\n(comment)\n  ;; baz"
+  },
+  {
+    "filename": "format.eno",
+    "name": "spaces around comments 1",
+    "input": "(aaa);;bbb\n(ccc);ddd\n(eee) ;;;;fff",
+    "expected": "(aaa) ;; bbb\n(ccc) ; ddd\n(eee) ;;;; fff"
+  },
+  {
+    "filename": "format.eno",
+    "name": "spaces around comments 2",
+    "input": "(let [;;foo\n      a \"a\"\n      b \"b\"]);;bar",
+    "expected": "(let [;; foo\n      a \"a\"\n      b \"b\"]) ;; bar"
+  },
+  {
+    "filename": "format.eno",
+    "name": "example code from Issue #60",
+    "input": "(defn classify-squares [n]\n  (->> (range n)          ; generate a bunch of numbers\n       (map #(* % %))     ; calculate their squares\n       (group-by even?))) ; and sort them by parity",
+    "expected": "(defn classify-squares [n]\n  (->> (range n)          ; generate a bunch of numbers\n       (map #(* % %))     ; calculate their squares\n       (group-by even?))) ; and sort them by parity"
+  },
+  {
+    "filename": "format.eno",
+    "name": "respect commas to hold parens 1",
+    "input": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n    ,))",
+    "expected": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n    ,))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "respect commas to hold parens 2",
+    "input": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n\n\n\n    ,))",
+    "expected": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n\n    ,))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "respect commas to hold parens 3",
+    "input": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n    ,,, , ))\n\n(aaa\n  ,,, ,,  )",
+    "expected": "(aaa bbb\n  (ccc\n    (ddd) ;; eee\n    (fff) ;; ggg\n    ,,, ,))\n\n(aaa\n  ,,, ,,)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "respect commas to hold parens 4",
+    "input": "(aaa\n  , ;; foo\n  )",
+    "expected": "(aaa\n  ,) ;; foo"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #97 - whitespace character",
+    "input": "(def test-spaces []\n  (str \" \" \\space \\ ))\n\n(test-spaces) ;; => \"   \"",
+    "expected": "(def test-spaces []\n  (str \" \" \\space \\ ))\n\n(test-spaces) ;; => \"   \""
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #99 - bug with parens inside string literals",
+    "input": "(defn rgb->css\n  ([r g b] (str \"rgb(\" r \",\" g \",\" b \")\"))\n  ([r g b a] (str \"rgba(\" r \",\" g \",\" b \",\" a \")\")))",
+    "expected": "(defn rgb->css\n  ([r g b] (str \"rgb(\" r \",\" g \",\" b \")\"))\n  ([r g b a] (str \"rgba(\" r \",\" g \",\" b \",\" a \")\")))"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #108 - anonymous function indentation",
+    "input": "(when :foo\n:bar)\n\n#(when :foo\n:bar)",
+    "expected": "(when :foo\n  :bar)\n\n#(when :foo\n   :bar)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #110 - tagged literal indentation",
+    "input": "   (-> #js aaa\n       bbb\n         ccc)\n\n(-> #uuid \"15adfdf0-2e6b-410e-a489-f71d1dd17642\"\n    str)\n\n(-> #js ddd\neee)",
+    "expected": "(-> #js aaa\n    bbb\n    ccc)\n\n(-> #uuid \"15adfdf0-2e6b-410e-a489-f71d1dd17642\"\n    str)\n\n(-> #js ddd\n  eee)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #104 - treat eol commas as trailing whitespace",
+    "input": "(aaa,\n   bbb),\n\n(ccc ,,\n  :ddd\n  )   ,",
+    "expected": "(aaa\n  bbb)\n\n(ccc\n  :ddd)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #6 - ignore forms",
+    "input": "(aaa\nbbb)\n\n#_ :standard-clj/ignore\n(ccc\nddd)\n\n(eee\nfff)",
+    "expected": "(aaa\n  bbb)\n\n#_ :standard-clj/ignore\n(ccc\nddd)\n\n(eee\n  fff)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 2",
+    "input": "#_:standard-clj/ignore\n(ccc\nddd)\n\n(eee\nfff)",
+    "expected": "#_:standard-clj/ignore\n(ccc\nddd)\n\n(eee\n  fff)"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 3",
+    "input": "#_ :standard-clj/ignore\n   :foo\n   :bar",
+    "expected": "#_ :standard-clj/ignore\n   :foo\n:bar"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 4",
+    "input": "[aaa\nbbb]\n#_:standard-clj/ignore\n   :foo\n{ccc\nddd}",
+    "expected": "[aaa\n bbb]\n#_:standard-clj/ignore\n   :foo\n{ccc\n ddd}"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 5",
+    "input": "#_{:standard-clj/ignore true}\n   [:foo]\n   :bar",
+    "expected": "#_{:standard-clj/ignore true}\n   [:foo]\n:bar"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 6",
+    "input": "(let [aaa \"aaa\"\n      bbb #_ :standard-clj/ignore [     [   \"bbb\"\n\n  :ccc\n           ]      :ddd  ,,\n           ]\n      eee \"eee\"\n      ])",
+    "expected": "(let [aaa \"aaa\"\n      bbb #_ :standard-clj/ignore [     [   \"bbb\"\n\n  :ccc\n           ]      :ddd  ,,\n           ]\n      eee \"eee\"])"
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 7",
+    "input": "#_:standard-clj/ignore\n(ns com.example (:require [clojure.string]))\n\n  \"aaa\"",
+    "expected": "#_:standard-clj/ignore\n(ns com.example (:require [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": "ignore forms 8",
+    "input": "#_{:standard-clj/ignore true}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_{:standard-clj/ignore true}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 1",
+    "input": "#_ :standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_ :standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 2",
+    "input": ";; :standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": ";; :standard-clj/ignore-file\n(ns com.example\n  (:require\n   [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 3",
+    "input": ":standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": ":standard-clj/ignore-file\n(ns com.example\n  (:require\n   [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 4",
+    "input": "#_ :aaa\n:standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_ :aaa\n:standard-clj/ignore-file\n(ns com.example\n  (:require\n   [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 5",
+    "input": "#_\n:standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_\n:standard-clj/ignore-file\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 6",
+    "input": "#_ {:standard-clj/ignore-file true}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_ {:standard-clj/ignore-file true}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 7",
+    "input": "#_ {:standard-clj/ignore-file false}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_ {:standard-clj/ignore-file false}\n(ns com.example\n  (:require\n   [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 8",
+    "input": "#_{:standard-clj/ignore-file,\ntrue}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_{:standard-clj/ignore-file,\ntrue}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": ":standard-clj/ignore-file 9",
+    "input": "#_{:standard-clj/ignore-file,\nfalse}\n(ns com.example\n(:require [clojure.string]\n)\n  )\n\n  \"aaa\"",
+    "expected": "#_{:standard-clj/ignore-file\n   false}\n(ns com.example\n  (:require\n   [clojure.string]))\n\n\"aaa\""
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #123 - eol commas inside comments",
+    "input": ";; foo, bar,\n;; biz, baz,\ngee, gaz,\nhee, haz,",
+    "expected": ";; foo, bar,\n;; biz, baz,\ngee, gaz\nhee, haz"
+  },
+  {
+    "filename": "format.eno",
+    "name": "GitHub Issue #137 - defmacro ns",
+    "input": ";   Copyright (c) Rich Hickey. All rights reserved.\n;   The use and distribution terms for this software are covered by the\n;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)\n;   which can be found in the file epl-v10.html at the root of this distribution.\n;   By using this software in any fashion, you are agreeing to be bound by\n;   the terms of this license.\n;   You must not remove this notice, or any other, from this software.\n\n(ns ^{:doc \"The core Clojure language.\"\n       :author \"Rich Hickey\"}\n  clojure.core)\n\n(def unquote)\n(def unquote-splicing)\n\n(def\n ^{:arglists '([& items])\n   :doc \"Creates a new list containing the items.\"\n   :added \"1.0\"}\n  list (. clojure.lang.PersistentList creator))\n\n(def\n ^{:arglists '([x seq])\n    :doc \"Returns a new seq where x is the first element and seq is\n    the rest.\"\n   :added \"1.0\"\n   :static true}\n\n cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))\n\n;during bootstrap we don't have destructuring let, loop or fn, will redefine later\n(def\n  ^{:macro true\n    :added \"1.0\"}\n  let (fn* let [&form &env & decl] (cons 'let* decl)))\n\n;; ...\n\n(declare gen-class)\n\n(defmacro with-loading-context [& body]\n  `((fn loading# []\n        (. clojure.lang.Var (pushThreadBindings {clojure.lang.Compiler/LOADER\n                                                 (.getClassLoader (.getClass ^Object loading#))}))\n        (try\n         ~@body\n         (finally\n          (. clojure.lang.Var (popThreadBindings)))))))\n\n(defmacro ns\n  \"Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))\"\n  {:arglists '([name docstring? attr-map? references*])\n   :added \"1.0\"}\n  [name & references]\n  (let [process-reference\n        (fn [[kname & args]]\n          `(~(symbol \"clojure.core\" (clojure.core/name kname))\n             ~@(map #(list 'quote %) args)))\n        docstring  (when (string? (first references)) (first references))\n        references (if docstring (next references) references)\n        name (if docstring\n               (vary-meta name assoc :doc docstring)\n               name)\n        metadata   (when (map? (first references)) (first references))\n        references (if metadata (next references) references)\n        name (if metadata\n               (vary-meta name merge metadata)\n               name)\n        gen-class-clause (first (filter #(= :gen-class (first %)) references))\n        gen-class-call\n          (when gen-class-clause\n            (list* `gen-class :name (.replace (str name) \\- \\_) :impl-ns name :main true (next gen-class-clause)))\n        references (remove #(= :gen-class (first %)) references)\n        ;ns-effect (clojure.core/in-ns name)\n        name-metadata (meta name)]\n    `(do\n       (clojure.core/in-ns '~name)\n       ~@(when name-metadata\n           `((.resetMeta (clojure.lang.Namespace/find '~name) ~name-metadata)))\n       (with-loading-context\n        ~@(when gen-class-call (list gen-class-call))\n        ~@(when (and (not= name 'clojure.core) (not-any? #(= :refer-clojure (first %)) references))\n            `((clojure.core/refer '~'clojure.core)))\n        ~@(map process-reference references))\n        (if (.equals '~name 'clojure.core)\n          nil\n          (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))\n\n(defmacro refer-clojure\n  \"Same as (refer 'clojure.core <filters>)\"\n  {:added \"1.0\"}\n  [& filters]\n  `(clojure.core/refer '~'clojure.core ~@filters))",
+    "expected": ";   Copyright (c) Rich Hickey. All rights reserved.\n;   The use and distribution terms for this software are covered by the\n;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)\n;   which can be found in the file epl-v10.html at the root of this distribution.\n;   By using this software in any fashion, you are agreeing to be bound by\n;   the terms of this license.\n;   You must not remove this notice, or any other, from this software.\n\n(ns clojure.core\n  {:doc \"The core Clojure language.\"\n   :author \"Rich Hickey\"})\n\n(def unquote)\n(def unquote-splicing)\n\n(def\n  ^{:arglists '([& items])\n    :doc \"Creates a new list containing the items.\"\n    :added \"1.0\"}\n  list (. clojure.lang.PersistentList creator))\n\n(def\n  ^{:arglists '([x seq])\n    :doc \"Returns a new seq where x is the first element and seq is\n    the rest.\"\n    :added \"1.0\"\n    :static true}\n\n  cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))\n\n; during bootstrap we don't have destructuring let, loop or fn, will redefine later\n(def\n  ^{:macro true\n    :added \"1.0\"}\n  let (fn* let [&form &env & decl] (cons 'let* decl)))\n\n;; ...\n\n(declare gen-class)\n\n(defmacro with-loading-context [& body]\n  `((fn loading# []\n        (. clojure.lang.Var (pushThreadBindings {clojure.lang.Compiler/LOADER\n                                                 (.getClassLoader (.getClass ^Object loading#))}))\n        (try\n          ~@body\n          (finally\n            (. clojure.lang.Var (popThreadBindings)))))))\n\n(defmacro ns\n  \"Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))\"\n  {:arglists '([name docstring? attr-map? references*])\n   :added \"1.0\"}\n  [name & references]\n  (let [process-reference\n        (fn [[kname & args]]\n          `(~(symbol \"clojure.core\" (clojure.core/name kname))\n             ~@(map #(list 'quote %) args)))\n        docstring  (when (string? (first references)) (first references))\n        references (if docstring (next references) references)\n        name (if docstring\n               (vary-meta name assoc :doc docstring)\n               name)\n        metadata   (when (map? (first references)) (first references))\n        references (if metadata (next references) references)\n        name (if metadata\n               (vary-meta name merge metadata)\n               name)\n        gen-class-clause (first (filter #(= :gen-class (first %)) references))\n        gen-class-call\n        (when gen-class-clause\n          (list* `gen-class :name (.replace (str name) \\- \\_) :impl-ns name :main true (next gen-class-clause)))\n        references (remove #(= :gen-class (first %)) references)\n        ; ns-effect (clojure.core/in-ns name)\n        name-metadata (meta name)]\n    `(do\n       (clojure.core/in-ns '~name)\n       ~@(when name-metadata\n           `((.resetMeta (clojure.lang.Namespace/find '~name) ~name-metadata)))\n       (with-loading-context\n         ~@(when gen-class-call (list gen-class-call))\n         ~@(when (and (not= name 'clojure.core) (not-any? #(= :refer-clojure (first %)) references))\n             `((clojure.core/refer '~'clojure.core)))\n         ~@(map process-reference references))\n       (if (.equals '~name 'clojure.core)\n         nil\n         (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))\n\n(defmacro refer-clojure\n  \"Same as (refer 'clojure.core <filters>)\"\n  {:added \"1.0\"}\n  [& filters]\n  `(clojure.core/refer '~'clojure.core ~@filters))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "Simple namespace",
+    "input": "(ns aaa)",
+    "expected": "(ns aaa)"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "Simple namespace 2",
+    "input": "\n(\n  ns aaa\n)",
+    "expected": "(ns aaa)"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: use keywords, not symbols",
+    "input": "(ns com.example.my-application\n  (refer-clojure :exclude [get])\n  (require\n   [clojure.string :as string])\n  (import\n   (java.util Date)))\n\n(require\n  foo\n  bar)",
+    "expected": "(ns com.example.my-application\n  (:refer-clojure :exclude [get])\n  (:require\n   [clojure.string :as string])\n  (:import\n   (java.util Date)))\n\n(require\n  foo\n  bar)"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: use vectors, not lists",
+    "input": "(ns com.example.application\n  [:require\n   [clojure.string :as string]]\n  [:import\n   (java.util Date)])\n\n[:require\n  foo\n  bar]",
+    "expected": "(ns com.example.application\n  (:require\n   [clojure.string :as string])\n  (:import\n   (java.util Date)))\n\n[:require\n foo\n bar]"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: use vectors for require",
+    "input": "(ns com.example.application\n  (:require\n   (clojure.string :as string))\n  [:import\n   (java.util Date)])",
+    "expected": "(ns com.example.application\n  (:require\n   [clojure.string :as string])\n  (:import\n   (java.util Date)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: use parenthesis for import",
+    "input": "(ns com.example.application\n[:import\n [java.util Date UUID]\n [java.io File]])",
+    "expected": "(ns com.example.application\n  (:import\n   (java.io File)\n   (java.util Date UUID)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: alphabetically sort requires",
+    "input": ";; something before\n\n(ns foo\n  (:require b [c])\n  (:require a))\n\n(something :after)",
+    "expected": ";; something before\n\n(ns foo\n  (:require\n   [a]\n   [b]\n   [c]))\n\n(something :after)"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: sort imports",
+    "input": "(ns com.example.my-app\n\n  (:import java.io.File\n           (xxx.yyy.zzz Bravo Alpha Delta Charlie)\n           hhh.eee.Ccc\n           hhh.eee.Bbb\n           (java.util Date UUID))\n  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)\n  )",
+    "expected": "(ns com.example.my-app\n  (:require\n   [com.example.my-app.aaa]\n   [com.example.my-app.bbb]\n   [com.example.my-app.ccc])\n  (:import\n   (hhh.eee Bbb Ccc)\n   (java.io File)\n   (java.util Date UUID)\n   (xxx.yyy.zzz Alpha Bravo Charlie Delta)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: sort refer-clojure, require, import",
+    "input": "(ns foo \"bar\"\n  (:require b c a)\n  (:import (java.util Date))\n  (:refer-clojure :exclude [get ->])\n  )",
+    "expected": "(ns foo\n  \"bar\"\n  (:refer-clojure :exclude [-> get])\n  (:require\n   [a]\n   [b]\n   [c])\n  (:import\n   (java.util Date)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "sort refer-clojure :only symbols",
+    "input": "(ns foo\n  (:require bbb aaa)\n  (:refer-clojure :only [get -> number? == *])\n  )",
+    "expected": "(ns foo\n  (:refer-clojure :only [* -> == get number?])\n  (:require\n   [aaa]\n   [bbb]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "sort refer-clojure :rename symbols",
+    "input": "(ns foo\n  (:require bbb.ccc bbb, aaa)\n    (:import (java.util UUID Date))\n  (:refer-clojure :rename {print core-print get g,  number? is-number\n                           ->> thread-last, -> thread-first}\n  )\n  )",
+    "expected": "(ns foo\n  (:refer-clojure :rename {-> thread-first, ->> thread-last, get g, number? is-number, print core-print})\n  (:require\n   [aaa]\n   [bbb]\n   [bbb.ccc])\n  (:import\n   (java.util Date UUID)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure :rename with reader conditional",
+    "input": "(ns com.example.my-app\n  (:refer-clojure\n    :rename {#?(:cljs [print core-print get g])})\n  )",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     (:refer-clojure :rename {get g, print core-print})))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "how to ns: require, as, refer",
+    "input": "(ns com.example.my-app\n  (:require\n    [com.example.duck :as duck :refer [quack quacking eat sleep]]\n    aaa.bbb\n    [com.example.cow :refer [moo eat-grass] :as cow]))",
+    "expected": "(ns com.example.my-app\n  (:require\n   [aaa.bbb]\n   [com.example.cow :as cow :refer [eat-grass moo]]\n   [com.example.duck :as duck :refer [eat quack quacking sleep]]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with :refer :all",
+    "input": "(ns com.example.my-app\n  (:require\n    [com.example.duck :as duck :refer :all]\n    aaa.bbb\n    [com.example.cow :refer [moo eat-grass] :as cow]\n    [com.example.pig :refer :all]))",
+    "expected": "(ns com.example.my-app\n  (:require\n   [aaa.bbb]\n   [com.example.cow :as cow :refer [eat-grass moo]]\n   [com.example.duck :as duck :refer :all]\n   [com.example.pig :refer :all]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with docstring",
+    "input": "(ns com.example.my-app\n\n  \"Mary had a little lamb,\n  Its fleece was white as snow.\n\n  And everywhere that Mary went,\n  The lamb was sure to go.\"\n  (:require\n    [com.example.duck :as duck :refer :all]\n    aaa.bbb\n    aaa))",
+    "expected": "(ns com.example.my-app\n  \"Mary had a little lamb,\n  Its fleece was white as snow.\n\n  And everywhere that Mary went,\n  The lamb was sure to go.\"\n  (:require\n   [aaa]\n   [aaa.bbb]\n   [com.example.duck :as duck :refer :all]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with require comments",
+    "input": ";; before\n\n(ns com.example.my-app\n;; foo bar\n    ;; bizzle wizzle\n  (:require\n ;; C\n ;; CC\n ;; CCC\n ccc ;; ccc\n    [aaa.bbb :as ab] ; abab\n    aaa)) ;;;; aaa\n\n:after",
+    "expected": ";; before\n\n(ns com.example.my-app\n  ;; foo bar\n  ;; bizzle wizzle\n  (:require\n   [aaa] ;;;; aaa\n   [aaa.bbb :as ab] ; abab\n   ;; C\n   ;; CC\n   ;; CCC\n   [ccc])) ;; ccc\n\n:after"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with prefix list",
+    "input": "(ns com.example.my-app\n  (:require\n ;; aaa\n ;; bbb\n    (com.example server client routes) ;; ccc\n    com.example.db\n    [com.example alpha bravo])) ;; ddd",
+    "expected": "(ns com.example.my-app\n  (:require\n   [com.example.alpha] ;; ddd\n   [com.example.bravo]\n   ;; aaa\n   ;; bbb\n   [com.example.client] ;; ccc\n   [com.example.db]\n   [com.example.routes]\n   [com.example.server]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with reader conditionals 1",
+    "input": "(ns com.example.my-app\n  (:require\n    com.example.bbb\n    #?(:cljs [com.example.aaa])\n    #?(:clj  [com.example.ccc])\n    com.example.ddd\n    ))",
+    "expected": "(ns com.example.my-app\n  (:require\n   [com.example.bbb]\n   [com.example.ddd]\n   #?(:clj [com.example.ccc]\n      :cljs [com.example.aaa])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with reader conditionals 2",
+    "input": ";; NOTE: the :default reader conditional platform is always placed last\n\n(ns com.example.my-app\n  (:require\n    #?(:clj  [com.example.eee]\n       :cljs [com.example.ddd :as d] ;; ddd\n       :elephant com.example.yyy)\n    com.example.fff\n    #?@(:cljs [com.example.bbb-cljs]\n        :elephant [com.example.bbb-elephant]\n        :default [com.example.bbb-default]) ;; bbb\n    com.example.ccc\n    #?(:clj com.example.aaa)\n    ))",
+    "expected": ";; NOTE: the :default reader conditional platform is always placed last\n\n(ns com.example.my-app\n  (:require\n   [com.example.ccc]\n   [com.example.fff]\n   #?@(:clj\n       [[com.example.aaa]\n        [com.example.eee]]\n\n       :cljs\n       [[com.example.bbb-cljs]\n        [com.example.ddd :as d]] ;; ddd\n\n       :elephant\n       [[com.example.bbb-elephant]\n        [com.example.yyy]]\n\n       :default\n       [[com.example.bbb-default]]))) ;; bbb"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns with reader conditionals 3",
+    "input": "(ns com.example.module-test\n  (:require #?(:clj  [clojure.test :refer :all]\n               :cljs [cljs.test :refer-macros [is]])\n            #?(:cljs [cljs.test.check :refer [quick-check]]) ;; aaa\n            #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]\n               :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])\n            #?(:clj  [clojure.test.check.properties :as prop]\n               :cljs [cljs.test.check.properties :as prop\n                       :include-macros true])\n            [schema.core :as schema :refer [check]]\n            [com.example.schema.ids :refer [Foo]]\n            [com.example.generators\n             :refer [gen-part-no gen-invalid-part-no]]))",
+    "expected": "(ns com.example.module-test\n  (:require\n   [com.example.generators :refer [gen-invalid-part-no gen-part-no]]\n   [com.example.schema.ids :refer [Foo]]\n   [schema.core :as schema :refer [check]]\n   #?@(:clj\n       [[clojure.test :refer :all]\n        [clojure.test.check.clojure-test :refer [defspec]]\n        [clojure.test.check.properties :as prop]]\n\n       :cljs\n       [[cljs.test :refer-macros [is]]\n        [cljs.test.check :refer [quick-check]] ;; aaa\n        [cljs.test.check.cljs-test :refer-macros [defspec]]\n        [cljs.test.check.properties :as prop :include-macros true]])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "reader conditionals in ns 4",
+    "input": "(ns com.example.my-app\n  (:require\n    #?(:clj  [com.example.eee]\n       :cljs [com.example.ddd :as d] ;; ddd\n       :elephant com.example.yyy)\n    com.example.fff\n    #?@(:cljs [com.example.bbb-cljs]\n        :elephant [com.example.bbb-elephant]\n        :default [com.example.bbb-default])\n    com.example.ccc\n    #?(:clj com.example.aaa))\n\n  (:import\n    xxx.yyy.Zzz ;; zzz\n    aaa.bbb.Ccc\n    #?@(:cljs goog.string.StringBuffer ;; aaa\n        :clj java.net.URI))\n\n  #?(:clj\n     (:import\n      [java.io StringReader]\n      java.net.InetAddress)\n\n     :cljs\n     (:import\n      [goog.module ModuleManager]\n      (goog.events EventType EventTarget)\n      goog.Uri))) ;; uuu",
+    "expected": "(ns com.example.my-app\n  (:require\n   [com.example.ccc]\n   [com.example.fff]\n   #?@(:clj\n       [[com.example.aaa]\n        [com.example.eee]]\n\n       :cljs\n       [[com.example.bbb-cljs]\n        [com.example.ddd :as d]] ;; ddd\n\n       :elephant\n       [[com.example.bbb-elephant]\n        [com.example.yyy]]\n\n       :default\n       [[com.example.bbb-default]]))\n  (:import\n   (aaa.bbb Ccc)\n   (xxx.yyy Zzz) ;; zzz\n   #?@(:clj\n       [(java.io StringReader)\n        (java.net InetAddress URI)]\n\n       :cljs\n       [(goog Uri) ;; uuu\n        (goog.events EventTarget EventType)\n        (goog.module ModuleManager)\n        (goog.string StringBuffer)]))) ;; aaa"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "all requires on one platform",
+    "input": "(ns com.example.my-app\n  ;; comment 1\n  (:require ;; comment 2\n    #?@(:clj\n        [[bbb] ;; bbb\n         [aaa]]))) ;; aaa",
+    "expected": "(ns com.example.my-app\n  #?(:clj\n     ;; comment 1\n     (:require ;; comment 2\n      [aaa] ;; aaa\n      [bbb]))) ;; bbb"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: figwheel.main",
+    "input": "(ns figwheel.main\n  #?(:clj\n     (:require\n      [cljs.analyzer :as ana]\n      [cljs.analyzer.api :as ana-api]\n      [cljs.build.api :as bapi]\n      [cljs.compiler]\n      [cljs.closure]\n      [cljs.cli :as cli]\n      [cljs.env]\n      [cljs.main :as cm]\n      [cljs.repl]\n      [cljs.repl.figwheel]\n      [cljs.util]\n      [clojure.data.json :as json]\n      [clojure.java.io :as io]\n      [clojure.pprint :refer [pprint]]\n      [clojure.string :as string]\n      [clojure.edn :as edn]\n      [clojure.java.shell :as sh]\n      [clojure.tools.reader.edn :as redn]\n      [clojure.tools.reader.reader-types :as rtypes]\n      [clojure.walk :as walk]\n      [figwheel.core :as fw-core]\n      [figwheel.main.ansi-party :as ansip]\n      [figwheel.main.logging :as log]\n      [figwheel.main.util :as fw-util]\n      [figwheel.main.watching :as fww]\n      [figwheel.main.helper :as helper]\n      [figwheel.main.npm :as npm]\n      [figwheel.main.async-result :as async-result]\n      [figwheel.main.react-native :as react-native]\n      [figwheel.main.testing :as testing]\n      [figwheel.repl :as fw-repl]\n      [figwheel.main.compat.ana-api :as ana-compat]\n      [figwheel.tools.exceptions :as fig-ex]\n      [certifiable.main :as certifiable]\n      [certifiable.log]))\n  #?(:clj\n     (:import\n      [java.io StringReader]\n      java.net.InetAddress\n      java.net.URI\n      java.net.URLEncoder\n      java.nio.file.Paths))\n  #?(:cljs\n     (:require-macros [figwheel.main])))",
+    "expected": "(ns figwheel.main\n  #?(:cljs\n     (:require-macros\n      [figwheel.main]))\n  #?(:clj\n     (:require\n      [certifiable.log]\n      [certifiable.main :as certifiable]\n      [cljs.analyzer :as ana]\n      [cljs.analyzer.api :as ana-api]\n      [cljs.build.api :as bapi]\n      [cljs.cli :as cli]\n      [cljs.closure]\n      [cljs.compiler]\n      [cljs.env]\n      [cljs.main :as cm]\n      [cljs.repl]\n      [cljs.repl.figwheel]\n      [cljs.util]\n      [clojure.data.json :as json]\n      [clojure.edn :as edn]\n      [clojure.java.io :as io]\n      [clojure.java.shell :as sh]\n      [clojure.pprint :refer [pprint]]\n      [clojure.string :as string]\n      [clojure.tools.reader.edn :as redn]\n      [clojure.tools.reader.reader-types :as rtypes]\n      [clojure.walk :as walk]\n      [figwheel.core :as fw-core]\n      [figwheel.main.ansi-party :as ansip]\n      [figwheel.main.async-result :as async-result]\n      [figwheel.main.compat.ana-api :as ana-compat]\n      [figwheel.main.helper :as helper]\n      [figwheel.main.logging :as log]\n      [figwheel.main.npm :as npm]\n      [figwheel.main.react-native :as react-native]\n      [figwheel.main.testing :as testing]\n      [figwheel.main.util :as fw-util]\n      [figwheel.main.watching :as fww]\n      [figwheel.repl :as fw-repl]\n      [figwheel.tools.exceptions :as fig-ex]))\n  #?(:clj\n     (:import\n      (java.io StringReader)\n      (java.net InetAddress URI URLEncoder)\n      (java.nio.file Paths))))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: figwheel.main.testing",
+    "input": "(ns figwheel.main.testing\n  (:require\n   [clojure.string :as string]\n   #?@(:cljs [[figwheel.main.async-result :as async-result]\n              [goog.dom :as gdom]\n              [cljs.test :refer [report]]]\n       :clj [[cljs.analyzer]\n             [figwheel.main.logging :as log]\n             [figwheel.main.util :as fw-util]\n             [clojure.java.io :as io]])))",
+    "expected": "(ns figwheel.main.testing\n  (:require\n   [clojure.string :as string]\n   #?@(:clj\n       [[cljs.analyzer]\n        [clojure.java.io :as io]\n        [figwheel.main.logging :as log]\n        [figwheel.main.util :as fw-util]]\n\n       :cljs\n       [[cljs.test :refer [report]]\n        [figwheel.main.async-result :as async-result]\n        [goog.dom :as gdom]])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: cuerdas.core",
+    "input": "(ns cuerdas.core\n  (:refer-clojure :exclude [contains? empty? repeat regexp?\n                            replace reverse chars keyword concat\n                            #?@(:clj [unquote format])])\n  #?(:cljs (:require-macros [cuerdas.core :refer [unsafe-concat nilv]])) ;; require-macros!\n  (:require [clojure.string :as str]\n            [clojure.set :refer [map-invert]]\n            [clojure.core :as c]\n\n            [clojure.walk :refer [stringify-keys]]\n            [cuerdas.regexp :as rx]\n\n            #?(:cljs [goog.string :as gstr]) ;; ggg\n            #?(:cljs [cljs.reader :as edn] ;; cljs-edn\n               :clj  [clojure.edn :as edn])) ;; clj-edn\n  #?(:clj (:import (java.util List Locale) ;; lll\n                   (aaa.bbb Ddd Ccc)))) ;; aaa",
+    "expected": "(ns cuerdas.core\n  (:refer-clojure\n    :exclude [chars concat contains? empty? keyword regexp? repeat replace reverse\n              #?@(:clj [format unquote])])\n  #?(:cljs\n     (:require-macros\n      [cuerdas.core :refer [nilv unsafe-concat]])) ;; require-macros!\n  (:require\n   [clojure.core :as c]\n   [clojure.set :refer [map-invert]]\n   [clojure.string :as str]\n   [clojure.walk :refer [stringify-keys]]\n   [cuerdas.regexp :as rx]\n   #?@(:clj\n       [[clojure.edn :as edn]] ;; clj-edn\n\n       :cljs\n       [[cljs.reader :as edn] ;; cljs-edn\n        [goog.string :as gstr]])) ;; ggg\n  #?(:clj\n     (:import\n      (aaa.bbb Ccc Ddd) ;; aaa\n      (java.util List Locale)))) ;; lll"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: metabase.util",
+    "input": "(ns metabase.util\n  \"Common utility functions useful throughout the codebase.\"\n  (:require\n   #?@(:clj ([clojure.math.numeric-tower :as math]\n             [me.flowthing.pp :as pp]\n             [metabase.config :as config]\n             [metabase.util.string :as u.str]\n             [potemkin :as p]\n             #_{:clj-kondo/ignore [:discouraged-namespace]}\n             [metabase.util.jvm :as u.jvm]\n             [ring.util.codec :as codec]))\n   [camel-snake-kebab.internals.macros :as csk.macros]\n   [clojure.data :refer [diff]]\n   [clojure.pprint :as pprint]\n   [clojure.set :as set]\n   [clojure.string :as str]\n   [clojure.walk :as walk]\n   [flatland.ordered.map :refer [ordered-map]]\n   [medley.core :as m]\n   [metabase.shared.util.i18n :refer [tru] :as i18n]\n   [metabase.shared.util.namespaces :as u.ns]\n   [metabase.util.format :as u.format]\n   [metabase.util.log :as log]\n   [metabase.util.memoize :as memoize]\n   [net.cgrand.macrovich :as macros]\n   [weavejester.dependency :as dep])\n  #?(:clj (:import\n           (clojure.lang Reflector)\n           (java.text Normalizer Normalizer$Form)\n           (java.util Locale)\n           (org.apache.commons.validator.routines RegexValidator UrlValidator)))\n  #?(:cljs (:require-macros [camel-snake-kebab.internals.macros :as csk.macros]\n                            [metabase.util])))\n\n#?(:clj (set! *warn-on-reflection* true))",
+    "expected": "(ns metabase.util\n  \"Common utility functions useful throughout the codebase.\"\n  #?(:cljs\n     (:require-macros\n      [camel-snake-kebab.internals.macros :as csk.macros]\n      [metabase.util]))\n  (:require\n   [camel-snake-kebab.internals.macros :as csk.macros]\n   [clojure.data :refer [diff]]\n   [clojure.pprint :as pprint]\n   [clojure.set :as set]\n   [clojure.string :as str]\n   [clojure.walk :as walk]\n   [flatland.ordered.map :refer [ordered-map]]\n   [medley.core :as m]\n   [metabase.shared.util.i18n :as i18n :refer [tru]]\n   [metabase.shared.util.namespaces :as u.ns]\n   [metabase.util.format :as u.format]\n   [metabase.util.log :as log]\n   [metabase.util.memoize :as memoize]\n   [net.cgrand.macrovich :as macros]\n   [weavejester.dependency :as dep]\n   #?@(:clj\n       [[clojure.math.numeric-tower :as math]\n        [me.flowthing.pp :as pp]\n        [metabase.config :as config]\n        #_{:clj-kondo/ignore [:discouraged-namespace]}\n        [metabase.util.jvm :as u.jvm]\n        [metabase.util.string :as u.str]\n        [potemkin :as p]\n        [ring.util.codec :as codec]]))\n  #?(:clj\n     (:import\n      (clojure.lang Reflector)\n      (java.text Normalizer Normalizer$Form)\n      (java.util Locale)\n      (org.apache.commons.validator.routines RegexValidator UrlValidator))))\n\n#?(:clj (set! *warn-on-reflection* true))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ambiguous import comment",
+    "input": "(ns com.example.my-app\n  (:import\n    java.net.URI ;; aaa\n    java.net.InetAddress)) ;; bbb",
+    "expected": "(ns com.example.my-app\n  (:import\n   (java.net InetAddress URI)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "require-macros with no reader conditional",
+    "input": "(ns com.example.my-app\n  (:require\n    [aaa.bbb :as bbb])\n  (:require-macros\n    [ccc.ddd :as d :refer [hhh ggg]]))",
+    "expected": "(ns com.example.my-app\n  (:require-macros\n   [ccc.ddd :as d :refer [ggg hhh]])\n  (:require\n   [aaa.bbb :as bbb]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "require-macros with reader conditional",
+    "input": "(ns com.example.my-app\n  (:require\n    [aaa.bbb :as bbb])\n  #?(:cljs\n     (:require-macros\n       [ccc.ddd :as d :refer [hhh ggg]]))) ;; ddd",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     (:require-macros\n      [ccc.ddd :as d :refer [ggg hhh]])) ;; ddd\n  (:require\n   [aaa.bbb :as bbb]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: require-macros comments 1",
+    "input": ";; alpha\n\n(ns bar.core\n  (:require-macros\n    [foo.core :refer [bad add cad]] ;; rad\n    [aaa.bbb :refer [ccc]] ;; ddd\n    ))\n\n;; bravo",
+    "expected": ";; alpha\n\n(ns bar.core\n  (:require-macros\n   [aaa.bbb :refer [ccc]] ;; ddd\n   [foo.core :refer [add bad cad]])) ;; rad\n\n;; bravo"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ns: require-macros comments 2",
+    "input": ";; alpha\n\n(ns bar.core\n  (:require-macros\n    [foo.core :refer [bad add cad]] ;; rad\n    [aaa.bbb :refer [ccc]])) ;; ddd\n\n;; bravo",
+    "expected": ";; alpha\n\n(ns bar.core\n  (:require-macros\n   [aaa.bbb :refer [ccc]] ;; ddd\n   [foo.core :refer [add bad cad]])) ;; rad\n\n;; bravo"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "basic refer-clojure with :only",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [dissoc conj]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure :only [conj dissoc]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 1",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [#?@(:cljs [dissoc conj])]))",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     (:refer-clojure :only [conj dissoc])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 2",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [get assoc #?@(:clj [dissoc conj]\n                                       :cljs [partition frequencies])]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :only [assoc get\n           #?@(:clj [conj dissoc]\n               :cljs [frequencies partition])]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 3",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [get assoc #?@(:cljs [dissoc conj])]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :only [assoc get\n           #?@(:cljs [conj dissoc])]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 4",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [#?@(:cljs [dissoc conj]\n                             :clj [partition frequencies int])]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :only #?@(:clj [frequencies int partition]\n              :cljs [conj dissoc])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 5",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :exclude [#?@(:cljs [dissoc conj]\n          :clj [partition frequencies int])]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :exclude #?@(:clj [frequencies int partition]\n                 :cljs [conj dissoc])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with reader conditionals 6",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :exclude [get assoc #?@(:cljs [dissoc conj])]))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :exclude [assoc get\n              #?@(:cljs [conj dissoc])]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure with multiple clauses",
+    "input": "(ns cljs.ns-test\n  (:refer-clojure :rename {mapv core-mapv} :exclude [+ for])  )",
+    "expected": "(ns cljs.ns-test\n  (:refer-clojure\n    :exclude [+ for]\n    :rename {mapv core-mapv}))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "ClojureScript ns test 2",
+    "input": "(ns cljs.ns-test\n  (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})\n  (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always\n                                                                          when-let always-let}]\n                   [cljs.test :refer [is deftest]]))",
+    "expected": "(ns cljs.ns-test\n  (:refer-clojure\n    :exclude [+ for]\n    :rename {mapv core-mapv})\n  (:require-macros\n   [cljs.test :refer [deftest is]]\n   [clojure.core :as lang :refer [when when-let] :rename {when always, when-let always-let}]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "basic gen-class",
+    "input": "(ns com.example.my-app\n  (:gen-class)\n  (:require [aaa.bbb :as ab])\n  )",
+    "expected": "(ns com.example.my-app\n  (:require\n   [aaa.bbb :as ab])\n  (:gen-class))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "gen-class with reader conditional",
+    "input": "(ns com.example.my-app\n  #?(:clj (:gen-class) )\n  (:require [aaa.bbb :as ab])\n  )",
+    "expected": "(ns com.example.my-app\n  (:require\n   [aaa.bbb :as ab])\n  #?(:clj\n     (:gen-class)))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "gen-class with simple values and comments",
+    "input": "(ns com.example.my-app\n  \"gen-class with comments and simple values\"\n  ;; aaa\n  ;; bbb\n  (:gen-class ;; ccc\n\n\n    ;; fff\n    :extends java.lang.RuntimeException ;; ggg\n    :impl-ns iii\n    :post-init jjj\n    :main true\n    :state state2\n    :prefix \"zzz-\"\n\n    ;; ddd\n    :name name2 ;; eee\n\n    :factory fff\n    :load-impl-ns false ;; hhh\n    :init init2)\n\n\n  (:require [aaa.bbb :as ab])\n  )",
+    "expected": "(ns com.example.my-app\n  \"gen-class with comments and simple values\"\n  (:require\n   [aaa.bbb :as ab])\n  ;; aaa\n  ;; bbb\n  (:gen-class ;; ccc\n   ;; ddd\n   :name name2 ;; eee\n   ;; fff\n   :extends java.lang.RuntimeException ;; ggg\n   :init init2\n   :post-init jjj\n   :main true\n   :factory fff\n   :state state2\n   :prefix \"zzz-\"\n   :impl-ns iii\n   :load-impl-ns false)) ;; hhh"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "reader macro comments",
+    "input": "(ns com.example.my-app\n  (:require\n    ccc.ddd #_ #{\"bugger\"}\n    #_ {:alpha \"alpha\"\n        :bravo \"bravo\"}\n    [aaa.bbb]))",
+    "expected": "(ns com.example.my-app\n  (:require\n   #_ {:alpha \"alpha\"\n        :bravo \"bravo\"}\n   [aaa.bbb]\n   [ccc.ddd])) #_ #{\"bugger\"}"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "require-macros wrapped in reader conditional, last main form",
+    "input": "(ns com.example.my-app\n  #?(:cljs (:require-macros [bar :refer [baz]])))",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     (:require-macros\n      [bar :refer [baz]])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "require-macros wrapped in reader conditional, not last main form",
+    "input": "(ns com.example.my-app\n  (:require [aaa])\n  #?(:cljs (:require-macros [bar :refer [baz]])))",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     (:require-macros\n      [bar :refer [baz]]))\n  (:require\n   [aaa]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "support :refer :exclude",
+    "input": "(ns com.example.my-app\n  (:require\n    [incanter.core :refer :all :exclude [ggg zzz abs]]\n    [bbb.ccc :exclude [yyy hhh eee] :refer :all]\n    ) )",
+    "expected": "(ns com.example.my-app\n  (:require\n   [bbb.ccc :refer :all :exclude [eee hhh yyy]]\n   [incanter.core :refer :all :exclude [abs ggg zzz]]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": ":require :as-alias",
+    "input": "(ns com.example.my-app\n  (:require\n    [incanter.core :as-alias ic]\n    [bbb.ccc :exclude [yyy hhh eee] :refer :all]\n    ) )",
+    "expected": "(ns com.example.my-app\n  (:require\n   [bbb.ccc :refer :all :exclude [eee hhh yyy]]\n   [incanter.core :as-alias ic]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure rename with comment and reader conditional",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :rename\n    {get core-get\n     #?@(:clj [conj core-conj])}))\n     ;:cljs [conj core-conj2])}))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :rename {get core-get\n             #?@(:clj [conj core-conj])}))\n     ; :cljs [conj core-conj2])}))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "refer-clojure rename with reader conditional and multiple platforms",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :rename\n    {get core-get\n     #?@(:clj [conj core-conj]\n              :cljs [conj core-conj2])}))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :rename {get core-get\n             #?@(:clj [conj core-conj]\n                 :cljs [conj core-conj2])}))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #111 - comments above :require-macros",
+    "input": "(ns com.example.my-app\n  ;; comment1\n  #_{:clj-kondo/ignore [:unused-referred-var]}\n  (:require-macros [other.ns :refer [one two]])\n  (:require\n    [aaa :as bbb]\n    ))",
+    "expected": "(ns com.example.my-app\n  ;; comment1\n  #_{:clj-kondo/ignore [:unused-referred-var]}\n  (:require-macros\n   [other.ns :refer [one two]])\n  (:require\n   [aaa :as bbb]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #111 - comments above :require-macros with reader conditional",
+    "input": "(ns com.example.my-app\n  (:require [aaa :as bbb] )\n#?(:cljs\n  ;; comment1\n  #_{:clj-kondo/ignore [:unused-referred-var]}\n  (:require-macros [other.ns :refer [one two]])\n  )\n  )",
+    "expected": "(ns com.example.my-app\n  #?(:cljs\n     ;; comment1\n     #_{:clj-kondo/ignore [:unused-referred-var]}\n     (:require-macros\n      [other.ns :refer [one two]]))\n  (:require\n   [aaa :as bbb]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #112 - extra options in JS requires",
+    "input": "(ns com.example.my-app\n  (:require\n    [\"@foo/bar\"\n      :rename {Charlie Delta Alpha Bravo }]\n    ))",
+    "expected": "(ns com.example.my-app\n  (:require\n   [\"@foo/bar\" :rename {Alpha Bravo, Charlie Delta}]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #114 - refer-clojure with reader conditional",
+    "input": "(ns com.example.my-app\n#?(:clj\n   (:refer-clojure :exclude [aaa ccc bbb])\n\n   :cljs\n   (:refer-clojure :exclude [ddd aaa])\n   ,))",
+    "expected": "(ns com.example.my-app\n  (:refer-clojure\n    :exclude #?@(:clj [aaa bbb ccc]\n                 :cljs [aaa ddd])))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 1",
+    "input": "(ns ^{:deprecated \"0.1.0\"} com.example.my-app\n  (:require [clojure.string]))",
+    "expected": "(ns com.example.my-app\n  {:deprecated \"0.1.0\"}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 2",
+    "input": "(ns ^:foo/bar com.example.my-app)",
+    "expected": "(ns com.example.my-app\n  {:foo/bar true})"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 3",
+    "input": "(ns com.example.my-app {:foo 45, :bar [:a :b :c {}]})",
+    "expected": "(ns com.example.my-app\n  {:foo 45\n   :bar [:a :b :c {}]})"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 4",
+    "input": "(ns ^{:foo bar} weeble.ns {:foo baz}\n  (:require [clojure.string]))",
+    "expected": "(ns weeble.ns\n  {:foo baz}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #113 - metadata in ns 5",
+    "input": "(ns com.example.my-app {:dev/always true}\n  (:require [clojure.string]))",
+    "expected": "(ns com.example.my-app\n  {:dev/always true}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #113 - metadata in ns 6",
+    "input": "(ns ^:dev/always com.example.my-app (:require [clojure.string]))",
+    "expected": "(ns com.example.my-app\n  {:dev/always true}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #113 - metadata in ns 7",
+    "input": "(ns ^{:dev/always true} com.example.my-app (:require [clojure.string]))",
+    "expected": "(ns com.example.my-app\n  {:dev/always true}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #126 - metadata in ns 8",
+    "input": "(ns ^{:added \"0.12.0\"} com.example.my-app\n  \"some docstring!\"\n  (:require [clojure.string]))",
+    "expected": "(ns com.example.my-app\n  \"some docstring!\"\n  {:added \"0.12.0\"}\n  (:require\n   [clojure.string]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "cljs.analyzer example",
+    "input": "(ns cljs.analyzer\n  #?(:clj  (:refer-clojure :exclude [ensure macroexpand-1])\n     :cljs (:refer-clojure :exclude [ensure js-reserved macroexpand-1 ns-interns]))\n  #?(:cljs (:require-macros [cljs.analyzer.macros\n                             :refer [allowing-redef disallowing-ns* disallowing-recur\n                                     no-warn with-warning-handlers wrapping-errors]]\n             [cljs.env.macros :refer [ensure]]))\n  #?(:clj  (:require [cljs.analyzer.impl :as impl]\n                     [cljs.analyzer.impl.namespaces :as nses]\n                     [cljs.analyzer.passes.and-or :as and-or]\n                     [cljs.env :as env :refer [ensure]]\n                     [cljs.externs :as externs]\n                     [cljs.js-deps :as deps]\n                     [cljs.tagged-literals :as tags]\n                     [cljs.util :as util :refer [ns->relpath topo-sort]]\n                     [clojure.edn :as edn]\n                     [clojure.java.io :as io]\n                     [clojure.set :as set]\n                     [clojure.string :as string]\n                     [cljs.vendor.clojure.tools.reader :as reader]\n                     [cljs.vendor.clojure.tools.reader.reader-types :as readers])\n     :cljs (:require [cljs.analyzer.impl :as impl]\n                     [cljs.analyzer.impl.namespaces :as nses]\n                     [cljs.analyzer.passes.and-or :as and-or]\n                     [cljs.env :as env]\n                     [cljs.reader :as edn]\n                     [cljs.tagged-literals :as tags]\n                     [cljs.tools.reader :as reader]\n                     [cljs.tools.reader.reader-types :as readers]\n                     [clojure.set :as set]\n                     [clojure.string :as string]\n                     [goog.string :as gstring]))\n  #?(:clj (:import [cljs.tagged_literals JSValue]\n                   [clojure.lang Namespace Var LazySeq ArityException]\n                   [java.io File Reader PushbackReader]\n                   [java.lang Throwable]\n                   [java.net URL]\n                   [java.util.regex Pattern])))\n\n#?(:clj (set! *warn-on-reflection* true))\n\n;; User file-local compiler flags\n#?(:clj (def ^:dynamic *unchecked-if* false))\n#?(:clj (def ^:dynamic *unchecked-arrays* false))",
+    "expected": "(ns cljs.analyzer\n  (:refer-clojure\n    :exclude #?@(:clj [ensure macroexpand-1]\n                 :cljs [ensure js-reserved macroexpand-1 ns-interns]))\n  #?(:cljs\n     (:require-macros\n      [cljs.analyzer.macros :refer [allowing-redef disallowing-ns* disallowing-recur no-warn with-warning-handlers wrapping-errors]]\n      [cljs.env.macros :refer [ensure]]))\n  (:require\n   #?@(:clj\n       [[cljs.analyzer.impl :as impl]\n        [cljs.analyzer.impl.namespaces :as nses]\n        [cljs.analyzer.passes.and-or :as and-or]\n        [cljs.env :as env :refer [ensure]]\n        [cljs.externs :as externs]\n        [cljs.js-deps :as deps]\n        [cljs.tagged-literals :as tags]\n        [cljs.util :as util :refer [ns->relpath topo-sort]]\n        [cljs.vendor.clojure.tools.reader :as reader]\n        [cljs.vendor.clojure.tools.reader.reader-types :as readers]\n        [clojure.edn :as edn]\n        [clojure.java.io :as io]\n        [clojure.set :as set]\n        [clojure.string :as string]]\n\n       :cljs\n       [[cljs.analyzer.impl :as impl]\n        [cljs.analyzer.impl.namespaces :as nses]\n        [cljs.analyzer.passes.and-or :as and-or]\n        [cljs.env :as env]\n        [cljs.reader :as edn]\n        [cljs.tagged-literals :as tags]\n        [cljs.tools.reader :as reader]\n        [cljs.tools.reader.reader-types :as readers]\n        [clojure.set :as set]\n        [clojure.string :as string]\n        [goog.string :as gstring]]))\n  #?(:clj\n     (:import\n      (cljs.tagged_literals JSValue)\n      (clojure.lang ArityException LazySeq Namespace Var)\n      (java.io File PushbackReader Reader)\n      (java.lang Throwable)\n      (java.net URL)\n      (java.util.regex Pattern))))\n\n#?(:clj (set! *warn-on-reflection* true))\n\n;; User file-local compiler flags\n#?(:clj (def ^:dynamic *unchecked-if* false))\n#?(:clj (def ^:dynamic *unchecked-arrays* false))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #135 - portal.runtime.cson before",
+    "input": "(ns ^:no-doc portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  (:refer-clojure :exclude [read])\n  #?(:clj  (:require [portal.runtime.json-buffer :as json])\n     :cljr (:require [portal.runtime.json-buffer :as json])\n     :joyride\n     (:require\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m])\n     :org.babashka/nbb\n     (:require\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m])\n     :cljs\n     (:require\n      [goog.crypt.base64 :as Base64]\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m]))\n  #?(:clj  (:import [java.net URL]\n                    [java.util Base64 Date UUID])\n     :joyride (:import)\n     :org.babashka/nbb (:import)\n     :cljs (:import [goog.math Long])))\n\n(defprotocol ToJson (-to-json [value buffer]))",
+    "expected": "(ns portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  {:no-doc true}\n  (:refer-clojure :exclude [read])\n  (:require\n   #?@(:clj\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljr\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljs\n       [[goog.crypt.base64 :as Base64]\n        [portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :joyride\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :org.babashka/nbb\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]))\n  (:import\n   #?@(:clj\n       [(java.net URL)\n        (java.util Base64 Date UUID)]\n\n       :cljs\n       [(goog.math Long)])))\n\n(defprotocol ToJson (-to-json [value buffer]))"
+  },
+  {
+    "filename": "ns.eno",
+    "name": "GitHub Issue #135 - portal.runtime.cson after",
+    "input": "(ns portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  {:no-doc true}\n  (:refer-clojure :exclude [read])\n  (:require\n   #?@(:clj\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljr\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljs\n       [[goog.crypt.base64 :as Base64]\n        [portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :joyride\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :org.babashka/nbb\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]))\n  (:import\n   #?@(:clj\n       [(java.net URL)\n        (java.util Base64 Date UUID)]\n\n       :cljs\n       [(goog.math Long)])))\n\n(defprotocol ToJson (-to-json [value buffer]))",
+    "expected": "(ns portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  {:no-doc true}\n  (:refer-clojure :exclude [read])\n  (:require\n   #?@(:clj\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljr\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljs\n       [[goog.crypt.base64 :as Base64]\n        [portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :joyride\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :org.babashka/nbb\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]))\n  (:import\n   #?@(:clj\n       [(java.net URL)\n        (java.util Base64 Date UUID)]\n\n       :cljs\n       [(goog.math Long)])))\n\n(defprotocol ToJson (-to-json [value buffer]))"
+  },
+  {
+    "filename": "trailing_whitespace.eno",
+    "name": "Trim trailing whitespace 1",
+    "input": "(def aaa \"aaa\")   ",
+    "expected": "(def aaa \"aaa\")"
+  },
+  {
+    "filename": "trailing_whitespace.eno",
+    "name": "Trim trailing whitespace 2",
+    "input": "(def aaa \"aaa\",   \n)(def bbb \"bbb\")",
+    "expected": "(def aaa \"aaa\")\n(def bbb \"bbb\")"
+  },
+  {
+    "filename": "trailing_whitespace.eno",
+    "name": "Surrounding newlines removed additional",
+    "input": "(aaa  \n)",
+    "expected": "(aaa)"
+  }
+]

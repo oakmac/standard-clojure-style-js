@@ -1,0 +1,386 @@
+[
+  {
+    "filename": "parse_ns.eno",
+    "name": "simple namespace 1",
+    "input": "(ns com.example.my-app)",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "simple namespace 2",
+    "input": "(\n  ns com.example.my-app\n\n)",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with multiple :require",
+    "input": "(ns com.example.my-app\n  (:require com.example.my-app.bbb [com.example.my-app.ccc])\n  (:require com.example.my-app.aaa)\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"symbol\": \"com.example.my-app.aaa\"\n    },\n    {\n      \"symbol\": \"com.example.my-app.bbb\"\n    },\n    {\n      \"symbol\": \"com.example.my-app.ccc\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with require + imports",
+    "input": "(ns com.example.my-app\n  (:require com.example.my-app.bbb com.example.my-app.ccc com.example.my-app.aaa)\n  (:import java.io.File\n           (xxx.yyy.zzz Bravo Alpha Delta Charlie)\n           hhh.eee.Ccc\n           hhh.eee.Bbb\n           (java.util Date UUID))\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"imports\": [\n    {\n      \"package\": \"hhh.eee\",\n      \"classes\": [\"Bbb\", \"Ccc\"]\n    },\n    {\n      \"package\": \"java.io\",\n      \"classes\": [\"File\"]\n    },\n    {\n      \"package\": \"java.util\",\n      \"classes\": [\"Date\", \"UUID\"]\n    },\n    {\n      \"package\": \"xxx.yyy.zzz\",\n      \"classes\": [\"Alpha\", \"Bravo\", \"Charlie\", \"Delta\"]\n    }\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"com.example.my-app.aaa\"\n    },\n    {\n      \"symbol\": \"com.example.my-app.bbb\"\n    },\n    {\n      \"symbol\": \"com.example.my-app.ccc\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :require :as",
+    "input": "(ns com.example.my-app\n  (:require com.example.my-app.bbb [com.example.my-app.ccc :as ccc])\n  (:require [com.example.my-app.aaa :as aaa)\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"as\": \"aaa\",\n      \"symbol\": \"com.example.my-app.aaa\"\n    },\n    {\n      \"symbol\": \"com.example.my-app.bbb\"\n    },\n    {\n      \"as\": \"ccc\",\n      \"symbol\": \"com.example.my-app.ccc\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :refer-clojure :exclude",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :exclude [print get nth]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\"symbol\": \"get\"},\n      {\"symbol\": \"nth\"},\n      {\"symbol\": \"print\"}\n    ]\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :refer-clojure :only",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [set conj number? get ==]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"only\": [\n      {\"symbol\": \"==\"},\n      {\"symbol\": \"conj\"},\n      {\"symbol\": \"get\"},\n      {\"symbol\": \"number?\"},\n      {\"symbol\": \"set\"}\n    ]\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :refer-clojure :rename",
+    "input": "(ns com.example.my-app\n  (:require bbb.ccc bbb, aaa)\n  (:refer-clojure :rename {print core-print get g,  number? is-number ->> thread-last}\n  )\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"rename\": [\n      {\n        \"fromSymbol\": \"->>\",\n        \"toSymbol\": \"thread-last\"\n      },\n      {\n        \"fromSymbol\": \"get\",\n        \"toSymbol\": \"g\"\n      },\n      {\n        \"fromSymbol\": \"number?\",\n        \"toSymbol\": \"is-number\"\n      },\n      {\n        \"fromSymbol\": \"print\",\n        \"toSymbol\": \"core-print\"\n      }\n    ]\n  },\n  \"requires\": [\n    {\n      \"symbol\": \"aaa\"\n    },\n    {\n      \"symbol\": \"bbb\"\n    },\n    {\n      \"symbol\": \"bbb.ccc\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "refer-clojure with reader conditionals 1",
+    "input": "(ns com.example.my-app\n  (:refer-clojure :only [#?@(:cljs [dissoc conj])]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"only\": [\n      {\n        \"symbol\": \"conj\",\n        \"platform\": \":cljs\"\n      },\n      {\n        \"symbol\": \"dissoc\",\n        \"platform\": \":cljs\"\n      }\n    ]\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :require, :refer, :as",
+    "input": "(ns com.example.my-app\n  (:require\n    [com.example.duck :as duck :refer [quack quacking eat sleep]]\n    aaa.bbb\n    [com.example.cow :refer [moo eat-grass] :as cow]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"symbol\": \"aaa.bbb\"\n    },\n    {\n      \"as\": \"cow\",\n      \"symbol\": \"com.example.cow\",\n      \"refer\": [\n        {\"symbol\": \"eat-grass\"},\n        {\"symbol\": \"moo\"}\n      ]\n    },\n    {\n      \"as\": \"duck\",\n      \"symbol\": \"com.example.duck\",\n      \"refer\": [\n        {\"symbol\": \"eat\"},\n        {\"symbol\": \"quack\"},\n        {\"symbol\": \"quacking\"},\n        {\"symbol\": \"sleep\"}\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with :require :refer :all",
+    "input": "(ns com.example.my-app\n  (:require\n    [com.example.duck :as duck :refer :all]\n    aaa.bbb\n    [com.example.cow :refer [moo eat-grass] :as cow]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"symbol\": \"aaa.bbb\"\n    },\n    {\n      \"as\": \"cow\",\n      \"symbol\": \"com.example.cow\",\n      \"refer\": [\n        {\"symbol\": \"eat-grass\"},\n        {\"symbol\": \"moo\"}\n      ]\n    },\n    {\n      \"as\": \"duck\",\n      \"symbol\": \"com.example.duck\",\n      \"refer\": \"all\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with docstring",
+    "input": "(ns com.example.my-app\n  \"Mary had a little lamb\n  Its fleece was white as snow\")",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"docstring\": \"Mary had a little lamb\\n  Its fleece was white as snow\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with require comments",
+    "input": "(ns com.example.my-app\n  (:require\n    [com.example.duck :as duck :refer [quack quacking eat sleep]] ; NOTE: this ns is primarily focused on Mallards\n    ;; include aaa.bbb for reasons\n;; please see Issue #NaN for deeper explanation\n    aaa.bbb\n    ;; the cow namespace is deprecated, please refactor\n    [com.example.cow :refer [moo eat-grass] :as cow]) ;; the cow goes \"moo\"\n    )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"commentsAbove\": [\n        \";; include aaa.bbb for reasons\",\n        \";; please see Issue #NaN for deeper explanation\"\n      ],\n      \"symbol\": \"aaa.bbb\"\n    },\n    {\n      \"as\": \"cow\",\n      \"commentsAbove\": [\";; the cow namespace is deprecated, please refactor\"],\n      \"commentAfter\": \";; the cow goes \\\"moo\\\"\",\n      \"symbol\": \"com.example.cow\",\n      \"refer\": [\n        {\"symbol\": \"eat-grass\"},\n        {\"symbol\": \"moo\"}\n      ]\n    },\n    {\n      \"as\": \"duck\",\n      \"commentAfter\": \"; NOTE: this ns is primarily focused on Mallards\",\n      \"symbol\": \"com.example.duck\",\n      \"refer\": [\n        {\"symbol\": \"eat\"},\n        {\"symbol\": \"quack\"},\n        {\"symbol\": \"quacking\"},\n        {\"symbol\": \"sleep\"}\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with require comments 2",
+    "input": "(ns com.example.my-app\n  (:require\n    #_{:clj-kondo/ignore [:discouraged-namespace]}\n    [com.example.bbb :as bbb]\n    [com.example.aaa] #_ \"AAA\"\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"commentAfter\": \"#_ \\\"AAA\\\"\",\n      \"symbol\": \"com.example.aaa\"\n    },\n    {\n      \"as\": \"bbb\",\n      \"commentsAbove\": [\"#_{:clj-kondo/ignore [:discouraged-namespace]}\"],\n      \"symbol\": \"com.example.bbb\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with import comments",
+    "input": "(ns com.example.my-app\n  ;;; I'm a little teapot\n  ;;; Short and stout\n  (:import ; Here is my handle\n\n  ;; Here is my spout\n;; When I get all steamed up\n     (java.util Date UUID) ; Hear me shout\n     ;; Tip me over\n     ;; And pour me out!\n     aaa.bbb.Ccc ;; HTTP 418\n;; fin\n  )\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"importCommentsAbove\": [\n    \";;; I'm a little teapot\",\n    \";;; Short and stout\"\n  ],\n  \"importCommentAfter\": \"; Here is my handle\",\n  \"imports\": [\n    {\n      \"classes\": [\"Ccc\"],\n      \"commentsAbove\": [\n        \";; Tip me over\",\n        \";; And pour me out!\"\n      ],\n      \"commentAfter\": \";; HTTP 418\",\n      \"package\": \"aaa.bbb\"\n    },\n    {\n      \"commentsAbove\": [\n        \";; Here is my spout\",\n        \";; When I get all steamed up\"\n      ],\n      \"commentAfter\": \"; Hear me shout\",\n      \"classes\": [\"Date\", \"UUID\"],\n      \"package\": \"java.util\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with refer-clojure comments",
+    "input": "(ns com.example.my-app\n  ;; aaa\n  ;; bbb\n  (:refer-clojure :only [number? -> set])) ; ccc",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojureCommentsAbove\": [\n    \";; aaa\",\n    \";; bbb\"\n  ],\n  \"referClojureCommentAfter\": \"; ccc\",\n  \"referClojure\": {\n    \"only\": [\n      {\"symbol\": \"->\"},\n      {\"symbol\": \"number?\"},\n      {\"symbol\": \"set\"}\n    ]\n  },\n  \"commentOutsideNsForm\": \"; ccc\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace with comment outside ns form",
+    "input": "(ns com.example.my-app\n  ;; aaa\n  ;; bbb\n  (:require [aaa :as a])) ;; if only it were this easy",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requireCommentsAbove\": [\n    \";; aaa\",\n    \";; bbb\"\n  ],\n  \"requires\": [\n    {\n      \"as\": \"a\",\n      \"commentAfter\": \";; if only it were this easy\",\n      \"symbol\": \"aaa\"\n    }\n  ],\n  \"commentOutsideNsForm\": \";; if only it were this easy\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "expand prefix lists in require",
+    "input": "(ns com.example.my-app\n  (:require\n    (com.example client server routes)\n    com.example.aaa\n    [com.example bbb ccc]\n    [com.example.xxx zzz yyy]\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"symbol\": \"com.example.aaa\"\n    },\n    {\n      \"symbol\": \"com.example.bbb\"\n    },\n    {\n      \"symbol\": \"com.example.ccc\"\n    },\n    {\n      \"symbol\": \"com.example.client\"\n    },\n    {\n      \"symbol\": \"com.example.routes\"\n    },\n    {\n      \"symbol\": \"com.example.server\"\n    },\n    {\n      \"symbol\": \"com.example.xxx.yyy\"\n    },\n    {\n      \"symbol\": \"com.example.xxx.zzz\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "prefix lists with comments",
+    "input": "(ns com.example.my-app\n  (:require\n    ;; aaa\n    ;; bbb\n    (com.example server client routes) ;; ccc\n    com.example.db))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"commentsAbove\": [\n        \";; aaa\",\n        \";; bbb\"\n      ],\n      \"commentAfter\": \";; ccc\",\n      \"symbol\": \"com.example.client\"\n    },\n    {\n      \"symbol\": \"com.example.db\"\n    },\n    {\n      \"symbol\": \"com.example.routes\"\n    },\n    {\n      \"symbol\": \"com.example.server\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "reader conditionals in ns 1",
+    "input": "(ns com.example.my-app\n  (:require\n    #?(:clj  [com.example.eee]\n       :cljs [com.example.ddd])\n    com.example.fff\n    #?(:cljs com.example.bbb)\n    com.example.ccc\n    #?(:clj com.example.aaa)\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.aaa\"\n    },\n    {\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.bbb\"\n    },\n    {\n      \"symbol\": \"com.example.ccc\"\n    },\n    {\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.ddd\"\n    },\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.eee\"\n    },\n    {\n      \"symbol\": \"com.example.fff\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "reader conditionals in ns 2",
+    "input": "(ns com.example.my-app\n  (:require\n    #?(:clj  [com.example.eee]\n       :cljs [com.example.ddd :as d] ;; ddd\n       :elephant com.example.yyy)\n    com.example.fff\n    #?@(:cljs [com.example.bbb-cljs]\n        :elephant [com.example.bbb-elephant]\n        :default [com.example.bbb-default])\n    com.example.ccc\n    #?(:clj com.example.aaa)\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.aaa\"\n    },\n    {\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.bbb-cljs\"\n    },\n    {\n      \"platform\": \":default\",\n      \"symbol\": \"com.example.bbb-default\"\n    },\n    {\n      \"platform\": \":elephant\",\n      \"symbol\": \"com.example.bbb-elephant\"\n    },\n    {\n      \"symbol\": \"com.example.ccc\"\n    },\n    {\n      \"as\": \"d\",\n      \"commentAfter\": \";; ddd\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.ddd\"\n    },\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.eee\"\n    },\n    {\n      \"symbol\": \"com.example.fff\"\n    },\n    {\n      \"platform\": \":elephant\",\n      \"symbol\": \"com.example.yyy\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "reader conditionals in ns 3",
+    "input": "(ns com.example.module-test\n  (:require #?(:clj  [clojure.test :refer :all]\n               :cljs [cljs.test :refer-macros [is]])\n            #?(:cljs [cljs.test.check :refer [quick-check]]) ;; aaa\n            #?(:clj  [clojure.test.check.clojure-test :refer [defspec]]\n               :cljs [cljs.test.check.cljs-test :refer-macros [defspec]])\n            #?(:clj  [clojure.test.check.properties :as prop]\n               :cljs [cljs.test.check.properties :as prop\n                       :include-macros true])\n            [schema.core :as schema :refer [check]]\n            [com.example.schema.ids :refer [Foo]]\n            [com.example.generators\n             :refer [gen-part-no gen-invalid-part-no]]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.module-test\",\n  \"requires\": [\n    {\n      \"platform\": \":cljs\",\n      \"referMacros\": [\"is\"],\n      \"symbol\": \"cljs.test\"\n    },\n    {\n      \"commentAfter\": \";; aaa\",\n      \"platform\": \":cljs\",\n      \"refer\": [{\"symbol\": \"quick-check\"}],\n      \"symbol\": \"cljs.test.check\"\n    },\n    {\n      \"platform\": \":cljs\",\n      \"referMacros\": [\"defspec\"],\n      \"symbol\": \"cljs.test.check.cljs-test\"\n    },\n    {\n      \"as\": \"prop\",\n      \"includeMacros\": true,\n      \"platform\": \":cljs\",\n      \"symbol\": \"cljs.test.check.properties\"\n    },\n    {\n      \"platform\": \":clj\",\n      \"refer\": \"all\",\n      \"symbol\": \"clojure.test\"\n    },\n    {\n      \"platform\": \":clj\",\n      \"refer\": [{\"symbol\": \"defspec\"}],\n      \"symbol\": \"clojure.test.check.clojure-test\"\n    },\n    {\n      \"as\": \"prop\",\n      \"platform\": \":clj\",\n      \"symbol\": \"clojure.test.check.properties\"\n    },\n    {\n      \"refer\": [\n        {\"symbol\": \"gen-invalid-part-no\"},\n        {\"symbol\": \"gen-part-no\"}\n      ],\n      \"symbol\": \"com.example.generators\"\n    },\n    {\n      \"refer\": [{\"symbol\": \"Foo\"}],\n      \"symbol\": \"com.example.schema.ids\"\n    },\n    {\n      \"as\": \"schema\",\n      \"refer\": [{\"symbol\": \"check\"}],\n      \"symbol\": \"schema.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "reader conditionals in ns 4",
+    "input": "(ns com.example.my-app\n  (:require\n    #?(:clj  [com.example.eee]\n       :cljs [com.example.ddd :as d] ;; ddd\n       :elephant com.example.yyy)\n    com.example.fff\n    #?@(:cljs [com.example.bbb-cljs]\n        :elephant [com.example.bbb-elephant]\n        :default [com.example.bbb-default])\n    com.example.ccc\n    #?(:clj com.example.aaa))\n\n  (:import\n    xxx.yyy.Zzz\n    aaa.bbb.Ccc\n    #?@(:cljs goog.string.StringBuffer\n        :clj java.net.URI))\n\n  #?(:clj\n     (:import\n      [java.io StringReader]\n      java.net.InetAddress)\n\n     :cljs\n     (:import\n      [goog.module ModuleManager]\n      (goog.events EventType EventTarget)\n      goog.Uri)))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"imports\": [\n    {\n      \"classes\": [\"Ccc\"],\n      \"package\": \"aaa.bbb\"\n    },\n    {\n      \"classes\": [\"Uri\"],\n      \"package\": \"goog\",\n      \"platform\": \":cljs\"\n    },\n    {\n      \"classes\": [\"EventTarget\", \"EventType\"],\n      \"package\": \"goog.events\",\n      \"platform\": \":cljs\"\n    },\n    {\n      \"classes\": [\"ModuleManager\"],\n      \"package\": \"goog.module\",\n      \"platform\": \":cljs\"\n    },\n    {\n      \"classes\": [\"StringBuffer\"],\n      \"package\": \"goog.string\",\n      \"platform\": \":cljs\"\n    },\n    {\n      \"classes\": [\"StringReader\"],\n      \"package\": \"java.io\",\n      \"platform\": \":clj\"\n    },\n    {\n      \"classes\": [\"InetAddress\", \"URI\"],\n      \"package\": \"java.net\",\n      \"platform\": \":clj\"\n    },\n    {\n      \"classes\": [\"Zzz\"],\n      \"package\": \"xxx.yyy\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.aaa\"\n    },\n    {\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.bbb-cljs\"\n    },\n    {\n      \"platform\": \":default\",\n      \"symbol\": \"com.example.bbb-default\"\n    },\n    {\n      \"platform\": \":elephant\",\n      \"symbol\": \"com.example.bbb-elephant\"\n    },\n    {\n      \"symbol\": \"com.example.ccc\"\n    },\n    {\n      \"as\": \"d\",\n      \"commentAfter\": \";; ddd\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"com.example.ddd\"\n    },\n    {\n      \"platform\": \":clj\",\n      \"symbol\": \"com.example.eee\"\n    },\n    {\n      \"symbol\": \"com.example.fff\"\n    },\n    {\n      \"platform\": \":elephant\",\n      \"symbol\": \"com.example.yyy\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros 1",
+    "input": "(ns bar.core\n  (:require-macros [foo.core :refer [add]]))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requireMacros\": [\n    {\n      \"refer\": [\n        {\"symbol\": \"add\"}\n      ],\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros 2",
+    "input": "(ns bar.core\n  (:require-macros [foo.core :as foo])\n  (:require [foo.core :as foo]))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requireMacros\": [\n    {\n      \"as\": \"foo\",\n      \"symbol\": \"foo.core\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"as\": \"foo\",\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros 3",
+    "input": "(ns foo.core\n  (:require-macros foo.core))",
+    "expected": "{\n  \"nsSymbol\": \"foo.core\",\n  \"requireMacros\": [\n    {\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros 4",
+    "input": "(ns bar.core\n  (:require-macros [foo.core :refer [add] :as quizzle])\n  (:require [foo.core :refer [subtract]]))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requireMacros\": [\n    {\n      \"as\": \"quizzle\",\n      \"refer\": [\n        {\"symbol\": \"add\"}\n      ],\n      \"symbol\": \"foo.core\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"refer\": [{\"symbol\":\"subtract\"}],\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros 5",
+    "input": "(ns bar.core\n  (:require [foo.core :refer [subtract] :refer-macros [add]]))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requires\": [\n    {\n      \"refer\": [{\"symbol\":\"subtract\"}],\n      \"referMacros\": [\"add\"],\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros with comments 1",
+    "input": "(ns bar.core\n  ;; aaa\n  ;; bbb\n  ;; ccc\n  (:require-macros [foo.core :refer [bad add cad]] ;; rad\n  ;; xxx\n  ;; yyy\n  bar.core.util ;; util util util\n        [biz.com :as bc :refer [qux zoom banana]] ;; biz-com!\n        )    )",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requireMacrosCommentsAbove\": [\n    \";; aaa\",\n    \";; bbb\",\n    \";; ccc\"\n  ],\n  \"requireMacros\": [\n    {\n      \"commentsAbove\": [\n        \";; xxx\",\n        \";; yyy\"\n      ],\n      \"commentAfter\": \";; util util util\",\n      \"symbol\": \"bar.core.util\"\n    },\n    {\n      \"as\": \"bc\",\n      \"commentAfter\": \";; biz-com!\",\n      \"refer\": [\n        {\"symbol\": \"banana\"},\n        {\"symbol\": \"qux\"},\n        {\"symbol\": \"zoom\"}\n      ],\n      \"symbol\": \"biz.com\"\n    },\n    {\n      \"commentAfter\": \";; rad\",\n      \"refer\": [\n        {\"symbol\": \"add\"},\n        {\"symbol\": \"bad\"},\n        {\"symbol\": \"cad\"}\n      ],\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros with comments 2",
+    "input": "(ns bar.core\n  (:require-macros\n    [foo.core :refer [bad add cad]] ;; rad\n    [aaa.bbb :refer [ccc]] ;; ddd\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requireMacros\": [\n    {\n      \"commentAfter\": \";; ddd\",\n      \"refer\": [{\"symbol\": \"ccc\"}],\n      \"symbol\": \"aaa.bbb\"\n    },\n    {\n      \"commentAfter\": \";; rad\",\n      \"refer\": [\n        {\"symbol\": \"add\"},\n        {\"symbol\": \"bad\"},\n        {\"symbol\": \"cad\"}\n      ],\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "require-macros with comments 3",
+    "input": "(ns com.example.my-app\n  #?(:cljs\n     (:require-macros\n       [ccc.ddd :as d :refer [hhh ggg]]))) ;; ddd",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requireMacros\": [\n    {\n      \"as\": \"d\",\n      \"commentAfter\": \";; ddd\",\n      \"refer\": [\n        {\n          \"symbol\": \"ggg\",\n          \"platform\": \":cljs\"\n        },\n        {\n          \"symbol\": \"hhh\",\n          \"platform\": \":cljs\"\n        }\n      ],\n      \"platform\": \":cljs\",\n      \"symbol\": \"ccc.ddd\"\n    }\n  ],\n  \"commentOutsideNsForm\": \";; ddd\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "ClojureScript ns test 1",
+    "input": "(ns bar.core\n  (:require [foo.core :as foo :include-macros true]))",
+    "expected": "{\n  \"nsSymbol\": \"bar.core\",\n  \"requires\": [\n    {\n      \"as\": \"foo\",\n      \"includeMacros\": true,\n      \"symbol\": \"foo.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "ClojureScript ns test 2",
+    "input": "(ns cljs.ns-test\n  (:refer-clojure :exclude [+ for] :rename {mapv core-mapv})\n  (:require-macros [clojure.core :as lang :refer [when when-let] :rename {when always\n                                                                          when-let always-let}]\n                   [cljs.test :refer [deftest is]]))",
+    "expected": "{\n  \"nsSymbol\": \"cljs.ns-test\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\"symbol\": \"+\"},\n      {\"symbol\": \"for\"}\n    ],\n    \"rename\": [\n      {\n        \"fromSymbol\": \"mapv\",\n        \"toSymbol\": \"core-mapv\"\n      }\n    ]\n  },\n  \"requireMacros\": [\n    {\n      \"refer\": [\n        {\"symbol\": \"deftest\"},\n        {\"symbol\": \"is\"}\n      ],\n      \"symbol\": \"cljs.test\"\n    },\n    {\n      \"as\": \"lang\",\n      \"refer\": [\n        {\"symbol\": \"when\"},\n        {\"symbol\": \"when-let\"}\n      ],\n      \"rename\": [\n        {\n          \"fromSymbol\": \"when\",\n          \"toSymbol\": \"always\"\n        },\n        {\n          \"fromSymbol\": \"when-let\",\n          \"toSymbol\": \"always-let\"\n        }\n      ],\n      \"symbol\": \"clojure.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "ClojureScript ns test 3",
+    "input": "(ns cljs.spec.gen.alpha\n  (:refer-clojure :exclude [boolean cat hash-map list map not-empty set vector\n                            char double int keyword symbol string uuid delay shuffle])\n  (:require-macros [cljs.core :as c]\n                   [cljs.spec.gen.alpha :as gen :refer [dynaload lazy-combinators lazy-prims]])\n  (:require [cljs.core :as c])\n  (:import (goog Uri)))",
+    "expected": "{\n  \"nsSymbol\": \"cljs.spec.gen.alpha\",\n  \"imports\": [\n    {\n      \"classes\": [\"Uri\"],\n      \"package\": \"goog\"\n    }\n  ],\n  \"referClojure\": {\n    \"exclude\": [\n      {\"symbol\": \"boolean\"},\n      {\"symbol\": \"cat\"},\n      {\"symbol\": \"char\"},\n      {\"symbol\": \"delay\"},\n      {\"symbol\": \"double\"},\n      {\"symbol\": \"hash-map\"},\n      {\"symbol\": \"int\"},\n      {\"symbol\": \"keyword\"},\n      {\"symbol\": \"list\"},\n      {\"symbol\": \"map\"},\n      {\"symbol\": \"not-empty\"},\n      {\"symbol\": \"set\"},\n      {\"symbol\": \"shuffle\"},\n      {\"symbol\": \"string\"},\n      {\"symbol\": \"symbol\"},\n      {\"symbol\": \"uuid\"},\n      {\"symbol\": \"vector\"}\n    ]\n  },\n  \"requireMacros\": [\n    {\n      \"as\": \"c\",\n      \"symbol\": \"cljs.core\"\n    },\n    {\n      \"as\": \"gen\",\n      \"refer\": [\n        {\"symbol\": \"dynaload\"},\n        {\"symbol\": \"lazy-combinators\"},\n        {\"symbol\": \"lazy-prims\"}\n      ],\n      \"symbol\": \"cljs.spec.gen.alpha\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"as\": \"c\",\n      \"symbol\": \"cljs.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "sente example",
+    "input": "(ns taoensso.sente\n  (:require\n    #?@(:clj  [[clojure.string :as str]\n               [clojure.core.async :as async]\n               [taoensso.encore :as enc]\n               [taoensso.timbre :as timbre]\n               [taoensso.sente.interfaces :as interfaces]]\n        :cljs [[clojure.string :as str]\n               [cljs.core.async :as async]\n               [taoensso.encore :as enc]\n               [taoensso.sente.interfaces :as interfaces]]))\n  #?(:cljs (:require-macros\n             [cljs.core.async.macros :as asyncm :refer (go go-loop)]\n             [taoensso.encore :as enc :refer (have? have have-in)])))",
+    "expected": "{\n  \"nsSymbol\": \"taoensso.sente\",\n  \"requires\": [\n    {\n      \"as\": \"async\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"cljs.core.async\"\n    },\n    {\n      \"as\": \"async\",\n      \"platform\": \":clj\",\n      \"symbol\": \"clojure.core.async\"\n    },\n    {\n      \"as\": \"str\",\n      \"platform\": \":clj\",\n      \"symbol\": \"clojure.string\"\n    },\n    {\n      \"as\": \"str\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"clojure.string\"\n    },\n    {\n      \"as\": \"enc\",\n      \"platform\": \":clj\",\n      \"symbol\": \"taoensso.encore\"\n    },\n    {\n      \"as\": \"enc\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"taoensso.encore\"\n    },\n    {\n      \"as\": \"interfaces\",\n      \"platform\": \":clj\",\n      \"symbol\": \"taoensso.sente.interfaces\"\n    },\n    {\n      \"as\": \"interfaces\",\n      \"platform\": \":cljs\",\n      \"symbol\": \"taoensso.sente.interfaces\"\n    },\n    {\n      \"as\": \"timbre\",\n      \"platform\": \":clj\",\n      \"symbol\": \"taoensso.timbre\"\n    }\n  ],\n  \"requireMacros\": [\n    {\n      \"as\": \"asyncm\",\n      \"platform\": \":cljs\",\n      \"refer\": [\n        {\n          \"symbol\": \"go\",\n          \"platform\": \":cljs\"\n        },\n        {\n          \"symbol\": \"go-loop\",\n          \"platform\": \":cljs\"\n        }\n      ],\n      \"symbol\": \"cljs.core.async.macros\"\n    },\n    {\n      \"as\": \"enc\",\n      \"platform\": \":cljs\",\n      \"refer\": [\n        {\n          \"symbol\": \"have\",\n          \"platform\": \":cljs\"\n        },\n        {\n          \"symbol\": \"have-in\",\n          \"platform\": \":cljs\"\n        },\n        {\n          \"symbol\": \"have?\",\n          \"platform\": \":cljs\"\n        }\n      ],\n      \"symbol\": \"taoensso.encore\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "basic gen-class",
+    "input": "(ns com.example.my-app\n  (:gen-class))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"isEmpty\": true\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class with reader conditional",
+    "input": "(ns com.example.my-app\n  #?(:clj\n     (:gen-class)))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"isEmpty\": true,\n    \"platform\": \":clj\"\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class with reader conditional and comments",
+    "input": "(ns com.example.my-app\n  #?(:clj\n  ;; zzz\n     (:gen-class)))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"commentsAbove\": [\";; zzz\"],\n    \"isEmpty\": true,\n    \"platform\": \":clj\"\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class with comments 1",
+    "input": "(ns com.example.my-app\n  ;; aaa\n  ;; bbb\n  (:gen-class)) ;; ccc",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"commentsAbove\": [\";; aaa\", \";; bbb\"],\n    \"commentAfter\": \";; ccc\",\n    \"isEmpty\": true\n  },\n  \"commentOutsideNsForm\": \";; ccc\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class with comments 2",
+    "input": "(ns com.example.my-app\n  ;; aaa\n  ;; bbb\n  (:gen-class) ;; ccc\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"commentsAbove\": [\";; aaa\", \";; bbb\"],\n    \"commentAfter\": \";; ccc\",\n    \"isEmpty\": true\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class with simple values",
+    "input": "(ns com.example.my-app\n  (:gen-class\n    :name name2\n    :extends java.lang.RuntimeException\n    :init init2\n    :post-init jjj\n    :main true\n    :factory fff\n    :state state2\n    :prefix \"zzz-\"\n    :impl-ns iii\n    :load-impl-ns false))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"isEmpty\": false,\n    \"name\": {\n      \"value\": \"name2\"\n    },\n    \"extends\": {\n      \"value\": \"java.lang.RuntimeException\"\n    },\n    \"init\": {\n      \"value\": \"init2\"\n    },\n    \"post-init\": {\n      \"value\": \"jjj\"\n    },\n    \"main\": {\n      \"value\": true\n    },\n    \"factory\": {\n      \"value\": \"fff\"\n    },\n    \"state\": {\n      \"value\": \"state2\"\n    },\n    \"prefix\": {\n      \"value\": \"\\\"zzz-\\\"\"\n    },\n    \"impl-ns\": {\n      \"value\": \"iii\"\n    },\n    \"load-impl-ns\": {\n      \"value\": false\n    }\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "gen-class simple values with comments",
+    "input": "(ns com.example.my-app\n  (:gen-class\n    ;; aaa\n    ;; bbb\n    :name name2 ;; ccc\n    ;; ddd\n    :main false) ;; eee\n  )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"genClass\": {\n    \"isEmpty\": false,\n    \"name\": {\n      \"commentsAbove\": [\n        \";; aaa\",\n        \";; bbb\"\n      ],\n      \"commentAfter\": \";; ccc\",\n      \"value\": \"name2\"\n    },\n    \"main\": {\n      \"commentsAbove\": [\n        \";; ddd\"\n      ],\n      \"commentAfter\": \";; eee\",\n      \"value\": false\n    }\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "cuerdas.core example",
+    "input": "(ns cuerdas.core\n  (:refer-clojure :exclude [contains? empty? repeat regexp?\n                            replace reverse chars keyword concat\n                            #?@(:clj [unquote format])])\n  #?(:cljs (:require-macros [cuerdas.core :refer [unsafe-concat nilv]])) ;; require-macros!\n  (:require [clojure.string :as str]\n            [clojure.set :refer [map-invert]]\n            [clojure.core :as c]\n\n            [clojure.walk :refer [stringify-keys]]\n            [cuerdas.regexp :as rx]\n\n            #?(:cljs [goog.string :as gstr]) ;; ggg\n            #?(:cljs [cljs.reader :as edn] ;; cljs-edn\n               :clj  [clojure.edn :as edn])) ;; clj-edn\n  #?(:clj (:import (java.util List Locale) ;; lll\n                   (aaa.bbb Ddd Ccc)))) ;; aaa",
+    "expected": "{\n  \"nsSymbol\": \"cuerdas.core\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\n        \"symbol\": \"chars\"\n      },\n      {\n        \"symbol\": \"concat\"\n      },\n      {\n        \"symbol\": \"contains?\"\n      },\n      {\n        \"symbol\": \"empty?\"\n      },\n      {\n        \"symbol\": \"format\",\n        \"platform\": \":clj\"\n      },\n      {\n        \"symbol\": \"keyword\"\n      },\n      {\n        \"symbol\": \"regexp?\"\n      },\n      {\n        \"symbol\": \"repeat\"\n      },\n      {\n        \"symbol\": \"replace\"\n      },\n      {\n        \"symbol\": \"reverse\"\n      },\n      {\n        \"symbol\": \"unquote\",\n        \"platform\": \":clj\"\n      }\n    ]\n  },\n  \"requireMacros\": [\n    {\n      \"symbol\": \"cuerdas.core\",\n      \"platform\": \":cljs\",\n      \"refer\": [\n        {\n          \"symbol\": \"nilv\",\n          \"platform\": \":cljs\"\n        },\n        {\n          \"symbol\": \"unsafe-concat\",\n          \"platform\": \":cljs\"\n        }\n      ],\n      \"commentAfter\": \";; require-macros!\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"cljs.reader\",\n      \"platform\": \":cljs\",\n      \"as\": \"edn\",\n      \"commentAfter\": \";; cljs-edn\"\n    },\n    {\n      \"symbol\": \"clojure.core\",\n      \"as\": \"c\"\n    },\n    {\n      \"symbol\": \"clojure.edn\",\n      \"platform\": \":clj\",\n      \"as\": \"edn\",\n      \"commentAfter\": \";; clj-edn\"\n    },\n    {\n      \"symbol\": \"clojure.set\",\n      \"refer\": [{\"symbol\": \"map-invert\"}]\n    },\n    {\n      \"symbol\": \"clojure.string\",\n      \"as\": \"str\"\n    },\n    {\n      \"symbol\": \"clojure.walk\",\n      \"refer\": [{\"symbol\": \"stringify-keys\"}]\n    },\n    {\n      \"symbol\": \"cuerdas.regexp\",\n      \"as\": \"rx\"\n    },\n    {\n      \"symbol\": \"goog.string\",\n      \"platform\": \":cljs\",\n      \"as\": \"gstr\",\n      \"commentAfter\": \";; ggg\"\n    }\n  ],\n  \"commentOutsideNsForm\": \";; aaa\",\n  \"imports\": [\n    {\n      \"package\": \"aaa.bbb\",\n      \"classes\": [\n        \"Ccc\",\n        \"Ddd\"\n      ],\n      \"commentAfter\": \";; aaa\",\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.util\",\n      \"classes\": [\n        \"List\",\n        \"Locale\"\n      ],\n      \"commentAfter\": \";; lll\",\n      \"platform\": \":clj\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "namespace docstring 2",
+    "input": "(ns com.oakmac.chessboard2.util.base58)\n\n(def base58-chars\n  \"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\")\n\n(def default-length 12)\n\n(defn random-base58\n  \"returns a random base58 string\"\n  ([]\n   (random-base58 default-length))\n  ([len]\n   (apply str (take len (repeatedly #(rand-nth base58-chars))))))\n",
+    "expected": "{\n  \"nsSymbol\": \"com.oakmac.chessboard2.util.base58\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "metabase example 1",
+    "input": "(ns metabase.shared.util.i18n\n  (:require\n   [\"ttag\" :as ttag]\n   [clojure.string :as str])\n  (:require-macros\n   [metabase.shared.util.i18n]))",
+    "expected": "{\n  \"nsSymbol\": \"metabase.shared.util.i18n\",\n  \"requires\": [\n    {\n      \"symbol\": \"\\\"ttag\\\"\",\n      \"symbolIsString\": true,\n      \"as\": \"ttag\"\n    },\n    {\n      \"symbol\": \"clojure.string\",\n      \"as\": \"str\"\n    }\n  ],\n  \"requireMacros\": [\n    {\n      \"symbol\": \"metabase.shared.util.i18n\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "reader macro comments",
+    "input": "(ns com.example.my-app\n  (:require\n    ccc.ddd #_ #{\"bugger\"}\n    #_ {:alpha \"alpha\"\n        :bravo \"bravo\"}\n    [aaa.bbb]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"commentsAbove\": [\"#_ {:alpha \\\"alpha\\\"\\n        :bravo \\\"bravo\\\"}\"],\n      \"symbol\": \"aaa.bbb\"\n    },\n    {\n      \"commentAfter\": \"#_ #{\\\"bugger\\\"}\",\n      \"symbol\": \"ccc.ddd\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "comment above ns form 1",
+    "input": ";; aaa\n(ns com.example.foo\n  \"bar\")",
+    "expected": "{\n  \"nsSymbol\": \"com.example.foo\",\n  \"docstring\": \"bar\"\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "comment above ns form 2",
+    "input": ";; abc\n;; def\n\n(ns metabase.api.common\n  \"Dynamic variables and utility functions/macros for writing API functions.\"\n  (:require\n    [clojure.set :as set]\n    [potemkin :as p]\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"metabase.api.common\",\n  \"docstring\": \"Dynamic variables and utility functions/macros for writing API functions.\",\n  \"requires\": [\n    {\n      \"as\": \"set\",\n      \"symbol\": \"clojure.set\"\n    },\n    {\n      \"as\": \"p\",\n      \"symbol\": \"potemkin\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": ":refer :all with :exclude",
+    "input": "(ns com.example.my-app\n  (:require\n    [incanter.core :refer :all :exclude [abs]])\n    )",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"exclude\": [{\"symbol\": \"abs\"}],\n      \"refer\": \"all\",\n      \"symbol\": \"incanter.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "comments after ns form",
+    "input": "(ns foo.bar\n  (:require baz.core\n            ))\n\n(comment\n  ;; foo\n  )\n\n\n(comment\n  ;; bar\n  )\n\n(comment\n  ;; baz\n  )",
+    "expected": "{\n  \"nsSymbol\": \"foo.bar\",\n  \"requires\": [\n    {\n      \"symbol\": \"baz.core\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": ":refer :as-alias",
+    "input": "(ns com.example.my-app\n  (require [foo :as-alias bar]\n[aaa :as-alias bbb :exclude [yyy ttt]]\n  )\n)",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"asAlias\": \"bbb\",\n      \"exclude\": [\n        {\"symbol\": \"ttt\"},\n        {\"symbol\": \"yyy\"}\n      ],\n      \"symbol\": \"aaa\"\n    },\n    {\n      \"asAlias\": \"bar\",\n      \"symbol\": \"foo\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "refer-clojure rename with comment and reader conditional",
+    "input": "(ns com.example.my-app\n  (:refer-clojure\n    :rename  {get core-get\n              #?@(:clj [conj core-conj])}))\n                  ;:cljs [conj core-conj2])}))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"rename\": [\n      {\n        \"fromSymbol\": \"conj\",\n        \"toSymbol\": \"core-conj\",\n        \"platform\": \":clj\"\n      },\n      {\n        \"fromSymbol\": \"get\",\n        \"toSymbol\": \"core-get\"\n      }\n    ]\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #111 - comments above :require-macros",
+    "input": "(ns com.example.my-app\n  ;; comment1\n  #_{:clj-kondo/ignore [:unused-referred-var]}\n  (:require-macros [other.ns :refer [one two]])\n  (:require\n    [aaa :as bbb]\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requireMacrosCommentsAbove\": [\n    \";; comment1\",\n    \"#_{:clj-kondo/ignore [:unused-referred-var]}\"\n  ],\n  \"requireMacros\": [\n    {\n      \"refer\": [\n        {\n          \"symbol\": \"one\"\n        },\n        {\n          \"symbol\": \"two\"\n        }\n      ],\n      \"symbol\": \"other.ns\"\n    }\n  ],\n  \"requires\": [\n    {\n      \"as\": \"bbb\",\n      \"symbol\": \"aaa\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #112 - extra options in JS requires",
+    "input": "(ns com.example.my-app\n  (:require\n    [\"@foo/bar\" :rename {Charlie Delta Alpha Bravo }]\n    ))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"requires\": [\n    {\n      \"symbol\": \"\\\"@foo/bar\\\"\",\n      \"symbolIsString\": true,\n      \"rename\": [\n        {\n          \"fromSymbol\": \"Alpha\",\n          \"toSymbol\": \"Bravo\"\n        },\n        {\n          \"fromSymbol\": \"Charlie\",\n          \"toSymbol\": \"Delta\"\n        }\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #114 - refer-clojure with reader conditional",
+    "input": "(ns com.example.my-app\n#?(:clj\n   (:refer-clojure :exclude [aaa ccc bbb])\n\n   :cljs\n   (:refer-clojure :exclude [ddd aaa])\n   ,))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\"symbol\": \"aaa\", \"platform\": \":clj\"},\n      {\"symbol\": \"aaa\", \"platform\": \":cljs\"},\n      {\"symbol\": \"bbb\", \"platform\": \":clj\"},\n      {\"symbol\": \"ccc\", \"platform\": \":clj\"},\n      {\"symbol\": \"ddd\", \"platform\": \":cljs\"}\n    ]\n  }\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 1",
+    "input": "(ns ^{:deprecated \"0.1.0\", :aaa \"aaa\"} com.example.my-app\n  (:require [clojure.string :as str]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"nsMetadata\": [\n    {\"key\": \":deprecated\", \"value\": \"\\\"0.1.0\\\"\"},\n    {\"key\": \":aaa\", \"value\": \"\\\"aaa\\\"\"}\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"clojure.string\",\n      \"as\": \"str\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 2",
+    "input": "(ns ^:foo/bar com.example.my-app)",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"nsMetadata\": [\n    {\"key\": \":foo/bar\", \"value\": \"true\"}\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 3",
+    "input": "(ns com.example.my-app {:foo 45, :bar [:a :b :c {}]})",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"nsMetadata\": [\n    {\"key\": \":foo\", \"value\": \"45\"},\n    {\"key\": \":bar\", \"value\": \"[:a :b :c {}]\"}\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #55 - metadata in ns 4",
+    "input": "(ns ^{:foo bar} weeble.ns {:foo baz}\n  (:require [clojure.string]))",
+    "expected": "{\n  \"nsSymbol\": \"weeble.ns\",\n  \"nsMetadata\": [\n    {\"key\": \":foo\", \"value\": \"baz\"}\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"clojure.string\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #126 - metadata in ns 8",
+    "input": "(ns ^{:added \"0.12.0\"} com.example.my-app\n  \"some docstring!\"\n  (:require [clojure.string]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"docstring\": \"some docstring!\",\n  \"nsMetadata\": [\n    {\"key\": \":added\", \"value\": \"\\\"0.12.0\\\"\"}\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"clojure.string\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #126 - metadata in ns 9",
+    "input": "(ns com.example.my-app\n  \"some docstring!\"\n  {:added \"0.12.0\"}\n  (:require\n    [clojure.string]))",
+    "expected": "{\n  \"nsSymbol\": \"com.example.my-app\",\n  \"docstring\": \"some docstring!\",\n  \"nsMetadata\": [\n    {\"key\": \":added\", \"value\": \"\\\"0.12.0\\\"\"}\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"clojure.string\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "cljs.analyzer example",
+    "input": "(ns cljs.analyzer\n  #?(:clj  (:refer-clojure :exclude [ensure macroexpand-1])\n     :cljs (:refer-clojure :exclude [ensure js-reserved macroexpand-1 ns-interns]))\n  #?(:cljs (:require-macros [cljs.analyzer.macros\n                             :refer [allowing-redef disallowing-ns* disallowing-recur\n                                     no-warn with-warning-handlers wrapping-errors]]\n             [cljs.env.macros :refer [ensure]]))\n  #?(:clj  (:require [cljs.analyzer.impl :as impl]\n                     [cljs.analyzer.impl.namespaces :as nses]\n                     [cljs.analyzer.passes.and-or :as and-or]\n                     [cljs.env :as env :refer [ensure]]\n                     [cljs.externs :as externs]\n                     [cljs.js-deps :as deps]\n                     [cljs.tagged-literals :as tags]\n                     [cljs.util :as util :refer [ns->relpath topo-sort]]\n                     [clojure.edn :as edn]\n                     [clojure.java.io :as io]\n                     [clojure.set :as set]\n                     [clojure.string :as string]\n                     [cljs.vendor.clojure.tools.reader :as reader]\n                     [cljs.vendor.clojure.tools.reader.reader-types :as readers])\n     :cljs (:require [cljs.analyzer.impl :as impl]\n                     [cljs.analyzer.impl.namespaces :as nses]\n                     [cljs.analyzer.passes.and-or :as and-or]\n                     [cljs.env :as env]\n                     [cljs.reader :as edn]\n                     [cljs.tagged-literals :as tags]\n                     [cljs.tools.reader :as reader]\n                     [cljs.tools.reader.reader-types :as readers]\n                     [clojure.set :as set]\n                     [clojure.string :as string]\n                     [goog.string :as gstring]))\n  #?(:clj (:import [cljs.tagged_literals JSValue]\n                   [clojure.lang Namespace Var LazySeq ArityException]\n                   [java.io File Reader PushbackReader]\n                   [java.lang Throwable]\n                   [java.net URL]\n                   [java.util.regex Pattern])))\n\n#?(:clj (set! *warn-on-reflection* true))\n\n;; User file-local compiler flags\n#?(:clj (def ^:dynamic *unchecked-if* false))\n#?(:clj (def ^:dynamic *unchecked-arrays* false))",
+    "expected": "{\n  \"nsSymbol\": \"cljs.analyzer\",\n  \"referClojure\": {\n    \"exclude\": [\n      { \"symbol\": \"ensure\",\"platform\": \":clj\" },\n      { \"symbol\": \"ensure\",\"platform\": \":cljs\" },\n      { \"symbol\": \"js-reserved\",\"platform\": \":cljs\" },\n      { \"symbol\": \"macroexpand-1\",\"platform\": \":clj\" },\n      { \"symbol\": \"macroexpand-1\",\"platform\": \":cljs\" },\n      { \"symbol\": \"ns-interns\",\"platform\": \":cljs\" }\n    ]\n  },\n  \"requireMacros\": [\n    {\n      \"symbol\": \"cljs.analyzer.macros\",\n      \"platform\": \":cljs\",\n      \"refer\": [\n        { \"symbol\": \"allowing-redef\", \"platform\": \":cljs\" },\n        { \"symbol\": \"disallowing-ns*\", \"platform\": \":cljs\" },\n        { \"symbol\": \"disallowing-recur\", \"platform\": \":cljs\" },\n        { \"symbol\": \"no-warn\", \"platform\": \":cljs\" },\n        { \"symbol\": \"with-warning-handlers\", \"platform\": \":cljs\" },\n        { \"symbol\": \"wrapping-errors\", \"platform\": \":cljs\" }\n      ]\n    },\n    {\n      \"symbol\": \"cljs.env.macros\",\n      \"platform\": \":cljs\",\n      \"refer\": [\n        { \"symbol\": \"ensure\", \"platform\": \":cljs\" }\n      ]\n    }\n  ],\n  \"requires\": [\n    {\n      \"symbol\": \"cljs.analyzer.impl\",\n      \"platform\": \":clj\",\n      \"as\": \"impl\"\n    },\n    {\n      \"symbol\": \"cljs.analyzer.impl\",\n      \"platform\": \":cljs\",\n      \"as\": \"impl\"\n    },\n    {\n      \"symbol\": \"cljs.analyzer.impl.namespaces\",\n      \"platform\": \":clj\",\n      \"as\": \"nses\"\n    },\n    {\n      \"symbol\": \"cljs.analyzer.impl.namespaces\",\n      \"platform\": \":cljs\",\n      \"as\": \"nses\"\n    },\n    {\n      \"symbol\": \"cljs.analyzer.passes.and-or\",\n      \"platform\": \":clj\",\n      \"as\": \"and-or\"\n    },\n    {\n      \"symbol\": \"cljs.analyzer.passes.and-or\",\n      \"platform\": \":cljs\",\n      \"as\": \"and-or\"\n    },\n    {\n      \"symbol\": \"cljs.env\",\n      \"platform\": \":clj\",\n      \"as\": \"env\",\n      \"refer\": [\n        {\n          \"symbol\": \"ensure\"\n        }\n      ]\n    },\n    {\n      \"symbol\": \"cljs.env\",\n      \"platform\": \":cljs\",\n      \"as\": \"env\"\n    },\n    {\n      \"symbol\": \"cljs.externs\",\n      \"platform\": \":clj\",\n      \"as\": \"externs\"\n    },\n    {\n      \"symbol\": \"cljs.js-deps\",\n      \"platform\": \":clj\",\n      \"as\": \"deps\"\n    },\n    {\n      \"symbol\": \"cljs.reader\",\n      \"platform\": \":cljs\",\n      \"as\": \"edn\"\n    },\n    {\n      \"symbol\": \"cljs.tagged-literals\",\n      \"platform\": \":clj\",\n      \"as\": \"tags\"\n    },\n    {\n      \"symbol\": \"cljs.tagged-literals\",\n      \"platform\": \":cljs\",\n      \"as\": \"tags\"\n    },\n    {\n      \"symbol\": \"cljs.tools.reader\",\n      \"platform\": \":cljs\",\n      \"as\": \"reader\"\n    },\n    {\n      \"symbol\": \"cljs.tools.reader.reader-types\",\n      \"platform\": \":cljs\",\n      \"as\": \"readers\"\n    },\n    {\n      \"symbol\": \"cljs.util\",\n      \"platform\": \":clj\",\n      \"as\": \"util\",\n      \"refer\": [\n        {\n          \"symbol\": \"ns->relpath\"\n        },\n        {\n          \"symbol\": \"topo-sort\"\n        }\n      ]\n    },\n    {\n      \"symbol\": \"cljs.vendor.clojure.tools.reader\",\n      \"platform\": \":clj\",\n      \"as\": \"reader\"\n    },\n    {\n      \"symbol\": \"cljs.vendor.clojure.tools.reader.reader-types\",\n      \"platform\": \":clj\",\n      \"as\": \"readers\"\n    },\n    {\n      \"symbol\": \"clojure.edn\",\n      \"platform\": \":clj\",\n      \"as\": \"edn\"\n    },\n    {\n      \"symbol\": \"clojure.java.io\",\n      \"platform\": \":clj\",\n      \"as\": \"io\"\n    },\n    {\n      \"symbol\": \"clojure.set\",\n      \"platform\": \":clj\",\n      \"as\": \"set\"\n    },\n    {\n      \"symbol\": \"clojure.set\",\n      \"platform\": \":cljs\",\n      \"as\": \"set\"\n    },\n    {\n      \"symbol\": \"clojure.string\",\n      \"platform\": \":clj\",\n      \"as\": \"string\"\n    },\n    {\n      \"symbol\": \"clojure.string\",\n      \"platform\": \":cljs\",\n      \"as\": \"string\"\n    },\n    {\n      \"symbol\": \"goog.string\",\n      \"platform\": \":cljs\",\n      \"as\": \"gstring\"\n    }\n  ],\n  \"imports\": [\n    {\n      \"package\": \"cljs.tagged_literals\",\n      \"classes\": [\n        \"JSValue\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"clojure.lang\",\n      \"classes\": [\n        \"ArityException\",\n        \"LazySeq\",\n        \"Namespace\",\n        \"Var\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.io\",\n      \"classes\": [\n        \"File\",\n        \"PushbackReader\",\n        \"Reader\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.lang\",\n      \"classes\": [\n        \"Throwable\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.net\",\n      \"classes\": [\n        \"URL\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.util.regex\",\n      \"classes\": [\n        \"Pattern\"\n      ],\n      \"platform\": \":clj\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #135 - portal.runtime.cson before",
+    "input": "(ns ^:no-doc portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  (:refer-clojure :exclude [read])\n  #?(:clj  (:require [portal.runtime.json-buffer :as json])\n     :cljr (:require [portal.runtime.json-buffer :as json])\n     :joyride\n     (:require\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m])\n     :org.babashka/nbb\n     (:require\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m])\n     :cljs\n     (:require\n      [goog.crypt.base64 :as Base64]\n      [portal.runtime.json-buffer :as json]\n      [portal.runtime.macros :as m]))\n  #?(:clj  (:import [java.net URL]\n                    [java.util Base64 Date UUID])\n     :joyride (:import)\n     :org.babashka/nbb (:import)\n     :cljs (:import [goog.math Long])))\n\n(defprotocol ToJson (-to-json [value buffer]))",
+    "expected": "{\n  \"nsSymbol\": \"portal.runtime.cson\",\n  \"nsMetadata\": [\n    {\n      \"key\": \":no-doc\",\n      \"value\": \"true\"\n    }\n  ],\n  \"docstring\": \"Clojure/Script Object Notation\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\n        \"symbol\": \"read\"\n      }\n    ]\n  },\n  \"requires\": [\n    {\n      \"symbol\": \"goog.crypt.base64\",\n      \"platform\": \":cljs\",\n      \"as\": \"Base64\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":clj\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":cljr\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":cljs\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":joyride\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":org.babashka/nbb\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":cljs\",\n      \"as\": \"m\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":joyride\",\n      \"as\": \"m\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":org.babashka/nbb\",\n      \"as\": \"m\"\n    }\n  ],\n  \"imports\": [\n    {\n      \"package\": \"goog.math\",\n      \"classes\": [\n        \"Long\"\n      ],\n      \"platform\": \":cljs\"\n    },\n    {\n      \"package\": \"java.net\",\n      \"classes\": [\n        \"URL\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.util\",\n      \"classes\": [\n        \"Base64\",\n        \"Date\",\n        \"UUID\"\n      ],\n      \"platform\": \":clj\"\n    }\n  ]\n}"
+  },
+  {
+    "filename": "parse_ns.eno",
+    "name": "GitHub Issue #135 - portal.runtime.cson after",
+    "input": "(ns portal.runtime.cson\n  \"Clojure/Script Object Notation\"\n  {:no-doc true}\n  (:refer-clojure :exclude [read])\n  (:require\n   #?@(:clj\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljr\n       [[portal.runtime.json-buffer :as json]]\n\n       :cljs\n       [[goog.crypt.base64 :as Base64]\n        [portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :joyride\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]\n\n       :org.babashka/nbb\n       [[portal.runtime.json-buffer :as json]\n        [portal.runtime.macros :as m]]))\n  (:import\n   #?@(:clj\n       [(java.net URL)\n        (java.util Base64 Date UUID)]\n\n       :cljs\n       [(goog.math Long)])))\n\n(defprotocol ToJson (-to-json [value buffer]))",
+    "expected": "{\n  \"nsSymbol\": \"portal.runtime.cson\",\n  \"nsMetadata\": [\n    {\n      \"key\": \":no-doc\",\n      \"value\": \"true\"\n    }\n  ],\n  \"docstring\": \"Clojure/Script Object Notation\",\n  \"referClojure\": {\n    \"exclude\": [\n      {\n        \"symbol\": \"read\"\n      }\n    ]\n  },\n  \"requires\": [\n    {\n      \"symbol\": \"goog.crypt.base64\",\n      \"platform\": \":cljs\",\n      \"as\": \"Base64\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":clj\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":cljr\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":cljs\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":joyride\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.json-buffer\",\n      \"platform\": \":org.babashka/nbb\",\n      \"as\": \"json\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":cljs\",\n      \"as\": \"m\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":joyride\",\n      \"as\": \"m\"\n    },\n    {\n      \"symbol\": \"portal.runtime.macros\",\n      \"platform\": \":org.babashka/nbb\",\n      \"as\": \"m\"\n    }\n  ],\n  \"imports\": [\n    {\n      \"package\": \"goog.math\",\n      \"classes\": [\n        \"Long\"\n      ],\n      \"platform\": \":cljs\"\n    },\n    {\n      \"package\": \"java.net\",\n      \"classes\": [\n        \"URL\"\n      ],\n      \"platform\": \":clj\"\n    },\n    {\n      \"package\": \"java.util\",\n      \"classes\": [\n        \"Base64\",\n        \"Date\",\n        \"UUID\"\n      ],\n      \"platform\": \":clj\"\n    }\n  ]\n}"
+  }
+]

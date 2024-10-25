@@ -1,0 +1,854 @@
+[
+  {
+    "filename": "braces.eno",
+    "name": "Empty Map",
+    "input": "{}",
+    "expected": "(source 0..2\n  (braces 0..2\n    (.open 0..1 '{')\n    (.close 1..2 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Simple Map",
+    "input": "{:a 1 :b 2}",
+    "expected": "(source 0..11\n  (braces 0..11\n    (.open 0..1 '{')\n    (.body 1..10\n      (token 1..3 ':a')\n      (token 4..5 '1')\n      (token 6..8 ':b')\n      (token 9..10 '2'))\n    (.close 10..11 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Deeper Map",
+    "input": "{:paths [\"src\"]\n :deps {clj-kondo/clj-kondo {:mvn/version \"2020.09.09\"}}}",
+    "expected": "(source 0..73\n  (braces 0..73\n    (.open 0..1 '{')\n    (.body 1..72\n      (token 1..7 ':paths')\n      (brackets 8..15\n        (.open 8..9 '[')\n        (.body 9..14\n          (string 9..14\n            (.open 9..10 '\"')\n            (.body 10..13 'src')\n            (.close 13..14 '\"')))\n        (.close 14..15 ']'))\n      (token 17..22 ':deps')\n      (braces 23..72\n        (.open 23..24 '{')\n        (.body 24..71\n          (token 24..43 'clj-kondo/clj-kondo')\n          (braces 44..71\n            (.open 44..45 '{')\n            (.body 45..70\n              (token 45..57 ':mvn/version')\n              (string 58..70\n                (.open 58..59 '\"')\n                (.body 59..69 '2020.09.09')\n                (.close 69..70 '\"')))\n            (.close 70..71 '}')))\n        (.close 71..72 '}')))\n    (.close 72..73 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Map with Comma",
+    "input": "{:x 1,\n :y 2}",
+    "expected": "(source 0..13\n  (braces 0..13\n    (.open 0..1 '{')\n    (.body 1..12\n      (token 1..3 ':x')\n      (token 4..5 '1')\n      (token 8..10 ':y')\n      (token 11..12 '2'))\n    (.close 12..13 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Empty Set",
+    "input": "#{}",
+    "expected": "(source 0..3\n  (braces 0..3\n    (.open 0..2 '#{')\n    (.close 2..3 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Simple Set",
+    "input": "#{:i :j :k}",
+    "expected": "(source 0..11\n  (braces 0..11\n    (.open 0..2 '#{')\n    (.body 2..10\n      (token 2..4 ':i')\n      (token 5..7 ':j')\n      (token 8..10 ':k'))\n    (.close 10..11 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Nested Sets",
+    "input": "#{#{1} #{#{0} 2}}",
+    "expected": "(source 0..17\n  (braces 0..17\n    (.open 0..2 '#{')\n    (.body 2..16\n      (braces 2..6\n        (.open 2..4 '#{')\n        (.body 4..5\n          (token 4..5 '1'))\n        (.close 5..6 '}'))\n      (braces 7..16\n        (.open 7..9 '#{')\n        (.body 9..15\n          (braces 9..13\n            (.open 9..11 '#{')\n            (.body 11..12\n              (token 11..12 '0'))\n            (.close 12..13 '}'))\n          (token 14..15 '2'))\n        (.close 15..16 '}')))\n    (.close 16..17 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Simple Namespace Map",
+    "input": "#:prefix{:a 1 :b 2}",
+    "expected": "(source 0..19\n  (braces 0..19\n    (.open 0..9 '#:prefix{')\n    (.body 9..18\n      (token 9..11 ':a')\n      (token 12..13 '1')\n      (token 14..16 ':b')\n      (token 17..18 '2'))\n    (.close 18..19 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Nested Namespace Maps",
+    "input": "#:outer{:first \"Terence\"\n        :last \"Tao\"\n        :area #:inner{:name \"Mathematics\"}}",
+    "expected": "(source 0..88\n  (braces 0..88\n    (.open 0..8 '#:outer{')\n    (.body 8..87\n      (token 8..14 ':first')\n      (string 15..24\n        (.open 15..16 '\"')\n        (.body 16..23 'Terence')\n        (.close 23..24 '\"'))\n      (token 33..38 ':last')\n      (string 39..44\n        (.open 39..40 '\"')\n        (.body 40..43 'Tao')\n        (.close 43..44 '\"'))\n      (token 53..58 ':area')\n      (braces 59..87\n        (.open 59..67 '#:inner{')\n        (.body 67..86\n          (token 67..72 ':name')\n          (string 73..86\n            (.open 73..74 '\"')\n            (.body 74..85 'Mathematics')\n            (.close 85..86 '\"')))\n        (.close 86..87 '}')))\n    (.close 87..88 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Autoresolving Namespace Map",
+    "input": "#::{}",
+    "expected": "(source 0..5\n  (braces 0..5\n    (.open 0..4 '#::{')\n    (.close 4..5 '}')))"
+  },
+  {
+    "filename": "braces.eno",
+    "name": "Namespace Map that Autoresolves with Alias",
+    "input": "#::s{:x 1 :y 2}",
+    "expected": "(source 0..15\n  (braces 0..15\n    (.open 0..5 '#::s{')\n    (.body 5..14\n      (token 5..7 ':x')\n      (token 8..9 '1')\n      (token 10..12 ':y')\n      (token 13..14 '2'))\n    (.close 14..15 '}')))"
+  },
+  {
+    "filename": "brackets.eno",
+    "name": "Empty Vector",
+    "input": "[]",
+    "expected": "(source 0..2\n  (brackets 0..2\n    (.open 0..1 '[')\n    (.close 1..2 ']')))"
+  },
+  {
+    "filename": "brackets.eno",
+    "name": "Empty Vector with gap",
+    "input": "[   ]",
+    "expected": "(source 0..5\n  (brackets 0..5\n    (.open 0..1 '[')\n    (.body 1..4)\n    (.close 4..5 ']')))"
+  },
+  {
+    "filename": "brackets.eno",
+    "name": "Vector with Numbers",
+    "input": "[1 1 2 3 5 8]",
+    "expected": "(source 0..13\n  (brackets 0..13\n    (.open 0..1 '[')\n    (.body 1..12\n      (token 1..2 '1')\n      (token 3..4 '1')\n      (token 5..6 '2')\n      (token 7..8 '3')\n      (token 9..10 '5')\n      (token 11..12 '8'))\n    (.close 12..13 ']')))"
+  },
+  {
+    "filename": "brackets.eno",
+    "name": "Vector with Different Types",
+    "input": "[:a 1 'fun {:x 1 :y 2} #{}]",
+    "expected": "(source 0..27\n  (brackets 0..27\n    (.open 0..1 '[')\n    (.body 1..26\n      (token 1..3 ':a')\n      (token 4..5 '1')\n      (wrap 6..10\n        (.marker 6..7 ''')\n        (.body 7..10\n          (token 7..10 'fun')))\n      (braces 11..22\n        (.open 11..12 '{')\n        (.body 12..21\n          (token 12..14 ':x')\n          (token 15..16 '1')\n          (token 17..19 ':y')\n          (token 20..21 '2'))\n        (.close 21..22 '}'))\n      (braces 23..26\n        (.open 23..25 '#{')\n        (.close 25..26 '}')))\n    (.close 26..27 ']')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Wrong Bracket",
+    "input": "(])\n(})\n[)]\n[}]\n{)}\n{]}",
+    "expected": "(source 0..23\n  (parens 0..3\n    (.open 0..1 '(')\n    (.body 1..2\n      (error 1..2 ']'))\n    (.close 2..3 ')'))\n  (parens 4..7\n    (.open 4..5 '(')\n    (.body 5..6\n      (error 5..6 '}'))\n    (.close 6..7 ')'))\n  (brackets 8..11\n    (.open 8..9 '[')\n    (.body 9..10\n      (error 9..10 ')'))\n    (.close 10..11 ']'))\n  (brackets 12..15\n    (.open 12..13 '[')\n    (.body 13..14\n      (error 13..14 '}'))\n    (.close 14..15 ']'))\n  (braces 16..19\n    (.open 16..17 '{')\n    (.body 17..18\n      (error 17..18 ')'))\n    (.close 18..19 '}'))\n  (braces 20..23\n    (.open 20..21 '{')\n    (.body 21..22\n      (error 21..22 ']'))\n    (.close 22..23 '}')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Wrong bracket with body",
+    "input": "(abc]def}xyz)",
+    "expected": "(source 0..13\n  (parens 0..13\n    (.open 0..1 '(')\n    (.body 1..12\n      (token 1..4 'abc')\n      (error 4..5 ']')\n      (token 5..8 'def')\n      (error 8..9 '}')\n      (token 9..12 'xyz'))\n    (.close 12..13 ')')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished paren",
+    "input": "(",
+    "expected": "(source 0..1\n  (parens 0..1\n    (.open 0..1 '(')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished bracket",
+    "input": "[",
+    "expected": "(source 0..1\n  (brackets 0..1\n    (.open 0..1 '[')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished brace",
+    "input": "{",
+    "expected": "(source 0..1\n  (braces 0..1\n    (.open 0..1 '{')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished string",
+    "input": "\"",
+    "expected": "(source 0..1\n  (string 0..1\n    (.open 0..1 '\"')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Lone escape",
+    "input": "\\",
+    "expected": "(source 0..1\n  (token 0..1 '\\'))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished hash",
+    "input": "#",
+    "expected": "(source 0..1\n  (error 0..1 '#'))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Unfinished everything",
+    "input": "({[# \"",
+    "expected": "(source 0..6\n  (parens 0..6\n    (.open 0..1 '(')\n    (.body 1..6\n      (braces 1..6\n        (.open 1..2 '{')\n        (.body 2..6\n          (brackets 2..6\n            (.open 2..3 '[')\n            (.body 3..6\n              (error 3..4 '#')\n              (string 5..6\n                (.open 5..6 '\"')))))))))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Nonsense 1",
+    "input": "#~#+@!(# abc",
+    "expected": "(source 0..12\n  (error 0..1 '#')\n  (wrap 1..6\n    (.marker 1..2 '~')\n    (.body 2..6\n      (tagged 2..6\n        (.tag 3..4\n          (token 3..4 '+'))\n        (.body 4..6\n          (wrap 4..6\n            (.marker 4..5 '@')\n            (.body 5..6\n              (token 5..6 '!')))))))\n  (parens 6..12\n    (.open 6..7 '(')\n    (.body 7..12\n      (error 7..8 '#')\n      (token 9..12 'abc'))))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Nonsense 2",
+    "input": "#~#+@!)# abc",
+    "expected": "(source 0..12\n  (error 0..1 '#')\n  (wrap 1..6\n    (.marker 1..2 '~')\n    (.body 2..6\n      (tagged 2..6\n        (.tag 3..4\n          (token 3..4 '+'))\n        (.body 4..6\n          (wrap 4..6\n            (.marker 4..5 '@')\n            (.body 5..6\n              (token 5..6 '!')))))))\n  (error 6..7 ')')\n  (error 7..8 '#')\n  (token 9..12 'abc'))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Nonsense 3",
+    "input": "#~#+@!# abc",
+    "expected": "(source 0..11\n  (error 0..1 '#')\n  (wrap 1..7\n    (.marker 1..2 '~')\n    (.body 2..7\n      (tagged 2..7\n        (.tag 3..4\n          (token 3..4 '+'))\n        (.body 4..7\n          (wrap 4..7\n            (.marker 4..5 '@')\n            (.body 5..7\n              (token 5..7 '!#')))))))\n  (token 8..11 'abc'))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Nonsense inside form",
+    "input": "(let [x #~#+@!)#]\n   x)",
+    "expected": "(source 0..23\n  (parens 0..23\n    (.open 0..1 '(')\n    (.body 1..22\n      (token 1..4 'let')\n      (brackets 5..17\n        (.open 5..6 '[')\n        (.body 6..16\n          (token 6..7 'x')\n          (error 8..9 '#')\n          (wrap 9..14\n            (.marker 9..10 '~')\n            (.body 10..14\n              (tagged 10..14\n                (.tag 11..12\n                  (token 11..12 '+'))\n                (.body 12..14\n                  (wrap 12..14\n                    (.marker 12..13 '@')\n                    (.body 13..14\n                      (token 13..14 '!')))))))\n          (error 14..15 ')')\n          (error 15..16 '#'))\n        (.close 16..17 ']'))\n      (token 21..22 'x'))\n    (.close 22..23 ')')))"
+  },
+  {
+    "filename": "errors.eno",
+    "name": "Nonsense inside form 2",
+    "input": "(let [x #~#+@!(#]\n   x)",
+    "expected": "(source 0..23\n  (parens 0..23\n    (.open 0..1 '(')\n    (.body 1..23\n      (token 1..4 'let')\n      (brackets 5..23\n        (.open 5..6 '[')\n        (.body 6..23\n          (token 6..7 'x')\n          (error 8..9 '#')\n          (wrap 9..14\n            (.marker 9..10 '~')\n            (.body 10..14\n              (tagged 10..14\n                (.tag 11..12\n                  (token 11..12 '+'))\n                (.body 12..14\n                  (wrap 12..14\n                    (.marker 12..13 '@')\n                    (.body 13..14\n                      (token 13..14 '!')))))))\n          (parens 14..23\n            (.open 14..15 '(')\n            (.body 15..22\n              (error 15..16 '#')\n              (error 16..17 ']')\n              (token 21..22 'x'))\n            (.close 22..23 ')')))))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Simple Comment",
+    "input": "; a comment",
+    "expected": "(source 0..11\n  (comment 0..11 '; a comment'))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Two semicolons",
+    "input": ";; another comment",
+    "expected": "(source 0..18\n  (comment 0..18 ';; another comment'))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Multiple lines",
+    "input": ";; first line\n;; second line",
+    "expected": "(source 0..28\n  (comment 0..13 ';; first line')\n  (comment 14..28 ';; second line'))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Number",
+    "input": "#_123",
+    "expected": "(source 0..5\n  (discard 0..5\n    (marker 0..2 '#_')\n    (.body 2..5\n      (token 2..5 '123'))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Number, with space",
+    "input": "#_ 1",
+    "expected": "(source 0..4\n  (discard 0..4\n    (marker 0..2 '#_')\n    (.body 3..4\n      (token 3..4 '1'))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Number, multiline",
+    "input": "#_\n1",
+    "expected": "(source 0..4\n  (discard 0..4\n    (marker 0..2 '#_')\n    (.body 3..4\n      (token 3..4 '1'))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard List",
+    "input": "#_ (+ 1 1)",
+    "expected": "(source 0..10\n  (discard 0..10\n    (marker 0..2 '#_')\n    (.body 3..10\n      (parens 3..10\n        (.open 3..4 '(')\n        (.body 4..9\n          (token 4..5 '+')\n          (token 6..7 '1')\n          (token 8..9 '1'))\n        (.close 9..10 ')')))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Map",
+    "input": "#_ {:a 1\n    :b 2}",
+    "expected": "(source 0..18\n  (discard 0..18\n    (marker 0..2 '#_')\n    (.body 3..18\n      (braces 3..18\n        (.open 3..4 '{')\n        (.body 4..17\n          (token 4..6 ':a')\n          (token 7..8 '1')\n          (token 13..15 ':b')\n          (token 16..17 '2'))\n        (.close 17..18 '}')))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Multiple",
+    "input": "#_#_1 2",
+    "expected": "(source 0..7\n  (discard 0..7\n    (marker 0..2 '#_')\n    (discard 2..5\n      (marker 2..4 '#_')\n      (.body 4..5\n        (token 4..5 '1')))\n    (.body 6..7\n      (token 6..7 '2'))))"
+  },
+  {
+    "filename": "gap.eno",
+    "name": "Discard Multiple, nested",
+    "input": "(let [x 1\n      #_ #_ y 2]\n  (+ x 2))",
+    "expected": "(source 0..37\n  (parens 0..37\n    (.open 0..1 '(')\n    (.body 1..36\n      (token 1..4 'let')\n      (brackets 5..26\n        (.open 5..6 '[')\n        (.body 6..25\n          (token 6..7 'x')\n          (token 8..9 '1')\n          (discard 16..25\n            (marker 16..18 '#_')\n            (discard 19..23\n              (marker 19..21 '#_')\n              (.body 22..23\n                (token 22..23 'y')))\n            (.body 24..25\n              (token 24..25 '2'))))\n        (.close 25..26 ']'))\n      (parens 29..36\n        (.open 29..30 '(')\n        (.body 30..35\n          (token 30..31 '+')\n          (token 32..33 'x')\n          (token 34..35 '2'))\n        (.close 35..36 ')')))\n    (.close 36..37 ')')))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "Symbol Metadata",
+    "input": "^String []",
+    "expected": "(source 0..10\n  (meta 0..10\n    (.marker 0..1 '^')\n    (.meta 1..7\n      (token 1..7 'String'))\n    (.body 8..10\n      (brackets 8..10\n        (.open 8..9 '[')\n        (.close 9..10 ']')))))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "Keyword Metadata",
+    "input": "^:private {}",
+    "expected": "(source 0..12\n  (meta 0..12\n    (.marker 0..1 '^')\n    (.meta 1..9\n      (token 1..9 ':private'))\n    (.body 10..12\n      (braces 10..12\n        (.open 10..11 '{')\n        (.close 11..12 '}')))))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "String Metadata",
+    "input": "^\"gnarly\" {}",
+    "expected": "(source 0..12\n  (meta 0..12\n    (.marker 0..1 '^')\n    (.meta 1..9\n      (string 1..9\n        (.open 1..2 '\"')\n        (.body 2..8 'gnarly')\n        (.close 8..9 '\"')))\n    (.body 10..12\n      (braces 10..12\n        (.open 10..11 '{')\n        (.close 11..12 '}')))))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "Map Metadata",
+    "input": "^{:x 0 :y 1} #{}",
+    "expected": "(source 0..16\n  (meta 0..16\n    (.marker 0..1 '^')\n    (.meta 1..12\n      (braces 1..12\n        (.open 1..2 '{')\n        (.body 2..11\n          (token 2..4 ':x')\n          (token 5..6 '0')\n          (token 7..9 ':y')\n          (token 10..11 '1'))\n        (.close 11..12 '}')))\n    (.body 13..16\n      (braces 13..16\n        (.open 13..15 '#{')\n        (.close 15..16 '}')))))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "Reader Conditional Metadata",
+    "input": "^#?(:clj \"vanilla\"\n    :cljr \"strawberry\"\n    :cljs \"chocolate\")\n[]",
+    "expected": "(source 0..67\n  (meta 0..67\n    (.marker 0..1 '^')\n    (.meta 1..64\n      (parens 1..64\n        (.open 1..4 '#?(')\n        (.body 4..63\n          (token 4..8 ':clj')\n          (string 9..18\n            (.open 9..10 '\"')\n            (.body 10..17 'vanilla')\n            (.close 17..18 '\"'))\n          (token 23..28 ':cljr')\n          (string 29..41\n            (.open 29..30 '\"')\n            (.body 30..40 'strawberry')\n            (.close 40..41 '\"'))\n          (token 46..51 ':cljs')\n          (string 52..63\n            (.open 52..53 '\"')\n            (.body 53..62 'chocolate')\n            (.close 62..63 '\"')))\n        (.close 63..64 ')')))\n    (.body 65..67\n      (brackets 65..67\n        (.open 65..66 '[')\n        (.close 66..67 ']')))))"
+  },
+  {
+    "filename": "meta.eno",
+    "name": "Multiple Bits of Metadata",
+    "input": "^:wake ^:sit ^:sleep #{}",
+    "expected": "(source 0..24\n  (meta 0..24\n    (.marker 0..1 '^')\n    (.meta 1..6\n      (token 1..6 ':wake'))\n    (.marker 7..8 '^')\n    (.meta 8..12\n      (token 8..12 ':sit'))\n    (.marker 13..14 '^')\n    (.meta 14..20\n      (token 14..20 ':sleep'))\n    (.body 21..24\n      (braces 21..24\n        (.open 21..23 '#{')\n        (.close 23..24 '}')))))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Empty Anonymous Function",
+    "input": "#()",
+    "expected": "(source 0..3\n  (parens 0..3\n    (.open 0..2 '#(')\n    (.close 2..3 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Empty Anonymous Function Gap",
+    "input": "#(   )",
+    "expected": "(source 0..6\n  (parens 0..6\n    (.open 0..2 '#(')\n    (.body 2..5)\n    (.close 5..6 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Anonymous Function",
+    "input": "#(+ % 8)",
+    "expected": "(source 0..8\n  (parens 0..8\n    (.open 0..2 '#(')\n    (.body 2..7\n      (token 2..3 '+')\n      (token 4..5 '%')\n      (token 6..7 '8'))\n    (.close 7..8 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Empty List",
+    "input": "()",
+    "expected": "(source 0..2\n  (parens 0..2\n    (.open 0..1 '(')\n    (.close 1..2 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "List with Keywords",
+    "input": "(:a :b :c)",
+    "expected": "(source 0..10\n  (parens 0..10\n    (.open 0..1 '(')\n    (.body 1..9\n      (token 1..3 ':a')\n      (token 4..6 ':b')\n      (token 7..9 ':c'))\n    (.close 9..10 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Call with Anonymous Function",
+    "input": "(#(+ % 1) 1)",
+    "expected": "(source 0..12\n  (parens 0..12\n    (.open 0..1 '(')\n    (.body 1..11\n      (parens 1..9\n        (.open 1..3 '#(')\n        (.body 3..8\n          (token 3..4 '+')\n          (token 5..6 '%')\n          (token 7..8 '1'))\n        (.close 8..9 ')'))\n      (token 10..11 '1'))\n    (.close 11..12 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Map Lookup",
+    "input": "({:a 1} :a)",
+    "expected": "(source 0..11\n  (parens 0..11\n    (.open 0..1 '(')\n    (.body 1..10\n      (braces 1..7\n        (.open 1..2 '{')\n        (.body 2..6\n          (token 2..4 ':a')\n          (token 5..6 '1'))\n        (.close 6..7 '}'))\n      (token 8..10 ':a'))\n    (.close 10..11 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Map Lookup Alternate",
+    "input": "(:b {:b 2})",
+    "expected": "(source 0..11\n  (parens 0..11\n    (.open 0..1 '(')\n    (.body 1..10\n      (token 1..3 ':b')\n      (braces 4..10\n        (.open 4..5 '{')\n        (.body 5..9\n          (token 5..7 ':b')\n          (token 8..9 '2'))\n        (.close 9..10 '}')))\n    (.close 10..11 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Set Lookup",
+    "input": "(#{:c :e} :e)",
+    "expected": "(source 0..13\n  (parens 0..13\n    (.open 0..1 '(')\n    (.body 1..12\n      (braces 1..9\n        (.open 1..3 '#{')\n        (.body 3..8\n          (token 3..5 ':c')\n          (token 6..8 ':e'))\n        (.close 8..9 '}'))\n      (token 10..12 ':e'))\n    (.close 12..13 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Call with Symbol with Metadata",
+    "input": "(.get ^ByteBuffer b)",
+    "expected": "(source 0..20\n  (parens 0..20\n    (.open 0..1 '(')\n    (.body 1..19\n      (token 1..5 '.get')\n      (meta 6..19\n        (.marker 6..7 '^')\n        (.meta 7..17\n          (token 7..17 'ByteBuffer'))\n        (.body 18..19\n          (token 18..19 'b'))))\n    (.close 19..20 ')')))"
+  },
+  {
+    "filename": "parens.eno",
+    "name": "Eval",
+    "input": "#=(+ 1 1)",
+    "expected": "(source 0..9\n  (parens 0..9\n    (.open 0..3 '#=(')\n    (.body 3..8\n      (token 3..4 '+')\n      (token 5..6 '1')\n      (token 7..8 '1'))\n    (.close 8..9 ')')))"
+  },
+  {
+    "filename": "tagged.eno",
+    "name": "Tagged Literal",
+    "input": "#uuid \"00000000-0000-0000-0000-000000000000\"",
+    "expected": "(source 0..44\n  (tagged 0..44\n    (.tag 1..5\n      (token 1..5 'uuid'))\n    (.body 6..44\n      (string 6..44\n        (.open 6..7 '\"')\n        (.body 7..43 '00000000-0000-0000-0000-000000000000')\n        (.close 43..44 '\"')))))"
+  },
+  {
+    "filename": "tagged.eno",
+    "name": "Constructor",
+    "input": "#user.Fun [1 2]",
+    "expected": "(source 0..15\n  (tagged 0..15\n    (.tag 1..9\n      (token 1..9 'user.Fun'))\n    (.body 10..15\n      (brackets 10..15\n        (.open 10..11 '[')\n        (.body 11..14\n          (token 11..12 '1')\n          (token 13..14 '2'))\n        (.close 14..15 ']')))))"
+  },
+  {
+    "filename": "tagged.eno",
+    "name": "Constructor Alternate 1",
+    "input": "#user.Fun {:a 1 :b 2}",
+    "expected": "(source 0..21\n  (tagged 0..21\n    (.tag 1..9\n      (token 1..9 'user.Fun'))\n    (.body 10..21\n      (braces 10..21\n        (.open 10..11 '{')\n        (.body 11..20\n          (token 11..13 ':a')\n          (token 14..15 '1')\n          (token 16..18 ':b')\n          (token 19..20 '2'))\n        (.close 20..21 '}')))))"
+  },
+  {
+    "filename": "tagged.eno",
+    "name": "Constructor Alternate 2",
+    "input": "#object[\"A\" 2 \"C\"]",
+    "expected": "(source 0..18\n  (tagged 0..18\n    (.tag 1..7\n      (token 1..7 'object'))\n    (.body 7..18\n      (brackets 7..18\n        (.open 7..8 '[')\n        (.body 8..17\n          (string 8..11\n            (.open 8..9 '\"')\n            (.body 9..10 'A')\n            (.close 10..11 '\"'))\n          (token 12..13 '2')\n          (string 14..17\n            (.open 14..15 '\"')\n            (.body 15..16 'C')\n            (.close 16..17 '\"')))\n        (.close 17..18 ']')))))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Keyword",
+    "input": ":smile",
+    "expected": "(source 0..6\n  (token 0..6 ':smile'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Keyword with Prefix",
+    "input": ":fun/day",
+    "expected": "(source 0..8\n  (token 0..8 ':fun/day'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Autoresolving Keyword",
+    "input": "::run",
+    "expected": "(source 0..5\n  (token 0..5 '::run'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Autoresolving Aliased Keyword",
+    "input": "::slow/dance",
+    "expected": "(source 0..12\n  (token 0..12 '::slow/dance'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Division Symbol Keyword",
+    "input": ":/",
+    "expected": "(source 0..2\n  (token 0..2 ':/'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Namespaced Division Symbol Keyword",
+    "input": ":clojure.core//",
+    "expected": "(source 0..15\n  (token 0..15 ':clojure.core//'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Autoresolving Division Symbol Keyword",
+    "input": "::/",
+    "expected": "(source 0..3\n  (token 0..3 '::/'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Autoresolving Aliased Division Symbol Keyword",
+    "input": "::clojure//",
+    "expected": "(source 0..11\n  (token 0..11 '::clojure//'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Integer",
+    "input": "1",
+    "expected": "(source 0..1\n  (token 0..1 '1'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Integer",
+    "input": "-2",
+    "expected": "(source 0..2\n  (token 0..2 '-2'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "BigInt Integer",
+    "input": "11N",
+    "expected": "(source 0..3\n  (token 0..3 '11N'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "BigDecimal Integer",
+    "input": "99M",
+    "expected": "(source 0..3\n  (token 0..3 '99M'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Hex",
+    "input": "0xaB",
+    "expected": "(source 0..4\n  (token 0..4 '0xaB'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Hex",
+    "input": "-0xFF",
+    "expected": "(source 0..5\n  (token 0..5 '-0xFF'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Shouting Hex",
+    "input": "0XA",
+    "expected": "(source 0..3\n  (token 0..3 '0XA'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "BigInt Hex",
+    "input": "0XeN",
+    "expected": "(source 0..4\n  (token 0..4 '0XeN'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Octal",
+    "input": "013",
+    "expected": "(source 0..3\n  (token 0..3 '013'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Octal",
+    "input": "-027",
+    "expected": "(source 0..4\n  (token 0..4 '-027'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "BigInt Octal",
+    "input": "0377N",
+    "expected": "(source 0..5\n  (token 0..5 '0377N'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Radix",
+    "input": "2r0101010001",
+    "expected": "(source 0..12\n  (token 0..12 '2r0101010001'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Radix",
+    "input": "-10r256",
+    "expected": "(source 0..7\n  (token 0..7 '-10r256'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Shouting Radix",
+    "input": "36RBREATHESL0WLY",
+    "expected": "(source 0..16\n  (token 0..16 '36RBREATHESL0WLY'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Ratio",
+    "input": "22/7",
+    "expected": "(source 0..4\n  (token 0..4 '22/7'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Ratio",
+    "input": "-1/2",
+    "expected": "(source 0..4\n  (token 0..4 '-1/2'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Double",
+    "input": "1.0",
+    "expected": "(source 0..3\n  (token 0..3 '1.0'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Negative Double",
+    "input": "-2.71828",
+    "expected": "(source 0..8\n  (token 0..8 '-2.71828'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Double with Exponent",
+    "input": "3e8",
+    "expected": "(source 0..3\n  (token 0..3 '3e8'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Shouting Double with Exponent",
+    "input": "1E9",
+    "expected": "(source 0..3\n  (token 0..3 '1E9'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Double with Negative Exponent",
+    "input": "2e-1",
+    "expected": "(source 0..4\n  (token 0..4 '2e-1'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "BigDecimal Double with Exponent",
+    "input": "3e1415926535M",
+    "expected": "(source 0..13\n  (token 0..13 '3e1415926535M'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Everything Double",
+    "input": "+0.1E-10M",
+    "expected": "(source 0..9\n  (token 0..9 '+0.1E-10M'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Simple Regular Expression",
+    "input": "#\".\"",
+    "expected": "(source 0..4\n  (string 0..4\n    (.open 0..2 '#\"')\n    (.body 2..3 '.')\n    (.close 3..4 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Hex Digits Regular Expression",
+    "input": "#\"[0-9a-fA-F]+\"",
+    "expected": "(source 0..15\n  (string 0..15\n    (.open 0..2 '#\"')\n    (.body 2..14 '[0-9a-fA-F]+')\n    (.close 14..15 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Regular Expression Escape",
+    "input": "#\"\\\"\"",
+    "expected": "(source 0..5\n  (string 0..5\n    (.open 0..2 '#\"')\n    (.body 2..4 '\\\"')\n    (.close 4..5 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Regular Expression Double Escape",
+    "input": "#\"\\\\\"",
+    "expected": "(source 0..5\n  (string 0..5\n    (.open 0..2 '#\"')\n    (.body 2..4 '\\\\')\n    (.close 4..5 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Simple String",
+    "input": "\"hello there\"",
+    "expected": "(source 0..13\n  (string 0..13\n    (.open 0..1 '\"')\n    (.body 1..12 'hello there')\n    (.close 12..13 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Simple with Escapes",
+    "input": "\"ab\\ncd\\tde\"",
+    "expected": "(source 0..12\n  (string 0..12\n    (.open 0..1 '\"')\n    (.body 1..11 'ab\\ncd\\tde')\n    (.close 11..12 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Multiline String",
+    "input": "\"first\nsecond\"",
+    "expected": "(source 0..14\n  (string 0..14\n    (.open 0..1 '\"')\n    (.body 1..13 'first\\nsecond')\n    (.close 13..14 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Empty String",
+    "input": "\"\"",
+    "expected": "(source 0..2\n  (string 0..2\n    (.open 0..1 '\"')\n    (.close 1..2 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "String with escaped quote",
+    "input": "\"abc\\\"def\"",
+    "expected": "(source 0..10\n  (string 0..10\n    (.open 0..1 '\"')\n    (.body 1..9 'abc\\\"def')\n    (.close 9..10 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "String with double escaped quote",
+    "input": "\"abcdef\\\\\"",
+    "expected": "(source 0..10\n  (string 0..10\n    (.open 0..1 '\"')\n    (.body 1..9 'abcdef\\\\')\n    (.close 9..10 '\"')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Simple Symbol",
+    "input": "def",
+    "expected": "(source 0..3\n  (token 0..3 'def'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Symbol with Prefix",
+    "input": "clojure.string/blank?",
+    "expected": "(source 0..21\n  (token 0..21 'clojure.string/blank?'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Division Symbol",
+    "input": "/",
+    "expected": "(source 0..1\n  (token 0..1 '/'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Namespaced Division Symbol",
+    "input": "clojure.core//",
+    "expected": "(source 0..14\n  (token 0..14 'clojure.core//'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Division Symbol followed by delimiter",
+    "input": "(+ - * /)",
+    "expected": "(source 0..9\n  (parens 0..9\n    (.open 0..1 '(')\n    (.body 1..8\n      (token 1..2 '+')\n      (token 3..4 '-')\n      (token 5..6 '*')\n      (token 7..8 '/'))\n    (.close 8..9 ')')))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "gensym'd symbol",
+    "input": "`(let [x# ~x]\n   x#)",
+    "expected": "(source 0..20\n  (wrap 0..20\n    (.marker 0..1 '`')\n    (.body 1..20\n      (parens 1..20\n        (.open 1..2 '(')\n        (.body 2..19\n          (token 2..5 'let')\n          (brackets 6..13\n            (.open 6..7 '[')\n            (.body 7..12\n              (token 7..9 'x#')\n              (wrap 10..12\n                (.marker 10..11 '~')\n                (.body 11..12\n                  (token 11..12 'x'))))\n            (.close 12..13 ']'))\n          (token 17..19 'x#'))\n        (.close 19..20 ')')))))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Inf",
+    "input": "##Inf",
+    "expected": "(source 0..5\n  (token 0..5 '##Inf'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "-Inf",
+    "input": "##-Inf",
+    "expected": "(source 0..6\n  (token 0..6 '##-Inf'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "NaN",
+    "input": "##NaN",
+    "expected": "(source 0..5\n  (token 0..5 '##NaN'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "True",
+    "input": "true",
+    "expected": "(source 0..4\n  (token 0..4 'true'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "False",
+    "input": "false",
+    "expected": "(source 0..5\n  (token 0..5 'false'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Simple Char",
+    "input": "\\a",
+    "expected": "(source 0..2\n  (token 0..2 '\\a'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Special Chars",
+    "input": "\\( \\) \\[ \\] \\{ \\} \\@ \\\" \\  \\,",
+    "expected": "(source 0..29\n  (token 0..2 '\\(')\n  (token 3..5 '\\)')\n  (token 6..8 '\\[')\n  (token 9..11 '\\]')\n  (token 12..14 '\\{')\n  (token 15..17 '\\}')\n  (token 18..20 '\\@')\n  (token 21..23 '\\\"')\n  (token 24..26 '\\ ')\n  (token 27..29 '\\,'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Octal Char",
+    "input": "\\o377",
+    "expected": "(source 0..5\n  (token 0..5 '\\o377'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Named Char",
+    "input": "\\backspace",
+    "expected": "(source 0..10\n  (token 0..10 '\\backspace'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Unicode Char",
+    "input": "\\u611B",
+    "expected": "(source 0..6\n  (token 0..6 '\\u611B'))"
+  },
+  {
+    "filename": "token.eno",
+    "name": "Nil",
+    "input": "nil",
+    "expected": "(source 0..3\n  (token 0..3 'nil'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Underscore Keyword",
+    "input": ":_",
+    "expected": "(source 0..2\n  (token 0..2 ':_'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Hyphen Keyword",
+    "input": ":-",
+    "expected": "(source 0..2\n  (token 0..2 ':-'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Keyword With Underscores and Hyphens",
+    "input": ":aaa-bbb_ccc",
+    "expected": "(source 0..12\n  (token 0..12 ':aaa-bbb_ccc'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Positive Integer",
+    "input": "+13",
+    "expected": "(source 0..3\n  (token 0..3 '+13'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Positive BigDecimal",
+    "input": "+2.4M",
+    "expected": "(source 0..5\n  (token 0..5 '+2.4M'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Everything Double 2",
+    "input": "-0.1E+10M",
+    "expected": "(source 0..9\n  (token 0..9 '-0.1E+10M'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "Symbol with Slash",
+    "input": "clj-kondo/clj-kondo",
+    "expected": "(source 0..19\n  (token 0..19 'clj-kondo/clj-kondo'))"
+  },
+  {
+    "filename": "token_additional.eno",
+    "name": "String with emoji",
+    "input": "\"👁️ ❤️ 🤓\"",
+    "expected": "(source 0..9\n  (string 0..9\n    (.open 0..1 '\"')\n    (.body 1..8 '👁️ ❤️ 🤓')\n    (.close 8..9 '\"')))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Platform Reader Conditional",
+    "input": "#?(:clj :clj\n   :cljr :cljr\n   :cljs :cljs)",
+    "expected": "(source 0..43\n  (parens 0..43\n    (.open 0..3 '#?(')\n    (.body 3..42\n      (token 3..7 ':clj')\n      (token 8..12 ':clj')\n      (token 16..21 ':cljr')\n      (token 22..27 ':cljr')\n      (token 31..36 ':cljs')\n      (token 37..42 ':cljs'))\n    (.close 42..43 ')')))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Splicing Reader Conditional",
+    "input": "(list '*\n      #?@(:clj [x y] :cljr [i j] :cljs [a b]))",
+    "expected": "(source 0..55\n  (parens 0..55\n    (.open 0..1 '(')\n    (.body 1..54\n      (token 1..5 'list')\n      (wrap 6..8\n        (.marker 6..7 ''')\n        (.body 7..8\n          (token 7..8 '*')))\n      (parens 15..54\n        (.open 15..19 '#?@(')\n        (.body 19..53\n          (token 19..23 ':clj')\n          (brackets 24..29\n            (.open 24..25 '[')\n            (.body 25..28\n              (token 25..26 'x')\n              (token 27..28 'y'))\n            (.close 28..29 ']'))\n          (token 30..35 ':cljr')\n          (brackets 36..41\n            (.open 36..37 '[')\n            (.body 37..40\n              (token 37..38 'i')\n              (token 39..40 'j'))\n            (.close 40..41 ']'))\n          (token 42..47 ':cljs')\n          (brackets 48..53\n            (.open 48..49 '[')\n            (.body 49..52\n              (token 49..50 'a')\n              (token 51..52 'b'))\n            (.close 52..53 ']')))\n        (.close 53..54 ')')))\n    (.close 54..55 ')')))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Quoted Symbol",
+    "input": "'a-sym",
+    "expected": "(source 0..6\n  (wrap 0..6\n    (.marker 0..1 ''')\n    (.body 1..6\n      (token 1..6 'a-sym'))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Quoted List",
+    "input": "'(1 2 3)",
+    "expected": "(source 0..8\n  (wrap 0..8\n    (.marker 0..1 ''')\n    (.body 1..8\n      (parens 1..8\n        (.open 1..2 '(')\n        (.body 2..7\n          (token 2..3 '1')\n          (token 4..5 '2')\n          (token 6..7 '3'))\n        (.close 7..8 ')')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Syntax Quoted Symbol",
+    "input": "`a-sym",
+    "expected": "(source 0..6\n  (wrap 0..6\n    (.marker 0..1 '`')\n    (.body 1..6\n      (token 1..6 'a-sym'))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Syntax Quoted List",
+    "input": "`(+ ~a 1)",
+    "expected": "(source 0..9\n  (wrap 0..9\n    (.marker 0..1 '`')\n    (.body 1..9\n      (parens 1..9\n        (.open 1..2 '(')\n        (.body 2..8\n          (token 2..3 '+')\n          (wrap 4..6\n            (.marker 4..5 '~')\n            (.body 5..6\n              (token 5..6 'a')))\n          (token 7..8 '1'))\n        (.close 8..9 ')')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquote Splicing into List",
+    "input": "`(+ ~@(list 2 3))",
+    "expected": "(source 0..17\n  (wrap 0..17\n    (.marker 0..1 '`')\n    (.body 1..17\n      (parens 1..17\n        (.open 1..2 '(')\n        (.body 2..16\n          (token 2..3 '+')\n          (wrap 4..16\n            (.marker 4..6 '~@')\n            (.body 6..16\n              (parens 6..16\n                (.open 6..7 '(')\n                (.body 7..15\n                  (token 7..11 'list')\n                  (token 12..13 '2')\n                  (token 14..15 '3'))\n                (.close 15..16 ')')))))\n        (.close 16..17 ')')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquote Splicing into Vector",
+    "input": "`[:a ~@(list :b :c)]",
+    "expected": "(source 0..20\n  (wrap 0..20\n    (.marker 0..1 '`')\n    (.body 1..20\n      (brackets 1..20\n        (.open 1..2 '[')\n        (.body 2..19\n          (token 2..4 ':a')\n          (wrap 5..19\n            (.marker 5..7 '~@')\n            (.body 7..19\n              (parens 7..19\n                (.open 7..8 '(')\n                (.body 8..18\n                  (token 8..12 'list')\n                  (token 13..15 ':b')\n                  (token 16..18 ':c'))\n                (.close 18..19 ')')))))\n        (.close 19..20 ']')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquote Splicing into Set",
+    "input": "`#{:i ~@(list :j :k)}",
+    "expected": "(source 0..21\n  (wrap 0..21\n    (.marker 0..1 '`')\n    (.body 1..21\n      (braces 1..21\n        (.open 1..3 '#{')\n        (.body 3..20\n          (token 3..5 ':i')\n          (wrap 6..20\n            (.marker 6..8 '~@')\n            (.body 8..20\n              (parens 8..20\n                (.open 8..9 '(')\n                (.body 9..19\n                  (token 9..13 'list')\n                  (token 14..16 ':j')\n                  (token 17..19 ':k'))\n                (.close 19..20 ')')))))\n        (.close 20..21 '}')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquote Splicing into Map",
+    "input": "`{~@(list :a 1) ~@(list :b 2)}",
+    "expected": "(source 0..30\n  (wrap 0..30\n    (.marker 0..1 '`')\n    (.body 1..30\n      (braces 1..30\n        (.open 1..2 '{')\n        (.body 2..29\n          (wrap 2..15\n            (.marker 2..4 '~@')\n            (.body 4..15\n              (parens 4..15\n                (.open 4..5 '(')\n                (.body 5..14\n                  (token 5..9 'list')\n                  (token 10..12 ':a')\n                  (token 13..14 '1'))\n                (.close 14..15 ')'))))\n          (wrap 16..29\n            (.marker 16..18 '~@')\n            (.body 18..29\n              (parens 18..29\n                (.open 18..19 '(')\n                (.body 19..28\n                  (token 19..23 'list')\n                  (token 24..26 ':b')\n                  (token 27..28 '2'))\n                (.close 28..29 ')')))))\n        (.close 29..30 '}')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquoting Symbol",
+    "input": "`~a",
+    "expected": "(source 0..3\n  (wrap 0..3\n    (.marker 0..1 '`')\n    (.body 1..3\n      (wrap 1..3\n        (.marker 1..2 '~')\n        (.body 2..3\n          (token 2..3 'a'))))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Unquoting List",
+    "input": "`(dec ~(+ 1 a))",
+    "expected": "(source 0..15\n  (wrap 0..15\n    (.marker 0..1 '`')\n    (.body 1..15\n      (parens 1..15\n        (.open 1..2 '(')\n        (.body 2..14\n          (token 2..5 'dec')\n          (wrap 6..14\n            (.marker 6..7 '~')\n            (.body 7..14\n              (parens 7..14\n                (.open 7..8 '(')\n                (.body 8..13\n                  (token 8..9 '+')\n                  (token 10..11 '1')\n                  (token 12..13 'a'))\n                (.close 13..14 ')')))))\n        (.close 14..15 ')')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Var Quoting a Symbol",
+    "input": "#'my-sym",
+    "expected": "(source 0..8\n  (wrap 0..8\n    (.marker 0..2 '#'')\n    (.body 2..8\n      (token 2..8 'my-sym'))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Var Quoting with Reader Conditional",
+    "input": "#'#?(:clj my-sym :cljr your-sym :cljs their-sym)",
+    "expected": "(source 0..48\n  (wrap 0..48\n    (.marker 0..2 '#'')\n    (.body 2..48\n      (parens 2..48\n        (.open 2..5 '#?(')\n        (.body 5..47\n          (token 5..9 ':clj')\n          (token 10..16 'my-sym')\n          (token 17..22 ':cljr')\n          (token 23..31 'your-sym')\n          (token 32..37 ':cljs')\n          (token 38..47 'their-sym'))\n        (.close 47..48 ')')))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Simple Deref",
+    "input": "@x",
+    "expected": "(source 0..2\n  (wrap 0..2\n    (.marker 0..1 '@')\n    (.body 1..2\n      (token 1..2 'x'))))"
+  },
+  {
+    "filename": "wrap.eno",
+    "name": "Deref of Call",
+    "input": "@(ping y)",
+    "expected": "(source 0..9\n  (wrap 0..9\n    (.marker 0..1 '@')\n    (.body 1..9\n      (parens 1..9\n        (.open 1..2 '(')\n        (.body 2..8\n          (token 2..6 'ping')\n          (token 7..8 'y'))\n        (.close 8..9 ')')))))"
+  }
+]
