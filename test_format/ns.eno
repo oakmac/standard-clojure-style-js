@@ -1727,3 +1727,20 @@
 
 (defprotocol ToJson (-to-json [value buffer]))
 --Expected
+
+# GitHub Issue #140 - :refer-clojure comments
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set ; ccc
+  ]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [-> number? set])) ; ccc
+--Expected

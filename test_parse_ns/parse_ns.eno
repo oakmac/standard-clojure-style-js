@@ -2726,3 +2726,19 @@
   ]
 }
 --Expected
+
+
+
+# GitHub Issue #140 - :refer-clojure comments
+
+--Input
+(ns com.example.my-app
+  ;; comment 1
+  (:refer-clojure
+    :exclude [some-> get]) ;; comment 2
+  )
+--Input
+
+--Expected
+--Expected
+
