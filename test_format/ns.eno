@@ -25,6 +25,7 @@
 
 --Input
 (ns com.example.my-application
+  ;; aaa
   (refer-clojure :exclude [get])
   (require
    [clojure.string :as string])
@@ -38,6 +39,7 @@
 
 --Expected
 (ns com.example.my-application
+  ;; aaa
   (:refer-clojure :exclude [get])
   (:require
    [clojure.string :as string])
@@ -224,19 +226,21 @@
 
 # refer-clojure :rename with reader conditional
 
-> FIXME: need to check this is valid reader conditional syntax
-
 --Input
 (ns com.example.my-app
+  ;; comment 1
+  ;; comment 2
   (:refer-clojure
-    :rename {#?(:cljs [print core-print get g])})
+    :rename {#?(:cljs [print core-print get g])}) ;; comment 3
   )
 --Input
 
 --Expected
 (ns com.example.my-app
   #?(:cljs
-     (:refer-clojure :rename {get g, print core-print})))
+     ;; comment 1
+     ;; comment 2
+     (:refer-clojure :rename {get g, print core-print}))) ;; comment 3
 --Expected
 
 # how to ns: require, as, refer
@@ -1780,4 +1784,45 @@
   (:refer-clojure :only [-> number? set]) ; ccc
   (:require
    [aaa]))
+--Expected
+
+# GitHub Issue #140 - :refer-clojure comments 4
+
+--Input
+(ns com.example.my-app
+  (:require [aaa])
+  ;; aaa
+  ;; bbb
+  #?(:clj
+     (:refer-clojure :only [number? -> set])) ;; ccc
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:clj
+     ;; aaa
+     ;; bbb
+     (:refer-clojure :only [-> number? set])) ;; ccc
+  (:require
+   [aaa]))
+--Expected
+
+# GitHub Issue #140 - :refer-clojure comments 5
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  #?(:clj
+     (:refer-clojure :only [number? -> set])) ;; ccc
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:clj
+     ;; aaa
+     ;; bbb
+     (:refer-clojure :only [-> number? set]))) ;; ccc
 --Expected

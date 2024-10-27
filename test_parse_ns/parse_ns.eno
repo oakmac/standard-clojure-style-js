@@ -2782,3 +2782,39 @@
   }
 }
 --Expected
+
+# refer-clojure :rename with reader conditional
+
+--Input
+(ns com.example.my-app
+  ;; comment 1
+  ;; comment 2
+  (:refer-clojure
+    :rename {#?(:cljs [print core-print get g])}) ;; comment 3
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; comment 1",
+    ";; comment 2"
+  ],
+  "referClojureCommentAfter": ";; comment 3",
+  "referClojure": {
+    "rename": [
+      {
+        "fromSymbol": "get",
+        "toSymbol": "g",
+        "platform": ":cljs"
+      },
+      {
+        "fromSymbol": "print",
+        "toSymbol": "core-print",
+        "platform": ":cljs"
+      }
+    ]
+  }
+}
+--Expected
