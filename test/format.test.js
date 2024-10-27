@@ -64,10 +64,10 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('GitHub Issue #140 - :refer-clojure comments')
+specificTests.add('GitHub Issue #140 - :refer-clojure comments 3')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

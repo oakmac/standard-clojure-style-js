@@ -1728,7 +1728,24 @@
 (defprotocol ToJson (-to-json [value buffer]))
 --Expected
 
-# GitHub Issue #140 - :refer-clojure comments
+# GitHub Issue #140 - :refer-clojure comments 1
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set]) ; ccc
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [-> number? set])) ; ccc
+--Expected
+
+# GitHub Issue #140 - :refer-clojure comments 2
 
 --Input
 (ns com.example.my-app
@@ -1743,4 +1760,24 @@
   ;; aaa
   ;; bbb
   (:refer-clojure :only [-> number? set])) ; ccc
+--Expected
+
+# GitHub Issue #140 - :refer-clojure comments 3
+
+--Input
+(ns com.example.my-app
+  (:require [aaa])
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set]) ; ccc
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [-> number? set]) ; ccc
+  (:require
+   [aaa]))
 --Expected

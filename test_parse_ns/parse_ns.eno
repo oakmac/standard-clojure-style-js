@@ -2727,18 +2727,58 @@
 }
 --Expected
 
-
-
-# GitHub Issue #140 - :refer-clojure comments
+# GitHub Issue #140 - :refer-clojure comments 1
 
 --Input
 (ns com.example.my-app
-  ;; comment 1
-  (:refer-clojure
-    :exclude [some-> get]) ;; comment 2
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set]) ; ccc
   )
 --Input
 
 --Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "referClojureCommentAfter": "; ccc",
+  "referClojure": {
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
+  }
+}
 --Expected
 
+# GitHub Issue #140 - :refer-clojure comments 2
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set ; ccc
+  ]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "referClojureCommentAfter": "; ccc",
+  "referClojure": {
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
+  }
+}
+--Expected
