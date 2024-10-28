@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- [Issue #140] - better support for comments around the `:refer-clojure` ns form ([PR-141])
+
 ## [0.12.0] - 2024-10-22
 
 ### Fixed
@@ -160,6 +163,7 @@ All notable changes to this project will be documented in this file.
 [Issue #126]:https://github.com/oakmac/standard-clojure-style-js/issues/126
 [Issue #135]:https://github.com/oakmac/standard-clojure-style-js/issues/135
 [Issue #137]:https://github.com/oakmac/standard-clojure-style-js/issues/137
+[Issue #140]:https://github.com/oakmac/standard-clojure-style-js/issues/140
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -193,3 +197,4 @@ All notable changes to this project will be documented in this file.
 [PR-133]:https://github.com/oakmac/standard-clojure-style-js/pull/133
 [PR-134]:https://github.com/oakmac/standard-clojure-style-js/pull/134
 [PR-138]:https://github.com/oakmac/standard-clojure-style-js/pull/138
+[PR-141]:https://github.com/oakmac/standard-clojure-style-js/pull/141
