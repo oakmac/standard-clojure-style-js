@@ -2726,3 +2726,95 @@
   ]
 }
 --Expected
+
+# GitHub Issue #140 - :refer-clojure comments 1
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set]) ; ccc
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "referClojureCommentAfter": "; ccc",
+  "referClojure": {
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
+  }
+}
+--Expected
+
+# GitHub Issue #140 - :refer-clojure comments 2
+
+--Input
+(ns com.example.my-app
+  ;; aaa
+  ;; bbb
+  (:refer-clojure :only [number? -> set ; ccc
+  ]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; aaa",
+    ";; bbb"
+  ],
+  "referClojureCommentAfter": "; ccc",
+  "referClojure": {
+    "only": [
+      {"symbol": "->"},
+      {"symbol": "number?"},
+      {"symbol": "set"}
+    ]
+  }
+}
+--Expected
+
+# refer-clojure :rename with reader conditional
+
+--Input
+(ns com.example.my-app
+  ;; comment 1
+  ;; comment 2
+  (:refer-clojure
+    :rename {#?(:cljs [print core-print get g])}) ;; comment 3
+  )
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojureCommentsAbove": [
+    ";; comment 1",
+    ";; comment 2"
+  ],
+  "referClojureCommentAfter": ";; comment 3",
+  "referClojure": {
+    "rename": [
+      {
+        "fromSymbol": "get",
+        "toSymbol": "g",
+        "platform": ":cljs"
+      },
+      {
+        "fromSymbol": "print",
+        "toSymbol": "core-print",
+        "platform": ":cljs"
+      }
+    ]
+  }
+}
+--Expected
