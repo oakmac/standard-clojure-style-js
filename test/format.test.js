@@ -64,10 +64,9 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('refer-clojure :rename with reader conditional')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
