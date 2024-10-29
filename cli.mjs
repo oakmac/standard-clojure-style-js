@@ -389,7 +389,11 @@ function processCheckCmd (argv) {
     if (atLeastOneFilePrinted) printToStdout('')
 
     if (allFilesFormatted) {
-      printToStdout(yocto.green('All ' + sortedFiles.length + ' ' + fileStr(sortedFiles.length) + ' formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      if (sortedFiles.length === 1) {
+        printToStdout(yocto.green('1 file formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      } else {
+        printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      }
     } else {
       printToStdout(yocto.green(checkResult.filesThatDidNotRequireFormatting.length + ' ' + fileStr(checkResult.filesThatDidNotRequireFormatting.length) + ' formatted with Standard Clojure Style'))
       printToStdout(yocto.red(checkResult.filesThatDidRequireFormatting.length + ' ' + fileStr(checkResult.filesThatDidRequireFormatting.length) + ' require formatting'))
@@ -433,7 +437,11 @@ function processFixCmdNotStdin (argv) {
     if (atLeastOneFilePrinted) printToStdout('')
 
     if (allFilesFormatted) {
-      printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      if (sortedFiles.length === 1) {
+        printToStdout(yocto.green('1 file formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      } else {
+        printToStdout(yocto.green('All ' + sortedFiles.length + ' files formatted with Standard Clojure Style 👍') + ' ' + formatDuration(scriptDurationMs))
+      }
     } else {
       printToStdout(yocto.green(numFormattedFiles + ' files formatted with Standard Clojure Style'))
       printToStdout(yocto.red(formatResult.filesWithErrors.length + ' files with errors'))
