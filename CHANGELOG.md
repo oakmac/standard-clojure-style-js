@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - [Issue #140] - better support for comments around the `:refer-clojure` ns form ([PR-141])
 
+### Changed
+- [Issue #145] - tweak CLI verbiage when only one file is checked or formatted ([PR-148])
+
 ### Fixed
 - [Issue #142] - fix ns parsing bug with paren nesting levels ([PR-147])
 
@@ -168,6 +171,7 @@ All notable changes to this project will be documented in this file.
 [Issue #137]:https://github.com/oakmac/standard-clojure-style-js/issues/137
 [Issue #140]:https://github.com/oakmac/standard-clojure-style-js/issues/140
 [Issue #142]:https://github.com/oakmac/standard-clojure-style-js/issues/142
+[Issue #145]:https://github.com/oakmac/standard-clojure-style-js/issues/145
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
@@ -203,3 +207,4 @@ All notable changes to this project will be documented in this file.
 [PR-138]:https://github.com/oakmac/standard-clojure-style-js/pull/138
 [PR-141]:https://github.com/oakmac/standard-clojure-style-js/pull/141
 [PR-147]:https://github.com/oakmac/standard-clojure-style-js/pull/147
+[PR-148]:https://github.com/oakmac/standard-clojure-style-js/pull/148
