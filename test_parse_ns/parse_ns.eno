@@ -2853,21 +2853,21 @@
   ],
   "referClojure": {
     "exclude": [
-      { "symbol": "aset", "platform": ":clj" },
-      { "symbol": "aget", "platform": ":clj" },
       { "symbol": "+", "platform": ":clj" },
-      { "symbol": "unsigned-bit-shift-right", "platform": ":clj" },
+      { "symbol": "aget", "platform": ":clj" },
+      { "symbol": "aset", "platform": ":clj" },
+      { "symbol": "bit-shift-left", "platform": ":clj" },
       { "symbol": "bit-shift-right", "platform": ":clj" },
-      { "symbol": "bit-shift-left", "platform": ":clj" }
+      { "symbol": "unsigned-bit-shift-right", "platform": ":clj" }
     ]
   },
   "requires": [
     {
       "symbol": "js",
       "refer": [
-        {"symbol": "aset"},
+        {"symbol": "+"},
         {"symbol": "aget"},
-        {"symbol": "+"}
+        {"symbol": "aset"}
       ],
       "platform": ":clj"
     }
@@ -2875,7 +2875,7 @@
   "imports": [
     {
       "package": "js",
-      "classes": ["ArrayBuffer", "Uint8Array", "Uint32Array", "Float64Array"],
+      "classes": ["ArrayBuffer", "Float64Array", "Uint32Array", "Uint8Array"],
       "platform": ":clj"
     }
   ]
