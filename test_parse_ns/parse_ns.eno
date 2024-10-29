@@ -2818,3 +2818,66 @@
   }
 }
 --Expected
+
+# GitHub Issue #142 - cljs.math reader conditional example
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/142
+
+--Input
+(ns ^{:doc "ClojureScript wrapper functions for math operations"
+      :author "Paula Gearon" }
+    cljs.math
+  ;; create space to load this in Clojure for testing
+  #?@(:clj ((:refer-clojure :exclude [aset aget + unsigned-bit-shift-right bit-shift-right bit-shift-left])
+            (:require [js :refer [aset aget +]])
+            (:import [js ArrayBuffer Uint8Array Uint32Array Float64Array]))))
+
+#?(:clj (def number Double))
+--Input
+
+--Expected
+{
+  "nsSymbol": "cljs.math",
+  "nsMetadata": [
+    {
+      "key": ":doc",
+      "value": "\"ClojureScript wrapper functions for math operations\""
+    },
+    {
+      "key": ":author",
+      "value": "\"Paula Gearon\""
+    }
+  ],
+  "referClojureCommentsAbove": [
+    ";; create space to load this in Clojure for testing"
+  ],
+  "referClojure": {
+    "exclude": [
+      { "symbol": "+", "platform": ":clj" },
+      { "symbol": "aget", "platform": ":clj" },
+      { "symbol": "aset", "platform": ":clj" },
+      { "symbol": "bit-shift-left", "platform": ":clj" },
+      { "symbol": "bit-shift-right", "platform": ":clj" },
+      { "symbol": "unsigned-bit-shift-right", "platform": ":clj" }
+    ]
+  },
+  "requires": [
+    {
+      "symbol": "js",
+      "refer": [
+        {"symbol": "+"},
+        {"symbol": "aget"},
+        {"symbol": "aset"}
+      ],
+      "platform": ":clj"
+    }
+  ],
+  "imports": [
+    {
+      "package": "js",
+      "classes": ["ArrayBuffer", "Float64Array", "Uint32Array", "Uint8Array"],
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected

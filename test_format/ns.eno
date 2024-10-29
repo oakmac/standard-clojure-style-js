@@ -1826,3 +1826,30 @@
      ;; bbb
      (:refer-clojure :only [-> number? set]))) ;; ccc
 --Expected
+
+# GitHub Issue #142 - bug with reader conditionals
+
+--Input
+(ns ^{:doc "ClojureScript wrapper functions for math operations"
+      :author "Paula Gearon" }
+    cljs.math
+  ;; create space to load this in Clojure for testing
+  #?@(:clj ((:refer-clojure :exclude [aset aget + unsigned-bit-shift-right bit-shift-right bit-shift-left])
+            (:require [js :refer [aset aget +]])
+            (:import [js ArrayBuffer Uint8Array Uint32Array Float64Array]))))
+--Input
+
+--Expected
+(ns cljs.math
+  {:doc "ClojureScript wrapper functions for math operations"
+   :author "Paula Gearon"}
+  #?(:clj
+     ;; create space to load this in Clojure for testing
+     (:refer-clojure :exclude [+ aget aset bit-shift-left bit-shift-right unsigned-bit-shift-right]))
+  #?(:clj
+     (:require
+      [js :refer [+ aget aset]]))
+  #?(:clj
+     (:import
+      (js ArrayBuffer Float64Array Uint32Array Uint8Array))))
+--Expected
