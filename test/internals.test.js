@@ -22,7 +22,7 @@ test('String util: substr', () => {
   expect(scsLib._substr('abcdef', 0, 0)).toBe('')
   expect(scsLib._substr('abcdef', 0, 2)).toBe('ab')
   expect(scsLib._substr('abcdef', 3, 5)).toBe('de')
-  expect(scsLib._substr('abcdef', 2)).toBe('cdef')
+  expect(scsLib._substr('abcdef', 2, -1)).toBe('cdef')
 })
 
 test('commentNeedsSpaceBefore', () => {
