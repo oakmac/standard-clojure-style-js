@@ -158,16 +158,16 @@ describe('String Util', () => {
     expect(scsLib._isStringWithChars(undefined)).toBe(false)
   })
 
-  describe('strReplace', () => {
+  describe('strReplaceFirst', () => {
     test('replaces substring', () => {
-      expect(scsLib._strReplace('hello world', 'world', 'there')).toBe('hello there')
-      expect(scsLib._strReplace('hello hello', 'hello', 'hi')).toBe('hi hello')
+      expect(scsLib._strReplaceFirst('hello world', 'world', 'there')).toBe('hello there')
+      expect(scsLib._strReplaceFirst('hello hello', 'hello', 'hi')).toBe('hi hello')
     })
 
     test('handles edge cases', () => {
-      expect(scsLib._strReplace('', 'a', 'b')).toBe('')
-      expect(scsLib._strReplace('hello', '', 'x')).toBe('hello')
-      expect(scsLib._strReplace('hello', 'x', 'y')).toBe('hello')
+      expect(scsLib._strReplaceFirst('', 'a', 'b')).toBe('')
+      expect(scsLib._strReplaceFirst('hello', '', 'x')).toBe('hello')
+      expect(scsLib._strReplaceFirst('hello', 'x', 'y')).toBe('hello')
     })
   })
 
