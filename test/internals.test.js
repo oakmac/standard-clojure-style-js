@@ -1,4 +1,4 @@
-/* global test expect */
+/* global describe test expect */
 
 // This file tests some internal functions of lib/standard-clojure-style.js
 // NOTE: in lib/standard-clojure-style.js, exportInternalFnsForTesting must be set to true for these to run
@@ -12,17 +12,191 @@ test('internal functions are exported', () => {
   expect(isFn(scsLib._flattenTree)).toBe(true)
 })
 
-test('String util: charAt', () => {
-  expect(scsLib._charAt('abc', 0)).toBe('a')
-  expect(scsLib._charAt('abc', 2)).toBe('c')
-  // TODO: handle out of range?
-})
+describe('String Util', () => {
+  describe('charAt', () => {
+    test('returns correct character at specified index', () => {
+      expect(scsLib._charAt('hello', 0)).toBe('h')
+      expect(scsLib._charAt('hello', 4)).toBe('o')
+    })
 
-test('String util: substr', () => {
-  expect(scsLib._substr('abcdef', 0, 0)).toBe('')
-  expect(scsLib._substr('abcdef', 0, 2)).toBe('ab')
-  expect(scsLib._substr('abcdef', 3, 5)).toBe('de')
-  expect(scsLib._substr('abcdef', 2, -1)).toBe('cdef')
+    test('handles edge cases', () => {
+      expect(scsLib._charAt('', 0)).toBe('')
+      expect(scsLib._charAt('a', 1)).toBe('') // out of bounds
+      expect(scsLib._charAt('a', -1)).toBe('') // negative index
+    })
+  })
+
+  describe('substr', () => {
+    test('extracts substring correctly', () => {
+      expect(scsLib._substr('hello world', 0, 5)).toBe('hello')
+      expect(scsLib._substr('hello world', 6, 11)).toBe('world')
+    })
+
+    test('handles negative end index', () => {
+      expect(scsLib._substr('hello world', 0, -1)).toBe('hello world')
+      expect(scsLib._substr('hello', 2, -1)).toBe('llo')
+    })
+
+    test('handles out of bounds indices', () => {
+      expect(scsLib._substr('hello', 0, 10)).toBe('hello') // end beyond string length
+      expect(scsLib._substr('hello', 10, 15)).toBe('') // start beyond string length
+      expect(scsLib._substr('hello', -1, 3)).toBe('') // negative start
+    })
+  })
+
+  describe('repeatString', () => {
+    test('repeats string correctly', () => {
+      expect(scsLib._repeatString('abc', 3)).toBe('abcabcabc')
+      expect(scsLib._repeatString('x', 5)).toBe('xxxxx')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._repeatString('', 5)).toBe('')
+      expect(scsLib._repeatString('hello', 0)).toBe('')
+      expect(scsLib._repeatString('a', -1)).toBe('')
+    })
+  })
+
+  describe('strIncludes', () => {
+    test('correctly checks string inclusion', () => {
+      expect(scsLib._strIncludes('hello world', 'world')).toBe(true)
+      expect(scsLib._strIncludes('hello world', 'hello')).toBe(true)
+      expect(scsLib._strIncludes('hello world', 'xyz')).toBe(false)
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strIncludes('', '')).toBe(true)
+      expect(scsLib._strIncludes('abc', '')).toBe(true)
+      expect(scsLib._strIncludes('', 'a')).toBe(false)
+    })
+  })
+
+  describe('toUpperCase', () => {
+    test('converts string to uppercase', () => {
+      expect(scsLib._toUpperCase('hello')).toBe('HELLO')
+      expect(scsLib._toUpperCase('Hello World!')).toBe('HELLO WORLD!')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._toUpperCase('')).toBe('')
+      expect(scsLib._toUpperCase('123')).toBe('123')
+      expect(scsLib._toUpperCase('áéíóú')).toBe('ÁÉÍÓÚ') // accented characters
+    })
+  })
+
+  describe('strJoin', () => {
+    test('joins array elements with separator', () => {
+      expect(scsLib._strJoin(['a', 'b', 'c'], '-')).toBe('a-b-c')
+      expect(scsLib._strJoin(['hello', 'world'], ' ')).toBe('hello world')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strJoin([], '-')).toBe('')
+      expect(scsLib._strJoin(['a'], '-')).toBe('a')
+      expect(scsLib._strJoin(['a', 'b'], '')).toBe('ab')
+    })
+  })
+
+  describe('rtrim', () => {
+    test('removes trailing whitespace', () => {
+      expect(scsLib._rtrim('  hello  ')).toBe('  hello')
+      expect(scsLib._rtrim('hello\n\t  ')).toBe('hello')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._rtrim('')).toBe('')
+      expect(scsLib._rtrim('   ')).toBe('')
+      expect(scsLib._rtrim('hello')).toBe('hello')
+    })
+  })
+
+  describe('strTrim', () => {
+    test('removes leading and trailing whitespace', () => {
+      expect(scsLib._strTrim('  hello  ')).toBe('hello')
+      expect(scsLib._strTrim('\n\t hello \t\n')).toBe('hello')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strTrim('')).toBe('')
+      expect(scsLib._strTrim('   ')).toBe('')
+      expect(scsLib._strTrim('hello')).toBe('hello')
+    })
+  })
+
+  describe('strStartsWith', () => {
+    test('checks string start', () => {
+      expect(scsLib._strStartsWith('hello world', 'hello')).toBe(true)
+      expect(scsLib._strStartsWith('hello world', 'world')).toBe(false)
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strStartsWith('', '')).toBe(true)
+      expect(scsLib._strStartsWith('hello', '')).toBe(true)
+      expect(scsLib._strStartsWith('', 'a')).toBe(false)
+    })
+  })
+
+  describe('strEndsWith', () => {
+    test('checks string end', () => {
+      expect(scsLib._strEndsWith('hello world', 'world')).toBe(true)
+      expect(scsLib._strEndsWith('hello world', 'hello')).toBe(false)
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strEndsWith('', '')).toBe(true)
+      expect(scsLib._strEndsWith('hello', '')).toBe(true)
+      expect(scsLib._strEndsWith('', 'a')).toBe(false)
+    })
+  })
+
+  test('isStringWithChars', () => {
+    expect(scsLib._isStringWithChars('hello')).toBe(true)
+    expect(scsLib._isStringWithChars('  x  ')).toBe(true)
+    expect(scsLib._isStringWithChars(' ')).toBe(true)
+    expect(scsLib._isStringWithChars('')).toBe(false)
+    expect(scsLib._isStringWithChars(null)).toBe(false)
+    expect(scsLib._isStringWithChars(undefined)).toBe(false)
+  })
+
+  describe('strReplace', () => {
+    test('replaces substring', () => {
+      expect(scsLib._strReplace('hello world', 'world', 'there')).toBe('hello there')
+      expect(scsLib._strReplace('hello hello', 'hello', 'hi')).toBe('hi hello')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strReplace('', 'a', 'b')).toBe('')
+      expect(scsLib._strReplace('hello', '', 'x')).toBe('hello')
+      expect(scsLib._strReplace('hello', 'x', 'y')).toBe('hello')
+    })
+  })
+
+  describe('crlfToLf', () => {
+    test('converts CRLF to LF', () => {
+      expect(scsLib._crlfToLf('hello\r\nworld')).toBe('hello\nworld')
+      expect(scsLib._crlfToLf('line1\r\nline2\r\nline3')).toBe('line1\nline2\nline3')
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._crlfToLf('')).toBe('')
+      expect(scsLib._crlfToLf('no crlf')).toBe('no crlf')
+      expect(scsLib._crlfToLf('\r\n')).toBe('\n')
+    })
+  })
+
+  describe('strSplit', () => {
+    test('splits string by delimiter', () => {
+      expect(scsLib._strSplit('a-b-c', '-')).toEqual(['a', 'b', 'c'])
+      expect(scsLib._strSplit('hello world', ' ')).toEqual(['hello', 'world'])
+    })
+
+    test('handles edge cases', () => {
+      expect(scsLib._strSplit('', '-')).toEqual([''])
+      expect(scsLib._strSplit('hello', '')).toEqual(['h', 'e', 'l', 'l', 'o'])
+      expect(scsLib._strSplit('a', 'x')).toEqual(['a'])
+      expect(scsLib._strSplit('a-b-', '-')).toEqual(['a', 'b', ''])
+    })
+  })
 })
 
 test('commentNeedsSpaceBefore', () => {
