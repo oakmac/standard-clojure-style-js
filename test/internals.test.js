@@ -444,9 +444,6 @@ test('Repeat parser', () => {
   expect(repeatResult4.children[1].name).toBe('AAA')
 })
 
-// TODO: add tests for NotChar
-// TODO: add tests for String
-
 test('Choice parser', () => {
   const testChoice1 = scsLib._Choice({
     name: 'choice_test_1',
