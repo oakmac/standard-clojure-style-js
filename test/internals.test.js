@@ -264,6 +264,62 @@ test('Char parser', () => {
   expect(charTest2.parse('a', 0)).toBeNull()
 })
 
+test('NotChar parser', () => {
+  const notCharTest1 = scsLib._NotChar({ char: 'a', name: 'notchar_test_a' })
+
+  // Test matching any non-'a' character
+  expect(notCharTest1.parse('b', 0).name).toBe('notchar_test_a')
+  expect(notCharTest1.parse('b', 0).text).toBe('b')
+  expect(notCharTest1.parse('b', 0).startIdx).toBe(0)
+  expect(notCharTest1.parse('b', 0).endIdx).toBe(1)
+
+  // Test failing to match 'a'
+  expect(notCharTest1.parse('a', 0)).toBeNull()
+
+  // Test with different characters
+  expect(notCharTest1.parse('x', 0).text).toBe('x')
+  expect(notCharTest1.parse('1', 0).text).toBe('1')
+  expect(notCharTest1.parse(' ', 0).text).toBe(' ')
+  expect(notCharTest1.parse('!', 0).text).toBe('!')
+
+  // Test with position beyond string length
+  expect(notCharTest1.parse('xyz', 3)).toBeNull()
+
+  // Test with empty string
+  expect(notCharTest1.parse('', 0)).toBeNull()
+
+  // Test with special character
+  const notCharTest2 = scsLib._NotChar({ char: '$', name: 'notchar_test_special' })
+  expect(notCharTest2.parse('a', 0).text).toBe('a')
+  expect(notCharTest2.parse('$', 0)).toBeNull()
+})
+
+test('String parser', () => {
+  const stringTest1 = scsLib._String({ str: 'foo', name: 'string_test_foo' })
+  expect(stringTest1.parse('foo', 0).name).toBe('string_test_foo')
+  expect(stringTest1.parse('foo', 0).text).toBe('foo')
+  expect(stringTest1.parse('foo', 0).startIdx).toBe(0)
+  expect(stringTest1.parse('foo', 0).endIdx).toBe(3)
+  expect(stringTest1.parse('bar', 0)).toBeNull()
+
+  // Test partial match
+  expect(stringTest1.parse('fo', 0)).toBeNull()
+  // Test inside middle of the String
+  expect(stringTest1.parse('foo', 1)).toBeNull()
+
+  // Test with leading characters
+  const result1 = stringTest1.parse('barfoo', 3)
+  expect(result1.name).toBe('string_test_foo')
+  expect(result1.startIdx).toBe(3)
+  expect(result1.endIdx).toBe(6)
+  expect(result1.text).toBe('foo')
+
+  // Test with trailing characters
+  const result2 = stringTest1.parse('foobar', 0)
+  expect(result2.text).toBe('foo')
+  expect(result2.endIdx).toBe(3)
+})
+
 test('Regex parser', () => {
   const regexTest1 = scsLib._Regex({
     regex: /(c|d)+/,
