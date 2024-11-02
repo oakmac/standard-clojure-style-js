@@ -147,7 +147,7 @@ function nodeToString (node, indentLevel) {
     let outTxt = ''
     if (node.name !== 'source') outTxt = '\n'
 
-    outTxt = outTxt + indentationSpaces + '(' + node.name + ' ' + node.start + '..' + node.end
+    outTxt = outTxt + indentationSpaces + '(' + node.name + ' ' + node.startIdx + '..' + node.endIdx
 
     if (node.text && node.text !== '') {
       const textWithNewlinesEscaped = strReplaceAll(node.text, '\n', '\\n')
