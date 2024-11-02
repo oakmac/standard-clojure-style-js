@@ -390,7 +390,56 @@ test('Repeat parser', () => {
 
 // TODO: add tests for NotChar
 // TODO: add tests for String
-// TODO: add tests for Optional
+
+test('Choice parser', () => {
+  const testChoice1 = scsLib._Choice({
+    name: 'choice_test_1',
+    parsers: [
+      scsLib._Char({ name: 'A', char: 'a' }),
+      scsLib._Char({ name: 'B', char: 'b' }),
+      scsLib._Char({ name: 'C', char: 'c' })
+    ]
+  })
+
+  // Test no match case
+  const choiceResult1 = testChoice1.parse('x', 0)
+  expect(choiceResult1).toBeNull()
+
+  // Test first parser match
+  const choiceResult2 = testChoice1.parse('a', 0)
+  expect(choiceResult2.startIdx).toBe(0)
+  expect(choiceResult2.endIdx).toBe(1)
+  expect(choiceResult2.name).toBe('A')
+  expect(choiceResult2.text).toBe('a')
+
+  // Test second parser match
+  const choiceResult3 = testChoice1.parse('b', 0)
+  expect(choiceResult3.startIdx).toBe(0)
+  expect(choiceResult3.endIdx).toBe(1)
+  expect(choiceResult3.name).toBe('B')
+  expect(choiceResult3.text).toBe('b')
+
+  // Test third parser match
+  const choiceResult4 = testChoice1.parse('c', 0)
+  expect(choiceResult4.startIdx).toBe(0)
+  expect(choiceResult4.endIdx).toBe(1)
+  expect(choiceResult4.name).toBe('C')
+  expect(choiceResult4.text).toBe('c')
+
+  // Test match with offset position
+  const choiceResult5 = testChoice1.parse('xab', 1)
+  expect(choiceResult5.startIdx).toBe(1)
+  expect(choiceResult5.endIdx).toBe(2)
+  expect(choiceResult5.name).toBe('A')
+  expect(choiceResult5.text).toBe('a')
+
+  // Test that it stops at first match
+  const choiceResult6 = testChoice1.parse('abc', 0)
+  expect(choiceResult6.startIdx).toBe(0)
+  expect(choiceResult6.endIdx).toBe(1)
+  expect(choiceResult6.name).toBe('A')
+  expect(choiceResult6.text).toBe('a')
+})
 
 test('parseJavaPackageWithClass', () => {
   const example1 = scsLib._parseJavaPackageWithClass('aaa.bbb.ccc.Ddd')
