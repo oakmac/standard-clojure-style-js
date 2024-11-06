@@ -2,13 +2,17 @@
 
 A JavaScript library to format Clojure code according to Standard Clojure Style.
 
-## Project Status (October 2024)
+## Introduction and Demo
 
-This project is under active development in preparation for [Clojure/conj 2024]. Please expect changes!
+I gave a 10-minute lightning talk at [Clojure/conj 2024] about this project:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=VhjxvEabOX0
+" target="_blank"><img src="http://img.youtube.com/vi/VhjxvEabOX0/0.jpg"
+alt="Introduction to Standard Clojure Style video preview" width="240" height="180" border="10" /></a>
 
 [Clojure/conj 2024]:https://2024.clojure-conj.org/
 
-## I want YOU for alpha testing :cowboy_hat_face:
+## I want YOU for testing :cowboy_hat_face:
 
 Calling all adventurous Clojure developers! Please run this library on your codebase and report bugs.
 
@@ -304,8 +308,9 @@ mv standard-clj /usr/local/bin
 > NOTE: this is an incomplete list. I am working on a website that will document all of the formatting rules. 20 Sep 2024
 
 - trim trailing whitespace (ie: `rtrim` every line)
-- ensure a single newline character (`\n`) at the end of the file
+- convert all `"\r\n"` to `"\n"`
 - convert all tab characters to spaces (except tab characters inside of Strings)
+- ensure a single newline character (`\n`) at the end of the file
 - [cljfmt option] `:remove-surrounding-whitespace?` = true
 - [cljfmt option] `:remove-trailing-whitespace?` = true
 - [cljfmt option] `:insert-missing-whitespace?` = true
@@ -313,7 +318,7 @@ mv standard-clj /usr/local/bin
 - format and sort `ns` forms according to Stuart Sierra's [how to ns]
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
   - with the addition of [Rule 3](https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649) as proposed by Shaun Lebron
-- (unfinished) comments that contain the String `standard-clojure-style:ignore` cause the next form to be ignored by the formatter
+- Use `#_ :standard-clj/ignore` or `#_ :standard-clj/ignore-file` to disable the formatter for certain special cases
 
 [how to ns]:https://stuartsierra.com/2016/clojure-how-to-ns.html
 [cljfmt option]:https://github.com/weavejester/cljfmt#formatting-options
