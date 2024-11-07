@@ -42,12 +42,13 @@ Please see [Issue #1] for an explanation of this project's genesis.
 
 [Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
 
-## Other Languages / Implementations
+## Editor Integrations and Other Implementations
 
 It is a goal of Standard Clojure Style to "meet you where you are". ie: in
 your editor, on the web, CLI tooling, etc.
 
 - [Standard Clojure Style in Lua]
+- Example Emacs usage [in this post](https://x.com/ovstoica/status/1854192289498706012)
 - a Python port is planned as of Nov 2024
 
 [Standard Clojure Style in Lua]:https://github.com/oakmac/standard-clojure-style-lua/tree/master
