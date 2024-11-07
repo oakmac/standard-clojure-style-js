@@ -199,6 +199,122 @@ describe('String Util', () => {
   })
 })
 
+describe('Stack Operations Tests', () => {
+  describe('stackPeek', () => {
+    test('should peek at the last element when idxFromBack is 0', () => {
+      const arr = [1, 2, 3, 4]
+      expect(scsLib._stackPeek(arr, 0)).toBe(4)
+    })
+
+    test('should peek at elements from the back correctly', () => {
+      const arr = [1, 2, 3, 4]
+      expect(scsLib._stackPeek(arr, 1)).toBe(3)
+      expect(scsLib._stackPeek(arr, 2)).toBe(2)
+      expect(scsLib._stackPeek(arr, 3)).toBe(1)
+    })
+
+    test('should return null when idxFromBack is too large', () => {
+      const arr = [1, 2, 3]
+      expect(scsLib._stackPeek(arr, 3)).toBe(null)
+      expect(scsLib._stackPeek(arr, 4)).toBe(null)
+    })
+
+    test('should handle empty array', () => {
+      const arr = []
+      expect(scsLib._stackPeek(arr, 0)).toBe(null)
+    })
+
+    test('should handle array with one element', () => {
+      const arr = [42]
+      expect(scsLib._stackPeek(arr, 0)).toBe(42)
+      expect(scsLib._stackPeek(arr, 1)).toBe(null)
+    })
+  })
+
+  describe('stackPop', () => {
+    test('should remove and return the last element', () => {
+      const stack = [1, 2, 3]
+      expect(scsLib._stackPop(stack)).toBe(3)
+      expect(stack).toEqual([1, 2])
+    })
+
+    test('should handle empty stack', () => {
+      const stack = []
+      expect(scsLib._stackPop(stack)).toBe(undefined)
+      expect(stack).toEqual([])
+    })
+
+    test('should handle stack with one element', () => {
+      const stack = [42]
+      expect(scsLib._stackPop(stack)).toBe(42)
+      expect(stack).toEqual([])
+    })
+  })
+
+  describe('stackPush', () => {
+    test('should add element to the end of stack', () => {
+      const stack = [1, 2]
+      expect(scsLib._stackPush(stack, 3)).toBe(null)
+      expect(stack).toEqual([1, 2, 3])
+    })
+
+    test('should handle pushing to empty stack', () => {
+      const stack = []
+      expect(scsLib._stackPush(stack, 1)).toBe(null)
+      expect(stack).toEqual([1])
+    })
+
+    test('should handle pushing multiple items', () => {
+      const stack = []
+      scsLib._stackPush(stack, 1)
+      scsLib._stackPush(stack, 2)
+      scsLib._stackPush(stack, 3)
+      expect(stack).toEqual([1, 2, 3])
+    })
+
+    test('should handle pushing different types', () => {
+      const stack = []
+      scsLib._stackPush(stack, 42)
+      scsLib._stackPush(stack, 'hello')
+      scsLib._stackPush(stack, { key: 'value' })
+      scsLib._stackPush(stack, [1, 2, 3])
+      expect(stack).toEqual([
+        42,
+        'hello',
+        { key: 'value' },
+        [1, 2, 3]
+      ])
+    })
+  })
+
+  describe('Integration Tests', () => {
+    test('should work together in sequence', () => {
+      const stack = []
+
+      // Push some items
+      scsLib._stackPush(stack, 1)
+      scsLib._stackPush(stack, 2)
+      scsLib._stackPush(stack, 3)
+
+      // Peek at different positions
+      expect(scsLib._stackPeek(stack, 0)).toBe(3)
+      expect(scsLib._stackPeek(stack, 1)).toBe(2)
+
+      // Pop an item
+      expect(scsLib._stackPop(stack)).toBe(3)
+
+      // Peek after pop
+      expect(scsLib._stackPeek(stack, 0)).toBe(2)
+
+      // Push new item
+      scsLib._stackPush(stack, 4)
+
+      // Verify final state
+      expect(stack).toEqual([1, 2, 4])
+    })
+  })
+})
+
 test('commentNeedsSpaceBefore', () => {
   expect(scsLib._commentNeedsSpaceBefore('foo', ';bar')).toBe(true)
   expect(scsLib._commentNeedsSpaceBefore('foo {}', ';bar')).toBe(true)
