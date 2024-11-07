@@ -8,7 +8,7 @@ I gave a 10-minute lightning talk at [Clojure/conj 2024] about this project:
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=VhjxvEabOX0
 " target="_blank"><img src="http://img.youtube.com/vi/VhjxvEabOX0/0.jpg"
-alt="Introduction to Standard Clojure Style video preview" width="240" height="180" border="10" /></a>
+alt="Introduction to Standard Clojure Style video preview" width="260" height="195" border="10" /></a>
 
 [Clojure/conj 2024]:https://2024.clojure-conj.org/
 
@@ -41,6 +41,16 @@ Please [open an issue] when Standard Clojure Style breaks your code :upside_down
 Please see [Issue #1] for an explanation of this project's genesis.
 
 [Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
+
+## Other Languages / Implementations
+
+It is a goal of Standard Clojure Style to "meet you where you are". ie: in
+your editor, on the web, CLI tooling, etc.
+
+- [Standard Clojure Style in Lua]
+- a Python port is planned as of Nov 2024
+
+[Standard Clojure Style in Lua]:https://github.com/oakmac/standard-clojure-style-lua/tree/master
 
 ## Command Line Usage
 
