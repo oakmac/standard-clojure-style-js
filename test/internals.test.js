@@ -438,7 +438,7 @@ test('String parser', () => {
 
 test('Regex parser', () => {
   const regexTest1 = scsLib._Regex({
-    regex: /(c|d)+/,
+    regex: /^(c|d)+/,
     name: 'foo'
   })
 
