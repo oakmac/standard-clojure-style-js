@@ -12,6 +12,14 @@ alt="Introduction to Standard Clojure Style video preview" width="260" height="1
 
 [Clojure/conj 2024]:https://2024.clojure-conj.org/
 
+## Try it online for free right now!
+
+[Try online using Squint playground.](https://tinyurl.com/43abayj2)
+
+> No purchase necessary. Side effects may include formatted Clojure code, sudden
+  urges to REPL, and a strange satisfaction of consistently formatted namespaces.
+  Not responsible for increased productivity due to reduced bikeshedding with coworkers.
+
 ## I want YOU for testing :cowboy_hat_face:
 
 Calling all adventurous Clojure developers! Please run this library on your codebase and report bugs.
