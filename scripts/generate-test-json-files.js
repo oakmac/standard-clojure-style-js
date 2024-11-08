@@ -53,11 +53,23 @@ enoFilesInDir('test_parse_ns/').forEach((f) => {
   parseNsTestCases = parseNsTestCases.concat(testCases)
 })
 
-fs.removeSync('test_cases_json')
-fs.makeTreeSync('test_cases_json')
-fs.writeFileSync('test_cases_json/format_tests.json', JSON.stringify(formatTestCases, null, 2))
-fs.writeFileSync('test_cases_json/parser_tests.json', JSON.stringify(parserTestCases, null, 2))
-fs.writeFileSync('test_cases_json/parse_ns_tests.json', JSON.stringify(parseNsTestCases, null, 2))
+const writeFilesToLocalDir = false
+if (writeFilesToLocalDir) {
+  fs.removeSync('test_cases_json')
+  fs.makeTreeSync('test_cases_json')
+  fs.writeFileSync('test_cases_json/format_tests.json', JSON.stringify(formatTestCases, null, 2))
+  fs.writeFileSync('test_cases_json/parser_tests.json', JSON.stringify(parserTestCases, null, 2))
+  fs.writeFileSync('test_cases_json/parse_ns_tests.json', JSON.stringify(parseNsTestCases, null, 2))
+}
+
+// copy the files to standard-clojure-style-lua/test_cases if it exists
+const luaTestFilesDir = path.join(rootDir, '../standard-clojure-style-lua/test_cases')
+if (fs.isDirectorySync(luaTestFilesDir)) {
+  fs.writeFileSync(path.join(luaTestFilesDir, 'format_tests.json'), JSON.stringify(formatTestCases, null, 2) + '\n')
+  fs.writeFileSync(path.join(luaTestFilesDir, 'parser_tests.json'), JSON.stringify(parserTestCases, null, 2) + '\n')
+  fs.writeFileSync(path.join(luaTestFilesDir, 'parse_ns_tests.json'), JSON.stringify(parseNsTestCases, null, 2) + '\n')
+  console.log('Wrote test files to ' + luaTestFilesDir)
+}
 
 // -----------------------------------------------------------------------------
 // Util
