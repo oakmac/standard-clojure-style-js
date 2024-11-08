@@ -4,11 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.13.0] - 2024-11-08
+
 ### Added
 - [Issue #140] - better support for comments around the `:refer-clojure` ns form ([PR-141])
 
 ### Changed
 - [Issue #145] - tweak CLI verbiage when only one file is checked or formatted ([PR-148])
+- refactorings and added unit tests for internals
 
 ### Fixed
 - [Issue #142] - fix ns parsing bug with paren nesting levels ([PR-147])
@@ -122,7 +125,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.11.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.13.0...HEAD
+[0.13.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.13.0
+[0.12.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.12.0
 [0.11.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.11.0
 [0.10.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.10.0
 [0.9.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.9.0
