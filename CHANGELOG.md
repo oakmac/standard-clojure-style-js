@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.14.0] - 2024-11-09
+
+### Fixed
+- [Issue #153] - fix CLI bug with traversing directories on Windows ([commit #db857ff4])
+
 ## [0.13.0] - 2024-11-08
 
 ### Added
@@ -125,7 +130,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.13.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.14.0...HEAD
+[0.13.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.14.0
 [0.13.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.13.0
 [0.12.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.12.0
 [0.11.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.11.0
@@ -177,6 +183,9 @@ All notable changes to this project will be documented in this file.
 [Issue #140]:https://github.com/oakmac/standard-clojure-style-js/issues/140
 [Issue #142]:https://github.com/oakmac/standard-clojure-style-js/issues/142
 [Issue #145]:https://github.com/oakmac/standard-clojure-style-js/issues/145
+[Issue #153]:https://github.com/oakmac/standard-clojure-style-js/issues/153
+
+[commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
 [PR-72]:https://github.com/oakmac/standard-clojure-style-js/pull/72
 [PR-79]:https://github.com/oakmac/standard-clojure-style-js/pull/79
