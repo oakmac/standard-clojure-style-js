@@ -1944,11 +1944,26 @@ hee, haz
          ~@(map process-reference references))
        (if (.equals '~name 'clojure.core)
          nil
-         (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))
+         (do (dosync (commute @#'*loaded-libs* conj '~name)) nil))))
 
 (defmacro refer-clojure
   "Same as (refer 'clojure.core <filters>)"
   {:added "1.0"}
   [& filters]
   `(clojure.core/refer '~'clojure.core ~@filters))
+--Expected
+
+# GitHub Issue #150 - error out on invalid syntax
+
+--Input
+(ns example
+  (:require
+   [clojure.math :as math])
+
+(doseq [i (range 100)]
+  (println {:a i}))
+--Input
+
+--Expected
+xxx
 --Expected
