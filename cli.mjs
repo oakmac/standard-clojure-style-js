@@ -31,7 +31,7 @@ const scriptStartTime = performance.now()
 // script before publishing to npm
 const programVersion = '[dev]' // 6444ef98-c603-42ca-97e7-ebe5c60382de
 
-const defaultFileExtensions = ['clj', 'cljs', 'cljc', 'edn']
+const defaultFileExtensions = new Set(['.clj', '.cljs', '.cljc', '.edn'])
 
 let logLevel = 'everything'
 let atLeastOneFilePrinted = false
@@ -52,9 +52,7 @@ function getFilesFromArgv (argv, cmd) {
   // remove the first item, which is the command
   argv._.shift()
   const directArgs = argv._
-
-  const fileExtensionsStr = argv['file-ext']
-
+  const fileExtensionsSet = argv['file-ext']
   let includeFiles = []
 
   // process the direct arguments
@@ -69,9 +67,13 @@ function getFilesFromArgv (argv, cmd) {
     if (fs.isFileSync(possibleFileOrDir)) {
       includeFiles.push(possibleFileOrDir)
     } else if (fs.isDirectorySync(possibleFileOrDir)) {
-      const dirGlobStr = path.join(arg, '/**/*.{' + fileExtensionsStr + '}')
-      const filesFromGlob = globSync(dirGlobStr)
-      includeFiles = includeFiles.concat(filesFromGlob)
+      fs.traverseTreeSync(possibleFileOrDir, (f) => {
+        const fileExt = path.extname(f)
+        if (fileExtensionsSet.has(fileExt)) {
+          includeFiles.push(f)
+        }
+        return true
+      }, alwaysTrue)
     } else {
       printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory at "' + arg + '"')
     }
@@ -86,8 +88,8 @@ function getFilesFromArgv (argv, cmd) {
   }
 
   // load --include files via config file if the user did not pass any direct arguments
-  const filesIncludedFromDirectArgs = includeFiles.length > 0
-  if (!filesIncludedFromDirectArgs && argv._optionsLoadedViaConfigFile && isArray(argv.includeFromConfig)) {
+  const anyDirectArgsPassed = directArgs.length > 0
+  if (!anyDirectArgsPassed && argv._optionsLoadedViaConfigFile && isArray(argv.includeFromConfig)) {
     argv.includeFromConfig.forEach(includeStr => {
       const filesFromGlob = globSync(includeStr)
       includeFiles = includeFiles.concat(filesFromGlob)
@@ -95,7 +97,7 @@ function getFilesFromArgv (argv, cmd) {
   }
 
   // exclude files if necessary
-  let ignoreFiles = []
+  const ignoreFiles = []
   let ignorePatterns = null
   // use --ignore from CLI argument
   if (isArray(argv.ignore)) {
@@ -117,9 +119,13 @@ function getFilesFromArgv (argv, cmd) {
       if (fs.isFileSync(possibleFileOrDir)) {
         ignoreFiles.push(possibleFileOrDir)
       } else if (fs.isDirectorySync(possibleFileOrDir)) {
-        const dirGlobStr = path.join(ignoreStr, '/**/*.{' + fileExtensionsStr + '}')
-        const filesFromGlob = globSync(dirGlobStr)
-        ignoreFiles = ignoreFiles.concat(filesFromGlob)
+        fs.traverseTreeSync(possibleFileOrDir, (f) => {
+          const fileExt = path.extname(f)
+          if (fileExtensionsSet.has(fileExt)) {
+            ignoreFiles.push(f)
+          }
+          return true
+        }, alwaysTrue)
       } else {
         printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to ignore at "' + ignoreStr + '"')
       }
@@ -151,6 +157,7 @@ function formatFileSync (formatResult, filename) {
   if (result && result.status === 'success') {
     // add a single newline to the end of the file
     // FIXME: should we do this here or upstream in the format() function?
+    // https://github.com/oakmac/standard-clojure-style-js/issues/154
     const outTxtWithNewline = result.out + '\n'
 
     // write the file to disk if necessary
@@ -226,6 +233,7 @@ function checkFileSync (checkResult, filename) {
 
   if (result && result.status === 'success') {
     // FIXME: should we do this here or upstream in the format() function?
+    // https://github.com/oakmac/standard-clojure-style-js/issues/154
     // add a single newline to the end of the file
     const outTxtWithNewline = result.out + '\n'
 
@@ -347,6 +355,17 @@ function convertStringsToArrays (argv) {
 
   if (isString(argv.include)) {
     argv.include = [argv.include]
+  }
+
+  return argv
+}
+
+// convert a String --file-ext argument into a Set of extensions that start with a period
+function convertFileExt (argv) {
+  if (isString(argv['file-ext']) && argv['file-ext'] !== '') {
+    let fileExtsArr = argv['file-ext'].split(',')
+    fileExtsArr = fileExtsArr.map(addPeriodPrefix)
+    argv['file-ext'] = new Set(fileExtsArr)
   }
 
   return argv
@@ -540,7 +559,7 @@ yargs(hideBin(process.argv))
   .command(yargsFixCommand)
   .command(yargsListCommand)
 
-  .middleware([injectConfigFile, convertStringsToArrays])
+  .middleware([injectConfigFile, convertStringsToArrays, convertFileExt])
 
   .alias('c', 'config')
   .alias('ig', 'ignore')
@@ -549,7 +568,7 @@ yargs(hideBin(process.argv))
   .alias('v', 'version')
   .alias('h', 'help')
 
-  .default('file-ext', defaultFileExtensions.join(','))
+  .default('file-ext', defaultFileExtensions)
 
   .demandCommand() // show them --help if they do not pass a valid command
   .version(programVersion)
@@ -647,4 +666,15 @@ async function readStream (stream) {
   const chunks = []
   for await (const chunk of stream) { chunks.push(chunk) }
   return Buffer.concat(chunks).toString('utf8')
+}
+
+function alwaysTrue () {
+  return true
+}
+
+function addPeriodPrefix (f) {
+  if (isString(f) && !f.startsWith('.')) {
+    return '.' + f
+  }
+  return f
 }
