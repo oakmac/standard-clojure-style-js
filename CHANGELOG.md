@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.15.0] - 2024-11-18
+
+### Added
+- [Issue #158] - add support for `:require` `:default` ([PR-160])
+
 ## [0.14.0] - 2024-11-09
 
 ### Fixed
@@ -130,7 +135,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.14.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.15.0...HEAD
+[0.15.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.15.0
 [0.14.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.14.0
 [0.13.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.13.0
 [0.12.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.12.0
@@ -184,6 +190,7 @@ All notable changes to this project will be documented in this file.
 [Issue #142]:https://github.com/oakmac/standard-clojure-style-js/issues/142
 [Issue #145]:https://github.com/oakmac/standard-clojure-style-js/issues/145
 [Issue #153]:https://github.com/oakmac/standard-clojure-style-js/issues/153
+[Issue #158]:https://github.com/oakmac/standard-clojure-style-js/issues/158
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -222,3 +229,4 @@ All notable changes to this project will be documented in this file.
 [PR-141]:https://github.com/oakmac/standard-clojure-style-js/pull/141
 [PR-147]:https://github.com/oakmac/standard-clojure-style-js/pull/147
 [PR-148]:https://github.com/oakmac/standard-clojure-style-js/pull/148
+[PR-160]:https://github.com/oakmac/standard-clojure-style-js/pull/160
