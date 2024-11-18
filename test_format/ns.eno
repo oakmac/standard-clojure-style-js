@@ -1853,3 +1853,23 @@
      (:import
       (js ArrayBuffer Float64Array Uint32Array Uint8Array))))
 --Expected
+
+# GitHub Issue #158 - ClojureScript require default
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/158
+
+--Input
+(ns com.example.my-app
+  (:require
+       ["react-select" :default Select]
+       ["react-dropzone" :default Dropzone]
+       ["react-select/creatable" :default CreatableSelect]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ["react-dropzone" :default Dropzone]
+   ["react-select" :default Select]
+   ["react-select/creatable" :default CreatableSelect]))
+--Expected
