@@ -2881,3 +2881,38 @@
   ]
 }
 --Expected
+
+# GitHub Issue #158 - ClojureScript require default
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/158
+
+--Input
+(ns com.example.my-app
+  (:require
+       ["react-dropzone" :default Dropzone]
+       ["react-select" :default Select]
+       ["react-select/creatable" :default CreatableSelect]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "\"react-dropzone\"",
+      "symbolIsString": true,
+      "default": "Dropzone"
+    },
+    {
+      "symbol": "\"react-select\"",
+      "symbolIsString": true,
+      "default": "Select"
+    },
+    {
+      "symbol": "\"react-select/creatable\"",
+      "symbolIsString": true,
+      "default": "CreatableSelect"
+    }
+  ]
+}
+--Expected
