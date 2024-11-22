@@ -66,7 +66,8 @@ test('All test_format/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = true
 const specificTests = new Set()
-specificTests.add('GitHub Issue #150 - error out on invalid syntax')
+// specificTests.add('GitHub Issue #150 - error out on invalid syntax')
+specificTests.add('test1')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()

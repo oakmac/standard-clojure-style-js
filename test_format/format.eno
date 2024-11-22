@@ -1967,3 +1967,29 @@ hee, haz
 --Expected
 xxx
 --Expected
+
+# test1
+
+--Input
+(cond
+  some-condition
+  12
+
+  another-condition
+  13
+
+  :else
+  nil)
+--Input
+
+--Expected
+(cond
+  some-condition
+  12
+
+  another-condition
+  13
+
+  :else
+  nil)
+--Expected
