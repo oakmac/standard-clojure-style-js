@@ -1952,3 +1952,21 @@ hee, haz
   [& filters]
   `(clojure.core/refer '~'clojure.core ~@filters))
 --Expected
+
+# GitHub Issue #162 - bug with commas
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
+(def my-map
+  {:aaa "aaa",
+   :bbb "bbb", ;; foo
+   :ccc "ccc"})
+--Input
+
+--Expected
+(def my-map
+  {:aaa "aaa"
+   :bbb "bbb" ;; foo
+   :ccc "ccc"})
+--Expected
