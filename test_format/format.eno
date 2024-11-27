@@ -1952,3 +1952,56 @@ hee, haz
   [& filters]
   `(clojure.core/refer '~'clojure.core ~@filters))
 --Expected
+
+# GitHub Issue #161 - namespaced map literals 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/161
+
+--Input
+(def my-vec
+ [#:xyz{:aaa "aaa"
+        :bbb "bbb"
+        :ccc "ccc"}
+
+  #:xyz{:ddd "ddd"
+        :eee "eee"
+        :fff "fff"}])
+--Input
+
+--Expected
+(def my-vec
+  [#:xyz{:aaa "aaa"
+         :bbb "bbb"
+         :ccc "ccc"}
+
+   #:xyz{:ddd "ddd"
+         :eee "eee"
+         :fff "fff"}])
+--Expected
+
+
+# GitHub Issue #161 - namespaced map literals 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/161
+
+--Input
+(def my-vec
+ [#:xyz{:aaa "aaa"
+ :bbb "bbb"
+ :ccc "ccc"}
+
+ #:xyz{:ddd "ddd"
+ :eee "eee"
+ :fff "fff"}])
+--Input
+
+--Expected
+(def my-vec
+  [#:xyz{:aaa "aaa"
+         :bbb "bbb"
+         :ccc "ccc"}
+
+   #:xyz{:ddd "ddd"
+         :eee "eee"
+         :fff "fff"}])
+--Expected
