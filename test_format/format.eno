@@ -2011,6 +2011,20 @@ hee, haz
 > https://github.com/oakmac/standard-clojure-style-js/issues/162
 
 --Input
+aaa, ;; foo
+bbb,;;bar
+--Input
+
+--Expected
+aaa ;; foo
+bbb ;; bar
+--Expected
+
+# GitHub Issue #162 - bug with commas 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
 (def my-map
   {:aaa "aaa",
    :bbb "bbb", ;; foo
@@ -2024,7 +2038,7 @@ hee, haz
    :ccc "ccc"})
 --Expected
 
-# GitHub Issue #162 - bug with commas 2
+# GitHub Issue #162 - bug with commas 3
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/162
 

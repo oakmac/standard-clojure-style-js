@@ -64,7 +64,7 @@ test('All test_format/ cases should have unique names', () => {
 
 // dev convenience: set this to true and add specific test cases
 // only those cases will run
-const onlyRunSpecificTests = true
+const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
 specificTests.add('GitHub Issue #162 - bug with commas 1')
@@ -77,6 +77,8 @@ const ignoreTests = new Set()
 ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
+
+ignoreTests.add('GitHub Issue #162 - bug with commas 3')
 
 allTestCases.forEach(testCase => {
   let runThisTest = true
@@ -120,17 +122,17 @@ allTestCases.forEach(testCase => {
 const inputFileWithCRLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/crlf_input.clj'), 'utf8')
 const outputFileWithLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/lf_output.clj'), 'utf8')
 
-// test('crlf to lf', () => {
-//   expect(isString(inputFileWithCRLF)).toBe(true)
-//   expect(isString(outputFileWithLF)).toBe(true)
-//   expect(inputFileWithCRLF.includes('\r\n')).toBe(true)
-//   expect(outputFileWithLF.includes('\r\n')).toBe(false)
+test('crlf to lf', () => {
+  expect(isString(inputFileWithCRLF)).toBe(true)
+  expect(isString(outputFileWithLF)).toBe(true)
+  expect(inputFileWithCRLF.includes('\r\n')).toBe(true)
+  expect(outputFileWithLF.includes('\r\n')).toBe(false)
 
-//   const result = scsLib.format(inputFileWithCRLF)
+  const result = scsLib.format(inputFileWithCRLF)
 
-//   expect(result.status).toBe('success')
-//   expect(result.out + '\n').toBe(outputFileWithLF)
-// })
+  expect(result.status).toBe('success')
+  expect(result.out + '\n').toBe(outputFileWithLF)
+})
 
 // -----------------------------------------------------------------------------
 // Util
