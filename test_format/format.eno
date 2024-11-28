@@ -2057,3 +2057,25 @@ bbb ;; bar
    ;; foo
    ,])
 --Expected
+
+# GitHub Issue #162 - bug with commas 4
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
+(def my-vec
+  [a "a"
+   b "b",
+   ;; foo
+   ;; bar
+   ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
+--Expected
