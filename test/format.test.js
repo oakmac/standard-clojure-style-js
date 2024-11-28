@@ -67,7 +67,7 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
-specificTests.add('GitHub Issue #162 - bug with commas 1')
+specificTests.add('respect commas to hold parens 4')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
