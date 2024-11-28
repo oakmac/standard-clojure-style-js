@@ -346,6 +346,15 @@ test('removeLeadingWhitespace', () => {
   expect(scsLib._removeLeadingWhitespace(',, \n\n')).toBe('')
 })
 
+test('removeTrailingWhitespace', () => {
+  expect(isFn(scsLib._removeTrailingWhitespace)).toBe(true)
+  expect(scsLib._removeTrailingWhitespace('aaa,')).toBe('aaa')
+  expect(scsLib._removeTrailingWhitespace('aaa , ')).toBe('aaa')
+  expect(scsLib._removeTrailingWhitespace('aaa')).toBe('aaa')
+  // expect(scsLib._removeTrailingWhitespace('aaa \n ')).toBe('aaa')
+  expect(scsLib._removeTrailingWhitespace('  aaa aaa ,, ')).toBe('  aaa aaa')
+})
+
 test('txtHasCommasAfterNewline', () => {
   expect(scsLib._txtHasCommasAfterNewline('\n ,,')).toBe(true)
   expect(scsLib._txtHasCommasAfterNewline('\n\n  ,')).toBe(true)
