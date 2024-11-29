@@ -2026,7 +2026,7 @@ bbb ;; bar
 (def my-map
   {:aaa "aaa",
    :bbb "bbb", ;; foo
-   :ccc "ccc"})
+   :ccc "ccc",,,,,,,,,,,,})
 --Input
 
 --Expected
