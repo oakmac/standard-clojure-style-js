@@ -2005,3 +2005,91 @@ hee, haz
          :eee "eee"
          :fff "fff"}])
 --Expected
+
+# GitHub Issue #162 - bug with commas 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
+aaa, ;; foo
+bbb,;;bar
+--Input
+
+--Expected
+aaa ;; foo
+bbb ;; bar
+--Expected
+
+# GitHub Issue #162 - bug with commas 2
+
+--Input
+(def my-map
+  {:aaa "aaa",
+   :bbb "bbb", ;; foo
+   :ccc "ccc",,,,,,,,,,,,})
+--Input
+
+--Expected
+(def my-map
+  {:aaa "aaa"
+   :bbb "bbb" ;; foo
+   :ccc "ccc"})
+--Expected
+
+# GitHub Issue #162 - bug with commas 3
+
+--Input
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ,])
+--Expected
+
+# GitHub Issue #162 - bug with commas 4
+
+--Input
+(def my-vec
+  [a "a"
+   b "b",
+   ;; foo
+   ;; bar
+   ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
+--Expected
+
+# GitHub Issue #162 - bug with commas 5
+
+--Input
+(def my-vec
+  [a "a"
+   b "b",
+   ;; foo
+   ;; bar
+   , ])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
+--Expected
