@@ -2022,8 +2022,6 @@ bbb ;; bar
 
 # GitHub Issue #162 - bug with commas 2
 
-> https://github.com/oakmac/standard-clojure-style-js/issues/162
-
 --Input
 (def my-map
   {:aaa "aaa",
@@ -2039,8 +2037,6 @@ bbb ;; bar
 --Expected
 
 # GitHub Issue #162 - bug with commas 3
-
-> https://github.com/oakmac/standard-clojure-style-js/issues/162
 
 --Input
 (def my-vec
@@ -2060,8 +2056,6 @@ bbb ;; bar
 
 # GitHub Issue #162 - bug with commas 4
 
-> https://github.com/oakmac/standard-clojure-style-js/issues/162
-
 --Input
 (def my-vec
   [a "a"
@@ -2069,6 +2063,26 @@ bbb ;; bar
    ;; foo
    ;; bar
    ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
+--Expected
+
+# GitHub Issue #162 - bug with commas 5
+
+--Input
+(def my-vec
+  [a "a"
+   b "b",
+   ;; foo
+   ;; bar
+   , ])
 --Input
 
 --Expected

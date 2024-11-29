@@ -351,8 +351,12 @@ test('removeTrailingWhitespace', () => {
   expect(scsLib._removeTrailingWhitespace('aaa,')).toBe('aaa')
   expect(scsLib._removeTrailingWhitespace('aaa , ')).toBe('aaa')
   expect(scsLib._removeTrailingWhitespace('aaa')).toBe('aaa')
-  // expect(scsLib._removeTrailingWhitespace('aaa \n ')).toBe('aaa')
   expect(scsLib._removeTrailingWhitespace('  aaa aaa ,, ')).toBe('  aaa aaa')
+  expect(scsLib._removeTrailingWhitespace(' , aaa aaa ,, ')).toBe(' , aaa aaa')
+
+  // NOTE: this function does not remove newline characters
+  // it only needs to operate against a single line
+  expect(scsLib._removeTrailingWhitespace('aaa \n ')).toBe('aaa \n')
 })
 
 test('txtHasCommasAfterNewline', () => {
