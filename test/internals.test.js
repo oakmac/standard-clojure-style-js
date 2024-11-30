@@ -171,6 +171,12 @@ describe('String Util', () => {
     })
   })
 
+  describe('strReplaceAll', () => {
+    expect(scsLib._strReplaceAll('aaa', 'a', 'b')).toBe('bbb')
+    expect(scsLib._strReplaceAll('a,b,c,', ',', '')).toBe('abc')
+    expect(scsLib._strReplaceAll('a,b,c,', ',', 'x')).toBe('axbxcx')
+  })
+
   describe('crlfToLf', () => {
     test('converts CRLF to LF', () => {
       expect(scsLib._crlfToLf('hello\r\nworld')).toBe('hello\nworld')
@@ -181,20 +187,6 @@ describe('String Util', () => {
       expect(scsLib._crlfToLf('')).toBe('')
       expect(scsLib._crlfToLf('no crlf')).toBe('no crlf')
       expect(scsLib._crlfToLf('\r\n')).toBe('\n')
-    })
-  })
-
-  describe('strSplit', () => {
-    test('splits string by delimiter', () => {
-      expect(scsLib._strSplit('a-b-c', '-')).toEqual(['a', 'b', 'c'])
-      expect(scsLib._strSplit('hello world', ' ')).toEqual(['hello', 'world'])
-    })
-
-    test('handles edge cases', () => {
-      expect(scsLib._strSplit('', '-')).toEqual([''])
-      expect(scsLib._strSplit('hello', '')).toEqual(['h', 'e', 'l', 'l', 'o'])
-      expect(scsLib._strSplit('a', 'x')).toEqual(['a'])
-      expect(scsLib._strSplit('a-b-', '-')).toEqual(['a', 'b', ''])
     })
   })
 })
@@ -357,6 +349,13 @@ test('removeTrailingWhitespace', () => {
   // NOTE: this function does not remove newline characters
   // it only needs to operate against a single line
   expect(scsLib._removeTrailingWhitespace('aaa \n ')).toBe('aaa \n')
+})
+
+test('removeCharsUpToNewline', () => {
+  expect(isFn(scsLib._removeCharsUpToNewline)).toBe(true)
+  expect(scsLib._removeCharsUpToNewline('abc\nxyz')).toBe('xyz')
+  expect(scsLib._removeCharsUpToNewline('abc')).toBe('abc')
+  expect(scsLib._removeCharsUpToNewline('abc\ndef\n\nxyz')).toBe('xyz')
 })
 
 test('txtHasCommasAfterNewline', () => {
