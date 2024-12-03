@@ -2120,6 +2120,9 @@ bbb ;; bar
 (foo bar #aaa "aaa"
          ;; bbb
          :ccc)
+
+  (foo
+        #aaa "aaa")
 --Input
 
 --Expected
@@ -2130,4 +2133,7 @@ bbb ;; bar
 (foo bar #aaa "aaa"
          ;; bbb
          :ccc)
+
+(foo
+  #aaa "aaa")
 --Expected
