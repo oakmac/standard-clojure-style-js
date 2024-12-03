@@ -2114,11 +2114,19 @@ bbb ;; bar
 
 --Input
 (foo bar #aaa "aaa"
+              ;; bbb
+           :ccc)
+
+(foo bar #aaa "aaa"
          ;; bbb
          :ccc)
 --Input
 
 --Expected
+(foo bar #aaa "aaa"
+              ;; bbb
+              :ccc)
+
 (foo bar #aaa "aaa"
          ;; bbb
          :ccc)
