@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.17.0] - 2024-12-02
+
+### Fixed
+- [Issue #162] - fix bugs related to commas at the end of lines ([PR-164])
+- [Issue #166] - fix bug with `:refer :all :rename` ([PR-167])
+
 ## [0.16.0] - 2024-11-27
 
 ### Fixed
@@ -140,7 +146,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.16.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.17.0...HEAD
+[0.17.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.17.0
 [0.16.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.16.0
 [0.15.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.15.0
 [0.14.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.14.0
@@ -198,6 +205,8 @@ All notable changes to this project will be documented in this file.
 [Issue #153]:https://github.com/oakmac/standard-clojure-style-js/issues/153
 [Issue #158]:https://github.com/oakmac/standard-clojure-style-js/issues/158
 [Issue #161]:https://github.com/oakmac/standard-clojure-style-js/issues/161
+[Issue #162]:https://github.com/oakmac/standard-clojure-style-js/issues/162
+[Issue #166]:https://github.com/oakmac/standard-clojure-style-js/issues/166
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -238,3 +247,5 @@ All notable changes to this project will be documented in this file.
 [PR-148]:https://github.com/oakmac/standard-clojure-style-js/pull/148
 [PR-160]:https://github.com/oakmac/standard-clojure-style-js/pull/160
 [PR-163]:https://github.com/oakmac/standard-clojure-style-js/pull/163
+[PR-164]:https://github.com/oakmac/standard-clojure-style-js/pull/164
+[PR-167]:https://github.com/oakmac/standard-clojure-style-js/pull/167
