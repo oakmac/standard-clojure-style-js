@@ -2093,3 +2093,47 @@ bbb ;; bar
    ;; bar
    ,])
 --Expected
+
+# GitHub Issue #165 - tag literal alignment 1
+
+--Input
+(case
+  #uuid "96bbb029-40e7-4566-83d5-7e6088a908fc" :a
+  ;; a comment
+  #uuid "148ccf8b-6122-4435-9a39-001e13a8aad7" :b)
+--Input
+
+--Expected
+(case
+  #uuid "96bbb029-40e7-4566-83d5-7e6088a908fc" :a
+  ;; a comment
+  #uuid "148ccf8b-6122-4435-9a39-001e13a8aad7" :b)
+--Expected
+
+# GitHub Issue #165 - tag literal alignment 2
+
+--Input
+(foo bar #aaa "aaa"
+              ;; bbb
+           :ccc)
+
+(foo bar #aaa "aaa"
+         ;; bbb
+         :ccc)
+
+  (foo
+        #aaa "aaa")
+--Input
+
+--Expected
+(foo bar #aaa "aaa"
+              ;; bbb
+              :ccc)
+
+(foo bar #aaa "aaa"
+         ;; bbb
+         :ccc)
+
+(foo
+  #aaa "aaa")
+--Expected
