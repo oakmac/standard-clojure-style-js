@@ -1873,3 +1873,33 @@
    ["react-select" :default Select]
    ["react-select/creatable" :default CreatableSelect]))
 --Expected
+
+# GitHub Issue #166 - :require :refer :all bug 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/166
+
+--Input
+(ns com.example.my-app
+  (:require [other :refer :all :rename {foo bar}]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [other :refer :all :rename {foo bar}]))
+--Expected
+
+# GitHub Issue #166 - :require :refer :all bug 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/166
+
+--Input
+(ns com.example.my-app
+  (:require [other :rename {foo bar} :refer :all]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [other :refer :all :rename {foo bar}]))
+--Expected
