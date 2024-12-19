@@ -2137,3 +2137,33 @@ bbb ;; bar
 (foo
   #aaa "aaa")
 --Expected
+
+# GitHub Issue #169 examples
+
+--Input
+(filter
+  #(not= 1 %) [1 2 3])
+
+(let [result (filter
+            #(not= 1 %) [123])]
+  result)
+
+(let [result (->>
+            (filter
+             #(not= 1 %) [123]))]
+  result)
+--Input
+
+--Expected
+(filter
+  #(not= 1 %) [1 2 3])
+
+(let [result (filter
+               #(not= 1 %) [123])]
+  result)
+
+(let [result (->>
+               (filter
+                 #(not= 1 %) [123]))]
+  result)
+--Expected
