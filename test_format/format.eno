@@ -1953,7 +1953,7 @@ hee, haz
   `(clojure.core/refer '~'clojure.core ~@filters))
 --Expected
 
-# GitHub Issue #162 - bug with commas
+# GitHub Issue #162 - bug with commas 1
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/162
 
@@ -1969,4 +1969,46 @@ hee, haz
   {:aaa "aaa"
    :bbb "bbb" ;; foo
    :ccc "ccc"})
+--Expected
+
+# GitHub Issue #162 - bug with commas 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ,])
+--Expected
+
+# GitHub Issue #162 - bug with commas 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/162
+
+--Input
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
+--Input
+
+--Expected
+(def my-vec
+  [a "a"
+   b "b"
+   ;; foo
+   ;; bar
+   ,])
 --Expected
