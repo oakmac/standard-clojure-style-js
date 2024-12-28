@@ -1903,3 +1903,32 @@
   (:require
    [other :refer :all :rename {foo bar}]))
 --Expected
+
+# GitHub Issue #152 - :use outside of the ns form should work normally
+
+--Input
+(ns com.example.my-app)
+
+  (use 'com.example.foo)
+--Input
+
+--Expected
+(ns com.example.my-app)
+
+(use 'com.example.foo)
+--Expected
+
+# GitHub Issue #152 - use symbol inside the ns form is ok
+
+--Input
+(ns com.example.my-app
+  (:require
+    [com.example.my-app.util :refer [use abc]
+    ]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [com.example.my-app.util :refer [abc use]]))
+--Expected
