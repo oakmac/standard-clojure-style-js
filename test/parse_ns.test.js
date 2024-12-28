@@ -80,22 +80,27 @@ allTestCases.forEach(testCase => {
         expectedObj = JSON.parse(testCase.expectedTxt)
       } catch (e) {}
 
-      // expectedTxt should be valid JSON
+      // the Expected text should be valid JSON
       expect(expectedObj).not.toBeNull()
 
       const inputNodes = scsLib.parse(testCase.input)
       const flatNodes = scsLib._flattenTree(inputNodes)
-      const nsParsed1 = scsLib._parseNs(flatNodes)
+      try {
+        const nsParsed1 = scsLib._parseNs(flatNodes)
 
-      const nsParsed2 = immutable.fromJS(nsParsed1)
-      const nsExpected = immutable.fromJS(expectedObj)
-      const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
+        const nsParsed2 = immutable.fromJS(nsParsed1)
+        const nsExpected = immutable.fromJS(expectedObj)
+        const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
 
-      if (!resultIsTheSame) {
-        console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
+        if (!resultIsTheSame) {
+          console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
+        }
+
+        expect(resultIsTheSame).toBe(true)
+      } catch (e) {
+        expect(expectedObj.parsingShouldError).toBe(true)
+        expect(e.message).toEqual(expectedObj.errorMessage)
       }
-
-      expect(resultIsTheSame).toBe(true)
     })
   }
 })

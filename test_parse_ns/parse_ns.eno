@@ -2970,3 +2970,53 @@
   ]
 }
 --Expected
+
+# GitHub Issue #152 - :use in the ns form should error
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/152
+
+--Input
+(ns com.example.my-app
+  (:use com.example-my-app.util))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": "Standard Clojure Style does not support :use inside of the ns form. Please refactor with :require as appropriate."
+}
+--Expected
+
+# GitHub Issue #152 - :use outside of the ns form should work normally
+
+--Input
+(ns com.example.my-app)
+
+  (use 'com.example.foo)
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app"
+}
+--Expected
+
+# GitHub Issue #152 - use symbol inside the ns form is ok
+
+--Input
+(ns com.example.my-app
+  (:require
+    [com.example.my-app.util :refer [use]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.my-app.util",
+      "refer": [{"symbol": "use"}]
+    }
+  ]
+}
+--Expected
