@@ -71,6 +71,15 @@ if (fs.isDirectorySync(luaTestFilesDir)) {
   console.log('Wrote test files to ' + luaTestFilesDir)
 }
 
+// copy the files to standard-clojure-style-java/ if it exists
+const javaTestFilesDir = path.join(rootDir, '../standard-clojure-style-java/src/test/resources/')
+if (fs.isDirectorySync(javaTestFilesDir)) {
+  fs.writeFileSync(path.join(javaTestFilesDir, 'format_tests.json'), JSON.stringify(formatTestCases, null, 2) + '\n')
+  fs.writeFileSync(path.join(javaTestFilesDir, 'parser_tests.json'), JSON.stringify(parserTestCases, null, 2) + '\n')
+  fs.writeFileSync(path.join(javaTestFilesDir, 'parse_ns_tests.json'), JSON.stringify(parseNsTestCases, null, 2) + '\n')
+  console.log('Wrote test files to ' + javaTestFilesDir)
+}
+
 // -----------------------------------------------------------------------------
 // Util
 
