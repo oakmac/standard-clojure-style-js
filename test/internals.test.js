@@ -423,7 +423,7 @@ test('NotChar parser', () => {
 })
 
 test('String parser', () => {
-  const stringTest1 = scsLib._String({ str: 'foo', name: 'string_test_foo' })
+  const stringTest1 = scsLib._StringParser({ str: 'foo', name: 'string_test_foo' })
   expect(stringTest1.parse('foo', 0).name).toBe('string_test_foo')
   expect(stringTest1.parse('foo', 0).text).toBe('foo')
   expect(stringTest1.parse('foo', 0).startIdx).toBe(0)
@@ -478,16 +478,7 @@ test('Regex parser', () => {
 })
 
 test('Choice parser', () => {
-  const choiceTest1 = scsLib._Choice({
-    parsers: [
-      scsLib._Char({ char: 'a', name: '.a' }),
-      scsLib._Char({ char: 'b', name: '.b' }),
-      scsLib._Char({ char: 'c', name: '.c' })]
-  })
-  expect(choiceTest1.parse('a', 0).text).toBe('a')
-  expect(choiceTest1.parse('b', 0).text).toBe('b')
-  expect(choiceTest1.parse('c', 0).text).toBe('c')
-  expect(choiceTest1.parse('z', 0)).toBeNull()
+
 })
 
 test('Seq parser', () => {
@@ -620,6 +611,45 @@ test('Choice parser', () => {
   expect(choiceResult6.endIdx).toBe(1)
   expect(choiceResult6.name).toBe('A')
   expect(choiceResult6.text).toBe('a')
+})
+
+test('Optional parser', () => {
+  const optTest1 = scsLib._Optional(scsLib._Char({ char: 'a', name: 'optional_a' }))
+
+  // Test successful match
+  const result1 = optTest1.parse('abc', 0)
+  expect(result1.startIdx).toBe(0)
+  expect(result1.endIdx).toBe(1)
+  expect(result1.name).toBe('optional_a')
+  expect(result1.text).toBe('a')
+
+  // Test no match - should return empty node at same position
+  const result2 = optTest1.parse('xyz', 0)
+  expect(result2.startIdx).toBe(0)
+  expect(result2.endIdx).toBe(0)
+  expect(result2.name).toBeUndefined()
+
+  // Test with offset
+  const result3 = optTest1.parse('xabc', 1)
+  expect(result3.startIdx).toBe(1)
+  expect(result3.endIdx).toBe(2)
+  expect(result3.name).toBe('optional_a')
+  expect(result3.text).toBe('a')
+
+  const optTest2 = scsLib._Optional(scsLib._StringParser({ str: 'foo', name: 'optional_foo' }))
+
+  // Test successful match
+  const result4 = optTest2.parse('foobar', 0)
+  expect(result4.startIdx).toBe(0)
+  expect(result4.endIdx).toBe(3)
+  expect(result4.name).toBe('optional_foo')
+  expect(result4.text).toBe('foo')
+
+  // Test no match
+  const result5 = optTest2.parse('bar', 0)
+  expect(result5.startIdx).toBe(0)
+  expect(result5.endIdx).toBe(0)
+  expect(result5.name).toBeUndefined()
 })
 
 test('parseJavaPackageWithClass', () => {
