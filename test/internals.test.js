@@ -367,6 +367,130 @@ test('txtHasCommasAfterNewline', () => {
   expect(scsLib._txtHasCommasAfterNewline(',, \n\n ')).toBe(false)
 })
 
+test('Named parser - basic functionality', () => {
+  const namedParser = scsLib._Named({
+    name: 'test_name',
+    parser: scsLib._Char({ char: 'a', name: 'char_a' })
+  })
+
+  // Test successful match
+  const result1 = namedParser.parse('abc', 0)
+  expect(result1).not.toBeNull()
+  expect(result1.name).toBe('test_name')
+  expect(result1.startIdx).toBe(0)
+  expect(result1.endIdx).toBe(1)
+  expect(result1.children[0].text).toBe('a')
+
+  // Test failed match
+  const result2 = namedParser.parse('xyz', 0)
+  expect(result2).toBeNull()
+})
+
+test('Named parser - with existing name', () => {
+  // Test when wrapped parser already has a name
+  const namedParser = scsLib._Named({
+    name: 'outer_name',
+    parser: scsLib._StringParser({ str: 'test', name: 'inner_name' })
+  })
+
+  const result = namedParser.parse('test123', 0)
+  expect(result).not.toBeNull()
+  expect(result.name).toBe('outer_name')
+  expect(result.children[0].name).toBe('inner_name')
+  expect(result.children[0].text).toBe('test')
+})
+
+test('Named parser - with unnamed parser', () => {
+  // Test when wrapped parser has no name
+  const unnamedParser = {
+    parse: (txt, pos) => {
+      if (txt[pos] === 'x') {
+        return { text: 'x' }
+      }
+      return null
+    }
+  }
+
+  const namedParser = scsLib._Named({
+    name: 'test_name',
+    parser: unnamedParser
+  })
+
+  const result = namedParser.parse('xyz', 0)
+  expect(result).not.toBeNull()
+  expect(result.name).toBe('test_name')
+  expect(result.text).toBe('x')
+})
+
+test('Named parser - with Optional parser', () => {
+  const namedParser = scsLib._Named({
+    name: 'optional_test',
+    parser: scsLib._Optional(scsLib._Char({ char: 'x', name: 'char_x' }))
+  })
+
+  // Test when optional char is present
+  const result1 = namedParser.parse('xyz', 0)
+  expect(result1).not.toBeNull()
+  expect(result1.name).toBe('optional_test')
+  expect(result1.children[0].text).toBe('x')
+
+  // Test when optional char is missing
+  const result2 = namedParser.parse('abc', 0)
+  expect(result2).not.toBeNull()
+  expect(result2.name).toBe('optional_test')
+  expect(result2.startIdx).toBe(0)
+  expect(result2.endIdx).toBe(0)
+})
+
+test('Named parser - with Choice parser', () => {
+  const namedParser = scsLib._Named({
+    name: 'choice_test',
+    parser: scsLib._Choice({
+      parsers: [
+        scsLib._Char({ char: 'a', name: 'char_a' }),
+        scsLib._Char({ char: 'b', name: 'char_b' })
+      ]
+    })
+  })
+
+  // Test first choice
+  const result1 = namedParser.parse('abc', 0)
+  expect(result1).not.toBeNull()
+  expect(result1.name).toBe('choice_test')
+  expect(result1.children[0].text).toBe('a')
+
+  // Test second choice
+  const result2 = namedParser.parse('bcd', 0)
+  expect(result2).not.toBeNull()
+  expect(result2.name).toBe('choice_test')
+  expect(result2.children[0].text).toBe('b')
+
+  // Test no match
+  const result3 = namedParser.parse('xyz', 0)
+  expect(result3).toBeNull()
+})
+
+test('Named parser - with empty or invalid input', () => {
+  const namedParser = scsLib._Named({
+    name: 'test_name',
+    parser: scsLib._Char({ char: 'a', name: 'char_a' })
+  })
+
+  // Test empty string
+  const result1 = namedParser.parse('', 0)
+  expect(result1).toBeNull()
+
+  // Test null input
+  expect(() => namedParser.parse(null, 0)).toThrow()
+
+  // Test invalid position
+  const result2 = namedParser.parse('abc', -1)
+  expect(result2).toBeNull()
+
+  const result3 = namedParser.parse('abc', 999)
+  expect(result3).toBeNull()
+})
+
 test('AnyChar parser', () => {
   const anyCharTest1 = scsLib._AnyChar({ name: 'anychar_test1' })
   expect(anyCharTest1.parse('a', 0).text).toBe('a')
@@ -475,10 +599,6 @@ test('Regex parser', () => {
   expect(regexResult4.startIdx).toBe(4)
   expect(regexResult4.endIdx).toBe(6)
   expect(regexResult4.text).toBe('dd')
-})
-
-test('Choice parser', () => {
-
 })
 
 test('Seq parser', () => {
