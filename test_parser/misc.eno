@@ -1,0 +1,56 @@
+
+# GitHub Issue #175
+
+--Input
+(= (my-flat-map #(list % (* % %)) '(1 2 3)) '(1 1 2 4 3 9))
+--Input
+
+--Expected
+(source 0..59
+  (parens 0..59
+    (.open 0..1 '(')
+    (.body 1..58
+      (token 1..2 '=')
+      (parens 3..43
+        (.open 3..4 '(')
+        (.body 4..42
+          (token 4..15 'my-flat-map')
+          (parens 16..33
+            (.open 16..18 '#(')
+            (.body 18..32
+              (token 18..22 'list')
+              (token 23..24 '%')
+              (parens 25..32
+                (.open 25..26 '(')
+                (.body 26..31
+                  (token 26..27 '*')
+                  (token 28..29 '%')
+                  (token 30..31 '%'))
+                (.close 31..32 ')')))
+            (.close 32..33 ')'))
+          (wrap 34..42
+            (.marker 34..35 ''')
+            (.body 35..42
+              (parens 35..42
+                (.open 35..36 '(')
+                (.body 36..41
+                  (token 36..37 '1')
+                  (token 38..39 '2')
+                  (token 40..41 '3'))
+                (.close 41..42 ')')))))
+        (.close 42..43 ')'))
+      (wrap 44..58
+        (.marker 44..45 ''')
+        (.body 45..58
+          (parens 45..58
+            (.open 45..46 '(')
+            (.body 46..57
+              (token 46..47 '1')
+              (token 48..49 '1')
+              (token 50..51 '2')
+              (token 52..53 '4')
+              (token 54..55 '3')
+              (token 56..57 '9'))
+            (.close 57..58 ')')))))
+    (.close 58..59 ')')))
+--Expected
