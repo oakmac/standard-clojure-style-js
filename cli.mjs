@@ -31,7 +31,7 @@ const scriptStartTime = performance.now()
 // script before publishing to npm
 const programVersion = '[dev]' // 6444ef98-c603-42ca-97e7-ebe5c60382de
 
-const defaultFileExtensions = new Set(['.clj', '.cljs', '.cljc', '.edn'])
+const defaultFileExtensions = new Set(['.clj', '.cljs', '.cljc', '.jank', '.edn'])
 
 let logLevel = 'everything'
 let atLeastOneFilePrinted = false

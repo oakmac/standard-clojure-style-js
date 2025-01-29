@@ -86,7 +86,7 @@ Style with the `npx` command:
 # formats the file located at src/com/example/foo.clj
 npx @chrisoakman/standard-clojure-style fix src/com/example/foo.clj
 
-# formats all .clj, .cljs, .cljc, .edn files found in the src/ directory
+# formats all .clj, .cljs, .cljc, .jank, .edn files found in the src/ directory
 # and subdirectories (ie: recursive)
 npx @chrisoakman/standard-clojure-style fix src/
 ```
