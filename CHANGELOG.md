@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.19.0] - 2025-01-29
+
+### Added
+- [Issue #158] - add `.jank` to the list of default file extensions ([PR-177])
+
+### Fixed
+- [Issue #152] - error when encountering `:use` in the `ns` form instead of silently failing ([PR-171])
+
 ## [0.18.0] - 2024-12-02
 
 ### Fixed
@@ -151,7 +159,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.18.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.19.0...HEAD
 [0.18.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.18.0
 [0.17.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.17.0
 [0.16.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.16.0
@@ -208,6 +216,7 @@ All notable changes to this project will be documented in this file.
 [Issue #140]:https://github.com/oakmac/standard-clojure-style-js/issues/140
 [Issue #142]:https://github.com/oakmac/standard-clojure-style-js/issues/142
 [Issue #145]:https://github.com/oakmac/standard-clojure-style-js/issues/145
+[Issue #152]:https://github.com/oakmac/standard-clojure-style-js/issues/152
 [Issue #153]:https://github.com/oakmac/standard-clojure-style-js/issues/153
 [Issue #158]:https://github.com/oakmac/standard-clojure-style-js/issues/158
 [Issue #161]:https://github.com/oakmac/standard-clojure-style-js/issues/161
@@ -257,3 +266,5 @@ All notable changes to this project will be documented in this file.
 [PR-164]:https://github.com/oakmac/standard-clojure-style-js/pull/164
 [PR-167]:https://github.com/oakmac/standard-clojure-style-js/pull/167
 [PR-168]:https://github.com/oakmac/standard-clojure-style-js/pull/168
+[PR-171]:https://github.com/oakmac/standard-clojure-style-js/pull/171
+[PR-177]:https://github.com/oakmac/standard-clojure-style-js/pull/177
