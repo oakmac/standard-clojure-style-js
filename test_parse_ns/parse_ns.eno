@@ -3021,14 +3021,7 @@
 }
 --Expected
 
-
-
-
-
-
-
-
-# GitHub Issue #178 2
+# GitHub Issue #178 - no ns form
 
 --Input
 (defn ns
@@ -3039,7 +3032,24 @@
 
 --Expected
 {
-  "nsSymbol": null,
-  "nsFormNotFound": true
+  "nsSymbol": null
+}
+--Expected
+
+
+# GitHub Issue #178 - with ns form
+
+--Input
+(ns foo.bar)
+
+(defn ns
+  "(:load ...)"
+  []
+  (println "boop"))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo.bar"
 }
 --Expected
