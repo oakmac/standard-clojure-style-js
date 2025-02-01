@@ -2138,7 +2138,7 @@ bbb ;; bar
   #aaa "aaa")
 --Expected
 
-# GitHub Issue #178 - no ns form
+# GitHub Issue #178 - ns symbol with no ns form
 
 --Input
 (defn ns
@@ -2154,10 +2154,11 @@ bbb ;; bar
   (println "boop"))
 --Expected
 
-# GitHub Issue #178 - with ns form
+# GitHub Issue #178 - ns symbol with ns form
 
 --Input
-(ns
+  (ns
+
 com.example.my-app)
 
 (defn ns
