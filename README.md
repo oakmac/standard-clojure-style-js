@@ -55,8 +55,15 @@ Please see [Issue #1] for an explanation of this project's genesis.
 It is a goal of Standard Clojure Style to "meet you where you are". ie: in
 your editor, on the web, CLI tooling, etc.
 
-- [Standard Clojure Style in Lua]
+### Editor Integrations
+
 - Example Emacs usage [in this post](https://x.com/ovstoica/status/1854192289498706012)
+- [Neovim plugin](https://git.sr.ht/~ioiojo/standard-clojure-style.nvim)
+
+### Implementations in Other Programming Languages
+
+- [Standard Clojure Style in Lua]
+- a port in pure Java is almost ready as of Feb 2025
 - a Python port is planned as of Nov 2024
 
 [Standard Clojure Style in Lua]:https://github.com/oakmac/standard-clojure-style-lua/tree/master
