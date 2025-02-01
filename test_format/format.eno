@@ -2137,3 +2137,58 @@ bbb ;; bar
 (foo
   #aaa "aaa")
 --Expected
+
+# GitHub Issue #178 ns --> foo
+
+--Input
+(defn foo
+  "(:load ...)"
+  []
+  (println "boop"))
+--Input
+
+--Expected
+(defn foo
+  "(:load ...)"
+  []
+  (println "boop"))
+--Expected
+
+# GitHub Issue #178 zzz
+
+--Input
+(defn ns
+  "(:load ...)"
+  []
+  (println "boop"))
+--Input
+
+--Expected
+(defn ns
+  "(:load ...)"
+  []
+  (println "boop"))
+--Expected
+
+
+
+
+# GitHub Issue #178 eeeeeee
+
+--Input
+(ns foo.bar)
+
+(defn ns
+  "(:load ...)"
+  []
+  (println "boop"))
+--Input
+
+--Expected
+(ns foo.bar)
+
+(defn ns
+  "(:load ...)"
+  []
+  (println "boop"))
+--Expected
