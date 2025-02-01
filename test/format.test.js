@@ -119,17 +119,17 @@ allTestCases.forEach(testCase => {
 const inputFileWithCRLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/crlf_input.clj'), 'utf8')
 const outputFileWithLF = fs.readFileSync(path.join(rootDir, 'test_format/line_endings/lf_output.clj'), 'utf8')
 
-// test('crlf to lf', () => {
-//   expect(isString(inputFileWithCRLF)).toBe(true)
-//   expect(isString(outputFileWithLF)).toBe(true)
-//   expect(inputFileWithCRLF.includes('\r\n')).toBe(true)
-//   expect(outputFileWithLF.includes('\r\n')).toBe(false)
+test('crlf to lf', () => {
+  expect(isString(inputFileWithCRLF)).toBe(true)
+  expect(isString(outputFileWithLF)).toBe(true)
+  expect(inputFileWithCRLF.includes('\r\n')).toBe(true)
+  expect(outputFileWithLF.includes('\r\n')).toBe(false)
 
-//   const result = scsLib.format(inputFileWithCRLF)
+  const result = scsLib.format(inputFileWithCRLF)
 
-//   expect(result.status).toBe('success')
-//   expect(result.out + '\n').toBe(outputFileWithLF)
-// })
+  expect(result.status).toBe('success')
+  expect(result.out + '\n').toBe(outputFileWithLF)
+})
 
 // -----------------------------------------------------------------------------
 // Util
