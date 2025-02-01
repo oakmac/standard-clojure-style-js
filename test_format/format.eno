@@ -2138,7 +2138,7 @@ bbb ;; bar
   #aaa "aaa")
 --Expected
 
-# GitHub Issue #178 ns --> foo
+# GitHub Issue #178 1
 
 --Input
 (defn foo
@@ -2154,7 +2154,7 @@ bbb ;; bar
   (println "boop"))
 --Expected
 
-# GitHub Issue #178 zzz
+# GitHub Issue #178 2
 
 --Input
 (defn ns
@@ -2170,10 +2170,7 @@ bbb ;; bar
   (println "boop"))
 --Expected
 
-
-
-
-# GitHub Issue #178 eeeeeee
+# GitHub Issue #178 3
 
 --Input
 (ns foo.bar)
