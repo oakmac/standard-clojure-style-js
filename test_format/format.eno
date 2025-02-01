@@ -2157,7 +2157,8 @@ bbb ;; bar
 # GitHub Issue #178 - with ns form
 
 --Input
-(ns com.example.my-app)
+(ns
+com.example.my-app)
 
 (defn ns
   "(:load ...)"
