@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.20.0] - 2025-02-01
+
+### Fixed
+- [Issue #178] - fix bug with `ns` symbols that are not the main `ns` form ([PR-179])
+
 ## [0.19.0] - 2025-01-29
 
 ### Added
@@ -159,7 +164,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.19.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.20.0...HEAD
+[0.20.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.20.0
 [0.19.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.19.0
 [0.18.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.18.0
 [0.17.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.17.0
@@ -224,6 +230,7 @@ All notable changes to this project will be documented in this file.
 [Issue #162]:https://github.com/oakmac/standard-clojure-style-js/issues/162
 [Issue #165]:https://github.com/oakmac/standard-clojure-style-js/issues/165
 [Issue #166]:https://github.com/oakmac/standard-clojure-style-js/issues/166
+[Issue #178]:https://github.com/oakmac/standard-clojure-style-js/issues/178
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -269,3 +276,4 @@ All notable changes to this project will be documented in this file.
 [PR-168]:https://github.com/oakmac/standard-clojure-style-js/pull/168
 [PR-171]:https://github.com/oakmac/standard-clojure-style-js/pull/171
 [PR-177]:https://github.com/oakmac/standard-clojure-style-js/pull/177
+[PR-179]:https://github.com/oakmac/standard-clojure-style-js/pull/179
