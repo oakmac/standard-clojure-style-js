@@ -60,8 +60,7 @@ test('All test_parse_ns/ cases should have unique names', () => {
 // only those cases will run
 const onlyRunSpecificTests = false
 const specificTests = new Set()
-specificTests.add('GitHub Issue #178 - no ns form')
-specificTests.add('GitHub Issue #178 - with ns form')
+// specificTests.add('your test case here')
 
 const ignoreSomeTests = false
 const ignoreTests = new Set()

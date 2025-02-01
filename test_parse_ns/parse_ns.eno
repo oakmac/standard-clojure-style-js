@@ -3040,7 +3040,7 @@
 # GitHub Issue #178 - with ns form
 
 --Input
-(ns foo.bar)
+(ns com.example.my-app)
 
 (defn ns
   "(:load ...)"
@@ -3050,6 +3050,6 @@
 
 --Expected
 {
-  "nsSymbol": "foo.bar"
+  "nsSymbol": "com.example.my-app"
 }
 --Expected
