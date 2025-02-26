@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.21.0] - 2025-02-26
+
 ### Fixed
 - [Issue #181] - fix bug with quoted values in `ns` metadata ([PR-182])
 
@@ -167,7 +169,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.20.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.21.0...HEAD
+[0.21.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.21.0
 [0.20.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.20.0
 [0.19.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.19.0
 [0.18.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.18.0
