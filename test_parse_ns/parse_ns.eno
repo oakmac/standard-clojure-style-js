@@ -3060,7 +3060,8 @@
 
 --Input
 (ns my.namespace
-  {:clj-kondo/config '{:linters {:unresolved-symbol {:level :off}}}})
+  {:clj-kondo/config '{:linters {:unresolved-symbol {:level :off}}}}
+  (:require [clojure.string :as str]))
 --Input
 
 --Expected
@@ -3070,6 +3071,12 @@
     {
       "key": ":clj-kondo/config",
       "value": "'{:linters {:unresolved-symbol {:level :off}}}"
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string",
+      "as": "str"
     }
   ]
 }
