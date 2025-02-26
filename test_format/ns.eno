@@ -1932,3 +1932,20 @@
   (:require
    [com.example.my-app.util :refer [abc use]]))
 --Expected
+
+# GitHub Issue #181 - ns metadata hash map with quoted value
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/181
+
+--Input
+(ns com.example.my-app
+  {:clj-kondo/config '{:linters {:unresolved-symbol {:level :off}}}}
+  (:require [clojure.string :as str]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  {:clj-kondo/config '{:linters {:unresolved-symbol {:level :off}}}}
+  (:require
+   [clojure.string :as str]))
+--Expected

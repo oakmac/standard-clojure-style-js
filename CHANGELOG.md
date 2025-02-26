@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- [Issue #181] - fix bug with quoted map value in `ns` hash map metadata ([PR-182])
+- [Issue #181] - fix bug with quoted values in `ns` metadata ([PR-182])
 
 ## [0.20.0] - 2025-02-01
 

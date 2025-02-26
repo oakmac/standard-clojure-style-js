@@ -3059,14 +3059,14 @@
 > https://github.com/oakmac/standard-clojure-style-js/issues/181
 
 --Input
-(ns my.namespace
+(ns com.example.my-app
   {:clj-kondo/config '{:linters {:unresolved-symbol {:level :off}}}}
   (:require [clojure.string :as str]))
 --Input
 
 --Expected
  {
-  "nsSymbol": "my.namespace",
+  "nsSymbol": "com.example.my-app",
   "nsMetadata": [
     {
       "key": ":clj-kondo/config",
