@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- [Issue #181] - fix bug with quoted map value in `ns` hash map metadata ([PR-182])
+
 ## [0.20.0] - 2025-02-01
 
 ### Fixed
@@ -231,6 +234,7 @@ All notable changes to this project will be documented in this file.
 [Issue #165]:https://github.com/oakmac/standard-clojure-style-js/issues/165
 [Issue #166]:https://github.com/oakmac/standard-clojure-style-js/issues/166
 [Issue #178]:https://github.com/oakmac/standard-clojure-style-js/issues/178
+[Issue #181]:https://github.com/oakmac/standard-clojure-style-js/issues/181
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -277,3 +281,4 @@ All notable changes to this project will be documented in this file.
 [PR-171]:https://github.com/oakmac/standard-clojure-style-js/pull/171
 [PR-177]:https://github.com/oakmac/standard-clojure-style-js/pull/177
 [PR-179]:https://github.com/oakmac/standard-clojure-style-js/pull/179
+[PR-182]:https://github.com/oakmac/standard-clojure-style-js/pull/182
