@@ -1965,6 +1965,6 @@
 --Expected
 (ns com.example.my-app
   (:require
-   [biz.baz :refer [iii jjj] :rename {ooo ppp, qqq rrr}]))
-   [foo.bar :refer [xxx yyy zzz] :rename {aaa bbb, ccc ddd}]
+   [biz.baz :refer [iii jjj] :rename {ooo ppp, qqq rrr}]
+   [foo.bar :refer [xxx yyy zzz] :rename {aaa bbb, ccc ddd}]))
 --Expected
