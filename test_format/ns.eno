@@ -1957,14 +1957,14 @@
 --Input
 (ns com.example.my-app
   (:require
-   [garden.selectors :refer [&] :rename {& parent}]
    [foo.bar :rename {ccc ddd, aaa bbb} :refer [zzz xxx yyy]]
+   [biz.baz :refer [iii jjj] :rename {ooo ppp, qqq rrr}]
    ))
 --Input
 
 --Expected
 (ns com.example.my-app
   (:require
+   [biz.baz :refer [iii jjj] :rename {ooo ppp, qqq rrr}]))
    [foo.bar :refer [xxx yyy zzz] :rename {aaa bbb, ccc ddd}]
-   [garden.selectors :refer [&] :rename {& parent}]))
 --Expected

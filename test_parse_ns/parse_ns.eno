@@ -3185,8 +3185,8 @@
 --Input
 (ns com.example.my-app
   (:require
-   [garden.selectors :refer [&] :rename {& parent}]
    [foo.bar :rename {ccc ddd, aaa bbb} :refer [zzz xxx yyy]]
+   [biz.baz :refer [iii jjj] :rename {ooo ppp, qqq rrr}]
    ))
 --Input
 
@@ -3194,6 +3194,23 @@
 {
   "nsSymbol": "com.example.my-app",
   "requires": [
+    {
+      "symbol": "biz.baz",
+      "refer": [
+        {"symbol": "iii"},
+        {"symbol": "jjj"}
+      ],
+      "rename": [
+        {
+          "fromSymbol": "ooo",
+          "toSymbol": "ppp"
+        },
+        {
+          "fromSymbol": "qqq",
+          "toSymbol": "rrr"
+        }
+      ]
+    },
     {
       "symbol": "foo.bar",
       "refer": [
@@ -3209,18 +3226,6 @@
         {
           "fromSymbol": "ccc",
           "toSymbol": "ddd"
-        }
-      ]
-    },
-    {
-      "symbol": "garden.selectors",
-      "refer": [
-        {"symbol": "&"}
-      ],
-      "rename": [
-        {
-          "fromSymbol": "&",
-          "toSymbol": "parent"
         }
       ]
     }
