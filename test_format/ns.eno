@@ -1952,7 +1952,7 @@
 
 # GitHub Issue #187 - :require with :refer and :rename
 
-> https://github.com/oakmac/standard-clojure-style-js/issues/183
+> https://github.com/oakmac/standard-clojure-style-js/issues/187
 
 --Input
 (ns com.example.my-app
