@@ -3109,3 +3109,71 @@
   ]
 }
 --Expected
+
+# GitHub Issue #183 - handle all types of quoted ns metadata hash map values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/183
+
+--Input
+(ns my.namespace
+  {:token 'token
+   :string '"string"
+   :parens '(parens)
+   :brackets '[brackets]
+   :braces '{:braces true}
+   :wrap ''wrap
+   :deep-wrap ''''''wrap
+   :meta '^:meta [1 2 3]
+   :tagged ' #tag [1 2 3]}
+  (:require [clojure.string :as str]))
+--Input
+
+--Expected
+ {
+  "nsSymbol": "my.namespace",
+  "nsMetadata": [
+    {
+      "key": ":token",
+      "value": "'token"
+    },
+    {
+      "key": ":string",
+      "value": "'\"string\""
+    },
+    {
+      "key": ":parens",
+      "value": "'(parens)"
+    },
+    {
+      "key": ":brackets",
+      "value": "'[brackets]"
+    },
+    {
+      "key": ":braces",
+      "value": "'{:braces true}"
+    },
+    {
+      "key": ":wrap",
+      "value": "''wrap"
+    },
+    {
+      "key": ":deep-wrap",
+      "value": "''''''wrap"
+    },
+    {
+      "key": ":meta",
+      "value": "'^:meta [1 2 3]"
+    },
+    {
+      "key": ":tagged",
+      "value": "' #tag [1 2 3]"
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    }
+  ]
+}
+--Expected
