@@ -3177,3 +3177,58 @@
   ]
 }
 --Expected
+
+# GitHub Issue #187 - :require with :refer and :rename
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/187
+
+--Input
+(ns com.example.my-app
+  (:require
+   [foo.bar :rename {ccc ddd, aaa bbb} :refer [zzz xxx yyy]]
+   [biz.baz :refer [iii jjj] :rename {ooo ppp qqq rrr}]
+   ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "biz.baz",
+      "refer": [
+        {"symbol": "iii"},
+        {"symbol": "jjj"}
+      ],
+      "rename": [
+        {
+          "fromSymbol": "ooo",
+          "toSymbol": "ppp"
+        },
+        {
+          "fromSymbol": "qqq",
+          "toSymbol": "rrr"
+        }
+      ]
+    },
+    {
+      "symbol": "foo.bar",
+      "refer": [
+        {"symbol": "xxx"},
+        {"symbol": "yyy"},
+        {"symbol": "zzz"}
+      ],
+      "rename": [
+        {
+          "fromSymbol": "aaa",
+          "toSymbol": "bbb"
+        },
+        {
+          "fromSymbol": "ccc",
+          "toSymbol": "ddd"
+        }
+      ]
+    }
+  ]
+}
+--Expected
