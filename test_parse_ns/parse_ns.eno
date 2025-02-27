@@ -3081,3 +3081,31 @@
   ]
 }
 --Expected
+
+# GitHub Issue 184 - Bug: ns metadata tagged literal values printed without hash
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/184
+
+--Input
+(ns com.example.my-app
+  {:id #uuid "7f5f474f-1c76-4884-af80-8ebdcf5c9df3"}
+  (:require [clojure.string :as str]))
+--Input
+
+--Expected
+ {
+  "nsSymbol": "com.example.my-app",
+  "nsMetadata": [
+    {
+      "key": ":id",
+      "value": "#uuid \"7f5f474f-1c76-4884-af80-8ebdcf5c9df3\""
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "clojure.string",
+      "as": "str"
+    }
+  ]
+}
+--Expected
