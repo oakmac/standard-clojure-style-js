@@ -1949,3 +1949,22 @@
   (:require
    [clojure.string :as str]))
 --Expected
+
+# GitHub Issue #187 - :require with :refer and :rename
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/183
+
+--Input
+(ns com.example.my-app
+  (:require
+   [garden.selectors :refer [&] :rename {& parent}]
+   [foo.bar :rename {ccc ddd, aaa bbb} :refer [zzz xxx yyy]]
+   ))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [foo.bar :refer [xxx yyy zzz] :rename {aaa bbb, ccc ddd}]
+   [garden.selectors :refer [&] :rename {& parent}]))
+--Expected
