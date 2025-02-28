@@ -163,6 +163,9 @@ Returns exit code 0 if all files are already formatted, 1 otherwise.
 ```sh
 # check to see if files are already formatted with Standard Clojure Style
 standard-clj check src-clj/ src-cljs/ test/
+
+# runs the same check, but only prints files that need fixing
+standard-clj check src-clj/ src-cljs/ test/ --log-level=ignore-already-formatted
 ```
 
 #### `fix` command
