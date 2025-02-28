@@ -4,8 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- [Issue #184] - fix bug with tagged literals in `ns` metadata ([PR-185])
+## [0.22.0] - 2025-02-27
+
+### Fixed
 - [Issue #183] - fix bug with quoted values other than maps, lists etc. in `ns` metadata ([PR-186])
+- [Issue #184] - fix bug with tagged literals in `ns` metadata ([PR-185])
+- [Issue #187] - fix bug with ns `:require :refer :rename` ([PR-188])
 
 ## [0.21.0] - 2025-02-26
 
@@ -172,7 +176,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.21.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.22.0...HEAD
+[0.22.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.22.0
 [0.21.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.21.0
 [0.20.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.20.0
 [0.19.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.19.0
@@ -243,6 +248,7 @@ All notable changes to this project will be documented in this file.
 [Issue #181]:https://github.com/oakmac/standard-clojure-style-js/issues/181
 [Issue #183]:https://github.com/oakmac/standard-clojure-style-js/issues/183
 [Issue #184]:https://github.com/oakmac/standard-clojure-style-js/issues/184
+[Issue #187]:https://github.com/oakmac/standard-clojure-style-js/issues/187
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -292,3 +298,4 @@ All notable changes to this project will be documented in this file.
 [PR-182]:https://github.com/oakmac/standard-clojure-style-js/pull/182
 [PR-185]:https://github.com/oakmac/standard-clojure-style-js/pull/185
 [PR-186]:https://github.com/oakmac/standard-clojure-style-js/pull/186
+[PR-188]:https://github.com/oakmac/standard-clojure-style-js/pull/188
