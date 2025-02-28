@@ -2243,3 +2243,79 @@ com.example.my-app)
   4
   [5]}
 --Expected
+
+# GitHub Issue #189 - set alignment bug 5
+
+--Input
+#{{:a "a"}
+  :b
+  [:c]}
+--Input
+
+--Expected
+#{{:a "a"}
+  :b
+  [:c]}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 6
+
+--Input
+(defn nested []
+  #{{:a "a"}
+    :b
+    [:c]})
+--Input
+
+--Expected
+(defn nested []
+  #{{:a "a"}
+    :b
+    [:c]})
+--Expected
+
+# GitHub Issue #189 - set alignment bug 7
+
+--Input
+#{#(:aaa %)
+ :b
+ #(:ccc %)}
+--Input
+
+--Expected
+#{#(:aaa %)
+  :b
+  #(:ccc %)}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 8
+
+--Input
+#{#{"a"} :a
+ :b
+ #(:ccc %)
+ }
+--Input
+
+--Expected
+#{#{"a"} :a
+  :b
+  #(:ccc %)}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 9
+
+--Input
+#{#?(:clj "a"
+    :cljs "b")
+ :b
+ #(:ccc %)
+ }
+--Input
+
+--Expected
+#{#?(:clj "a"
+     :cljs "b")
+  :b
+  #(:ccc %)}
+--Expected
