@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.23.0] - 2025-02-28
+
+### Fixed
+- [Issue #189] - fix bug with alignment under set literals ([PR-190])
+
 ## [0.22.0] - 2025-02-27
 
 ### Fixed
@@ -176,7 +181,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.22.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.23.0...HEAD
+[0.23.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.23.0
 [0.22.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.22.0
 [0.21.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.21.0
 [0.20.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.20.0
@@ -249,6 +255,7 @@ All notable changes to this project will be documented in this file.
 [Issue #183]:https://github.com/oakmac/standard-clojure-style-js/issues/183
 [Issue #184]:https://github.com/oakmac/standard-clojure-style-js/issues/184
 [Issue #187]:https://github.com/oakmac/standard-clojure-style-js/issues/187
+[Issue #189]:https://github.com/oakmac/standard-clojure-style-js/issues/189
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -299,3 +306,4 @@ All notable changes to this project will be documented in this file.
 [PR-185]:https://github.com/oakmac/standard-clojure-style-js/pull/185
 [PR-186]:https://github.com/oakmac/standard-clojure-style-js/pull/186
 [PR-188]:https://github.com/oakmac/standard-clojure-style-js/pull/188
+[PR-190]:https://github.com/oakmac/standard-clojure-style-js/pull/190
