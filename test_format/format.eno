@@ -2175,3 +2175,71 @@ com.example.my-app)
   []
   (println "boop"))
 --Expected
+
+# GitHub Issue #189 - set alignment bug 1
+
+--Input
+#{1
+  2
+  3
+  4}
+--Input
+
+--Expected
+#{1
+  2
+  3
+  4}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 2
+
+--Input
+#{[1]
+  [2]
+  [3]
+  [4]}
+--Input
+
+--Expected
+#{[1]
+  [2]
+  [3]
+  [4]}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 3
+
+--Input
+#{1
+  [2]
+  3
+  [4]
+  5}
+--Input
+
+--Expected
+#{1
+  [2]
+  3
+  [4]
+  5}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 4
+
+--Input
+#{[1]
+  2
+  [3]
+  4
+  [5]}
+--Input
+
+--Expected
+#{[1]
+  2
+  [3]
+  4
+  [5]}
+--Expected
