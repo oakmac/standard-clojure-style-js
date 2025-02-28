@@ -2319,3 +2319,20 @@ com.example.my-app)
   :b
   #(:ccc %)}
 --Expected
+
+# GitHub Issue #189 - set alignment bug 10
+
+--Input
+#{ #:xyz{ #:aaa{:a "a"
+     :b "b"} }
+          :ccc
+  :ddd
+ }
+--Input
+
+--Expected
+#{#:xyz{#:aaa{:a "a"
+              :b "b"}}
+  :ccc
+  :ddd}
+--Expected
