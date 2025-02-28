@@ -2175,3 +2175,164 @@ com.example.my-app)
   []
   (println "boop"))
 --Expected
+
+# GitHub Issue #189 - set alignment bug 1
+
+--Input
+#{1
+  2
+  3
+  4}
+--Input
+
+--Expected
+#{1
+  2
+  3
+  4}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 2
+
+--Input
+#{[1]
+  [2]
+  [3]
+  [4]}
+--Input
+
+--Expected
+#{[1]
+  [2]
+  [3]
+  [4]}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 3
+
+--Input
+#{1
+  [2]
+  3
+  [4]
+  5}
+--Input
+
+--Expected
+#{1
+  [2]
+  3
+  [4]
+  5}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 4
+
+--Input
+#{[1]
+  2
+  [3]
+  4
+  [5]}
+--Input
+
+--Expected
+#{[1]
+  2
+  [3]
+  4
+  [5]}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 5
+
+--Input
+#{{:a "a"}
+  :b
+  [:c]}
+--Input
+
+--Expected
+#{{:a "a"}
+  :b
+  [:c]}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 6
+
+--Input
+(defn nested []
+  #{{:a "a"}
+    :b
+    [:c]})
+--Input
+
+--Expected
+(defn nested []
+  #{{:a "a"}
+    :b
+    [:c]})
+--Expected
+
+# GitHub Issue #189 - set alignment bug 7
+
+--Input
+#{#(:aaa %)
+ :b
+ #(:ccc %)}
+--Input
+
+--Expected
+#{#(:aaa %)
+  :b
+  #(:ccc %)}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 8
+
+--Input
+#{#{"a"} :a
+ :b
+ #(:ccc %)
+ }
+--Input
+
+--Expected
+#{#{"a"} :a
+  :b
+  #(:ccc %)}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 9
+
+--Input
+#{#?(:clj "a"
+    :cljs "b")
+ :b
+ #(:ccc %)
+ }
+--Input
+
+--Expected
+#{#?(:clj "a"
+     :cljs "b")
+  :b
+  #(:ccc %)}
+--Expected
+
+# GitHub Issue #189 - set alignment bug 10
+
+--Input
+#{ #:xyz{ #:aaa{:a "a"
+     :b "b"} }
+          :ccc
+  :ddd
+ }
+--Input
+
+--Expected
+#{#:xyz{#:aaa{:a "a"
+              :b "b"}}
+  :ccc
+  :ddd}
+--Expected
