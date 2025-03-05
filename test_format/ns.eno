@@ -1985,3 +1985,20 @@
   (:require
    [garden.selectors :refer [&] :rename {& parent}]))
 --Expected
+
+# GitHub Issue #191 - expand nested prefix lists
+
+--Input
+(ns com.example.my-app
+  (:require
+   [com.example.my-app.foo
+    [bar :as bar :refer [fred]] ;; a comment
+    [baz :refer [qux] :as plugh]])) ;; another comment
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [com.example.my-app.foo.bar :as bar :refer [fred]] ;; a comment
+   [com.example.my-app.foo.baz :as plugh :refer [qux]])) ;; another comment
+--Expected

@@ -3232,3 +3232,31 @@
   ]
 }
 --Expected
+
+# GitHub Issue #191 - expand nested prefix lists
+
+--Input
+(ns com.example.my-app
+  (:require
+   [com.example.my-app.foo
+    [bar :as bar]
+    [baz :refer [qux]]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.my-app.foo.bar",
+      "as": "bar"
+    },
+    {
+      "symbol": "com.example.my-app.foo.baz",
+      "refer": [
+        {"symbol": "qux"}
+      ]
+    }
+  ]
+}
+--Expected
