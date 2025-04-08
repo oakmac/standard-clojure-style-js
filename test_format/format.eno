@@ -2337,7 +2337,7 @@ com.example.my-app)
   :ddd}
 --Expected
 
-# GitHub Issue #193 - rule 3 alignment
+# GitHub Issue #193 - rule 3 alignment for unquote
 
 --Input
 (foo ~'@(bar)
@@ -2377,4 +2377,94 @@ com.example.my-app)
 
 (foo ~'@(bar
           baz))
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for metadata
+
+--Input
+(defonce ^:private
+         foo)
+
+(defonce ^:private
+          foo)
+
+(defonce ^ :private
+         foo)
+
+(defonce ^ :private
+           foo)
+
+(defonce ^ :private
+          foo)
+
+(defonce ^{:private
+          foo})
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+            foo})
+--Input
+
+--Expected
+(defonce ^:private
+         foo)
+
+(defonce ^:private
+          foo)
+
+(defonce ^ :private
+         foo)
+
+(defonce ^ :private
+           foo)
+
+(defonce ^ :private
+  foo)
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+           foo})
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for ignore form
+
+--Input
+(foo #_bar
+     baz)
+
+(foo #_bar
+      baz)
+
+(foo #_bar
+       baz)
+
+(foo #_bar baz
+           qux)
+
+(#_foo bar baz
+           qux)
+--Input
+
+--Expected
+(foo #_bar
+     baz)
+
+(foo #_bar
+  baz)
+
+(foo #_bar
+       baz)
+
+(foo #_bar baz
+           qux)
+
+(#_foo bar baz
+           qux)
 --Expected
