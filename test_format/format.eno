@@ -2336,3 +2336,45 @@ com.example.my-app)
   :ccc
   :ddd}
 --Expected
+
+# GitHub Issue #193 - rule 3 alignment
+
+--Input
+(foo ~'@(bar)
+    baz)
+
+(foo ~'@(bar)
+     baz)
+
+(foo ~'@(bar)
+      baz)
+
+(foo ~'@(bar)
+       baz)
+
+(foo ~'@(bar)
+        baz)
+
+(foo ~'@(bar
+         baz))
+--Input
+
+--Expected
+(foo ~'@(bar)
+  baz)
+
+(foo ~'@(bar)
+     baz)
+
+(foo ~'@(bar)
+  baz)
+
+(foo ~'@(bar)
+  baz)
+
+(foo ~'@(bar)
+  baz)
+
+(foo ~'@(bar
+          baz))
+--Expected
