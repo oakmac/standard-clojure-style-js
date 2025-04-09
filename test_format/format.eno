@@ -2337,46 +2337,138 @@ com.example.my-app)
   :ddd}
 --Expected
 
-# GitHub Issue #193 - rule 3 alignment for unquote
+# GitHub Issue #193 - rule 3 alignment for quote
+
+> FIXME: write this
 
 --Input
-(foo ~'@(bar)
-    baz)
-
-(foo ~'@(bar)
-     baz)
-
-(foo ~'@(bar)
-      baz)
-
-(foo ~'@(bar)
-       baz)
-
-(foo ~'@(bar)
-        baz)
-
-(foo ~'@(bar
-         baz))
+'quote
 --Input
 
 --Expected
-(foo ~'@(bar)
-  baz)
+'quote
+--Expected
 
-(foo ~'@(bar)
+# GitHub Issue #193 - rule 3 alignment for syntax quote
+
+> FIXME: write this
+
+--Input
+`syntax-quote
+--Input
+
+--Expected
+`syntax-quote
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for unquote
+
+> FIXME: write this
+
+--Input
+~unquote
+--Input
+
+--Expected
+~unquote
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for unquote splicing
+
+> FIXME: write this
+
+--Input
+~@unquote-splicing
+--Input
+
+--Expected
+~@unquote-splicing
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for deref
+
+--Input
+;; no rule 3 alignment 1
+(foo @(bar)
+    baz)
+
+;; rule 3 alignment to "@"
+(foo @(bar)
      baz)
 
-(foo ~'@(bar)
+;; no rule 3 alignment 2
+(foo @(bar)
+      baz)
+
+;; no rule 3 alignment 3
+(foo @(bar)
+       baz)
+
+;; no rule 3 alignment 4
+(foo @(bar)
+        baz)
+
+;; no rule 3 alignment 5
+(foo @(bar
+       baz))
+
+;; no rule 3 alignment 6
+(foo @bar
+    baz)
+
+;; rule 3 alignment to "@bar"
+(foo @bar
+     baz)
+
+;; no rule 3 alignment 7
+(foo @bar
+      baz)
+
+;; no rule 3 alignment 8
+(foo @bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo @(bar)
   baz)
 
-(foo ~'@(bar)
+;; rule 3 alignment to "@"
+(foo @(bar)
+     baz)
+
+;; no rule 3 alignment 2
+(foo @(bar)
   baz)
 
-(foo ~'@(bar)
+;; no rule 3 alignment 3
+(foo @(bar)
   baz)
 
-(foo ~'@(bar
-          baz))
+;; no rule 3 alignment 4
+(foo @(bar)
+  baz)
+
+;; no rule 3 alignment 5
+(foo @(bar
+        baz))
+
+;; no rule 3 alignment 6
+(foo @bar
+  baz)
+
+;; rule 3 alignment to "@bar"
+(foo @bar
+     baz)
+
+;; no rule 3 alignment 7
+(foo @bar
+  baz)
+
+;; no rule 3 alignment 8
+(foo @bar
+  baz)
 --Expected
 
 # GitHub Issue #193 - rule 3 alignment for metadata
