@@ -2433,38 +2433,122 @@ com.example.my-app)
            foo})
 --Expected
 
-# GitHub Issue #193 - rule 3 alignment for ignore form
+# GitHub Issue #193 - rule 3 alignment for discard
 
 --Input
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+    baz)
+
+;; rule 3 alignment to the discard
 (foo #_bar
      baz)
 
+;; no rule 3 alignment, normal fixed indentation
 (foo #_bar
       baz)
 
+;; rule 3 alignment to "bar"
 (foo #_bar
        baz)
 
+;; rule 3 alignment to "baz"
 (foo #_bar baz
            qux)
 
+;; rule 3 alignment to "baz"
 (#_foo bar baz
            qux)
+
+;; no rule 3 alignment
+(foo #_
+    bar
+    baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+    baz)
+
+;; no rule 3 alignment
+(foo #_
+      bar
+    baz)
+
+;; rule 3 alignment to the discard
+(foo #_ bar
+     baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+      baz)
+
+;; no rule 3 alignment
+(foo     #_
+ bar baz)
+
+;; no rule 3 alignment
+(foo #_
+         bar
+         baz)
 --Input
 
 --Expected
-(foo #_bar
-     baz)
-
+;; no rule 3 alignment, normal fixed indentation
 (foo #_bar
   baz)
 
+;; rule 3 alignment to the discard
+(foo #_bar
+     baz)
+
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+  baz)
+
+;; rule 3 alignment to "bar"
 (foo #_bar
        baz)
 
+;; rule 3 alignment to "baz"
 (foo #_bar baz
            qux)
 
+;; rule 3 alignment to "baz"
 (#_foo bar baz
            qux)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+     baz)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
+
+;; rule 3 alignment to the discard
+(foo #_ bar
+     baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+     baz)
+
+;; no rule 3 alignment
+(foo     #_
+  bar baz)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
 --Expected
