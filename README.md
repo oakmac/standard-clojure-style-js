@@ -40,7 +40,7 @@ npx @chrisoakman/standard-clojure-style fix src-clj/ src-cljs/ test/
 
 See the **Command Line Usage** section below for more options.
 
-Please [open an issue] when Standard Clojure Style breaks your code :upside_down_face:
+Please [open an issue] if Standard Clojure Style breaks your code :upside_down_face:
 
 [open an issue]:https://github.com/oakmac/standard-clojure-style-js/issues/new
 
@@ -70,10 +70,9 @@ your editor, on the web, CLI tooling, etc.
 
 ## Project Status and Stability
 
-As of Nov 2024, I think this formatter is ready for **most** Clojure
-codebases. There are still [some outstanding bugs] that I want to fix before
-releasing v1.0.0, but I do not want this project to live in "pre-1.0"
-forever.
+As of April 2025, this formatter is ready for **most** Clojure codebases. There
+are still [some outstanding bugs] that I want to fix before releasing v1.0.0,
+but I do not want this project to live in "pre-1.0" forever.
 
 [some outstanding bugs]:https://github.com/oakmac/standard-clojure-style-js/labels/v1%20blocker
 
