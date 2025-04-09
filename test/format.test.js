@@ -67,6 +67,7 @@ test('All test_format/ cases should have unique names', () => {
 const onlyRunSpecificTests = false
 const specificTests = new Set()
 // specificTests.add('your test case here')
+specificTests.add('GitHub Issue #193 - rule 3 alignment for deref')
 
 const ignoreSomeTests = true
 const ignoreTests = new Set()
