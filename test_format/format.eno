@@ -2339,14 +2339,40 @@ com.example.my-app)
 
 # GitHub Issue #193 - rule 3 alignment for quote
 
-> FIXME: write this
-
 --Input
-'quote
+;; no rule 3 alignment 1
+(foo 'bar
+    baz)
+
+;; rule 3 alignment to 'bar
+(foo 'bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo 'bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo 'bar
+       baz)
 --Input
 
 --Expected
-'quote
+;; no rule 3 alignment 1
+(foo 'bar
+  baz)
+
+;; rule 3 alignment to 'bar
+(foo 'bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo 'bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo 'bar
+  baz)
 --Expected
 
 # GitHub Issue #193 - rule 3 alignment for syntax quote
