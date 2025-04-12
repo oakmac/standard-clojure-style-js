@@ -48,7 +48,19 @@ Please [open an issue] if Standard Clojure Style breaks your code :upside_down_f
 
 Please see [Issue #1] for an explanation of this project's genesis.
 
+Standard Clojure Style aspires to be the obvious, [boring choice] for formatting Clojure source code.
+
+* no config options
+  * all projects using Standard Clojure Style follow the same rules and should have a similar look and feel
+* produces idiomatic-looking Clojure code while not impairing the unique expressiveness of Lisp syntax
+  * "Rule 3" support allows for vertical alignment of forms
+  * all `ns` forms are pretty-printed from scratch and follow simple rules
+* easy to use and integrate with existing tooling
+  * continuous integration systems, text editors
+* fast!
+
 [Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
+[boring choice]:https://boringtechnology.club/
 
 ## Editor Integrations and Other Implementations
 
