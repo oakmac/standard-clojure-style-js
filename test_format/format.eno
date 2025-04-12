@@ -2377,38 +2377,116 @@ com.example.my-app)
 
 # GitHub Issue #193 - rule 3 alignment for syntax quote
 
-> FIXME: write this
-
 --Input
-`syntax-quote
+;; no rule 3 alignment 1
+(foo `bar
+    baz)
+
+;; rule 3 alignment to `bar
+(foo `bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo `bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo `bar
+       baz)
 --Input
 
 --Expected
-`syntax-quote
+;; no rule 3 alignment 1
+(foo `bar
+  baz)
+
+;; rule 3 alignment to `bar
+(foo `bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo `bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo `bar
+  baz)
 --Expected
 
 # GitHub Issue #193 - rule 3 alignment for unquote
 
-> FIXME: write this
-
 --Input
-~unquote
+;; no rule 3 alignment 1
+(foo ~bar
+    baz)
+
+;; rule 3 alignment to ~bar
+(foo ~bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo ~bar
+       baz)
 --Input
 
 --Expected
-~unquote
+;; no rule 3 alignment 1
+(foo ~bar
+  baz)
+
+;; rule 3 alignment to ~bar
+(foo ~bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo ~bar
+  baz)
 --Expected
 
 # GitHub Issue #193 - rule 3 alignment for unquote splicing
 
-> FIXME: write this
-
 --Input
-~@unquote-splicing
+;; no rule 3 alignment 1
+(foo ~@bar
+    baz)
+
+;; rule 3 alignment to ~@bar
+(foo ~@bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~@bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo ~@bar
+       baz)
 --Input
 
 --Expected
-~@unquote-splicing
+;; no rule 3 alignment 1
+(foo ~@bar
+  baz)
+
+;; rule 3 alignment to ~@bar
+(foo ~@bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~@bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo ~@bar
+  baz)
 --Expected
 
 # GitHub Issue #193 - rule 3 alignment for deref
