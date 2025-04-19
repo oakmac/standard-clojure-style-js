@@ -12,6 +12,30 @@ alt="Introduction to Standard Clojure Style video preview" width="260" height="1
 
 [Clojure/conj 2024]:https://2024.clojure-conj.org/
 
+## Project Background and Rationale
+
+Please see [Issue #1] for an explanation of this project's genesis.
+
+Standard Clojure Style aspires to be the obvious, [boring choice] for formatting Clojure source code.
+
+* No config options
+  * All projects using Standard Clojure Style follow the same rules and should have a similar look and feel
+* Produces idiomatic-looking Clojure code while not impairing the unique expressiveness of Lisp syntax
+  * Follows the rules from Niki Tonsky's [Better clojure formatting]
+  * With the addition of ["Rule 3"] to allow vertical alignment of forms
+* All `ns` forms are pretty-printed from scratch and have a consistent format
+* Easy to use and integrate with existing tooling
+  * continuous integration systems, text editors, web browsers, etc
+* Single-file implementation in under 5,000 lines of code
+  * requires no external libraries
+  * works everywhere (node.js, web browsers, etc)
+* Fast!
+  * can format [~100,000 lines of code in under 2 seconds](https://youtu.be/VhjxvEabOX0?t=60)
+
+[Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
+[boring choice]:https://boringtechnology.club/
+["Rule 3"]:https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
+
 ## Try it online for free right now!
 
 [Try online using Squint playground.](https://tinyurl.com/43abayj2)
@@ -43,24 +67,6 @@ See the **Command Line Usage** section below for more options.
 Please [open an issue] if Standard Clojure Style breaks your code :upside_down_face:
 
 [open an issue]:https://github.com/oakmac/standard-clojure-style-js/issues/new
-
-## Project Background and Rationale
-
-Please see [Issue #1] for an explanation of this project's genesis.
-
-Standard Clojure Style aspires to be the obvious, [boring choice] for formatting Clojure source code.
-
-* no config options
-  * all projects using Standard Clojure Style follow the same rules and should have a similar look and feel
-* produces idiomatic-looking Clojure code while not impairing the unique expressiveness of Lisp syntax
-  * "Rule 3" support allows for vertical alignment of forms
-  * all `ns` forms are pretty-printed from scratch and follow simple rules
-* easy to use and integrate with existing tooling
-  * continuous integration systems, text editors
-* fast!
-
-[Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
-[boring choice]:https://boringtechnology.club/
 
 ## Editor Integrations and Other Implementations
 
