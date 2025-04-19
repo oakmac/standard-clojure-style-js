@@ -2336,3 +2336,415 @@ com.example.my-app)
   :ccc
   :ddd}
 --Expected
+
+# GitHub Issue #193 - rule 3 alignment for quote
+
+--Input
+;; no rule 3 alignment 1
+(foo 'bar
+    baz)
+
+;; rule 3 alignment to 'bar
+(foo 'bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo 'bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo 'bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo 'bar
+  baz)
+
+;; rule 3 alignment to 'bar
+(foo 'bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo 'bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo 'bar
+  baz)
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for syntax quote
+
+--Input
+;; no rule 3 alignment 1
+(foo `bar
+    baz)
+
+;; rule 3 alignment to `bar
+(foo `bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo `bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo `bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo `bar
+  baz)
+
+;; rule 3 alignment to `bar
+(foo `bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo `bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo `bar
+  baz)
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for unquote
+
+--Input
+;; no rule 3 alignment 1
+(foo ~bar
+    baz)
+
+;; rule 3 alignment to ~bar
+(foo ~bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo ~bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo ~bar
+  baz)
+
+;; rule 3 alignment to ~bar
+(foo ~bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo ~bar
+  baz)
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for unquote splicing
+
+--Input
+;; no rule 3 alignment 1
+(foo ~@bar
+    baz)
+
+;; rule 3 alignment to ~@bar
+(foo ~@bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~@bar
+      baz)
+
+;; no rule 3 alignment 3
+(foo ~@bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo ~@bar
+  baz)
+
+;; rule 3 alignment to ~@bar
+(foo ~@bar
+     baz)
+
+;; no rule 3 alignment 2
+(foo ~@bar
+  baz)
+
+;; no rule 3 alignment 3
+(foo ~@bar
+  baz)
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for deref
+
+--Input
+;; no rule 3 alignment 1
+(foo @(bar)
+    baz)
+
+;; rule 3 alignment to "@"
+(foo @(bar)
+     baz)
+
+;; no rule 3 alignment 2
+(foo @(bar)
+      baz)
+
+;; no rule 3 alignment 3
+(foo @(bar)
+       baz)
+
+;; no rule 3 alignment 4
+(foo @(bar)
+        baz)
+
+;; no rule 3 alignment 5
+(foo @(bar
+       baz))
+
+;; no rule 3 alignment 6
+(foo @bar
+    baz)
+
+;; rule 3 alignment to "@bar"
+(foo @bar
+     baz)
+
+;; no rule 3 alignment 7
+(foo @bar
+      baz)
+
+;; no rule 3 alignment 8
+(foo @bar
+       baz)
+--Input
+
+--Expected
+;; no rule 3 alignment 1
+(foo @(bar)
+  baz)
+
+;; rule 3 alignment to "@"
+(foo @(bar)
+     baz)
+
+;; no rule 3 alignment 2
+(foo @(bar)
+  baz)
+
+;; no rule 3 alignment 3
+(foo @(bar)
+  baz)
+
+;; no rule 3 alignment 4
+(foo @(bar)
+  baz)
+
+;; no rule 3 alignment 5
+(foo @(bar
+        baz))
+
+;; no rule 3 alignment 6
+(foo @bar
+  baz)
+
+;; rule 3 alignment to "@bar"
+(foo @bar
+     baz)
+
+;; no rule 3 alignment 7
+(foo @bar
+  baz)
+
+;; no rule 3 alignment 8
+(foo @bar
+  baz)
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for metadata
+
+--Input
+(defonce ^:private
+         foo)
+
+(defonce ^:private
+          foo)
+
+(defonce ^ :private
+         foo)
+
+(defonce ^ :private
+           foo)
+
+(defonce ^ :private
+          foo)
+
+(defonce ^{:private
+          foo})
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+            foo})
+--Input
+
+--Expected
+(defonce ^:private
+         foo)
+
+(defonce ^:private
+          foo)
+
+(defonce ^ :private
+         foo)
+
+(defonce ^ :private
+           foo)
+
+(defonce ^ :private
+  foo)
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+           foo})
+
+(defonce ^{:private
+           foo})
+--Expected
+
+# GitHub Issue #193 - rule 3 alignment for discard
+
+--Input
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+    baz)
+
+;; rule 3 alignment to the discard
+(foo #_bar
+     baz)
+
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+      baz)
+
+;; rule 3 alignment to "bar"
+(foo #_bar
+       baz)
+
+;; rule 3 alignment to "baz"
+(foo #_bar baz
+           qux)
+
+;; rule 3 alignment to "baz"
+(#_foo bar baz
+           qux)
+
+;; no rule 3 alignment
+(foo #_
+    bar
+    baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+    baz)
+
+;; no rule 3 alignment
+(foo #_
+      bar
+    baz)
+
+;; rule 3 alignment to the discard
+(foo #_ bar
+     baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+      baz)
+
+;; no rule 3 alignment
+(foo     #_
+ bar baz)
+
+;; no rule 3 alignment
+(foo #_
+         bar
+         baz)
+--Input
+
+--Expected
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+  baz)
+
+;; rule 3 alignment to the discard
+(foo #_bar
+     baz)
+
+;; no rule 3 alignment, normal fixed indentation
+(foo #_bar
+  baz)
+
+;; rule 3 alignment to "bar"
+(foo #_bar
+       baz)
+
+;; rule 3 alignment to "baz"
+(foo #_bar baz
+           qux)
+
+;; rule 3 alignment to "baz"
+(#_foo bar baz
+           qux)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+     baz)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
+
+;; rule 3 alignment to the discard
+(foo #_ bar
+     baz)
+
+;; rule 3 alignment to the discard
+(foo #_
+     bar
+     baz)
+
+;; no rule 3 alignment
+(foo     #_
+  bar baz)
+
+;; no rule 3 alignment
+(foo #_
+  bar
+  baz)
+--Expected
