@@ -3260,3 +3260,33 @@
   ]
 }
 --Expected
+
+# GitHub Issue #203 - default keyword with as
+
+--Input
+(ns com.example.my-app
+  (:require
+    ["foo-bar" :default Foobar :as fb]
+    ["bar-foo" :as bf :default Barfoo]
+    ))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "as": "bf",
+      "default": "Barfoo",
+      "symbol": "\"bar-foo\"",
+      "symbolIsString": true
+    },
+    {
+      "as": "fb",
+      "default": "Foobar",
+      "symbol": "\"foo-bar\"",
+      "symbolIsString": true
+    }
+  ]
+}
+--Expected
