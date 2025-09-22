@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.25.0] - 2025-09-22
+
+### Fixed
+- [Issue #203] - support require lines with both `:default` and `:as` ([PR-204])
+
 ## [0.24.0] - 2025-03-05
 
 ### Added
@@ -263,6 +268,7 @@ All notable changes to this project will be documented in this file.
 [Issue #187]:https://github.com/oakmac/standard-clojure-style-js/issues/187
 [Issue #189]:https://github.com/oakmac/standard-clojure-style-js/issues/189
 [Issue #191]:https://github.com/oakmac/standard-clojure-style-js/issues/191
+[Issue #203]:https://github.com/oakmac/standard-clojure-style-js/issues/203
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -315,3 +321,4 @@ All notable changes to this project will be documented in this file.
 [PR-188]:https://github.com/oakmac/standard-clojure-style-js/pull/188
 [PR-190]:https://github.com/oakmac/standard-clojure-style-js/pull/190
 [PR-192]:https://github.com/oakmac/standard-clojure-style-js/pull/192
+[PR-204]:https://github.com/oakmac/standard-clojure-style-js/pull/204

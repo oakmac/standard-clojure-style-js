@@ -2002,3 +2002,20 @@
    [com.example.my-app.foo.bar :as bar :refer [fred]] ;; a comment
    [com.example.my-app.foo.baz :as plugh :refer [qux]])) ;; another comment
 --Expected
+
+# GitHub Issue #203 - default keyword with as
+
+--Input
+(ns com.example.my-app
+  (:require
+    ["foo-bar" :default Foobar :as fb]
+    ["bar-foo" :as bf :default Barfoo]
+    ))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ["bar-foo" :as bf :default Barfoo]
+   ["foo-bar" :as fb :default Foobar]))
+--Expected
