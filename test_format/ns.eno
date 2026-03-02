@@ -2019,3 +2019,70 @@
    ["bar-foo" :as bf :default Barfoo]
    ["foo-bar" :as fb :default Foobar]))
 --Expected
+
+# GitHub Issue #208 - basic :gen-class :implements
+
+--Input
+(ns example-ns
+  (:gen-class
+   :implements [com.amazonaws.services.lambda.runtime.RequestStreamHandler]))
+--Input
+
+--Expected
+(ns example-ns
+  (:gen-class
+   :implements [com.amazonaws.services.lambda.runtime.RequestStreamHandler]))
+--Expected
+
+# GitHub Issue #208 - :gen-class :implements with sorting
+
+--Input
+(ns com.example.my-app
+  "complex gen-class"
+  ;; aaa
+  ;; bbb
+  (:gen-class ;; ccc
+:implements [zap.zip.RockSock foo.bar.BizBang] ;; uuu
+
+    ;; fff
+    :extends java.lang.RuntimeException ;; ggg
+    :impl-ns iii
+    :post-init jjj
+    :main true
+    :state state2
+    :prefix "zzz-"
+
+    ;; ddd
+    :name name2 ;; eee
+
+    :factory fff
+    :load-impl-ns false ;; hhh
+    :init init2)
+
+
+  (:require [aaa.bbb :as ab])
+  )
+--Input
+
+--Expected
+(ns com.example.my-app
+  "complex gen-class"
+  (:require
+   [aaa.bbb :as ab])
+  ;; aaa
+  ;; bbb
+  (:gen-class ;; ccc
+   ;; ddd
+   :name name2 ;; eee
+   ;; fff
+   :extends java.lang.RuntimeException ;; ggg
+   :implements [foo.bar.BizBang zap.zip.RockSock] ;; uuu
+   :init init2
+   :post-init jjj
+   :main true
+   :factory fff
+   :state state2
+   :prefix "zzz-"
+   :impl-ns iii
+   :load-impl-ns false)) ;; hhh
+--Expected

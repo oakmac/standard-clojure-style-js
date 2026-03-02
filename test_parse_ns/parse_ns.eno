@@ -3290,3 +3290,24 @@
   ]
 }
 --Expected
+
+# GitHub Issue #208 - implements
+
+--Input
+(ns com.example.my-app
+  (:gen-class
+   :implements [zap.zip.RockSock foo.bar.BizBang]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "genClass": {
+    "isEmpty": false,
+    "implements": [
+      {"symbol": "foo.bar.BizBang"},
+      {"symbol": "zap.zip.RockSock"}
+    ]
+  }
+}
+--Expected
