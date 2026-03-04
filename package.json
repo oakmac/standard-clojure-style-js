@@ -17,7 +17,7 @@
     "standard-clj": "cli.mjs"
   },
   "scripts": {
-    "lint": "standard --fix lib/ scripts/ test/ ./cli.mjs",
+    "lint": "standard --fix lib/ scripts/ test/ ./cli.mjs ./cli_util.js",
     "test": "jest"
   },
   "dependencies": {
