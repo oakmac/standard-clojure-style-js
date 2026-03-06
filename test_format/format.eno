@@ -2336,3 +2336,25 @@ com.example.my-app)
   :ccc
   :ddd}
 --Expected
+
+# multi-byte symbols
+
+--Input
+(let [price-at-σ (fn [b]
+                   (round-price-to-α (* dynamic-multipler b)))
+
+      levels-σ [{:key "010" :mult 0.1}
+                {:key "020" :mult 0.2}
+                {:key "030" :mult 0.3}]]
+  nil)
+--Input
+
+--Expected
+(let [price-at-σ (fn [b]
+                   (round-price-to-α (* dynamic-multipler b)))
+
+      levels-σ [{:key "010" :mult 0.1}
+                {:key "020" :mult 0.2}
+                {:key "030" :mult 0.3}]]
+  nil)
+--Expected

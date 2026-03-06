@@ -88,3 +88,14 @@ clj-kondo/clj-kondo
     (.body 1..8 '👁️ ❤️ 🤓')
     (.close 8..9 '"')))
 -- Expected
+
+# Symbol with multi-byte character
+
+-- Input
+levels-σ
+-- Input
+
+-- Expected
+(source 0..8
+  (token 0..8 'levels-σ'))
+-- Expected

@@ -191,6 +191,73 @@ describe('String Util', () => {
   })
 })
 
+// Unicode / multi-byte UTF-8 test cases for String Util functions
+// These tests ensure that charAt, substr, and strLen operate on
+// characters (Unicode code points), not raw bytes.
+describe('String Util - Unicode', () => {
+  describe('strLen', () => {
+    test('counts characters, not bytes', () => {
+      expect(scsLib._strLen('levels-σ')).toBe(8) // σ is 2 bytes
+      expect(scsLib._strLen('σ')).toBe(1)
+      expect(scsLib._strLen('αβγ')).toBe(3) // 3 chars, 6 bytes
+      expect(scsLib._strLen('hello')).toBe(5) // ASCII baseline
+      expect(scsLib._strLen('')).toBe(0)
+    })
+
+    test('handles 3-byte and 4-byte characters', () => {
+      expect(scsLib._strLen('日本語')).toBe(3) // 3 chars, 9 bytes (CJK)
+      expect(scsLib._strLen('a日b')).toBe(3)
+    })
+  })
+
+  describe('charAt', () => {
+    test('returns correct character for multi-byte strings', () => {
+      // 0-indexed in JS
+      expect(scsLib._charAt('levels-σ', 0)).toBe('l')
+      expect(scsLib._charAt('levels-σ', 6)).toBe('-')
+      expect(scsLib._charAt('levels-σ', 7)).toBe('σ')
+    })
+
+    test('returns empty string for out of bounds on multi-byte strings', () => {
+      expect(scsLib._charAt('levels-σ', 8)).toBe('')
+    })
+
+    test('works with multi-byte characters in the middle', () => {
+      expect(scsLib._charAt('aσb', 0)).toBe('a')
+      expect(scsLib._charAt('aσb', 1)).toBe('σ')
+      expect(scsLib._charAt('aσb', 2)).toBe('b')
+      expect(scsLib._charAt('aσb', 3)).toBe('')
+    })
+
+    test('works with CJK characters', () => {
+      expect(scsLib._charAt('日本語', 0)).toBe('日')
+      expect(scsLib._charAt('日本語', 1)).toBe('本')
+      expect(scsLib._charAt('日本語', 2)).toBe('語')
+    })
+  })
+
+  describe('substr', () => {
+    test('extracts substring correctly with multi-byte characters', () => {
+      // substr(s, startIdx, endIdx) — endIdx is exclusive, 0-indexed in JS
+      expect(scsLib._substr('levels-σ', 0, 8)).toBe('levels-σ')
+      expect(scsLib._substr('levels-σ', 7, 8)).toBe('σ')
+      expect(scsLib._substr('levels-σ', 6, 8)).toBe('-σ')
+      expect(scsLib._substr('levels-σ', 0, 7)).toBe('levels-')
+    })
+
+    test('handles -1 endIdx with multi-byte characters', () => {
+      expect(scsLib._substr('levels-σ', 0, -1)).toBe('levels-σ')
+      expect(scsLib._substr('levels-σ', 7, -1)).toBe('σ')
+    })
+
+    test('works with multi-byte characters in the middle', () => {
+      expect(scsLib._substr('aσb', 0, 3)).toBe('aσb')
+      expect(scsLib._substr('aσb', 1, 2)).toBe('σ')
+      expect(scsLib._substr('aσb', 1, 3)).toBe('σb')
+    })
+  })
+})
+
 describe('Stack Operations Tests', () => {
   describe('stackPeek', () => {
     test('should peek at the last element when idxFromBack is 0', () => {
