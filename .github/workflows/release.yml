@@ -50,6 +50,19 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Inject version into cli.mjs
+        run: |
+          # The git tag is "v1.0.0" — use it as the version string.
+          # cli.mjs has: const programVersion = '[dev]' // 6444ef98-...
+          # build-release.js does the same replacement for npm publish,
+          # but we use sed here to keep the binary build independent.
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "Injecting version: ${TAG}"
+          sed -i "s/const programVersion = '\[dev\]'/const programVersion = '${TAG}'/" cli.mjs
+
+          # Sanity check: make sure the replacement actually worked
+          grep "programVersion" cli.mjs
+
       - name: Build all binaries
         run: |
           mkdir -p dist/
