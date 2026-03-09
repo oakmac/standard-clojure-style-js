@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.27.0] - 2026-03-09
+
+### Added
+- bump npm dependencies
+- publish release binaries to homebrew ([Issue #205])
+- print the git hash with `--version`
+
 ## [0.26.0] - 2026-03-02
 
 ### Added
@@ -197,7 +204,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.26.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.27.0...HEAD
+[0.27.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.27.0
 [0.26.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.26.0
 [0.25.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.25.0
 [0.24.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.24.0
@@ -277,6 +285,7 @@ All notable changes to this project will be documented in this file.
 [Issue #189]:https://github.com/oakmac/standard-clojure-style-js/issues/189
 [Issue #191]:https://github.com/oakmac/standard-clojure-style-js/issues/191
 [Issue #203]:https://github.com/oakmac/standard-clojure-style-js/issues/203
+[Issue #205]:https://github.com/oakmac/standard-clojure-style-js/issues/205
 [Issue #208]:https://github.com/oakmac/standard-clojure-style-js/issues/208
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
