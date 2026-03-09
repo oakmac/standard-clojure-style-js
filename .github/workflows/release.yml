@@ -1,0 +1,130 @@
+# Build cross-platform binaries using Bun and create a GitHub Release on every tagged push.
+#
+# Usage:
+#   git tag v1.0.0
+#   git push --tags
+#
+# This will:
+#   1. Run lint + tests (same as CI)
+#   2. Cross-compile standard-clj binaries for Linux, macOS, and Windows using Bun
+#   3. Create a GitHub Release with all binaries attached
+#   4. Include the source tarball SHA256 (needed for Homebrew formula updates)
+#
+# All 5 binaries are built from a single Linux runner using Bun's cross-compilation.
+# Bun supports: bun-linux-x64, bun-linux-arm64, bun-darwin-x64, bun-darwin-arm64, bun-windows-x64
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Code linter
+        run: bun run lint
+
+      - name: Unit tests
+        run: bun test
+
+  build-and-release:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build all binaries
+        run: |
+          mkdir -p dist/
+
+          # Linux x86_64
+          bun build ./cli.mjs --compile --target=bun-linux-x64 --outfile dist/standard-clj-linux-x86_64
+
+          # Linux ARM64
+          bun build ./cli.mjs --compile --target=bun-linux-arm64 --outfile dist/standard-clj-linux-aarch64
+
+          # macOS Apple Silicon
+          bun build ./cli.mjs --compile --target=bun-darwin-arm64 --outfile dist/standard-clj-macos-aarch64
+
+          # macOS Intel
+          bun build ./cli.mjs --compile --target=bun-darwin-x64 --outfile dist/standard-clj-macos-x86_64
+
+          # Windows x86_64
+          bun build ./cli.mjs --compile --target=bun-windows-x64 --outfile dist/standard-clj-windows-x86_64.exe
+
+      - name: List binaries
+        run: ls -lh dist/
+
+      - name: Compute SHA256 for all binaries
+        id: sha
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+          # Compute SHA256 for each binary (needed for Homebrew formula)
+          for f in dist/*; do
+            name=$(basename "$f")
+            hash=$(shasum -a 256 "$f" | cut -d ' ' -f 1)
+            # Convert filename to a valid output name: replace dots and dashes with underscores
+            key=$(echo "$name" | sed 's/[^a-zA-Z0-9]/_/g')
+            echo "${key}=${hash}" >> "$GITHUB_OUTPUT"
+            echo "${name}: ${hash}"
+          done
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.sha.outputs.tag }}
+          body: |
+            ## Binaries
+
+            | Platform | File |
+            |----------|------|
+            | Linux x86_64 | `standard-clj-linux-x86_64` |
+            | Linux ARM64 | `standard-clj-linux-aarch64` |
+            | macOS Apple Silicon | `standard-clj-macos-aarch64` |
+            | macOS Intel | `standard-clj-macos-x86_64` |
+            | Windows x86_64 | `standard-clj-windows-x86_64.exe` |
+
+            ## Install via Homebrew (macOS / Linux)
+
+            ```sh
+            brew tap oakmac/tap
+            brew install standard-clj
+            ```
+
+            ## SHA256 Checksums (for Homebrew formula update)
+
+            ```
+            standard-clj-linux-x86_64:        ${{ steps.sha.outputs.standard_clj_linux_x86_64 }}
+            standard-clj-linux-aarch64:        ${{ steps.sha.outputs.standard_clj_linux_aarch64 }}
+            standard-clj-macos-aarch64:        ${{ steps.sha.outputs.standard_clj_macos_aarch64 }}
+            standard-clj-macos-x86_64:         ${{ steps.sha.outputs.standard_clj_macos_x86_64 }}
+            standard-clj-windows-x86_64.exe:   ${{ steps.sha.outputs.standard_clj_windows_x86_64_exe }}
+            ```
+
+            Copy these into `Formula/standard-clj.rb` in [oakmac/homebrew-tap](https://github.com/oakmac/homebrew-tap).
+            See that repo's README for the full release checklist.
+          files: |
+            dist/standard-clj-linux-x86_64
+            dist/standard-clj-linux-aarch64
+            dist/standard-clj-macos-aarch64
+            dist/standard-clj-macos-x86_64
+            dist/standard-clj-windows-x86_64.exe
