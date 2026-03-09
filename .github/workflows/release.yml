@@ -57,8 +57,10 @@ jobs:
           # build-release.js does the same replacement for npm publish,
           # but we use sed here to keep the binary build independent.
           TAG="${GITHUB_REF#refs/tags/}"
-          echo "Injecting version: ${TAG}"
-          sed -i "s/const programVersion = '\[dev\]'/const programVersion = '${TAG}'/" cli.mjs
+          SHA=$(git rev-parse --short HEAD)
+          VERSION="${TAG} (${SHA})"
+          echo "Injecting version: ${VERSION}"
+          sed -i "s/const programVersion = '\[dev\]'/const programVersion = '${VERSION}'/" cli.mjs
 
           # Sanity check: make sure the replacement actually worked
           grep "programVersion" cli.mjs
