@@ -36,6 +36,7 @@ const scriptStartTime = performance.now()
 // NOTE: the line below (including the UUID) gets replaced by script/build-release.js
 // script before publishing to npm
 const programVersion = '[dev]' // 6444ef98-c603-42ca-97e7-ebe5c60382de
+const programVersionVerbose = '[dev]' // 890d2c4a-b7e1-4f3a-9c56-8a1d3e5f7b92
 
 const defaultFileExtensions = new Set(['.clj', '.cljs', '.cljc', '.jank', '.edn'])
 
@@ -553,7 +554,7 @@ yargs(hideBin(process.argv))
   .default('file-ext', defaultFileExtensions)
 
   .demandCommand() // show them --help if they do not pass a valid command
-  .version(programVersion)
+  .version(programVersionVerbose)
 
   .example([
     ['$0 list src/', 'List files that will be formatted in the src/ directory (recursive)'],

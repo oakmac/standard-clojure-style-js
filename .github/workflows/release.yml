@@ -52,17 +52,20 @@ jobs:
 
       - name: Inject version into cli.mjs
         run: |
-          # The git tag is "v1.0.0" — use it as the version string.
-          # cli.mjs has: const programVersion = '[dev]' // 6444ef98-...
-          # build-release.js does the same replacement for npm publish,
+          # cli.mjs has two version lines:
+          #   programVersion        → shown in check/fix/list output (just the tag)
+          #   programVersionVerbose → shown for --version (tag + git hash)
+          #
+          # build-release.js does similar replacements for npm publish,
           # but we use sed here to keep the binary build independent.
           TAG="${GITHUB_REF#refs/tags/}"
           SHA=$(git rev-parse --short HEAD)
-          VERSION="${TAG} (${SHA})"
-          echo "Injecting version: ${VERSION}"
-          sed -i "s/const programVersion = '\[dev\]'/const programVersion = '${VERSION}'/" cli.mjs
+          echo "Injecting version: ${TAG} [${SHA}]"
 
-          # Sanity check: make sure the replacement actually worked
+          sed -i "s/const programVersion = '\[dev\]'/const programVersion = '${TAG}'/" cli.mjs
+          sed -i "s/const programVersionVerbose = '\[dev\]'/const programVersionVerbose = '${TAG} [${SHA}]'/" cli.mjs
+
+          # Sanity check: make sure both replacements worked
           grep "programVersion" cli.mjs
 
       - name: Build all binaries
