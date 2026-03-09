@@ -82,7 +82,14 @@ what's wrong.
 ### 6. Publish to npm
 
 ```sh
-npm publish
+# ensure you are logged in
+npm whoami
+
+# check the output
+npm publish --dry-run
+
+# actually publish
+npm publish --access=public
 ```
 
 Your working tree will be dirty at this point (because `build-release.js`
