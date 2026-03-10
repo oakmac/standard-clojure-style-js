@@ -10,7 +10,16 @@ I gave a 10-minute lightning talk at [Clojure/conj 2024] about this project:
 " target="_blank"><img src="http://img.youtube.com/vi/VhjxvEabOX0/0.jpg"
 alt="Introduction to Standard Clojure Style video preview" width="260" height="195" border="10" /></a>
 
-[Clojure/conj 2024]:https://2024.clojure-conj.org/
+[Clojure/conj 2024]: https://2024.clojure-conj.org/
+
+## Install via Homebrew
+
+```sh
+brew tap oakmac/tap
+brew install standard-clj
+```
+
+This installs a self-contained binary. No Node.js or Bun install required.
 
 ## Project Background and Rationale
 
@@ -32,9 +41,9 @@ Standard Clojure Style aspires to be the obvious, [boring choice] for formatting
 * Fast!
   * can format [~100,000 lines of code in under 2 seconds](https://youtu.be/VhjxvEabOX0?t=60)
 
-[Issue #1]:https://github.com/oakmac/standard-clojure-style-js/issues/1
-[boring choice]:https://boringtechnology.club/
-["Rule 3"]:https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
+[Issue #1]: https://github.com/oakmac/standard-clojure-style-js/issues/1
+[boring choice]: https://boringtechnology.club/
+["Rule 3"]: https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649
 
 ## Try it online for free right now!
 
