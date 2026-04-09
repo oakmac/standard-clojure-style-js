@@ -86,6 +86,7 @@ your editor, on the web, CLI tooling, etc.
 
 - Example Emacs usage [in this post](https://x.com/ovstoica/status/1854192289498706012)
 - [Neovim plugin](https://git.sr.ht/~ioiojo/standard-clojure-style.nvim)
+- [Cursive for JetBrains IntelliJ IDEA](https://cursive-ide.com/)
 
 ### Implementations in Other Programming Languages
 
