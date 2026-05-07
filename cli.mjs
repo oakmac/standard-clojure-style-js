@@ -88,14 +88,14 @@ function exitHappy (s) {
   if (cliUtil.isString(s)) {
     printToStdout(s)
   }
-  process.exit(0)
+  process.exitCode = 0;
 }
 
 function exitSad (s) {
   if (cliUtil.isString(s)) {
     printToStderr(s)
   }
-  process.exit(1)
+  process.exitCode = 1;
 }
 
 function formatDuration (durationMs) {
