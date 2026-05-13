@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - [Issue #213] - fix bug with large file output cut short when using standard-clj with stdin/stdout ([PR-214])
+- [Issue #210] - fix bug with `:refer-clojure` and reader conditionals producing invalid `#?@` splicing inside `:exclude`/`:only` ([PR-215])
 
 ## [0.27.0] - 2026-03-09
 
@@ -293,6 +294,7 @@ All notable changes to this project will be documented in this file.
 [Issue #203]:https://github.com/oakmac/standard-clojure-style-js/issues/203
 [Issue #205]:https://github.com/oakmac/standard-clojure-style-js/issues/205
 [Issue #208]:https://github.com/oakmac/standard-clojure-style-js/issues/208
+[Issue #210]:https://github.com/oakmac/standard-clojure-style-js/issues/210
 [Issue #213]:https://github.com/oakmac/standard-clojure-style-js/issues/213
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
@@ -350,3 +352,4 @@ All notable changes to this project will be documented in this file.
 [PR-206]:https://github.com/oakmac/standard-clojure-style-js/pull/206
 [PR-209]:https://github.com/oakmac/standard-clojure-style-js/pull/209
 [PR-214]:https://github.com/oakmac/standard-clojure-style-js/pull/214
+[PR-215]:https://github.com/oakmac/standard-clojure-style-js/pull/215
