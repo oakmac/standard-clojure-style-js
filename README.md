@@ -12,6 +12,18 @@ alt="Introduction to Standard Clojure Style video preview" width="260" height="1
 
 [Clojure/conj 2024]: https://2024.clojure-conj.org/
 
+
+
+
+Issue #202:
+* https://claude.ai/chat/de4a0fef-303f-4267-8cd7-3c3bde525106 (fixed the ns, long context window)
+* https://claude.ai/chat/a48e84b0-5eb2-4ef9-9876-c80baa31c1d4 (new chat)
+* https://gemini.google.com/app/e5c052302cc82a02
+
+
+
+
+
 ## Install via Homebrew
 
 ```sh
