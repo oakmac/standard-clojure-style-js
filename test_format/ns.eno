@@ -994,8 +994,6 @@
 
 # refer-clojure with reader conditionals 4
 
-> FIXME: need to double-check this reader conditional syntax
-
 --Input
 (ns com.example.my-app
   (:refer-clojure :only [#?@(:cljs [dissoc conj]
@@ -1004,14 +1002,11 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure
-    :only #?@(:clj [frequencies int partition]
-              :cljs [conj dissoc])))
+  #?(:clj (:refer-clojure :only [frequencies int partition])
+     :cljs (:refer-clojure :only [conj dissoc])))
 --Expected
 
 # refer-clojure with reader conditionals 5
-
-> FIXME: need to double-check this reader conditional syntax
 
 --Input
 (ns com.example.my-app
@@ -1021,9 +1016,8 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure
-    :exclude #?@(:clj [frequencies int partition]
-                 :cljs [conj dissoc])))
+  #?(:clj (:refer-clojure :exclude [frequencies int partition])
+     :cljs (:refer-clojure :exclude [conj dissoc])))
 --Expected
 
 # refer-clojure with reader conditionals 6
@@ -1378,9 +1372,8 @@
 
 --Expected
 (ns com.example.my-app
-  (:refer-clojure
-    :exclude #?@(:clj [aaa bbb ccc]
-                 :cljs [aaa ddd])))
+  #?(:clj (:refer-clojure :exclude [aaa bbb ccc])
+     :cljs (:refer-clojure :exclude [aaa ddd])))
 --Expected
 
 # GitHub Issue #55 - metadata in ns 1
@@ -1543,9 +1536,8 @@
 
 --Expected
 (ns cljs.analyzer
-  (:refer-clojure
-    :exclude #?@(:clj [ensure macroexpand-1]
-                 :cljs [ensure js-reserved macroexpand-1 ns-interns]))
+  #?(:clj (:refer-clojure :exclude [ensure macroexpand-1])
+     :cljs (:refer-clojure :exclude [ensure js-reserved macroexpand-1 ns-interns]))
   #?(:cljs
      (:require-macros
       [cljs.analyzer.macros :refer [allowing-redef disallowing-ns* disallowing-recur no-warn with-warning-handlers wrapping-errors]]
@@ -2085,4 +2077,20 @@
    :prefix "zzz-"
    :impl-ns iii
    :load-impl-ns false)) ;; hhh
+--Expected
+
+# GitHub Issue #210 - bug with refer-clojure and reader conditionals
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/210
+
+--Input
+(ns repro
+  #?(:cljs (:refer-clojure :exclude [juxt])
+     :clj  (:refer-clojure :exclude [juxt format])))
+--Input
+
+--Expected
+(ns repro
+  #?(:clj (:refer-clojure :exclude [format juxt])
+     :cljs (:refer-clojure :exclude [juxt])))
 --Expected
