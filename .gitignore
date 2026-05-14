@@ -4,3 +4,4 @@ dist/
 node_modules/
 *.diff
 .standard-clj.edn
+code_dump.txt
