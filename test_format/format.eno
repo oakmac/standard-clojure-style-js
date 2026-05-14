@@ -2361,7 +2361,7 @@ com.example.my-app)
 
 # GitHub Issue #202 - metadata before arglist 1
 
-> https://github.com/oakmac/standard-clojure-style-js/issues/NNN
+> https://github.com/oakmac/standard-clojure-style-js/issues/202
 > Type hint on arglist in multi-arity defn should not change indentation:
 > body aligns with the first character of the first arg (the ^), not +2 from the opener.
 
