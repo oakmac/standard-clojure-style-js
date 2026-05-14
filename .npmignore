@@ -1,6 +1,7 @@
 .clj-kondo/
 .github/
 .lsp/
+docs/
 lib/
 scripts/
 test/
@@ -13,3 +14,4 @@ test_perf/
 .standard-clj.edn
 .standard-clj.json
 bun.lockb
+code_dump.txt
