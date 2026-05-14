@@ -2462,3 +2462,47 @@ com.example.my-app)
      (println x)
      (* x x))))
 --Expected
+
+# GitHub Issue #202 - metadata containing reader conditionals
+
+> If a metadata map contains a reader conditional, the depth tracking
+> should properly skip the entire map and align to the arglist.
+
+--Input
+(defn foo
+  (^{:doc #?(:clj "clj"
+             :cljs "cljs")} [a]
+    (bar a))
+  (^{:doc "other"} [a b]
+    (str a "-" b)))
+--Input
+
+--Expected
+(defn foo
+  (^{:doc #?(:clj "clj"
+             :cljs "cljs")} [a]
+   (bar a))
+  (^{:doc "other"} [a b]
+   (str a "-" b)))
+--Expected
+
+# GitHub Issue #202 - reader conditional arglist with metadata
+
+> If the arglist itself is wrapped in a reader conditional, and the
+> platform-specific arglists have metadata, they should still align correctly.
+
+--Input
+(defn foo
+  #?(:clj (^long [a]
+            (bar a))
+     :cljs (^number [a]
+             (bar a))))
+--Input
+
+--Expected
+(defn foo
+  #?(:clj (^long [a]
+           (bar a))
+     :cljs (^number [a]
+            (bar a))))
+--Expected

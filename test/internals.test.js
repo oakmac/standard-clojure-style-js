@@ -931,6 +931,19 @@ describe('findNextTextNodeSkippingMeta', () => {
     // The string opener `"` is the next text node
     expect(getNextNodeText('(^String "hello")')).toBe('"')
   })
+
+  test('skips metadata containing reader conditionals', () => {
+    // Tests that parenDepth correctly steps into and out of #?()
+    expect(getNextNodeText('(^{:doc #?(:clj "Clojure!" :cljs "ClojureScript!")} [a])')).toBe('[')
+
+    // Tests with splicing reader conditionals #?@() and arrays
+    expect(getNextNodeText('(^:private ^{:doc #?@(:clj ["a"] :default ["b"])} [a])')).toBe('[')
+  })
+
+  test('finds reader conditionals if they are the target form', () => {
+    // If the arglist itself is behind a reader conditional, the next node is #?(
+    expect(getNextNodeText('(^:meta #?(:clj [a] :cljs [b]))')).toBe('#?(')
+  })
 })
 
 // -----------------------------------------------------------------------------
