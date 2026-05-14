@@ -2358,3 +2358,151 @@ com.example.my-app)
                 {:key "030" :mult 0.3}]]
   nil)
 --Expected
+
+# GitHub Issue #202 - metadata before arglist 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/202
+> Type hint on arglist in multi-arity defn should not change indentation:
+> body aligns with the first character of the first arg (the ^), not +2 from the opener.
+
+--Input
+(defn ms->tg-dt
+  "Gets the current date-time in or converts a given `dt-ms` (date-time millis)
+   to the Telegram Date/Time format."
+  (^long []
+    (types/ms->tg-dt))
+  (^long [^long dt-ms]
+    (types/ms->tg-dt dt-ms)))
+--Input
+
+--Expected
+(defn ms->tg-dt
+  "Gets the current date-time in or converts a given `dt-ms` (date-time millis)
+   to the Telegram Date/Time format."
+  (^long []
+   (types/ms->tg-dt))
+  (^long [^long dt-ms]
+   (types/ms->tg-dt dt-ms)))
+--Expected
+
+# GitHub Issue #202 - metadata before arglist 2
+
+> Simpler reproducer — same shape as "Do not cross previous line last opener",
+> just with a return-type hint on the arglist.
+
+--Input
+(defn foo
+  (^long [a]
+    (bar a))
+  (^long [a b]
+    (str a "-" b)))
+--Input
+
+--Expected
+(defn foo
+  (^long [a]
+   (bar a))
+  (^long [a b]
+   (str a "-" b)))
+--Expected
+
+# GitHub Issue #202 - metadata before arglist 3
+
+> Keyword-shaped metadata should behave the same.
+
+--Input
+(defn foo
+  (^:private [a]
+    (bar a)))
+--Input
+
+--Expected
+(defn foo
+  (^:private [a]
+   (bar a)))
+--Expected
+
+# GitHub Issue #202 - metadata before arglist 4
+
+> Map-shaped metadata is a different parse path (the .meta is a map literal,
+> not a token), so worth a separate case.
+
+--Input
+(defn foo
+  (^{:doc "single arity"} [a]
+    (bar a))
+  (^{:doc "two arity"} [a b]
+    (str a "-" b)))
+--Input
+
+--Expected
+(defn foo
+  (^{:doc "single arity"} [a]
+   (bar a))
+  (^{:doc "two arity"} [a b]
+   (str a "-" b)))
+--Expected
+
+# GitHub Issue #202 - metadata before arglist 5
+
+> Body that crosses multiple lines should still align to ^, not to the opener.
+
+--Input
+(defn foo
+  (^long []
+    (let [x 1]
+      (println x)
+      (* x x))))
+--Input
+
+--Expected
+(defn foo
+  (^long []
+   (let [x 1]
+     (println x)
+     (* x x))))
+--Expected
+
+# GitHub Issue #202 - metadata containing reader conditionals
+
+> If a metadata map contains a reader conditional, the depth tracking
+> should properly skip the entire map and align to the arglist.
+
+--Input
+(defn foo
+  (^{:doc #?(:clj "clj"
+             :cljs "cljs")} [a]
+    (bar a))
+  (^{:doc "other"} [a b]
+    (str a "-" b)))
+--Input
+
+--Expected
+(defn foo
+  (^{:doc #?(:clj "clj"
+             :cljs "cljs")} [a]
+   (bar a))
+  (^{:doc "other"} [a b]
+   (str a "-" b)))
+--Expected
+
+# GitHub Issue #202 - reader conditional arglist with metadata
+
+> If the arglist itself is wrapped in a reader conditional, and the
+> platform-specific arglists have metadata, they should still align correctly.
+
+--Input
+(defn foo
+  #?(:clj (^long [a]
+            (bar a))
+     :cljs (^number [a]
+             (bar a))))
+--Input
+
+--Expected
+(defn foo
+  #?(:clj (^long [a]
+           (bar a))
+     :cljs (^number [a]
+            (bar a))))
+--Expected

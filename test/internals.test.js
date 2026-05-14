@@ -849,6 +849,103 @@ test('parseJavaPackageWithClass', () => {
   expect(example2.className).toBe(null)
 })
 
+describe('findNextNodeWithText', () => {
+  // Helper: parses code, flattens the tree, finds the index of a specific text,
+  // and runs the function starting from the next index.
+  function getNextNode (code, startAfterText) {
+    const tree = scsLib.parse(code)
+    const nodes = scsLib._flattenTree(tree)
+    const startIdx = nodes.findIndex(n => n.text === startAfterText)
+    return scsLib._findNextNodeWithText(nodes, startIdx + 1)
+  }
+
+  test('finds the immediate next text node (including whitespace)', () => {
+    const node = getNextNode('(a b)', 'a')
+    expect(node.text).toBe(' ')
+    expect(node.name).toBe('whitespace')
+  })
+
+  test('finds the next token node if no whitespace exists between them', () => {
+    const node = getNextNode('(+ 1 2)', '(')
+    expect(node.text).toBe('+')
+    expect(node.name).toBe('token')
+  })
+
+  test('finds metadata markers without skipping them', () => {
+    const node = getNextNode('(^long [a])', '(')
+    expect(node.text).toBe('^')
+    expect(node.name).toBe('.marker')
+  })
+
+  test('finds reader discards without skipping them', () => {
+    const node = getNextNode('(#_ignore [a])', '(')
+    expect(node.text).toBe('#_')
+    expect(node.name).toBe('marker')
+  })
+
+  test('returns null if there are no subsequent nodes with text', () => {
+    const node = getNextNode('(a)', ')')
+    expect(node).toBeNull()
+  })
+})
+
+describe('findNextTextNodeSkippingMeta', () => {
+  // Helper: parses code, flattens the tree, finds the first '(',
+  // and runs the lookahead function starting from the next index.
+  function getNextNodeText (code) {
+    const tree = scsLib.parse(code)
+    const nodes = scsLib._flattenTree(tree)
+    const openerIdx = nodes.findIndex(n => n.name === '.open' && n.text === '(')
+
+    const targetNode = scsLib._findNextTextNodeSkippingMeta(nodes, openerIdx + 1)
+    return targetNode ? targetNode.text : null
+  }
+
+  test('skips single metadata token', () => {
+    expect(getNextNodeText('(^long [a])')).toBe('[')
+    expect(getNextNodeText('(^:private [a])')).toBe('[')
+  })
+
+  test('skips metadata map literals', () => {
+    expect(getNextNodeText('(^{:doc "foo"} [a])')).toBe('[')
+    expect(getNextNodeText('(^{:a 1 :b 2} [a])')).toBe('[')
+  })
+
+  test('skips chained metadata', () => {
+    expect(getNextNodeText('(^:private ^long [a])')).toBe('[')
+    expect(getNextNodeText('(^{:doc "a"} ^:private ^long [a])')).toBe('[')
+  })
+
+  test('works normally when no metadata is present', () => {
+    expect(getNextNodeText('([a])')).toBe('[')
+    expect(getNextNodeText('(foo bar)')).toBe('foo')
+  })
+
+  test('skips reader discards (#_)', () => {
+    expect(getNextNodeText('(#_ignore [a])')).toBe('[')
+    expect(getNextNodeText('(#_ [ignored list] [a])')).toBe('[')
+    expect(getNextNodeText('(#_ {:ignored :map} [a])')).toBe('[')
+  })
+
+  test('safely identifies strings as the target form', () => {
+    // The string opener `"` is the next text node
+    expect(getNextNodeText('(^String "hello")')).toBe('"')
+  })
+
+  test('skips metadata containing reader conditionals', () => {
+    // Tests that parenDepth correctly steps into and out of #?()
+    expect(getNextNodeText('(^{:doc #?(:clj "Clojure!" :cljs "ClojureScript!")} [a])')).toBe('[')
+
+    // Tests with splicing reader conditionals #?@() and arrays
+    expect(getNextNodeText('(^:private ^{:doc #?@(:clj ["a"] :default ["b"])} [a])')).toBe('[')
+  })
+
+  test('finds reader conditionals if they are the target form', () => {
+    // If the arglist itself is behind a reader conditional, the next node is #?(
+    expect(getNextNodeText('(^:meta #?(:clj [a] :cljs [b]))')).toBe('#?(')
+  })
+})
+
 // -----------------------------------------------------------------------------
 // Util
 
