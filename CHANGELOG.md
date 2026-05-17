@@ -212,7 +212,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.27.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.28.0...HEAD
+[0.28.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.28.0
 [0.27.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.27.0
 [0.26.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.26.0
 [0.25.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.25.0
