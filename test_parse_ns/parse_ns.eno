@@ -3679,3 +3679,393 @@
   "errorMessage": ":gen-class :methods must be a vector of method vectors."
 }
 --Expected
+
+# parse gen-class exposes and exposes-methods
+
+--Input
+(ns foo
+  (:gen-class
+   :exposes {z-field {:set setZ :get getZ}
+             a-field {:get getA}
+             write-only {:set setWriteOnly}
+             noop {}}
+   :exposes-methods {z-method callSuperZ
+                     a-method callSuperA}
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "exposes": {
+      "value": [
+        {
+          "fieldName": "z-field",
+          "getter": "getZ",
+          "setter": "setZ"
+        },
+        {
+          "fieldName": "a-field",
+          "getter": "getA"
+        },
+        {
+          "fieldName": "write-only",
+          "setter": "setWriteOnly"
+        },
+        {
+          "fieldName": "noop"
+        }
+      ]
+    },
+    "exposes-methods": {
+      "value": [
+        {
+          "superMethodName": "z-method",
+          "exposedName": "callSuperZ"
+        },
+        {
+          "superMethodName": "a-method",
+          "exposedName": "callSuperA"
+        }
+      ]
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# parse empty gen-class exposes maps
+
+--Input
+(ns foo (:gen-class :exposes {} :exposes-methods {}))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "exposes": {
+      "value": []
+    },
+    "exposes-methods": {
+      "value": []
+    }
+  }
+}
+--Expected
+
+# parse comments on gen-class exposes values
+
+--Input
+(ns foo
+  (:gen-class
+   ;; exposed fields above
+   :exposes {value {:get getValue}} ; exposed fields after
+   ;; exposed methods above
+   :exposes-methods {close callSuperClose} ; exposed methods after
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "exposes": {
+      "commentsAbove": [";; exposed fields above"],
+      "value": [
+        {
+          "fieldName": "value",
+          "getter": "getValue"
+        }
+      ],
+      "commentAfter": "; exposed fields after"
+    },
+    "exposes-methods": {
+      "commentsAbove": [";; exposed methods above"],
+      "value": [
+        {
+          "superMethodName": "close",
+          "exposedName": "callSuperClose"
+        }
+      ],
+      "commentAfter": "; exposed methods after"
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# parse gen-class exposes inside a reader conditional
+
+--Input
+(ns foo
+  #?(:clj
+     (:gen-class
+      :exposes {value {:get getValue}}
+      :exposes-methods {close callSuperClose})))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "platform": ":clj",
+    "exposes": {
+      "value": [
+        {
+          "fieldName": "value",
+          "getter": "getValue"
+        }
+      ]
+    },
+    "exposes-methods": {
+      "value": [
+        {
+          "superMethodName": "close",
+          "exposedName": "callSuperClose"
+        }
+      ]
+    }
+  }
+}
+--Expected
+
+# parse gen-class exposes preserves metadata
+
+--Input
+(ns foo
+  (:gen-class
+   :exposes {^String value {:get ^:deprecated readValue :set writeValue}}
+   :exposes-methods {^:deprecated close callSuperClose}))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "exposes": {
+      "value": [
+        {
+          "fieldName": "^String value",
+          "getter": "^:deprecated readValue",
+          "setter": "writeValue"
+        }
+      ]
+    },
+    "exposes-methods": {
+      "value": [
+        {
+          "superMethodName": "^:deprecated close",
+          "exposedName": "callSuperClose"
+        }
+      ]
+    }
+  }
+}
+--Expected
+
+# parse gen-class exposes requires an outer map
+
+--Input
+(ns foo (:gen-class :exposes []))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes must be a map of protected-field names to accessor maps."
+}
+--Expected
+
+# parse gen-class exposes requires field and accessor-map pairs
+
+--Input
+(ns foo (:gen-class :exposes {value}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes must contain protected-field and accessor-map pairs."
+}
+--Expected
+
+# parse gen-class exposes requires symbol field names
+
+--Input
+(ns foo (:gen-class :exposes {[value] {:get getValue}}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes protected field names must be symbols."
+}
+--Expected
+
+# parse gen-class exposes requires accessor maps
+
+--Input
+(ns foo (:gen-class :exposes {value getValue}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes field values must be maps containing :get and/or :set."
+}
+--Expected
+
+# parse gen-class exposes requires accessor pairs
+
+--Input
+(ns foo (:gen-class :exposes {value {:get}}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes accessor maps must contain keyword and method-name pairs."
+}
+--Expected
+
+# parse gen-class exposes rejects unknown accessor keys
+
+--Input
+(ns foo (:gen-class :exposes {value {:read getValue}}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes accessor keys must be :get or :set."
+}
+--Expected
+
+# parse gen-class exposes rejects repeated accessor keys
+
+--Input
+(ns foo (:gen-class :exposes {value {:get getValue :get readValue}}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes accessor maps cannot repeat :get or :set."
+}
+--Expected
+
+# parse gen-class exposes requires symbol accessor names
+
+--Input
+(ns foo (:gen-class :exposes {value {:get [getValue]}}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes accessor method names must be symbols."
+}
+--Expected
+
+# parse gen-class exposes-methods requires an outer map
+
+--Input
+(ns foo (:gen-class :exposes-methods []))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes-methods must be a map of superclass-method names to exposed names."
+}
+--Expected
+
+# parse gen-class exposes-methods requires name pairs
+
+--Input
+(ns foo (:gen-class :exposes-methods {close}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes-methods must contain superclass-method and exposed-name pairs."
+}
+--Expected
+
+# parse gen-class exposes-methods requires symbol names
+
+--Input
+(ns foo (:gen-class :exposes-methods {[close] callSuperClose}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :exposes-methods names must be symbols."
+}
+--Expected
+
+# parse all structured gen-class values together
+
+--Input
+(ns foo
+  (:gen-class
+   :constructors {[String] []}
+   :methods [[run [] void]]
+   :exposes {value {:get getValue}}
+   :exposes-methods {close callSuperClose}))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "constructors": {
+      "value": [
+        {
+          "parameterTypes": ["String"],
+          "superParameterTypes": []
+        }
+      ]
+    },
+    "methods": {
+      "value": [
+        {
+          "name": "run",
+          "parameterTypes": [],
+          "returnType": "void"
+        }
+      ]
+    },
+    "exposes": {
+      "value": [
+        {
+          "fieldName": "value",
+          "getter": "getValue"
+        }
+      ]
+    },
+    "exposes-methods": {
+      "value": [
+        {
+          "superMethodName": "close",
+          "exposedName": "callSuperClose"
+        }
+      ]
+    }
+  }
+}
+--Expected
