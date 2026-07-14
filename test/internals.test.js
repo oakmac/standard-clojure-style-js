@@ -71,6 +71,57 @@ describe('String Util', () => {
     })
   })
 
+  describe('strLastIndexOf', () => {
+    test('returns the index of the last occurrence', () => {
+      expect(scsLib._strLastIndexOf('a,b,c', ',')).toBe(3)
+      expect(scsLib._strLastIndexOf('abc\ndef\nxyz', '\n')).toBe(7)
+      expect(scsLib._strLastIndexOf('aaa', 'a')).toBe(2)
+    })
+
+    test('returns -1 when needle is not found', () => {
+      expect(scsLib._strLastIndexOf('abc', 'z')).toBe(-1)
+      expect(scsLib._strLastIndexOf('', 'a')).toBe(-1)
+      expect(scsLib._strLastIndexOf('abc', '\n')).toBe(-1)
+    })
+  })
+
+  describe('strIndexOfFrom', () => {
+    test('finds the first occurrence at or after fromIdx', () => {
+      expect(scsLib._strIndexOfFrom('a,b,c', ',', 0)).toBe(1)
+      expect(scsLib._strIndexOfFrom('a,b,c', ',', 2)).toBe(3)
+      // fromIdx pointing directly at a match
+      expect(scsLib._strIndexOfFrom('a,b,c', ',', 3)).toBe(3)
+    })
+
+    test('returns -1 when needle is not found at or after fromIdx', () => {
+      expect(scsLib._strIndexOfFrom('a,b,c', ',', 4)).toBe(-1)
+      expect(scsLib._strIndexOfFrom('abc', 'z', 0)).toBe(-1)
+      expect(scsLib._strIndexOfFrom('', 'a', 0)).toBe(-1)
+    })
+  })
+
+  describe('strHasNonWhitespaceChars', () => {
+    test('is equivalent to strTrim(s) !== emptyString', () => {
+      const cases = ['', ' ', '   ', '\n', ' \t\n ', 'a', ' a ', ',', ' , ', '\u00a0', 'abc']
+      for (const s of cases) {
+        expect(scsLib._strHasNonWhitespaceChars(s)).toBe(scsLib._strTrim(s) !== '')
+      }
+    })
+
+    test('whitespace-only strings return false', () => {
+      expect(scsLib._strHasNonWhitespaceChars('')).toBe(false)
+      expect(scsLib._strHasNonWhitespaceChars('   ')).toBe(false)
+      expect(scsLib._strHasNonWhitespaceChars(' \t\r\n ')).toBe(false)
+    })
+
+    test('any non-whitespace character returns true', () => {
+      expect(scsLib._strHasNonWhitespaceChars('a')).toBe(true)
+      expect(scsLib._strHasNonWhitespaceChars('   x   ')).toBe(true)
+      // NOTE: commas are NOT whitespace for this function (same as strTrim)
+      expect(scsLib._strHasNonWhitespaceChars(',')).toBe(true)
+    })
+  })
+
   describe('toUpperCase', () => {
     test('converts string to uppercase', () => {
       expect(scsLib._toUpperCase('hello')).toBe('HELLO')
@@ -416,6 +467,21 @@ test('removeTrailingWhitespace', () => {
   // NOTE: this function does not remove newline characters
   // it only needs to operate against a single line
   expect(scsLib._removeTrailingWhitespace('aaa \n ')).toBe('aaa \n')
+
+  // edge cases: empty and whitespace-only strings
+  expect(scsLib._removeTrailingWhitespace('')).toBe('')
+  expect(scsLib._removeTrailingWhitespace(' ')).toBe('')
+  expect(scsLib._removeTrailingWhitespace(',')).toBe('')
+  expect(scsLib._removeTrailingWhitespace(' ,, ,, ')).toBe('')
+})
+
+test('isSpaceOrComma', () => {
+  expect(scsLib._isSpaceOrComma(' ')).toBe(true)
+  expect(scsLib._isSpaceOrComma(',')).toBe(true)
+  expect(scsLib._isSpaceOrComma('a')).toBe(false)
+  expect(scsLib._isSpaceOrComma('\n')).toBe(false)
+  expect(scsLib._isSpaceOrComma('\t')).toBe(false)
+  expect(scsLib._isSpaceOrComma('')).toBe(false)
 })
 
 test('removeCharsUpToNewline', () => {
@@ -423,6 +489,12 @@ test('removeCharsUpToNewline', () => {
   expect(scsLib._removeCharsUpToNewline('abc\nxyz')).toBe('xyz')
   expect(scsLib._removeCharsUpToNewline('abc')).toBe('abc')
   expect(scsLib._removeCharsUpToNewline('abc\ndef\n\nxyz')).toBe('xyz')
+
+  // edge cases: newline at the very end, or string is only a newline
+  expect(scsLib._removeCharsUpToNewline('abc\n')).toBe('')
+  expect(scsLib._removeCharsUpToNewline('\n')).toBe('')
+  expect(scsLib._removeCharsUpToNewline('')).toBe('')
+  expect(scsLib._removeCharsUpToNewline('\nabc')).toBe('abc')
 })
 
 test('txtHasCommasAfterNewline', () => {
@@ -432,6 +504,42 @@ test('txtHasCommasAfterNewline', () => {
   expect(scsLib._txtHasCommasAfterNewline('  \n\n  ')).toBe(false)
   expect(scsLib._txtHasCommasAfterNewline(',, \n ')).toBe(false)
   expect(scsLib._txtHasCommasAfterNewline(',, \n\n ')).toBe(false)
+
+  // the comma must come after the *last* newline
+  expect(scsLib._txtHasCommasAfterNewline('a,b\nc')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline('a\nb,c\nd')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline('a\nb,')).toBe(true)
+
+  // strings without a newline always return false, even with commas
+  expect(scsLib._txtHasCommasAfterNewline(',,,')).toBe(false)
+  expect(scsLib._txtHasCommasAfterNewline('')).toBe(false)
+})
+
+test('numSpacesAfterNewline', () => {
+  expect(isFn(scsLib._numSpacesAfterNewline)).toBe(true)
+  expect(scsLib._numSpacesAfterNewline({ text: '\n' })).toBe(0)
+  expect(scsLib._numSpacesAfterNewline({ text: '\n  ' })).toBe(2)
+  expect(scsLib._numSpacesAfterNewline({ text: '\n    ' })).toBe(4)
+  // only the characters after the *last* newline are counted
+  expect(scsLib._numSpacesAfterNewline({ text: '\n  \n ' })).toBe(1)
+  expect(scsLib._numSpacesAfterNewline({ text: '  \n   ' })).toBe(3)
+})
+
+test('isNewlineNodeWithCommaOnNextLine', () => {
+  expect(isFn(scsLib._isNewlineNodeWithCommaOnNextLine)).toBe(true)
+
+  // newline node with a comma after the last newline
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'whitespace', text: '\n ,' })).toBe(true)
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'whitespace', text: '\n\n  ,,' })).toBe(true)
+
+  // newline node without a comma on the next line
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'whitespace', text: '\n ' })).toBe(false)
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'whitespace', text: ', \n ' })).toBe(false)
+
+  // not a newline node
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'whitespace', text: ' , ' })).toBe(false)
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine({ name: 'token', text: 'a,b' })).toBe(false)
+  expect(scsLib._isNewlineNodeWithCommaOnNextLine(null)).toBe(false)
 })
 
 test('Named parser - basic functionality', () => {
