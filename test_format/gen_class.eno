@@ -208,3 +208,147 @@
   (:gen-class
    :methods [[^{:static true} create [^Deprecated String] Object]]))
 --Expected
+
+# gen-class exposes and exposes-methods
+
+--Input
+(ns foo
+ (:gen-class
+ :exposes { z-field {:set setZ :get getZ}
+ a-field {:get getA}
+ write-only {:set setWriteOnly}
+ noop {} }
+ :exposes-methods { z-method callSuperZ
+ a-method callSuperA }
+ :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :main true
+   :exposes {z-field {:get getZ :set setZ}
+             a-field {:get getA}
+             write-only {:set setWriteOnly}
+             noop {}}
+   :exposes-methods {z-method callSuperZ
+                     a-method callSuperA}))
+--Expected
+
+# empty gen-class exposes maps
+
+--Input
+(ns foo (:gen-class :exposes {} :exposes-methods {}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :exposes {}
+   :exposes-methods {}))
+--Expected
+
+# single gen-class exposed field
+
+--Input
+(ns foo (:gen-class :exposes {value {:get getValue :set setValue}}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :exposes {value {:get getValue :set setValue}}))
+--Expected
+
+# gen-class exposes accepts commas
+
+--Input
+(ns foo
+ (:gen-class
+ :exposes {value, {:set, setValue, :get, getValue}, other, {:get, getOther}}
+ :exposes-methods {close, callSuperClose, reset, callSuperReset}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :exposes {value {:get getValue :set setValue}
+             other {:get getOther}}
+   :exposes-methods {close callSuperClose
+                     reset callSuperReset}))
+--Expected
+
+# comments on gen-class exposes values
+
+--Input
+(ns foo
+ (:gen-class
+ ;; exposed fields above
+ :exposes {value {:get getValue}} ; exposed fields after
+ ;; exposed methods above
+ :exposes-methods {close callSuperClose} ; exposed methods after
+ :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :main true
+   ;; exposed fields above
+   :exposes {value {:get getValue}} ; exposed fields after
+   ;; exposed methods above
+   :exposes-methods {close callSuperClose})) ; exposed methods after
+--Expected
+
+# gen-class exposes inside a reader conditional
+
+--Input
+(ns foo
+ #?(:clj (:gen-class
+ :exposes {value {:get getValue}}
+ :exposes-methods {close callSuperClose})))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:gen-class
+      :exposes {value {:get getValue}}
+      :exposes-methods {close callSuperClose})))
+--Expected
+
+# gen-class exposes preserves metadata
+
+--Input
+(ns foo
+ (:gen-class
+ :exposes {^String value {:get ^:deprecated readValue :set writeValue}}
+ :exposes-methods {^:deprecated close callSuperClose}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :exposes {^String value {:get ^:deprecated readValue :set writeValue}}
+   :exposes-methods {^:deprecated close callSuperClose}))
+--Expected
+
+# all structured gen-class values together
+
+--Input
+(ns foo
+ (:gen-class
+ :exposes-methods {close callSuperClose}
+ :methods [[run [] void]]
+ :exposes {value {:get getValue}}
+ :constructors {[String] []}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :constructors {[String] []}
+   :methods [[run [] void]]
+   :exposes {value {:get getValue}}
+   :exposes-methods {close callSuperClose}))
+--Expected
