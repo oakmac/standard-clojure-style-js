@@ -2506,3 +2506,28 @@ com.example.my-app)
      :cljs (^number [a]
             (bar a))))
 --Expected
+
+# GitHub Issue #197 - do not align comments across blank lines
+> https://github.com/oakmac/standard-clojure-style-js/issues/197
+
+--Input
+;; comment1
+(aaa
+bbb ccc)
+
+;; comment2
+(aaa bbb
+         ccc
+         ddd)
+--Input
+
+--Expected
+;; comment1
+(aaa
+  bbb ccc)
+
+;; comment2
+(aaa bbb
+  ccc
+  ddd)
+--Expected
