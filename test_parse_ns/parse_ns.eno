@@ -3313,7 +3313,6 @@
 --Expected
 
 # gen-class constructors with multiple signatures
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -3357,7 +3356,6 @@
 --Expected
 
 # empty gen-class constructors
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo (:gen-class :constructors {} :main false))
@@ -3379,7 +3377,6 @@
 --Expected
 
 # comments on gen-class constructors
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -3417,7 +3414,6 @@
 --Expected
 
 # gen-class constructors inside a reader conditional
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -3445,5 +3441,241 @@
       "value": true
     }
   }
+}
+--Expected
+
+# gen-class methods with multiple signatures
+
+--Input
+(ns foo
+  (:gen-class
+   :name foo.Bar
+   :methods [[foo [String long] void]
+             [bar [] String]]
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "foo.Bar"
+    },
+    "methods": {
+      "value": [
+        {
+          "name": "foo",
+          "parameterTypes": ["String", "long"],
+          "returnType": "void"
+        },
+        {
+          "name": "bar",
+          "parameterTypes": [],
+          "returnType": "String"
+        }
+      ]
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# empty gen-class methods
+
+--Input
+(ns foo (:gen-class :methods [] :main false))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "methods": {
+      "value": []
+    },
+    "main": {
+      "value": false
+    }
+  }
+}
+--Expected
+
+# comments on gen-class methods
+
+--Input
+(ns foo
+  (:gen-class
+   ;; comment above
+   :methods [[foo [] void]
+             [bar [String] String]] ; comment after
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "methods": {
+      "commentsAbove": [";; comment above"],
+      "value": [
+        {
+          "name": "foo",
+          "parameterTypes": [],
+          "returnType": "void"
+        },
+        {
+          "name": "bar",
+          "parameterTypes": ["String"],
+          "returnType": "String"
+        }
+      ],
+      "commentAfter": "; comment after"
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# gen-class methods inside a reader conditional
+
+--Input
+(ns foo
+  #?(:clj
+     (:gen-class
+      :methods [[foo [] void]]
+      :main true)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "platform": ":clj",
+    "methods": {
+      "value": [
+        {
+          "name": "foo",
+          "parameterTypes": [],
+          "returnType": "void"
+        }
+      ]
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# gen-class methods rejects a non-vector entry
+
+--Input
+(ns foo (:gen-class :methods [foo]))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods must be a vector of method vectors."
+}
+--Expected
+
+# gen-class methods rejects a missing return type
+
+--Input
+(ns foo (:gen-class :methods [[foo [String]]]))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods entries must contain a name, parameter-types vector, and return type."
+}
+--Expected
+
+# gen-class methods requires a parameter vector
+
+--Input
+(ns foo (:gen-class :methods [[foo String void]]))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods parameter types must be provided in a vector."
+}
+--Expected
+
+# gen-class methods rejects extra forms
+
+--Input
+(ns foo (:gen-class :methods [[foo [String] void extra]]))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods entries must contain a name, parameter-types vector, and return type."
+}
+--Expected
+
+# gen-class methods rejects nested parameter forms
+
+--Input
+(ns foo (:gen-class :methods [[foo [[String]] void]]))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods parameter types must be symbols inside a vector."
+}
+--Expected
+
+# gen-class methods preserves metadata
+
+--Input
+(ns foo
+  (:gen-class
+   :methods [[^{:static true} create [^Deprecated String] Object]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "methods": {
+      "value": [
+        {
+          "name": "^{:static true} create",
+          "parameterTypes": ["^Deprecated String"],
+          "returnType": "Object"
+        }
+      ]
+    }
+  }
+}
+--Expected
+
+# gen-class methods requires an outer vector
+
+--Input
+(ns foo (:gen-class :methods {}))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":gen-class :methods must be a vector of method vectors."
 }
 --Expected

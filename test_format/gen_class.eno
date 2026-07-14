@@ -1,5 +1,4 @@
 # gen-class constructors with multiple signatures
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -21,7 +20,6 @@
 --Expected
 
 # empty gen-class constructors
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo (:gen-class :constructors {} :main false))
@@ -35,7 +33,6 @@
 --Expected
 
 # single gen-class constructor
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo (:gen-class :constructors { [String] [Object] }))
@@ -48,7 +45,6 @@
 --Expected
 
 # gen-class constructors with commas and mixed type symbols
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -67,7 +63,6 @@
 --Expected
 
 # comments on gen-class constructors
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -88,7 +83,6 @@
 --Expected
 
 # gen-class constructors inside a reader conditional
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
 
 --Input
 (ns foo
@@ -101,4 +95,116 @@
      (:gen-class
       :constructors {[String] []}
       :main true)))
+--Expected
+
+# gen-class methods with multiple signatures
+
+--Input
+(ns foo
+ (:gen-class
+ :main true
+ :methods [ [foo [String long] void]
+ [bar [] String] ]
+ :name foo.Bar))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name foo.Bar
+   :methods [[foo [String long] void]
+             [bar [] String]]
+   :main true))
+--Expected
+
+# empty gen-class methods
+
+--Input
+(ns foo (:gen-class :methods [] :main false))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :methods []
+   :main false))
+--Expected
+
+# single gen-class method
+
+--Input
+(ns foo (:gen-class :methods [[foo [] void]]))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :methods [[foo [] void]]))
+--Expected
+
+# gen-class methods with commas and mixed type symbols
+
+--Input
+(ns foo
+ (:gen-class
+ :methods [[transform, [java.lang.String, clojure.lang.IPersistentMap, long], java.lang.Object],
+ [reset, [], void]]
+ :prefix "native-"))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :methods [[transform [java.lang.String clojure.lang.IPersistentMap long] java.lang.Object]
+             [reset [] void]]
+   :prefix "native-"))
+--Expected
+
+# comments on gen-class methods
+
+--Input
+(ns foo
+ (:gen-class
+ ;; comment above
+ :methods [[foo [] void]
+ [bar [String] String]] ; comment after
+ :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   ;; comment above
+   :methods [[foo [] void]
+             [bar [String] String]] ; comment after
+   :main true))
+--Expected
+
+# gen-class methods inside a reader conditional
+
+--Input
+(ns foo
+ #?(:clj (:gen-class :methods [[foo [] void]] :main true)))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:gen-class
+      :methods [[foo [] void]]
+      :main true)))
+--Expected
+
+# gen-class methods preserve metadata
+
+--Input
+(ns foo
+ (:gen-class
+ :methods [[^{:static true} create [^Deprecated String] Object]]))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :methods [[^{:static true} create [^Deprecated String] Object]]))
 --Expected
