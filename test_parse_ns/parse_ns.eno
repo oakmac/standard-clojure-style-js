@@ -3311,3 +3311,139 @@
   }
 }
 --Expected
+
+# gen-class constructors with multiple signatures
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+  (:gen-class
+   :name foo.Bar
+   :constructors {[java.lang.String] []
+                  [] []
+                  [String long] [String]}
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "foo.Bar"
+    },
+    "constructors": {
+      "value": [
+        {
+          "parameterTypes": ["java.lang.String"],
+          "superParameterTypes": []
+        },
+        {
+          "parameterTypes": [],
+          "superParameterTypes": []
+        },
+        {
+          "parameterTypes": ["String", "long"],
+          "superParameterTypes": ["String"]
+        }
+      ]
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# empty gen-class constructors
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo (:gen-class :constructors {} :main false))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "constructors": {
+      "value": []
+    },
+    "main": {
+      "value": false
+    }
+  }
+}
+--Expected
+
+# comments on gen-class constructors
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+  (:gen-class
+   ;; comment above
+   :constructors {[String] []
+                  [long] [long]} ; comment after
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "constructors": {
+      "commentsAbove": [";; comment above"],
+      "value": [
+        {
+          "parameterTypes": ["String"],
+          "superParameterTypes": []
+        },
+        {
+          "parameterTypes": ["long"],
+          "superParameterTypes": ["long"]
+        }
+      ],
+      "commentAfter": "; comment after"
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# gen-class constructors inside a reader conditional
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+  #?(:clj
+     (:gen-class
+      :constructors {[String] []}
+      :main true)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "platform": ":clj",
+    "constructors": {
+      "value": [
+        {
+          "parameterTypes": ["String"],
+          "superParameterTypes": []
+        }
+      ]
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected

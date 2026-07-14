@@ -1,0 +1,104 @@
+# gen-class constructors with multiple signatures
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+ (:gen-class
+ :main true
+ :constructors { [java.lang.String] []
+ [] [], [String long] [String] }
+ :name foo.Bar))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name foo.Bar
+   :constructors {[java.lang.String] []
+                  [] []
+                  [String long] [String]}
+   :main true))
+--Expected
+
+# empty gen-class constructors
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo (:gen-class :constructors {} :main false))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :constructors {}
+   :main false))
+--Expected
+
+# single gen-class constructor
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo (:gen-class :constructors { [String] [Object] }))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :constructors {[String] [Object]}))
+--Expected
+
+# gen-class constructors with commas and mixed type symbols
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+ (:gen-class
+ :constructors {[long double], [long],
+ [java.lang.String clojure.lang.IPersistentMap], []}
+ :prefix "native-"))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :constructors {[long double] [long]
+                  [java.lang.String clojure.lang.IPersistentMap] []}
+   :prefix "native-"))
+--Expected
+
+# comments on gen-class constructors
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+ (:gen-class
+ ;; constructors above
+ :constructors {[String] []
+ [long] [long]} ; constructors after
+ :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   ;; constructors above
+   :constructors {[String] []
+                  [long] [long]} ; constructors after
+   :main true))
+--Expected
+
+# gen-class constructors inside a reader conditional
+> https://github.com/oakmac/standard-clojure-style-js/issues/31
+
+--Input
+(ns foo
+ #?(:clj (:gen-class :constructors {[String] []} :main true)))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:gen-class
+      :constructors {[String] []}
+      :main true)))
+--Expected
