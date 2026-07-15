@@ -1,0 +1,245 @@
+# GitHub Issue #125 - metadata on require line 1
+
+> metadata attached to a require line should be preserved
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [grouper.core :as grouper]
+   [metabase.models.setting :refer [defsetting]]
+   [metabase.util.i18n :refer [deferred-tru]]
+   [potemkin :as p])
+  (:import
+   (grouper.core Grouper)))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [grouper.core :as grouper]
+   [metabase.models.setting :refer [defsetting]]
+   [metabase.util.i18n :refer [deferred-tru]]
+   [potemkin :as p])
+  (:import
+   (grouper.core Grouper)))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 2
+
+> shorthand keyword metadata should travel with its require line when sorting
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:no-doc
+   [zzz.core :as z]
+   [aaa.core :as a]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   ^:no-doc
+   [zzz.core :as z]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 3
+
+> inline metadata should be moved to its own line above the require,
+> matching the existing convention for discard forms
+
+--Input
+(ns com.example.my-app
+  (:require ^{:clj-kondo/ignore [:discouraged-namespace]} [zzz.core :as z] [aaa.core :as a]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.core :as z]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 4
+
+> metadata map with multiple entries must not leak values into the requires list
+> (currently produces a bogus [1] require)
+
+--Input
+(ns com.example.my-app
+  (:require ^{:a 1 :b 2} [bbb.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ^{:a 1 :b 2}
+   [bbb.core]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 5
+
+> stacked metadata forms should all be preserved
+
+--Input
+(ns com.example.my-app
+  (:require ^:no-doc ^{:added "0.1.0"} [bbb.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ^:no-doc ^{:added "0.1.0"}
+   [bbb.core]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 6
+
+> metadata on a require line inside a reader conditional
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   #?@(:clj (^{:clj-kondo/ignore [:discouraged-namespace]}
+             [zzz.jvm :as z.jvm]
+             [yyy.jvm :as y.jvm]))))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   #?@(:clj
+       [[yyy.jvm :as y.jvm]
+        ^{:clj-kondo/ignore [:discouraged-namespace]}
+        [zzz.jvm :as z.jvm]])))
+--Expected
+
+# GitHub Issue #125 - inline discard form with comment on require line
+
+> an inline discard form and same-line comment should not be deleted
+
+--Input
+(ns foo (:require #_:clj-kondo/ignore ;; some comment
+clojure.string))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   #_:clj-kondo/ignore ;; some comment
+   [clojure.string]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line with trailing requires
+
+> requires after the metadata-annotated line must be unaffected
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [mmm.core :as m]
+   [zzz.core :as z]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [mmm.core :as m]
+   [zzz.core :as z]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 9
+
+> type hints and stacked metadata; metadata travels with its require when sorting
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:zzz [com.example.zzz]
+   ^String [com.example.aaa]
+   ^:foo ^{:bar true} [com.example.mmm :as m]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   ^String
+   [com.example.aaa]
+   ^:foo ^{:bar true}
+   [com.example.mmm :as m]
+   ^:zzz
+   [com.example.zzz]))
+--Expected
+
+# GitHub Issue #125 - metadata on require line 10
+
+> metadata combined with comments; comments stay above the metadata line
+
+--Input
+(ns com.example.my-app
+  (:require
+   ;; this require needs a clj-kondo exception
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [com.example.bbb :as bbb] ;; keep this comment with bbb
+   [com.example.aaa]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [com.example.aaa]
+   ;; this require needs a clj-kondo exception
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [com.example.bbb :as bbb])) ;; keep this comment with bbb
+--Expected
+
+# discard form with end-of-line comment travels during sorting
+
+> a trailing comment on the same line as a mid-list discard form
+> should be preserved and travel with the require below it
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_:clj-kondo/ignore ;; some comment
+   [zzz.core]
+   [aaa.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #_:clj-kondo/ignore ;; some comment
+   [zzz.core]))
+--Expected
+
+# discard form before libspec with trailing comment
+
+> a reader discard before a same-line libspec must not consume the libspec's
+> trailing comment
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_:clj-kondo/ignore [zzz.core] ;; trailing comment
+   [aaa.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #_:clj-kondo/ignore
+   [zzz.core])) ;; trailing comment
+--Expected
