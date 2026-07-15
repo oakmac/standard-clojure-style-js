@@ -1,0 +1,303 @@
+# GitHub Issue #125 - metadata on require line 1
+
+> metadata attached to a require line should be preserved
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [grouper.core :as grouper]
+   [metabase.models.setting :refer [defsetting]]
+   [metabase.util.i18n :refer [deferred-tru]]
+   [potemkin :as p])
+  (:import
+   (grouper.core Grouper)))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "grouper.core",
+      "as": "grouper"
+    },
+    {
+      "symbol": "metabase.models.setting",
+      "refer": [
+        {"symbol": "defsetting"}
+      ]
+    },
+    {
+      "symbol": "metabase.util.i18n",
+      "refer": [
+        {"symbol": "deferred-tru"}
+      ]
+    },
+    {
+      "symbol": "potemkin",
+      "as": "p"
+    }
+  ],
+  "imports": [
+    {
+      "package": "grouper.core",
+      "classes": ["Grouper"]
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 2
+
+> shorthand keyword metadata stays attached to its require during sorting
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:no-doc
+   [zzz.core :as z]
+   [aaa.core :as a]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core",
+      "as": "a"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.core",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 3
+
+> inline metadata (same line as the require) is also preserved
+
+--Input
+(ns com.example.my-app
+  (:require ^{:clj-kondo/ignore [:discouraged-namespace]} [zzz.core :as z] [aaa.core :as a]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core",
+      "as": "a"
+    },
+    {
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "zzz.core",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 4
+
+> metadata map with multiple entries must not leak values into the requires list
+> (currently produces a bogus {"symbol": "1"} require)
+
+--Input
+(ns com.example.my-app
+  (:require ^{:a 1 :b 2} [bbb.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "metadata": ["^{:a 1 :b 2}"],
+      "symbol": "bbb.core"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 5
+
+> stacked metadata forms are preserved as separate array elements, in source order
+
+--Input
+(ns com.example.my-app
+  (:require ^:no-doc ^{:added "0.1.0"} [bbb.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "metadata": ["^:no-doc", "^{:added \"0.1.0\"}"],
+      "symbol": "bbb.core"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 6
+
+> metadata on a require line inside a reader conditional
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   #?@(:clj (^{:clj-kondo/ignore [:discouraged-namespace]}
+             [zzz.jvm :as z.jvm]
+             [yyy.jvm :as y.jvm]))))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core",
+      "as": "a"
+    },
+    {
+      "platform": ":clj",
+      "symbol": "yyy.jvm",
+      "as": "y.jvm"
+    },
+    {
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "platform": ":clj",
+      "symbol": "zzz.jvm",
+      "as": "z.jvm"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - inline discard form with comment on require line
+
+> an inline discard form and same-line comment should not be deleted
+
+--Input
+(ns foo (:require #_:clj-kondo/ignore ;; some comment
+clojure.string))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "requires": [
+    {
+      "commentsAbove": ["#_:clj-kondo/ignore ;; some comment"],
+      "symbol": "clojure.string"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line with trailing requires
+
+> requires after the metadata-annotated line must be unaffected
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core :as a]
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [mmm.core :as m]
+   [zzz.core :as z]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core",
+      "as": "a"
+    },
+    {
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "mmm.core",
+      "as": "m"
+    },
+    {
+      "symbol": "zzz.core",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 9
+
+> type hints and stacked metadata; metadata travels with its require when sorting
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:zzz [com.example.zzz]
+   ^String [com.example.aaa]
+   ^:foo ^{:bar true} [com.example.mmm :as m]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "metadata": ["^String"],
+      "symbol": "com.example.aaa"
+    },
+    {
+      "as": "m",
+      "metadata": ["^:foo", "^{:bar true}"],
+      "symbol": "com.example.mmm"
+    },
+    {
+      "metadata": ["^:zzz"],
+      "symbol": "com.example.zzz"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #125 - metadata on require line 10
+
+> metadata combined with commentsAbove and commentAfter on the same require
+
+--Input
+(ns com.example.my-app
+  (:require
+   ;; this require needs a clj-kondo exception
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [com.example.bbb :as bbb] ;; keep this comment with bbb
+   [com.example.aaa]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "com.example.aaa"
+    },
+    {
+      "as": "bbb",
+      "commentsAbove": [";; this require needs a clj-kondo exception"],
+      "commentAfter": ";; keep this comment with bbb",
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "com.example.bbb"
+    }
+  ]
+}
+--Expected
