@@ -202,3 +202,24 @@ clojure.string))
    ^{:clj-kondo/ignore [:discouraged-namespace]}
    [com.example.bbb :as bbb])) ;; keep this comment with bbb
 --Expected
+
+# discard form with end-of-line comment travels during sorting
+
+> a trailing comment on the same line as a mid-list discard form
+> should be preserved and travel with the require below it
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_:clj-kondo/ignore ;; some comment
+   [zzz.core]
+   [aaa.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #_:clj-kondo/ignore ;; some comment
+   [zzz.core]))
+--Expected

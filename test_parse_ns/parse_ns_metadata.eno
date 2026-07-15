@@ -301,3 +301,28 @@ clojure.string))
   ]
 }
 --Expected
+
+# discard form with end-of-line comment travels during sorting
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_:clj-kondo/ignore ;; some comment
+   [zzz.core]
+   [aaa.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core"
+    },
+    {
+      "commentsAbove": ["#_:clj-kondo/ignore ;; some comment"],
+      "symbol": "zzz.core"
+    }
+  ]
+}
+--Expected
