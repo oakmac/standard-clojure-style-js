@@ -223,3 +223,23 @@ clojure.string))
    #_:clj-kondo/ignore ;; some comment
    [zzz.core]))
 --Expected
+
+# discard form before libspec with trailing comment
+
+> a reader discard before a same-line libspec must not consume the libspec's
+> trailing comment
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_:clj-kondo/ignore [zzz.core] ;; trailing comment
+   [aaa.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #_:clj-kondo/ignore
+   [zzz.core])) ;; trailing comment
+--Expected
