@@ -186,3 +186,60 @@
   }
 }
 --Expected
+
+# gen-class metadata on name-like values
+
+--Input
+(ns foo
+  (:gen-class
+   :extends ^{Deprecated {}} java.io.FilterInputStream
+   :init ^:private init
+   :state ^{:doc "the state"} state))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "extends": {
+      "metadata": "^{Deprecated {}}",
+      "value": "java.io.FilterInputStream"
+    },
+    "init": {
+      "metadata": "^:private",
+      "value": "init"
+    },
+    "state": {
+      "metadata": "^{:doc \"the state\"}",
+      "value": "state"
+    }
+  }
+}
+--Expected
+
+# gen-class metadata on name-like string values
+
+--Input
+(ns foo
+  (:gen-class
+   :extends ^{Deprecated {}} "java.io.FilterInputStream"
+   :factory ^:a ^:b "create"))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "extends": {
+      "metadata": "^{Deprecated {}}",
+      "value": "\"java.io.FilterInputStream\""
+    },
+    "factory": {
+      "metadata": "^:a ^:b",
+      "value": "\"create\""
+    }
+  }
+}
+--Expected

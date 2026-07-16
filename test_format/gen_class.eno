@@ -442,3 +442,37 @@
    :impl-ns "example.widget-impl"
    :load-impl-ns false))
 --Expected
+
+# gen-class metadata on name-like values
+
+--Input
+(ns foo
+ (:gen-class
+ :extends ^{Deprecated {}} java.io.FilterInputStream
+ :init ^:private init
+ :state ^{:doc "the state"} state))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :extends ^{Deprecated {}} java.io.FilterInputStream
+   :init ^:private init
+   :state ^{:doc "the state"} state))
+--Expected
+
+# gen-class metadata on name-like string values
+
+--Input
+(ns foo
+ (:gen-class
+ :extends ^{Deprecated {}} "java.io.FilterInputStream"
+ :factory ^:a ^:b "create"))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :extends ^{Deprecated {}} "java.io.FilterInputStream"
+   :factory ^:a ^:b "create"))
+--Expected
