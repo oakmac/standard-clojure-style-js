@@ -4,6 +4,7 @@ const enolib = require('enolib')
 const fs = require('fs-plus')
 const immutable = require('immutable')
 const path = require('path')
+
 const scsLib = require('../lib/standard-clojure-style.js')
 
 const rootDir = path.join(__dirname, '../')
@@ -47,13 +48,24 @@ enoFilesInTestFormatDir().forEach((f) => {
 allTestCases.sort(compareTestCases)
 
 // sanity-check that all of the test cases have unique names
-const uniqueTestCaseNames = new Set()
+// NOTE: collect the filenames for every name so a failure tells you
+// exactly which cases collided
+const testCaseNamesToFiles = new Map()
 allTestCases.forEach(testCase => {
-  uniqueTestCaseNames.add(testCase.name)
+  const filesForName = testCaseNamesToFiles.get(testCase.name) || []
+  filesForName.push(testCase.filename)
+  testCaseNamesToFiles.set(testCase.name, filesForName)
+})
+
+const duplicateTestCaseNames = []
+testCaseNamesToFiles.forEach((files, name) => {
+  if (files.length > 1) {
+    duplicateTestCaseNames.push(name + ' (x' + files.length + ': ' + files.join(', ') + ')')
+  }
 })
 
 test('All test_parse_ns/ cases should have unique names', () => {
-  expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
+  expect(duplicateTestCaseNames).toEqual([])
 })
 
 // dev convenience: set this to true and add specific test cases
@@ -68,7 +80,6 @@ const ignoreTests = new Set()
 
 allTestCases.forEach(testCase => {
   // FIXME: input should parse without errors
-
   let runThisTest = true
   if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
   else if (ignoreSomeTests && ignoreTests.has(testCase.name)) runThisTest = false
@@ -85,17 +96,15 @@ allTestCases.forEach(testCase => {
 
       const inputNodes = scsLib.parse(testCase.input)
       const flatNodes = scsLib._flattenTree(inputNodes)
+
       try {
         const nsParsed1 = scsLib._parseNs(flatNodes)
-
         const nsParsed2 = immutable.fromJS(nsParsed1)
         const nsExpected = immutable.fromJS(expectedObj)
         const resultIsTheSame = immutable.is(nsParsed2, nsExpected)
-
         if (!resultIsTheSame) {
           console.log('ns parsed:', JSON.stringify(nsParsed1, null, 2))
         }
-
         expect(resultIsTheSame).toBe(true)
       } catch (e) {
         expect(expectedObj.parsingShouldError).toBe(true)

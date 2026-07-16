@@ -1,5 +1,4 @@
-# GitHub Issue #31 - parse gen-class static method signature metadata
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
+# gen-class static method signature metadata
 
 --Input
 (ns foo
@@ -32,8 +31,7 @@
 }
 --Expected
 
-# GitHub Issue #31 - parse gen-class constructor annotations
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
+# gen-class constructor annotations
 
 --Input
 (ns foo
@@ -68,8 +66,7 @@
 }
 --Expected
 
-# GitHub Issue #31 - parse gen-class class annotations
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
+# gen-class class annotations
 
 --Input
 (ns foo
@@ -94,8 +91,7 @@
 }
 --Expected
 
-# GitHub Issue #31 - parse gen-class names supplied as strings
-> https://github.com/oakmac/standard-clojure-style-js/issues/31
+# gen-class names supplied as strings
 
 --Input
 (ns foo
@@ -110,7 +106,7 @@
    :factory "create"
    :state "state"
    :exposes {"in" {:get "getIn" :set "setIn"}}
-   :exposes-methods {close "callSuperClose"}
+   :exposes-methods {"close" "callSuperClose"}
    :prefix "native-"
    :impl-ns "example.widget-impl"
    :load-impl-ns false))
@@ -173,7 +169,7 @@
     "exposes-methods": {
       "value": [
         {
-          "superMethodName": "close",
+          "superMethodName": "\"close\"",
           "exposedName": "\"callSuperClose\""
         }
       ]

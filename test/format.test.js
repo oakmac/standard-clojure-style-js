@@ -53,13 +53,24 @@ function compareTestCases (testCaseA, testCaseB) {
 allTestCases.sort(compareTestCases)
 
 // sanity-check that all of the test cases have unique names
-const uniqueTestCaseNames = new Set()
+// NOTE: collect the filenames for every name so a failure tells you
+// exactly which cases collided
+const testCaseNamesToFiles = new Map()
 allTestCases.forEach(testCase => {
-  uniqueTestCaseNames.add(testCase.name)
+  const filesForName = testCaseNamesToFiles.get(testCase.name) || []
+  filesForName.push(testCase.filename)
+  testCaseNamesToFiles.set(testCase.name, filesForName)
+})
+
+const duplicateTestCaseNames = []
+testCaseNamesToFiles.forEach((files, name) => {
+  if (files.length > 1) {
+    duplicateTestCaseNames.push(name + ' (x' + files.length + ': ' + files.join(', ') + ')')
+  }
 })
 
 test('All test_format/ cases should have unique names', () => {
-  expect(uniqueTestCaseNames.size).toBe(allTestCases.length)
+  expect(duplicateTestCaseNames).toEqual([])
 })
 
 // dev convenience: set this to true and add specific test cases
