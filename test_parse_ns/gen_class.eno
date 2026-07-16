@@ -1,0 +1,188 @@
+# gen-class static method signature metadata
+
+--Input
+(ns foo
+  (:gen-class
+   :methods [^{:static true} [create [] Object]
+             [instanceMethod [String] String]]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "methods": {
+      "value": [
+        {
+          "metadata": "^{:static true}",
+          "name": "create",
+          "parameterTypes": [],
+          "returnType": "Object"
+        },
+        {
+          "name": "instanceMethod",
+          "parameterTypes": ["String"],
+          "returnType": "String"
+        }
+      ]
+    }
+  }
+}
+--Expected
+
+# gen-class constructor annotations
+
+--Input
+(ns foo
+  (:gen-class
+   :init init
+   :constructors {^{Deprecated {}} [String] []
+                  [long] []}))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "init": {
+      "value": "init"
+    },
+    "constructors": {
+      "value": [
+        {
+          "metadata": "^{Deprecated {}}",
+          "parameterTypes": ["String"],
+          "superParameterTypes": []
+        },
+        {
+          "parameterTypes": ["long"],
+          "superParameterTypes": []
+        }
+      ]
+    }
+  }
+}
+--Expected
+
+# gen-class class annotations
+
+--Input
+(ns foo
+  (:gen-class
+   :name ^{Deprecated {}} example.Widget
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "metadata": "^{Deprecated {}}",
+      "value": "example.Widget"
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected
+
+# gen-class names supplied as strings
+
+--Input
+(ns foo
+  (:gen-class
+   :name "example.Widget"
+   :extends "java.io.FilterInputStream"
+   :implements ["java.lang.Runnable"]
+   :init "init"
+   :constructors {["java.io.InputStream"] ["java.io.InputStream"]}
+   :post-init "postInit"
+   :methods [["transform" ["java.lang.String"] "java.lang.Object"]]
+   :factory "create"
+   :state "state"
+   :exposes {"in" {:get "getIn" :set "setIn"}}
+   :exposes-methods {"close" "callSuperClose"}
+   :prefix "native-"
+   :impl-ns "example.widget-impl"
+   :load-impl-ns false))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "\"example.Widget\""
+    },
+    "extends": {
+      "value": "\"java.io.FilterInputStream\""
+    },
+    "implements": [
+      {
+        "symbol": "\"java.lang.Runnable\""
+      }
+    ],
+    "init": {
+      "value": "\"init\""
+    },
+    "constructors": {
+      "value": [
+        {
+          "parameterTypes": ["\"java.io.InputStream\""],
+          "superParameterTypes": ["\"java.io.InputStream\""]
+        }
+      ]
+    },
+    "post-init": {
+      "value": "\"postInit\""
+    },
+    "methods": {
+      "value": [
+        {
+          "name": "\"transform\"",
+          "parameterTypes": ["\"java.lang.String\""],
+          "returnType": "\"java.lang.Object\""
+        }
+      ]
+    },
+    "factory": {
+      "value": "\"create\""
+    },
+    "state": {
+      "value": "\"state\""
+    },
+    "exposes": {
+      "value": [
+        {
+          "fieldName": "\"in\"",
+          "getter": "\"getIn\"",
+          "setter": "\"setIn\""
+        }
+      ]
+    },
+    "exposes-methods": {
+      "value": [
+        {
+          "superMethodName": "\"close\"",
+          "exposedName": "\"callSuperClose\""
+        }
+      ]
+    },
+    "prefix": {
+      "value": "\"native-\""
+    },
+    "impl-ns": {
+      "value": "\"example.widget-impl\""
+    },
+    "load-impl-ns": {
+      "value": false
+    }
+  }
+}
+--Expected
