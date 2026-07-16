@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.29.0] - 2026-07-16
+
+### Added
+
+- [Issue #31] - support additional `:gen-class` keys and values: `:constructors` ([PR-218]), `:methods`, `:exposes`, `:exposes-methods`, and more ([PR-224])
+- [Issue #125] - better support for metadata in the `ns` form ([PR-219])
+
+### Fixed
+
+- [Issue #197] - fix bug with comment alignment spanning across newlines
+- [Issue #226] - support `gen-class` metadata on name-like keys other than `:name` ([PR-227])
+
+### Changed
+
+- parser performance improvements
+
 ## [0.28.0] - 2026-05-14
 
 ### Fixed
@@ -212,7 +228,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial alpha release
 
-[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.28.0...HEAD
+[Unreleased]:https://github.com/oakmac/standard-clojure-style-js/compare/v0.29.0...HEAD
+[0.29.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.29.0
 [0.28.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.28.0
 [0.27.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.27.0
 [0.26.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.26.0
@@ -246,6 +263,7 @@ All notable changes to this project will be documented in this file.
 [0.1.0]:https://github.com/oakmac/standard-clojure-style-js/releases/tag/v0.1.0
 
 [Issue #6]:https://github.com/oakmac/standard-clojure-style-js/issues/6
+[Issue #31]:https://github.com/oakmac/standard-clojure-style-js/issues/31
 [Issue #48]:https://github.com/oakmac/standard-clojure-style-js/issues/48
 [Issue #52]:https://github.com/oakmac/standard-clojure-style-js/issues/52
 [Issue #53]:https://github.com/oakmac/standard-clojure-style-js/issues/53
@@ -273,6 +291,7 @@ All notable changes to this project will be documented in this file.
 [Issue #113]:https://github.com/oakmac/standard-clojure-style-js/issues/113
 [Issue #114]:https://github.com/oakmac/standard-clojure-style-js/issues/114
 [Issue #123]:https://github.com/oakmac/standard-clojure-style-js/issues/123
+[Issue #125]:https://github.com/oakmac/standard-clojure-style-js/issues/125
 [Issue #126]:https://github.com/oakmac/standard-clojure-style-js/issues/126
 [Issue #135]:https://github.com/oakmac/standard-clojure-style-js/issues/135
 [Issue #137]:https://github.com/oakmac/standard-clojure-style-js/issues/137
@@ -293,12 +312,14 @@ All notable changes to this project will be documented in this file.
 [Issue #187]:https://github.com/oakmac/standard-clojure-style-js/issues/187
 [Issue #189]:https://github.com/oakmac/standard-clojure-style-js/issues/189
 [Issue #191]:https://github.com/oakmac/standard-clojure-style-js/issues/191
+[Issue #197]:https://github.com/oakmac/standard-clojure-style-js/issues/197
 [Issue #202]:https://github.com/oakmac/standard-clojure-style-js/issues/202
 [Issue #203]:https://github.com/oakmac/standard-clojure-style-js/issues/203
 [Issue #205]:https://github.com/oakmac/standard-clojure-style-js/issues/205
 [Issue #208]:https://github.com/oakmac/standard-clojure-style-js/issues/208
 [Issue #210]:https://github.com/oakmac/standard-clojure-style-js/issues/210
 [Issue #213]:https://github.com/oakmac/standard-clojure-style-js/issues/213
+[Issue #226]:https://github.com/oakmac/standard-clojure-style-js/issues/226
 
 [commit #db857ff4]:https://github.com/oakmac/standard-clojure-style-js/commit/db857ff413f0a8625c0cd0c975684244d875705e
 
@@ -357,3 +378,7 @@ All notable changes to this project will be documented in this file.
 [PR-214]:https://github.com/oakmac/standard-clojure-style-js/pull/214
 [PR-215]:https://github.com/oakmac/standard-clojure-style-js/pull/215
 [PR-216]:https://github.com/oakmac/standard-clojure-style-js/pull/216
+[PR-218]:https://github.com/oakmac/standard-clojure-style-js/pull/218
+[PR-219]:https://github.com/oakmac/standard-clojure-style-js/pull/219
+[PR-224]:https://github.com/oakmac/standard-clojure-style-js/pull/224
+[PR-227]:https://github.com/oakmac/standard-clojure-style-js/pull/227
