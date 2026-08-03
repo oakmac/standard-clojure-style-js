@@ -18,7 +18,6 @@ import process from 'process'
 
 // npm imports
 import { parseEDNString, toEDNStringFromSimpleObject } from 'edn-data'
-import { globSync } from 'glob'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import yocto from 'yoctocolors'
@@ -28,7 +27,8 @@ import yocto from 'yoctocolors'
 // script before publishing to npm
 import standardClj from './lib/standard-clojure-style.js' // 7b323d1c-2984-4bd1-9304-d62d8dee9a1f
 
-// Pure helper functions (no side effects, tested separately)
+// CLI helpers
+import cliFileDiscovery from './cli_file_discovery.mjs'
 import cliUtil from './cli_util.js'
 
 const scriptStartTime = performance.now()
@@ -110,10 +110,6 @@ async function readStream (stream) {
   return Buffer.concat(chunks).toString('utf8')
 }
 
-function alwaysTrue () {
-  return true
-}
-
 function setLogLevel (level) {
   logLevel = cliUtil.normalizeLogLevel(level)
 }
@@ -176,94 +172,48 @@ function injectConfigFile (argv) {
 // =============================================================================
 
 // returns a Set of files from the args passed to the "list", "check", or "fix" commands
-function getFilesFromArgv (argv, cmd) {
+function getFilesFromArgv (argv) {
   // remove the first item, which is the command
   argv._.shift()
   const directArgs = argv._
-  const fileExtensionsSet = argv['file-ext']
-  let includeFiles = []
 
-  // process the direct arguments
-  directArgs.forEach(arg => {
-    let possibleFileOrDir = arg
-    if (!fs.isAbsolute(arg)) {
-      // if the argument is not an absolute path, assume it is relative to the
-      // directory where the script is being run from
-      possibleFileOrDir = path.join(rootDir, arg)
-    }
-
-    if (fs.isFileSync(possibleFileOrDir)) {
-      includeFiles.push(possibleFileOrDir)
-    } else if (fs.isDirectorySync(possibleFileOrDir)) {
-      fs.traverseTreeSync(possibleFileOrDir, (f) => {
-        const fileExt = path.extname(f)
-        if (fileExtensionsSet.has(fileExt)) {
-          includeFiles.push(f)
-        }
-        return true
-      }, alwaysTrue)
-    } else {
-      printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory at "' + arg + '"')
-    }
-  })
-
-  // process the --include glob patterns
-  if (cliUtil.isArray(argv.include)) {
-    argv.include.forEach(includeStr => {
-      const filesFromGlob = globSync(includeStr)
-      includeFiles = includeFiles.concat(filesFromGlob)
-    })
+  let cliIncludePatterns = []
+  const cliIncludeWasPassed = cliUtil.isArray(argv.include)
+  if (cliIncludeWasPassed) {
+    cliIncludePatterns = argv.include
+  }
+  const anyCliFileSelection = directArgs.length > 0 || cliIncludeWasPassed
+  let includePatterns = cliIncludePatterns
+  if (!anyCliFileSelection &&
+      argv._optionsLoadedViaConfigFile &&
+      cliUtil.isArray(argv.includeFromConfig)) {
+    includePatterns = argv.includeFromConfig
   }
 
-  // load --include files via config file if the user did not pass any direct arguments
-  const anyDirectArgsPassed = directArgs.length > 0
-  if (!anyDirectArgsPassed && argv._optionsLoadedViaConfigFile && cliUtil.isArray(argv.includeFromConfig)) {
-    argv.includeFromConfig.forEach(includeStr => {
-      const filesFromGlob = globSync(includeStr)
-      includeFiles = includeFiles.concat(filesFromGlob)
-    })
-  }
-
-  // exclude files if necessary
-  const ignoreFiles = []
-  let ignorePatterns = null
-  // use --ignore from CLI argument
+  let ignorePatterns = []
   if (cliUtil.isArray(argv.ignore)) {
     ignorePatterns = argv.ignore
-    // or from config file if present
   } else if (argv._optionsLoadedViaConfigFile && cliUtil.isArray(argv.ignoreFromConfig)) {
     ignorePatterns = argv.ignoreFromConfig
   }
 
-  if (ignorePatterns) {
-    ignorePatterns.forEach(ignoreStr => {
-      let possibleFileOrDir = ignoreStr
-      if (!fs.isAbsolute(ignoreStr)) {
-        // if the argument is not an absolute path, assume it is relative to the
-        // directory where the script is being run from
-        possibleFileOrDir = path.join(rootDir, ignoreStr)
+  return cliFileDiscovery.discoverFiles({
+    rootDir,
+    directArgs,
+    includePatterns,
+    ignorePatterns,
+    fileExtensions: argv['file-ext'],
+    onMissingPath: (kind, filename) => {
+      let ignoreText = ''
+      if (kind === 'ignore') {
+        ignoreText = ' to ignore'
       }
-
-      if (fs.isFileSync(possibleFileOrDir)) {
-        ignoreFiles.push(possibleFileOrDir)
-      } else if (fs.isDirectorySync(possibleFileOrDir)) {
-        fs.traverseTreeSync(possibleFileOrDir, (f) => {
-          const fileExt = path.extname(f)
-          if (fileExtensionsSet.has(fileExt)) {
-            ignoreFiles.push(f)
-          }
-          return true
-        }, alwaysTrue)
-      } else {
-        printToStderr(yocto.bold(yocto.yellow('WARN')) + ' Could not find a file or directory to ignore at "' + ignoreStr + '"')
-      }
-    })
-  }
-
-  const includeFilesSet = new Set(includeFiles)
-  const ignoreFileSet = new Set(ignoreFiles)
-
-  return cliUtil.setDifference(includeFilesSet, ignoreFileSet)
+      printToStderr(
+        yocto.bold(yocto.yellow('WARN')) +
+        ' Could not find a file or directory' + ignoreText + ' at "' + filename + '"'
+      )
+    }
+  })
 }
 
 // =============================================================================
@@ -366,7 +316,7 @@ function processCheckCmd (argv) {
 
   printProgramInfo({ command: 'check' })
 
-  const filesToProcess = getFilesFromArgv(argv, 'check')
+  const filesToProcess = getFilesFromArgv(argv)
 
   if (filesToProcess.size === 0) {
     exitSad('No files were passed to the "check" command. Please pass a filename, directory, or --include glob pattern.')
@@ -413,7 +363,7 @@ function processFixCmdNotStdin (argv) {
 
   printProgramInfo({ command: 'fix' })
 
-  const filesToProcess = getFilesFromArgv(argv, 'fix')
+  const filesToProcess = getFilesFromArgv(argv)
 
   if (filesToProcess.size === 0) {
     exitSad('No files were passed to the "fix" command. Please pass a filename, directory, or --include glob pattern.')
@@ -487,7 +437,7 @@ function processFixCmd (argv) {
 }
 
 function processListCmd (argv) {
-  const filesSet = getFilesFromArgv(argv, 'list')
+  const filesSet = getFilesFromArgv(argv)
   const sortedFiles = setToArray(filesSet).sort()
 
   if (argv.output === 'json') {
