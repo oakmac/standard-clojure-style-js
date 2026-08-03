@@ -731,13 +731,12 @@ describe('ignoring explicitly named files', () => {
   })
 })
 
-describe('glob library edge cases', () => {
+describe('patterns that also match directories', () => {
   test('a pattern matching only a directory yields no files', () => {
-    // "src*" is not a literal path, so it falls through to the glob library,
-    // where it matches the src/ directory itself. With nodir (glob) or
-    // onlyFiles (tinyglobby) semantics this must yield no files -- it must
-    // NOT silently expand into the directory's contents. When swapping to
-    // tinyglobby, pass expandDirectories: false to preserve this.
+    // "src*" is not a literal path, so it is treated as a pattern. It matches
+    // the src/ directory itself, which must yield no files: only regular
+    // files are ever returned, and a matched directory must NOT silently
+    // expand into its contents.
     expect(runList('--include', 'src*')).toEqual([])
   })
 
