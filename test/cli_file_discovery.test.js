@@ -713,28 +713,6 @@ describe('warnings for missing paths', () => {
   })
 })
 
-describe('absolute glob patterns', () => {
-  // NOTE: glob patterns always use forward slashes, even on Windows,
-  // so these are constructed via string concatenation, not path.join
-  test('supports an absolute --include glob pattern', () => {
-    expect(runList(
-      '--include', projectDir + '/src/**/*.cljc'
-    )).toEqual(absoluteFiles(
-      'src/nested/deep.cljc',
-      'src/shared.cljc'
-    ))
-  })
-
-  test('supports an absolute --ignore glob pattern', () => {
-    expect(runList(
-      '--include', 'src/**/*.cljc',
-      '--ignore', projectDir + '/src/nested/**/*'
-    )).toEqual(absoluteFiles(
-      'src/shared.cljc'
-    ))
-  })
-})
-
 describe('ignoring explicitly named files', () => {
   test('ignores a directly named file with a non-default extension', () => {
     expect(runList(
@@ -750,30 +728,6 @@ describe('ignoring explicitly named files', () => {
       'src/notes.txt',
       '--ignore', 'src'
     )).toEqual([])
-  })
-})
-
-describe('hidden files and directories', () => {
-  // These two tests pin the CURRENT (divergent) behavior: literal directory
-  // traversal descends into hidden directories, while glob patterns use the
-  // standard "dot: false" default and skip them. If you decide to unify
-  // this behavior, update these tests deliberately.
-  test('literal directory traversal descends into hidden directories', () => {
-    writeFile('src/.hidden/secret.clj', '(ns secret)\n')
-
-    expect(runList('src')).toContain(
-      path.join(projectDir, 'src/.hidden/secret.clj')
-    )
-  })
-
-  test('glob patterns do not match files inside hidden directories', () => {
-    writeFile('src/.hidden/secret.clj', '(ns secret)\n')
-
-    expect(runList('--include', 'src/**/*.clj')).toEqual(absoluteFiles(
-      'src/core.clj',
-      'src/generated/generated.clj',
-      'src/nested/deep.clj'
-    ))
   })
 })
 

@@ -30,20 +30,22 @@ function addFilesFromDirectory (files, directory, shouldIncludeFile) {
 }
 
 function filesFromGlob (rootDir, pattern) {
-  return globSync(pattern, {
+  const tinyGlobbyOpts = {
     absolute: true,
+    braceExpansion: true,
     cwd: rootDir,
     expandDirectories: false,
+    globstar: true,
     onlyFiles: true
-  })
+  }
 
+  return globSync(pattern, tinyGlobbyOpts)
     .map(filename => absolutePath(rootDir, filename))
     .filter(filename => fs.isFileSync(filename))
 }
 
-// This is intentionally narrower than every pattern understood by "glob".
-// Its only purpose is deciding whether a no-match --ignore value should be
-// treated as a harmless pattern or warned about as a missing literal path.
+// This only identifies values that should be treated as patterns when
+// deciding whether an unmatched --ignore value should produce a warning.
 function containsGlobSyntax (pattern) {
   return pattern.includes('*') ||
          pattern.includes('?') ||
