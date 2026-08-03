@@ -6,7 +6,7 @@
 
 import fs from 'fs-plus'
 import path from 'path'
-import { globSync } from 'glob'
+import { globSync } from 'tinyglobby'
 
 function absolutePath (rootDir, filename) {
   if (path.isAbsolute(filename)) {
@@ -33,8 +33,10 @@ function filesFromGlob (rootDir, pattern) {
   return globSync(pattern, {
     absolute: true,
     cwd: rootDir,
-    nodir: true
+    expandDirectories: false,
+    onlyFiles: true
   })
+
     .map(filename => absolutePath(rootDir, filename))
     .filter(filename => fs.isFileSync(filename))
 }
