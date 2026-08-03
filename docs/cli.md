@@ -335,8 +335,6 @@ standard-clj check src/ --log-level ignore-already-formatted
 standard-clj check src/ --log-level quiet
 ```
 
-The aliases are `--log-level` / `-l`.
-
 ### Option aliases
 
 ```text
