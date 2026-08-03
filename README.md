@@ -106,179 +106,67 @@ but I do not want this project to live in "pre-1.0" forever.
 
 ## Command Line Usage
 
-The `@chrisoakman/standard-clojure-style` npm package exposes a command-line
-tool to help format your Clojure projects. You may wish to run this as a git
-hook, via continuous integration, an editor integration, etc.
-
-If you have Node.js installed on your system, you can try out Standard Clojure
-Style with the `npx` command:
+Use `list` to preview files, `check` to verify formatting, and `fix` to format
+files in place. `check` does not modify files; `fix` does.
 
 ```sh
-## NOTE: the "fix" command will change your files on disk!
-## Please ensure a clean git working tree or new branch as necessary
-
-# formats the file located at src/com/example/foo.clj
-npx @chrisoakman/standard-clojure-style fix src/com/example/foo.clj
-
-# formats all .clj, .cljs, .cljc, .jank, .edn files found in the src/ directory
-# and subdirectories (ie: recursive)
-npx @chrisoakman/standard-clojure-style fix src/
+standard-clj list src/ test/
+standard-clj check src/ test/
+standard-clj fix src/ test/
 ```
 
-If you plan to use the library frequently you may wish to install it globally:
+Directories are searched recursively. By default, Standard Clojure Style finds
+`.clj`, `.cljs`, `.cljc`, `.jank`, and `.edn` files. You can also pass individual
+files:
 
 ```sh
-# Installs "standard-clj" globally onto your system via npm
+standard-clj fix src/my_app/core.clj deps.edn
+```
+
+For more control, use `--include` and `--ignore`:
+
+```sh
+standard-clj check \
+  --include "src/**/*.{clj,cljs,cljc}" \
+  --ignore "src/generated/**/*"
+```
+
+Most projects that use Standard Clojure Style regularly should commit a
+`.standard-clj.edn` file:
+
+```clojure
+{:include ["src/" "test/"]
+ :ignore ["src/generated/"]}
+```
+
+Then run:
+
+```sh
+standard-clj check
+```
+
+Use `standard-clj list` whenever you want to confirm which files were selected.
+
+Run the package without installation:
+
+```sh
+npx @chrisoakman/standard-clojure-style check src/ test/
+```
+
+Or install the CLI globally:
+
+```sh
 npm install --global @chrisoakman/standard-clojure-style
 ```
 
-#### Quick Reference
+The `fix` command also supports stdin:
 
 ```sh
-# use the "list" command to see which files standard-clj will analyze
-standard-clj list src/
-
-# use the "check" command to see which files need formatting
-standard-clj check src-clj/ src-cljs/
-
-## use the "fix" command to format files with Standard Clojure Style
-standard-clj fix src/ test/ project.clj
-
-## you can pass a glob pattern for more control over which files are formatted
-standard-clj fix --include "src/**/*.{clj,cljs,cljc}"
-
-## ignore files or folders with the --ignore flag
-standard-clj fix --include "src/**/*.{clj,cljs,cljc}" --ignore "src/com/example/some_weird_file.clj"
-
-## standard-clj will look for a .standard-clj.edn or .standard-clj.json file in the directory where
-## the command is run from (likely the root directory for your project)
-echo '{:include ["src-clj/**/*.clj" "src-cljs/**/*.cljs"]}' > .standard-clj.edn
-standard-clj fix
-
-## or pass a config file explicitly using the --config argument
-standard-clj list --config /home/user1/my-project/my-standard-cfg.json
-
-## pipe code directly to the fix command using "-"
-echo '(ns my.company.core (:require [clojure.string :as str]))' | standard-clj fix -
+echo '(ns my.company.core)' | standard-clj fix -
 ```
 
-#### `list` command
-
-Use `standard-clj list` to see which files will be effected by the `check` and
-`fix` commands. This command is useful in order to test your `--include`
-glob patterns or `.standard-clj.edn` config files.
-
-```sh
-# prints each filename that will be effected by the "check" and "fix" commands
-standard-clj list src/
-
-# output the same file list in various data formats
-standard-clj list src/ --output json
-standard-clj list src/ --output json-pretty
-standard-clj list src/ --output edn
-standard-clj list src/ --output edn-pretty
-```
-
-#### `check` command
-
-Use `standard-clj check` to see if files are already formatted with Standard
-Clojure Style. Useful for continuous integration. This command will **not** write
-to any files on disk.
-
-Returns exit code 0 if all files are already formatted, 1 otherwise.
-
-```sh
-# check to see if files are already formatted with Standard Clojure Style
-standard-clj check src-clj/ src-cljs/ test/
-
-# runs the same check, but only prints files that need fixing
-standard-clj check src-clj/ src-cljs/ test/ --log-level=ignore-already-formatted
-```
-
-#### `fix` command
-
-Use `standard-clj fix` to format files according to Standard Clojure Style.
-This command **will** write to files on disk, so please ensure a clean git
-working tree or new branch as necessary. The changes made by this command
-cannot be undone by this program.
-
-Returns exit code 0 if all files have been formatted, 1 otherwise.
-
-```sh
-# format files according to Standard Clojure Style
-standard-clj fix src/ test/ deps.edn
-```
-
-#### `fix -` command (stdin / stdout)
-
-Use `standard-clj fix -` to pipe code directly via stdin.
-
-Prints the formatted code to stdout with error code 0 if successful. Prints an
-error message to stderr with error code 1 otherwise.
-
-```sh
-echo '(ns my.company.core (:require [clojure.string :as str]))' | standard-clj fix -
-```
-
-#### Which files will be formatted?
-
-`standard-clj` accepts several ways to know which files to format:
-
-* pass filenames directly as arguments
-* pass directories directly as arguments
-* pass a [glob pattern] with the `--include` option
-
-```sh
-# will fix:
-# - dev/user.clj (single file argument)
-# - project.clj (single file argument)
-# - all .clj, .cljs, .cljc, .edn files in the src-clj/ directory and subdirectories (directory argument)
-# - all .edn files in the resources/ directory and subdirectories (glob pattern argument)
-standard-clj fix dev/user.clj project.clj src-clj/ test/ --include "resources/**/*.edn"
-```
-
-`--include` or `--ignore` arguments passed via command line will supercede any
-`--include` or `--ignore` arguments found via config file.
-
-You can always use the `list` command to see which files will be formatted by `standard-clj`.
-
-#### Other options
-
-- `--config` or `-c` - pass a filepath of a config file to use for options to the `standard-clj` program.
-- `--ignore` or `-ig` - exclude files from `list`, `check`, or `fix` commands. Accepts individual files or directories.
-- `--include` or `-in` - include files for the `list`, `check`, or `fix` commands. Accepts a [glob pattern].
-- `--log-level` or `-l` - specify a logging level
-  - `"everything"` or `0` - prints everything to either stdout or stderr. This is the default.
-  - `"ignore-already-formatted"` or `1`
-    - For the `check` command, will only print files that need formatting.
-    - For the `fix` command, will only print files that were formatted or have errors.
-    - This option can be less noisy in your terminal if you have a project with many files and only
-      want to see the ones that need formatting.
-  - `"quiet"` or `5` - will not print anything to stdout or stderr for the `check` or `fix` commands
-
-[glob pattern]:https://github.com/isaacs/node-glob?tab=readme-ov-file#glob-primer
-
-#### Options via config file
-
-By default, `standard-clj` will look for a `.standard-clj.edn` or
-`.standard-clj.json` file located in the directory where the command is run.
-Most projects that use `standard-clj` regularly will want to commit this file
-to their git repo for convenience.
-
-```sh
-# create a .standard-clj.edn file
-echo '{:include ["src-clj/**/*.clj" "src-cljs/**/*.cljs"]}' > .standard-clj.edn
-
-# run the "fix" command with options from that file
-standard-clj fix
-```
-
-You can use the `--config` or `-c` flag to specify a different file location:
-
-```sh
-# run the "fix" command with options from ./my-config-file.edn
-standard-clj fix --config ./my-config-file.edn
-```
+See [CLI file selection and configuration](docs/cli.md) for config-file formats,
+glob syntax, option precedence, custom file extensions, and additional examples.
 
 ## Ignore a file or form
 
