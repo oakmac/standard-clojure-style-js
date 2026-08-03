@@ -69,11 +69,25 @@ function addDirectArgument (files, rootDir, directArg, fileExtensions, onMissing
 }
 
 function addIncludePattern (files, rootDir, pattern, fileExtensions) {
-  filesFromGlob(rootDir, pattern).forEach(filename => {
-    if (hasAllowedExtension(filename, fileExtensions)) {
-      files.add(filename)
+  const possibleFileOrDir = absolutePath(rootDir, pattern)
+
+  if (fs.isFileSync(possibleFileOrDir)) {
+    if (hasAllowedExtension(possibleFileOrDir, fileExtensions)) {
+      files.add(possibleFileOrDir)
     }
-  })
+  } else if (fs.isDirectorySync(possibleFileOrDir)) {
+    addFilesFromDirectory(
+      files,
+      possibleFileOrDir,
+      filename => hasAllowedExtension(filename, fileExtensions)
+    )
+  } else {
+    filesFromGlob(rootDir, pattern).forEach(filename => {
+      if (hasAllowedExtension(filename, fileExtensions)) {
+        files.add(filename)
+      }
+    })
+  }
 }
 
 function addIgnorePattern (files, rootDir, pattern, onMissingPath) {

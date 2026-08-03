@@ -72,6 +72,36 @@ function runList (...args) {
   return JSON.parse(result.stdout)
 }
 
+// Like runList, but does not require an empty stderr or exit code 0.
+// Used to test warning behavior. Returns { files, status, stderr }.
+function runListCaptureStderr (...args) {
+  const result = childProcess.spawnSync(
+    process.execPath,
+    [cliFile, 'list', ...args, '--output', 'json'],
+    {
+      cwd: projectDir,
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        FORCE_COLOR: '0'
+      },
+      windowsHide: true
+    }
+  )
+
+  if (result.error) {
+    throw result.error
+  }
+
+  expect(result.signal).toBeNull()
+
+  return {
+    files: JSON.parse(result.stdout || '[]'),
+    status: result.status,
+    stderr: result.stderr
+  }
+}
+
 function writeJSONConfig (config) {
   writeFile('.standard-clj.json', JSON.stringify(config, null, 2) + '\n')
 }
@@ -123,6 +153,187 @@ describe('direct file and directory arguments', () => {
       'src/nested/deep.clj',
       'src/nested/deep.cljs'
     ))
+  })
+})
+
+describe('--include files and directories', () => {
+  test('includes a directly named file with a supported extension', () => {
+    expect(runList(
+      '--include', 'src/core.clj'
+    )).toEqual(absoluteFiles(
+      'src/core.clj'
+    ))
+  })
+
+  test('filters a directly named file with a non-default extension', () => {
+    expect(runList(
+      '--include', 'src/notes.txt'
+    )).toEqual([])
+  })
+
+  test('recursively discovers supported files in a literal directory', () => {
+    expect(runList(
+      '--include', 'src'
+    )).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('accepts a trailing slash on a literal directory', () => {
+    expect(runList(
+      '--include', 'src/'
+    )).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('recursively discovers files from a nested literal directory', () => {
+    expect(runList(
+      '--include', 'src/nested'
+    )).toEqual(absoluteFiles(
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc'
+    ))
+  })
+
+  test('supports an absolute literal directory', () => {
+    expect(runList(
+      '--include', path.join(projectDir, 'src/nested')
+    )).toEqual(absoluteFiles(
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc'
+    ))
+  })
+
+  test('combines multiple literal directories', () => {
+    expect(runList(
+      '--include', 'dev',
+      '--include', 'test'
+    )).toEqual(absoluteFiles(
+      'dev/user.clj',
+      'test/core_test.clj',
+      'test/nested/browser_test.cljs'
+    ))
+  })
+
+  test('combines a literal directory with a glob pattern', () => {
+    expect(runList(
+      '--include', 'dev',
+      '--include', 'src/**/*.cljc'
+    )).toEqual(absoluteFiles(
+      'dev/user.clj',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('deduplicates a literal directory and an overlapping glob pattern', () => {
+    expect(runList(
+      '--include', 'src',
+      '--include', 'src/**/*.clj'
+    )).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('uses --file-ext when discovering files from a literal directory', () => {
+    expect(runList(
+      '--include', 'src',
+      '--file-ext', 'clj,cljc'
+    )).toEqual(absoluteFiles(
+      'src/core.clj',
+      'src/generated/generated.clj',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('applies literal directory ignores to a literal include directory', () => {
+    expect(runList(
+      '--include', 'src',
+      '--ignore', 'src/generated'
+    )).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('applies ignore globs to a literal include directory', () => {
+    expect(runList(
+      '--include', 'src',
+      '--ignore', 'src/{generated,nested}/**/*'
+    )).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('recursively discovers supported files from the current directory', () => {
+    expect(runList(
+      '--include', '.'
+    )).toEqual(absoluteFiles(
+      'dev/user.clj',
+      'resources/config.edn',
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc',
+      'test/core_test.clj',
+      'test/nested/browser_test.cljs'
+    ))
+  })
+
+  test('returns an empty list for an empty literal directory', () => {
+    fs.mkdirSync(path.join(projectDir, 'empty'))
+
+    expect(runList(
+      '--include', 'empty'
+    )).toEqual([])
   })
 })
 
@@ -304,6 +515,85 @@ describe('--ignore patterns', () => {
 })
 
 describe('configuration files and command-line precedence', () => {
+  test('loads a literal include directory from .standard-clj.json', () => {
+    writeJSONConfig({
+      include: ['src']
+    })
+
+    expect(runList()).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('loads a literal include directory with a trailing slash from .standard-clj.edn', () => {
+    writeEDNConfig(
+      '{:include ["src/"]}\n'
+    )
+
+    expect(runList()).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/generated/generated.clj',
+      'src/generated/generated.cljs',
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('loads multiple literal include directories from configuration', () => {
+    writeJSONConfig({
+      include: ['dev', 'test']
+    })
+
+    expect(runList()).toEqual(absoluteFiles(
+      'dev/user.clj',
+      'test/core_test.clj',
+      'test/nested/browser_test.cljs'
+    ))
+  })
+
+  test('applies configured ignore patterns to a configured literal directory', () => {
+    writeJSONConfig({
+      include: ['src'],
+      ignore: ['src/{generated,nested}/**/*']
+    })
+
+    expect(runList()).toEqual(absoluteFiles(
+      'src/browser.cljs',
+      'src/core.clj',
+      'src/data.edn',
+      'src/experimental.jank',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('command-line literal directories replace configured include patterns', () => {
+    writeJSONConfig({
+      include: ['test/**/*.clj']
+    })
+
+    expect(runList(
+      '--include', 'src/nested'
+    )).toEqual(absoluteFiles(
+      'src/nested/deep.clj',
+      'src/nested/deep.cljs',
+      'src/nested/deep.cljc'
+    ))
+  })
+
   test('loads include and ignore patterns from .standard-clj.json', () => {
     writeJSONConfig({
       include: ['src/**/*.{clj,cljs,cljc}'],
@@ -383,6 +673,125 @@ describe('configuration files and command-line precedence', () => {
     )).toEqual(absoluteFiles(
       'src/core.clj',
       'src/generated/generated.clj'
+    ))
+  })
+})
+
+describe('warnings for missing paths', () => {
+  test('warns on stderr when a direct argument does not exist', () => {
+    const result = runListCaptureStderr('does-not-exist.clj', 'src/core.clj')
+
+    expect(result.status).toBe(0)
+    expect(result.stderr).toContain('WARN')
+    expect(result.stderr).toContain('does-not-exist.clj')
+    expect(result.stderr).not.toContain('to ignore')
+    expect(result.files).toEqual(absoluteFiles('src/core.clj'))
+  })
+
+  test('warns on stderr when a literal --ignore path does not exist', () => {
+    const result = runListCaptureStderr(
+      'src/core.clj',
+      '--ignore', 'no-such-path'
+    )
+
+    expect(result.status).toBe(0)
+    expect(result.stderr).toContain('WARN')
+    expect(result.stderr).toContain('no-such-path')
+    expect(result.stderr).toContain('to ignore')
+    expect(result.files).toEqual(absoluteFiles('src/core.clj'))
+  })
+
+  test('an --ignore glob pattern that matches nothing is silent', () => {
+    // NOTE: runList itself asserts stderr === '' and exit code 0,
+    // which is exactly the contract this test exists to pin
+    expect(runList(
+      '--include', 'src/*.clj',
+      '--ignore', 'does-not-exist/**/*'
+    )).toEqual(absoluteFiles(
+      'src/core.clj'
+    ))
+  })
+})
+
+describe('absolute glob patterns', () => {
+  // NOTE: glob patterns always use forward slashes, even on Windows,
+  // so these are constructed via string concatenation, not path.join
+  test('supports an absolute --include glob pattern', () => {
+    expect(runList(
+      '--include', projectDir + '/src/**/*.cljc'
+    )).toEqual(absoluteFiles(
+      'src/nested/deep.cljc',
+      'src/shared.cljc'
+    ))
+  })
+
+  test('supports an absolute --ignore glob pattern', () => {
+    expect(runList(
+      '--include', 'src/**/*.cljc',
+      '--ignore', projectDir + '/src/nested/**/*'
+    )).toEqual(absoluteFiles(
+      'src/shared.cljc'
+    ))
+  })
+})
+
+describe('ignoring explicitly named files', () => {
+  test('ignores a directly named file with a non-default extension', () => {
+    expect(runList(
+      'src/notes.txt',
+      '--ignore', 'src/notes.txt'
+    )).toEqual([])
+  })
+
+  test('a directory ignore removes a directly named file with a non-default extension', () => {
+    // the ignore side intentionally applies no extension filter when
+    // traversing an ignored directory
+    expect(runList(
+      'src/notes.txt',
+      '--ignore', 'src'
+    )).toEqual([])
+  })
+})
+
+describe('hidden files and directories', () => {
+  // These two tests pin the CURRENT (divergent) behavior: literal directory
+  // traversal descends into hidden directories, while glob patterns use the
+  // standard "dot: false" default and skip them. If you decide to unify
+  // this behavior, update these tests deliberately.
+  test('literal directory traversal descends into hidden directories', () => {
+    writeFile('src/.hidden/secret.clj', '(ns secret)\n')
+
+    expect(runList('src')).toContain(
+      path.join(projectDir, 'src/.hidden/secret.clj')
+    )
+  })
+
+  test('glob patterns do not match files inside hidden directories', () => {
+    writeFile('src/.hidden/secret.clj', '(ns secret)\n')
+
+    expect(runList('--include', 'src/**/*.clj')).toEqual(absoluteFiles(
+      'src/core.clj',
+      'src/generated/generated.clj',
+      'src/nested/deep.clj'
+    ))
+  })
+})
+
+describe('glob library edge cases', () => {
+  test('a pattern matching only a directory yields no files', () => {
+    // "src*" is not a literal path, so it falls through to the glob library,
+    // where it matches the src/ directory itself. With nodir (glob) or
+    // onlyFiles (tinyglobby) semantics this must yield no files -- it must
+    // NOT silently expand into the directory's contents. When swapping to
+    // tinyglobby, pass expandDirectories: false to preserve this.
+    expect(runList('--include', 'src*')).toEqual([])
+  })
+
+  test('a pattern matching a directory does not shadow sibling file matches', () => {
+    writeFile('srcfile.clj', '(ns srcfile)\n')
+
+    expect(runList('--include', 'src*')).toEqual(absoluteFiles(
+      'srcfile.clj'
     ))
   })
 })

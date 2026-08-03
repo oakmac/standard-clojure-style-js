@@ -7,7 +7,7 @@ const { globSync } = require('tinyglobby')
 // ====================== FILE LIST ======================
 const patterns = [
   'README.md',
-  'lib/standard-clojure-style.js',
+  // 'lib/standard-clojure-style.js',
   'cli.mjs',
   'cli_file_discovery.mjs',
   'cli_util.js',
@@ -19,11 +19,11 @@ const patterns = [
   // 'test/parse_ns.test.js',
   // 'test/parser.test.js',
 
-  'test/*.js',
+  'test/*.js'
 
-  'test_format/*.eno',
-  'test_parse_ns/*.eno',
-  'test_parser/*.eno'
+  // 'test_format/*.eno',
+  // 'test_parse_ns/*.eno',
+  // 'test_parser/*.eno'
 ]
 // ======================================================
 
