@@ -54,6 +54,8 @@ const parseEDNOptions = {
   mapAs: 'object'
 }
 
+const useTheBunStdoutFix = false
+
 // =============================================================================
 // Util
 // =============================================================================
@@ -117,6 +119,24 @@ function setLogLevel (level) {
 function printProgramInfo (opts) {
   printToStdout(yocto.bold('standard-clj ' + opts.command) + ' ' + yocto.dim(programVersion))
   printToStdout('')
+}
+
+async function writeToStdout (str) {
+  const output = str + '\n'
+
+  if (globalThis.Bun) {
+    await globalThis.Bun.write(globalThis.Bun.stdout, output)
+  } else {
+    await new Promise((resolve, reject) => {
+      process.stdout.write(output, err => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
 }
 
 // =============================================================================
@@ -417,8 +437,13 @@ async function processFixCmdStdin (argv) {
     } catch (e) {}
 
     if (formatResult && formatResult.status === 'success') {
-      console.log(formatResult.out)
-      exitHappy()
+      if (useTheBunStdoutFix) {
+        await writeToStdout(formatResult.out)
+        exitHappy()
+      } else {
+        console.log(formatResult.out)
+        exitHappy()
+      }
     } else if (formatResult && formatResult.status === 'error' && cliUtil.isString(formatResult.reason)) {
       exitSad('Failed to format code: ' + formatResult.reason)
     } else {
@@ -430,7 +455,11 @@ async function processFixCmdStdin (argv) {
 function processFixCmd (argv) {
   const lastArg = getLastItemInArray(argv._)
   if (lastArg === '-') {
-    processFixCmdStdin(argv)
+    if (useTheBunStdoutFix) {
+      return processFixCmdStdin(argv)
+    } else {
+      processFixCmdStdin(argv)
+    }
   } else {
     processFixCmdNotStdin(argv)
   }
