@@ -112,6 +112,9 @@ files in place. `check` does not modify files; `fix` does.
 ```sh
 standard-clj list src/ test/
 standard-clj check src/ test/
+
+# NOTE: "fix" writes to your files on disk and cannot undo its changes.
+# Please ensure a clean git working tree or new branch as necessary.
 standard-clj fix src/ test/
 ```
 
@@ -165,8 +168,10 @@ The `fix` command also supports stdin:
 echo '(ns my.company.core)' | standard-clj fix -
 ```
 
-See [CLI file selection and configuration](docs/cli.md) for config-file formats,
-glob syntax, option precedence, custom file extensions, and additional examples.
+See the [CLI docs] for config-file formats, glob syntax, option precedence,
+custom file extensions, and additional examples.
+
+[CLI docs]:https://github.com/oakmac/standard-clojure-style-js/blob/master/docs/cli.md
 
 ## Ignore a file or form
 

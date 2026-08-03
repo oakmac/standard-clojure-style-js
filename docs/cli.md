@@ -323,6 +323,8 @@ A glob pattern that matches nothing is valid and produces no files. This is
 useful for configuration shared across projects where some directories may not
 exist.
 
+If no files are selected at all, `check` and `fix` exit with code 1.
+
 ## Other Options
 
 ### Logging
