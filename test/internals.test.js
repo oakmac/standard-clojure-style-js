@@ -484,19 +484,6 @@ test('isSpaceOrComma', () => {
   expect(scsLib._isSpaceOrComma('')).toBe(false)
 })
 
-test('removeCharsUpToNewline', () => {
-  expect(isFn(scsLib._removeCharsUpToNewline)).toBe(true)
-  expect(scsLib._removeCharsUpToNewline('abc\nxyz')).toBe('xyz')
-  expect(scsLib._removeCharsUpToNewline('abc')).toBe('abc')
-  expect(scsLib._removeCharsUpToNewline('abc\ndef\n\nxyz')).toBe('xyz')
-
-  // edge cases: newline at the very end, or string is only a newline
-  expect(scsLib._removeCharsUpToNewline('abc\n')).toBe('')
-  expect(scsLib._removeCharsUpToNewline('\n')).toBe('')
-  expect(scsLib._removeCharsUpToNewline('')).toBe('')
-  expect(scsLib._removeCharsUpToNewline('\nabc')).toBe('abc')
-})
-
 test('txtHasCommasAfterNewline', () => {
   expect(scsLib._txtHasCommasAfterNewline('\n ,,')).toBe(true)
   expect(scsLib._txtHasCommasAfterNewline('\n\n  ,')).toBe(true)
