@@ -3304,10 +3304,12 @@
   "nsSymbol": "com.example.my-app",
   "genClass": {
     "isEmpty": false,
-    "implements": [
-      {"symbol": "foo.bar.BizBang"},
-      {"symbol": "zap.zip.RockSock"}
-    ]
+    "implements": {
+      "value": [
+        {"symbol": "foo.bar.BizBang"},
+        {"symbol": "zap.zip.RockSock"}
+      ]
+    }
   }
 }
 --Expected

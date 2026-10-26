@@ -476,3 +476,48 @@
    :extends ^{Deprecated {}} "java.io.FilterInputStream"
    :factory ^:a ^:b "create"))
 --Expected
+
+# GitHub Issue #233 - gen-class :implements keeps comments above and after
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/233
+
+--Input
+(ns foo
+  (:gen-class
+   ;; comment above implements
+   :implements [java.lang.Runnable] ;; after
+   :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   ;; comment above implements
+   :implements [java.lang.Runnable] ;; after
+   :main true))
+--Expected
+
+# GitHub Issue #233 - gen-class :implements with multiple comments above, sorting, and key reordering
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/233
+
+--Input
+(ns foo
+  (:gen-class ;; after gen-class
+   ;; first comment above implements
+   ;; second comment above implements
+   :implements [zap.zip.RockSock
+                foo.bar.BizBang] ;; after implements
+   ;; above name
+   :name foo.Bar))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class ;; after gen-class
+   ;; above name
+   :name foo.Bar
+   ;; first comment above implements
+   ;; second comment above implements
+   :implements [foo.bar.BizBang zap.zip.RockSock])) ;; after implements
+--Expected

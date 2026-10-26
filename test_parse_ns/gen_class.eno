@@ -123,11 +123,13 @@
     "extends": {
       "value": "\"java.io.FilterInputStream\""
     },
-    "implements": [
-      {
-        "symbol": "\"java.lang.Runnable\""
-      }
-    ],
+    "implements": {
+      "value": [
+        {
+          "symbol": "\"java.lang.Runnable\""
+        }
+      ]
+    },
     "init": {
       "value": "\"init\""
     },
@@ -239,6 +241,37 @@
     "factory": {
       "metadata": "^:a ^:b",
       "value": "\"create\""
+    }
+  }
+}
+--Expected
+
+# GitHub Issue #233 - gen-class :implements keeps comments above and after
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/233
+
+--Input
+(ns foo
+  (:gen-class
+   ;; comment above implements
+   :implements [java.lang.Runnable] ;; after
+   :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "implements": {
+      "commentsAbove": [";; comment above implements"],
+      "value": [
+        {"symbol": "java.lang.Runnable"}
+      ],
+      "commentAfter": ";; after"
+    },
+    "main": {
+      "value": true
     }
   }
 }
