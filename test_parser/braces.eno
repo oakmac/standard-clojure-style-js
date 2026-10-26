@@ -231,3 +231,50 @@
     (.close 14..15 '}')))
 -- Expected
 
+# Namespace Map with Hyphen in Alias
+
+-- Input
+#:my-ns{:a 1}
+-- Input
+
+-- Expected
+(source 0..13
+  (braces 0..13
+    (.open 0..8 '#:my-ns{')
+    (.body 8..12
+      (token 8..10 ':a')
+      (token 11..12 '1'))
+    (.close 12..13 '}')))
+-- Expected
+
+# Autoresolving Namespace Map with Hyphen in Alias
+
+-- Input
+#::my-ns{:a 1}
+-- Input
+
+-- Expected
+(source 0..14
+  (braces 0..14
+    (.open 0..9 '#::my-ns{')
+    (.body 9..13
+      (token 9..11 ':a')
+      (token 12..13 '1'))
+    (.close 13..14 '}')))
+-- Expected
+
+# Namespace Map with Symbol Characters in Alias
+
+-- Input
+#:foo.bar->baz?{:a 1}
+-- Input
+
+-- Expected
+(source 0..21
+  (braces 0..21
+    (.open 0..16 '#:foo.bar->baz?{')
+    (.body 16..20
+      (token 16..18 ':a')
+      (token 19..20 '1'))
+    (.close 20..21 '}')))
+-- Expected

@@ -2531,3 +2531,25 @@ bbb ccc)
   ccc
   ddd)
 --Expected
+
+# Namespaced map literals with symbol characters in the alias
+
+--Input
+(def my-map
+ [#:my-ns{:aaa "aaa"
+ :bbb "bbb"}
+ #::my-ns{:ccc "ccc"
+ :ddd "ddd"}
+   #:foo.bar->baz?{:eee "eee"
+     :fff "fff"}])
+--Input
+
+--Expected
+(def my-map
+  [#:my-ns{:aaa "aaa"
+           :bbb "bbb"}
+   #::my-ns{:ccc "ccc"
+            :ddd "ddd"}
+   #:foo.bar->baz?{:eee "eee"
+                   :fff "fff"}])
+--Expected
