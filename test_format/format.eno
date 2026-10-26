@@ -2553,3 +2553,19 @@ bbb ccc)
    #:foo.bar->baz?{:eee "eee"
                    :fff "fff"}])
 --Expected
+
+# string with backslash before newline is left alone
+
+--Input
+(def x "a\
+b")
+
+(def y 1)
+--Input
+
+--Expected
+(def x "a\
+b")
+
+(def y 1)
+--Expected
