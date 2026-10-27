@@ -4196,3 +4196,75 @@
   ]
 }
 --Expected
+
+# single-symbol :import splits on the last dot regardless of case
+
+--Input
+(ns foo
+  (:import com.acme.lowercase_class java.util))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "imports": [
+    {
+      "package": "com.acme",
+      "classes": [
+        "lowercase_class"
+      ]
+    },
+    {
+      "package": "java",
+      "classes": [
+        "util"
+      ]
+    }
+  ]
+}
+--Expected
+
+# single-symbol :import of a class in the default package
+
+--Input
+(ns foo (:import Foo java.util.Date Bar))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "imports": [
+    {
+      "package": "",
+      "classes": [
+        "Bar"
+      ]
+    },
+    {
+      "package": "",
+      "classes": [
+        "Foo"
+      ]
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "Date"
+      ]
+    }
+  ]
+}
+--Expected
+
+# keyword directly inside :import should error
+
+--Input
+(ns foo (:import :only x))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":import :only must be a class symbol."
+}
+--Expected
