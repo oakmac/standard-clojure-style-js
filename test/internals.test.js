@@ -939,9 +939,15 @@ test('parseJavaPackageWithClass', () => {
   expect(example1.package).toBe('aaa.bbb.ccc')
   expect(example1.className).toBe('Ddd')
 
+  // Java allows lower case class names, so the class is always the last segment
   const example2 = scsLib._parseJavaPackageWithClass('aaa.bbb.ccc')
-  expect(example2.package).toBe('aaa.bbb.ccc')
-  expect(example2.className).toBe(null)
+  expect(example2.package).toBe('aaa.bbb')
+  expect(example2.className).toBe('ccc')
+
+  // a class in the default package has an empty package name
+  const example3 = scsLib._parseJavaPackageWithClass('Ddd')
+  expect(example3.package).toBe('')
+  expect(example3.className).toBe('Ddd')
 })
 
 describe('findNextNodeWithText', () => {

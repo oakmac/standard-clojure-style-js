@@ -4196,3 +4196,81 @@
   ]
 }
 --Expected
+
+# GitHub Issue #234 - single-symbol :import splits on the last dot regardless of case
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo
+  (:import com.acme.lowercase_class java.util))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "imports": [
+    {
+      "package": "com.acme",
+      "classes": [
+        "lowercase_class"
+      ]
+    },
+    {
+      "package": "java",
+      "classes": [
+        "util"
+      ]
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #234 - single-symbol :import of a class in the default package
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo (:import Foo java.util.Date Bar))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "imports": [
+    {
+      "package": "",
+      "classes": [
+        "Bar"
+      ]
+    },
+    {
+      "package": "",
+      "classes": [
+        "Foo"
+      ]
+    },
+    {
+      "package": "java.util",
+      "classes": [
+        "Date"
+      ]
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #234 - keyword directly inside :import should error
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo (:import :only x))
+--Input
+
+--Expected
+{
+  "parsingShouldError": true,
+  "errorMessage": ":import :only must be a class symbol."
+}
+--Expected

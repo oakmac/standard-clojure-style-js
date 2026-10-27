@@ -2360,3 +2360,57 @@
    #?@(:clj
        [(java.util Date)]))) ;; date
 --Expected
+
+# GitHub Issue #234 - single-symbol :import with a lower case class name
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo
+  (:import java.util.Date com.acme.lowercase_class java.util))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (com.acme lowercase_class)
+   (java util)
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #234 - single-symbol :import of classes in the default package
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo
+  (:import Foo java.util.Date Bar))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   Bar
+   Foo
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #234 - single-symbol :import of a default package class inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
+
+--Input
+(ns foo
+  (:import #?(:clj Foo :cljs goog.Uri) java.util.Date))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.util Date)
+   #?@(:clj
+       [Foo]
+
+       :cljs
+       [(goog Uri)])))
+--Expected
