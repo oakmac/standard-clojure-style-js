@@ -2408,20 +2408,3 @@
        :cljs
        [(goog Uri)])))
 --Expected
-
-# zzzzzzzzzzzzzzzzzzzzzz
-
---Input
-(ns foo (:import (java.util Date) ;; c
-))
-
-(def x 1)
---Input
-
---Expected
-(ns foo
-  (:import
-   (java.util Date))) ;; c
-
-(def x 1)
---Expected
