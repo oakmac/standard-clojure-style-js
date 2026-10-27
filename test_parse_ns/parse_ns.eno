@@ -4274,3 +4274,71 @@
   "errorMessage": ":import :only must be a class symbol."
 }
 --Expected
+
+# GitHub Issue #237 - :refer-clojure :only across reader conditional platforms
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+
+--Input
+(ns com.example.my-app
+  #?(:clj (:refer-clojure :only [frequencies int partition])
+     :cljs (:refer-clojure :only [conj dissoc])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "referClojure": {
+    "only": [
+      {
+        "symbol": "conj",
+        "platform": ":cljs"
+      },
+      {
+        "symbol": "dissoc",
+        "platform": ":cljs"
+      },
+      {
+        "symbol": "frequencies",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "int",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "partition",
+        "platform": ":clj"
+      }
+    ]
+  }
+}
+--Expected
+
+# GitHub Issue #237 - multiple discards and comments at the end of a line are merged
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.bbb] #_ 1 ;; c
+   [ccc.ddd])) #_ 2 #_ 3
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.bbb",
+      "commentAfter": "#_ 1 ;; c"
+    },
+    {
+      "symbol": "ccc.ddd",
+      "commentAfter": "#_ 2 #_ 3"
+    }
+  ],
+  "commentOutsideNsForm": "#_ 2 #_ 3"
+}
+--Expected
