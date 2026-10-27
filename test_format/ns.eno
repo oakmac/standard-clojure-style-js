@@ -2094,3 +2094,269 @@
   #?(:clj (:refer-clojure :exclude [format juxt])
      :cljs (:refer-clojure :exclude [juxt])))
 --Expected
+
+# GitHub Issue #235 - comment after the last import is the last line of the ns form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> The comment must be printed after the closing parens, otherwise it comments them out
+
+--Input
+(ns foo (:import (java.util Date) ;; c
+))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.util Date))) ;; c
+
+(def x 1)
+--Expected
+
+# GitHub Issue #235 - comment after the last import when :import is not the last main form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import (java.util Date) ;; c
+) (:gen-class))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.util Date)) ;; c
+  (:gen-class))
+--Expected
+
+# GitHub Issue #235 - comment after an import that does not sort last
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import (java.io File) ;; c
+  (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #235 - comment after an import that sorts last
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> The comment stays with its import and moves after the closing parens
+
+--Input
+(ns foo (:import (java.util Date) ;; c
+  (java.io File)))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   (java.util Date))) ;; c
+--Expected
+
+# GitHub Issue #235 - comments above the :import form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo
+  ;; aaa
+  ;; bbb
+  (:import (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  ;; aaa
+  ;; bbb
+  (:import
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #235 - comment after the :import keyword
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import ;; c
+  (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  (:import ;; c
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #235 - comments above individual imports
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> Comments above an import stay with that import when the imports are sorted
+
+--Input
+(ns foo
+  (:import
+    ;; above util
+    (java.util Date) ;; after util
+    ;; above io
+    (java.io File)))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   ;; above io
+   (java.io File)
+   ;; above util
+   (java.util Date))) ;; after util
+--Expected
+
+# GitHub Issue #235 - comment after the closing paren of the ns form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import (java.util Date))) ;; c
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.util Date))) ;; c
+--Expected
+
+# GitHub Issue #235 - comment inside the package list before its closing paren
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import (java.util Date ;; c
+)))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.util Date))) ;; c
+--Expected
+
+# GitHub Issue #235 - all import comment positions with a :require after :import
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo
+  ;; above import
+  (:import ;; after keyword
+    ;; above util
+    (java.util Date) ;; after util
+    ;; above io
+    (java.io File) ;; after io
+    )
+  (:require [aaa.bbb :as b]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [aaa.bbb :as b])
+  ;; above import
+  (:import ;; after keyword
+   ;; above io
+   (java.io File) ;; after io
+   ;; above util
+   (java.util Date))) ;; after util
+--Expected
+
+# GitHub Issue #235 - single symbol imports with comments
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import
+  java.util.Date ;; date
+  java.io.File)) ;; file
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; file
+   (java.util Date))) ;; date
+--Expected
+
+# GitHub Issue #235 - import comments with one reader conditional platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo
+  ;; above
+  (:import ;; kw
+    #?@(:clj [(java.util Date) ;; date
+              ;; above file
+              (java.io File)]))) ;; file
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     ;; above
+     (:import ;; kw
+      ;; above file
+      (java.io File) ;; file
+      (java.util Date)))) ;; date
+--Expected
+
+# GitHub Issue #235 - import comments with two reader conditional platforms
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> A comment after the last import of a platform that is not the last platform stays on its line
+
+--Input
+(ns foo (:import
+    #?@(:clj [(java.util Date) ;; date
+              ;; above file
+              (java.io File)] ;; file
+        :cljs [(goog Uri)]))) ;; uri
+--Input
+
+--Expected
+(ns foo
+  (:import
+   #?@(:clj
+       ;; above file
+       [(java.io File) ;; file
+        (java.util Date)] ;; date
+
+       :cljs
+       [(goog Uri)]))) ;; uri
+--Expected
+
+# GitHub Issue #235 - comment after the last non-platform import when platform imports follow
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns foo (:import
+    (java.io File) ;; file
+    #?@(:clj [(java.util Date)]))) ;; date
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; file
+   #?@(:clj
+       [(java.util Date)]))) ;; date
+--Expected

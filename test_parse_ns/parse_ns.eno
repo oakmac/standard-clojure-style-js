@@ -4071,3 +4071,128 @@
   }
 }
 --Expected
+
+# GitHub Issue #235 - import comments with two reader conditional platforms
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> NOTE: the ";; after uri" comment is recorded both on the goog import and as commentOutsideNsForm
+
+--Input
+(ns com.example.my-app
+  ;; above import
+  (:import ;; after keyword
+    #?@(:clj
+        [
+         ;; above date
+         (java.util Date) ;; after date
+         ;; above file
+         (java.io File)] ;; after file
+        :cljs
+        [
+         ;; above uri
+         (goog Uri)]))) ;; after uri
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "importCommentsAbove": [";; above import"],
+  "importCommentAfter": ";; after keyword",
+  "commentOutsideNsForm": ";; after uri",
+  "imports": [
+    {
+      "package": "goog",
+      "classes": ["Uri"],
+      "commentsAbove": [";; above uri"],
+      "commentAfter": ";; after uri",
+      "platform": ":cljs"
+    },
+    {
+      "package": "java.io",
+      "classes": ["File"],
+      "commentsAbove": [";; above file"],
+      "commentAfter": ";; after file",
+      "platform": ":clj"
+    },
+    {
+      "package": "java.util",
+      "classes": ["Date"],
+      "commentsAbove": [";; above date"],
+      "commentAfter": ";; after date",
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #235 - import comments with non-platform and platform imports
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+
+--Input
+(ns com.example.my-app
+  (:import
+    ;; above file
+    (java.io File) ;; after file
+    #?@(:clj
+        [
+         ;; above date
+         (java.util Date)]))) ;; after date
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "commentOutsideNsForm": ";; after date",
+  "imports": [
+    {
+      "package": "java.io",
+      "classes": ["File"],
+      "commentsAbove": [";; above file"],
+      "commentAfter": ";; after file"
+    },
+    {
+      "package": "java.util",
+      "classes": ["Date"],
+      "commentsAbove": [";; above date"],
+      "commentAfter": ";; after date",
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #235 - comment on the same line as the opening bracket of a platform import vector
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/235
+> NOTE: the ";; above date" and ";; above uri" comments are ignored by the parser
+> because they do not start their own line and are not on the line of an import
+
+--Input
+(ns com.example.my-app
+  (:import
+    #?@(:clj
+        [;; above date
+         (java.util Date)]
+        :cljs
+        [;; above uri
+         (goog Uri)])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "imports": [
+    {
+      "package": "goog",
+      "classes": ["Uri"],
+      "platform": ":cljs"
+    },
+    {
+      "package": "java.util",
+      "classes": ["Date"],
+      "platform": ":clj"
+    }
+  ]
+}
+--Expected
