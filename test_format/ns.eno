@@ -2361,7 +2361,9 @@
        [(java.util Date)]))) ;; date
 --Expected
 
-# single-symbol :import with a lower case class name
+# GitHub Issue #234 - single-symbol :import with a lower case class name
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
 
 --Input
 (ns foo
@@ -2376,7 +2378,9 @@
    (java.util Date)))
 --Expected
 
-# single-symbol :import of classes in the default package
+# GitHub Issue #234 - single-symbol :import of classes in the default package
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
 
 --Input
 (ns foo
@@ -2391,7 +2395,9 @@
    (java.util Date)))
 --Expected
 
-# single-symbol :import of a default package class inside a reader conditional
+# GitHub Issue #234 - single-symbol :import of a default package class inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/234
 
 --Input
 (ns foo
