@@ -797,6 +797,88 @@
 (def x 1)
 --Expected
 
+# ns comment matrix: comment after keyword - require-macros - comment - last main form
+
+--Input
+(ns foo
+  (:require-macros ;; c1
+    [m.a] [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros ;; c1
+   [m.a]
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  (:require-macros ;; c1
+    [m.a] [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros ;; c1
+   [m.a]
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require-macros - discard - last main form
+
+--Input
+(ns foo
+  (:require-macros #_ :c1
+    [m.a] [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros #_ :c1
+   [m.a]
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  (:require-macros #_ :c1
+    [m.a] [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros #_ :c1
+   [m.a]
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
 # ns comment matrix: comment after item - require-macros - comment - last main form
 
 --Input

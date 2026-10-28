@@ -4367,3 +4367,28 @@
   ]
 }
 --Expected
+
+# GitHub Issue #243 - discard and comment on the :require-macros keyword line are requireMacrosCommentAfter
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/243
+
+--Input
+(ns foo
+  (:require-macros #_ :c1 ;; c2
+    [m.b] [m.a]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "requireMacrosCommentAfter": "#_ :c1 ;; c2",
+  "requireMacros": [
+    {
+      "symbol": "m.a"
+    },
+    {
+      "symbol": "m.b"
+    }
+  ]
+}
+--Expected
