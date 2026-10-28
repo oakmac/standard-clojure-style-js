@@ -186,6 +186,8 @@
 # GitHub Issue #125 - inline discard form with comment on require line
 
 > an inline discard form and same-line comment should not be deleted
+> NOTE: the discard and comment are on the :require keyword line, so they belong to :require
+> (GitHub Issue #244)
 
 --Input
 (ns foo (:require #_:clj-kondo/ignore ;; some comment
@@ -195,9 +197,9 @@ clojure.string))
 --Expected
 {
   "nsSymbol": "foo",
+  "requireCommentAfter": "#_:clj-kondo/ignore ;; some comment",
   "requires": [
     {
-      "commentsAbove": ["#_:clj-kondo/ignore ;; some comment"],
       "symbol": "clojure.string"
     }
   ]

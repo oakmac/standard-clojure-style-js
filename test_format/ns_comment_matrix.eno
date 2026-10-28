@@ -393,6 +393,88 @@
 (def x 1)
 --Expected
 
+# ns comment matrix: comment after keyword - require - comment - last main form
+
+--Input
+(ns foo
+  (:require ;; c1
+    [a.b] [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require ;; c1
+   [a.b]
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require - comment - not last main form
+
+--Input
+(ns foo
+  (:require ;; c1
+    [a.b] [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require ;; c1
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require - discard - last main form
+
+--Input
+(ns foo
+  (:require #_ :c1
+    [a.b] [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require #_ :c1
+   [a.b]
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - require - discard - not last main form
+
+--Input
+(ns foo
+  (:require #_ :c1
+    [a.b] [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require #_ :c1
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
 # ns comment matrix: comment after item - require - comment - last main form
 
 --Input
