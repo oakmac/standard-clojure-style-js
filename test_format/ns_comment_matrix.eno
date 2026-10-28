@@ -1,0 +1,1538 @@
+> Comment placement matrix for the ns form.
+>
+> Every case is one cell of: section x comment position x comment kind x whether the
+> section is the last main form in the input. The comment is either a line comment
+> (;; c1) or a discard form (#_ :c1). Each case must format correctly, be idempotent,
+> and keep the comment exactly once in the output.
+>
+> Cells affected by an open bug are not in this file yet; they are listed in the issue
+> for that bug and should be added here once it is fixed.
+>
+> The rule being tested: a comment or discard form attaches to the nearest form to its
+> left on the same line. If nothing is to its left on that line, it is a comment above
+> the next item and travels with that item when the item is sorted. A closing paren
+> counts as the end of the form it closes.
+
+# ns comment matrix: comment above - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:refer-clojure :exclude [get assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:refer-clojure :exclude [assoc get]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:refer-clojure :exclude [get assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:refer-clojure :exclude [assoc get])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:refer-clojure :exclude [get assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:refer-clojure :exclude [assoc get]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:refer-clojure :exclude [get assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:refer-clojure :exclude [assoc get])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc ;; c1
+                            ]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc ;; c1
+                            ])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) ;; c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc #_ :c1
+                            ]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc #_ :c1
+                            ])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) #_ :c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc]) ;; c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc]) ;; c1
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) ;; c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc]) #_ :c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc]) #_ :c1
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) #_ :c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc])) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc])
+  (:require [z.z])) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])
+  (:require
+   [z.z])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc])) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get assoc])
+  (:require [z.z])) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])
+  (:require
+   [z.z])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require - comment - last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:require [a.b] [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:require
+   [a.b]
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require - comment - not last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:require [a.b] [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:require
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require - discard - last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:require [a.b] [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:require
+   [a.b]
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require - discard - not last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:require [a.b] [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:require
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require - comment - last main form
+
+--Input
+(ns foo
+  (:require [a.b] ;; c1
+            [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] ;; c1
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require - comment - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] ;; c1
+            [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] ;; c1
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require - discard - last main form
+
+--Input
+(ns foo
+  (:require [a.b] #_ :c1
+            [c.d]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] #_ :c1
+   [c.d]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require - discard - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] #_ :c1
+            [c.d])
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] #_ :c1
+   [c.d])
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require - comment - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d] ;; c1
+            ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require - discard - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d] #_ :c1
+            ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require - comment - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d]) ;; c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require - discard - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d]) #_ :c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require - comment - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d])) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require - comment - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d])
+  (:import (java.net URI))) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI))) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require - discard - last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d])) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require - discard - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d])
+  (:import (java.net URI))) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d])
+  (:import
+   (java.net URI))) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require-macros - comment - last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:require-macros [m.a] [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:require-macros
+   [m.a]
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:require-macros [m.a] [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:require-macros
+   [m.a]
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require-macros - discard - last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:require-macros [m.a] [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:require-macros
+   [m.a]
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:require-macros [m.a] [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:require-macros
+   [m.a]
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require-macros - comment - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] ;; c1
+                   [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a] ;; c1
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] ;; c1
+                   [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a] ;; c1
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require-macros - discard - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] #_ :c1
+                   [m.b]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a] #_ :c1
+   [m.b]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] #_ :c1
+                   [m.b])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a] #_ :c1
+   [m.b])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require-macros - comment - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b] ;; c1
+                   ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b] ;; c1
+                   )
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b]) ;; c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require-macros - discard - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b] #_ :c1
+                   ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b] #_ :c1
+                   )
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b]) #_ :c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require-macros - comment - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b]) ;; c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b]) ;; c1
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b]) ;; c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require-macros - discard - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b]) #_ :c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b]) #_ :c1
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b]) #_ :c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require-macros - comment - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b])) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require-macros - comment - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b])
+  (:require [z.z])) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])
+  (:require
+   [z.z])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require-macros - discard - last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b])) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - require-macros - discard - not last main form
+
+--Input
+(ns foo
+  (:require-macros [m.a] [m.b])
+  (:require [z.z])) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require-macros
+   [m.a]
+   [m.b])
+  (:require
+   [z.z])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - import - comment - last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:import (java.util Date) (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:import
+   (java.io File)
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - import - comment - not last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:import (java.util Date) (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:import
+   (java.io File)
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - import - discard - last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:import (java.util Date) (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:import
+   (java.io File)
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - import - discard - not last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:import (java.util Date) (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:import
+   (java.io File)
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - import - comment - last main form
+
+--Input
+(ns foo
+  (:import ;; c1
+    (java.util Date) (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import ;; c1
+   (java.io File)
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - import - comment - not last main form
+
+--Input
+(ns foo
+  (:import ;; c1
+    (java.util Date) (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import ;; c1
+   (java.io File)
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - import - discard - last main form
+
+--Input
+(ns foo
+  (:import #_ :c1
+    (java.util Date) (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import #_ :c1
+   (java.io File)
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - import - discard - not last main form
+
+--Input
+(ns foo
+  (:import #_ :c1
+    (java.util Date) (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import #_ :c1
+   (java.io File)
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - import - comment - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) ;; c1
+           (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   (java.util Date))) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - import - comment - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) ;; c1
+           (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   (java.util Date)) ;; c1
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - import - discard - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) #_ :c1
+           (java.io File)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   (java.util Date))) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - import - discard - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) #_ :c1
+           (java.io File))
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   (java.util Date)) #_ :c1
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - import - comment - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File) ;; c1
+           ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c1
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - import - comment - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File) ;; c1
+           )
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c1
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - import - discard - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File) #_ :c1
+           ))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) #_ :c1
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - import - discard - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File) #_ :c1
+           )
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) #_ :c1
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - gen-class - comment - last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:gen-class :name foo.Bar :extends Object))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  (:gen-class
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - gen-class - comment - not last main form
+
+--Input
+(ns foo
+  ;; c1
+  (:gen-class :name foo.Bar :extends Object)
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.net URI))
+  ;; c1
+  (:gen-class
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - gen-class - discard - last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:gen-class :name foo.Bar :extends Object))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  #_ :c1
+  (:gen-class
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment above - gen-class - discard - not last main form
+
+--Input
+(ns foo
+  #_ :c1
+  (:gen-class :name foo.Bar :extends Object)
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.net URI))
+  #_ :c1
+  (:gen-class
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - gen-class - comment - last main form
+
+--Input
+(ns foo
+  (:gen-class ;; c1
+    :name foo.Bar :extends Object))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:gen-class ;; c1
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - gen-class - comment - not last main form
+
+--Input
+(ns foo
+  (:gen-class ;; c1
+    :name foo.Bar :extends Object)
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.net URI))
+  (:gen-class ;; c1
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - gen-class - discard - last main form
+
+--Input
+(ns foo
+  (:gen-class #_ :c1
+    :name foo.Bar :extends Object))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:gen-class #_ :c1
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - gen-class - discard - not last main form
+
+--Input
+(ns foo
+  (:gen-class #_ :c1
+    :name foo.Bar :extends Object)
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.net URI))
+  (:gen-class #_ :c1
+   :name foo.Bar
+   :extends Object))
+
+(def x 1)
+--Expected

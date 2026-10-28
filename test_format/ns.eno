@@ -2414,3 +2414,93 @@
        :cljs
        [(goog Uri)])))
 --Expected
+
+# GitHub Issue #237 - refer-clojure :only per platform is idempotent
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+> A second (:refer-clojure :only ...) form used to reset the symbols collected
+> from the first one, which deleted the :clj branch when re-formatting.
+
+--Input
+(ns com.example.my-app
+  #?(:clj (:refer-clojure :only [frequencies int partition])
+     :cljs (:refer-clojure :only [conj dissoc])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:clj (:refer-clojure :only [frequencies int partition])
+     :cljs (:refer-clojure :only [conj dissoc])))
+--Expected
+
+# GitHub Issue #237 - discard after the ns form is idempotent
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+> The discard form that trails the closing paren of the ns form is printed by
+> formatNs; it should not be printed a second time.
+
+--Input
+(ns com.example.my-app
+  (:require
+   #_ {:alpha "alpha"
+        :bravo "bravo"}
+   [aaa.bbb]
+   [ccc.ddd])) #_ #{"bugger"}
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   #_ {:alpha "alpha"
+        :bravo "bravo"}
+   [aaa.bbb]
+   [ccc.ddd])) #_ #{"bugger"}
+--Expected
+
+# GitHub Issue #237 - code on the same line as the closing ns paren keeps its whitespace
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+
+--Input
+(ns foo (:require [a.b])) (def x    2)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b])) (def x    2)
+--Expected
+
+# GitHub Issue #237 - multiple discards after the ns form keep their order
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+
+--Input
+(ns foo
+  (:require [a.b])) #_ 1 #_ 2
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b])) #_ 1 #_ 2
+(def x 1)
+--Expected
+
+# GitHub Issue #237 - discard followed by a comment on a require line keeps both
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/237
+
+--Input
+(ns foo
+  (:require [a.b] #_ 1 ;; c
+            [c.d]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] #_ 1 ;; c
+   [c.d]))
+--Expected

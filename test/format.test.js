@@ -106,6 +106,15 @@ allTestCases.forEach(testCase => {
       expect(result.out).toBe(testCase.expected)
     })
 
+    // formatting is idempotent: formatting the Expected output again should produce no changes
+    // https://github.com/oakmac/standard-clojure-style-js/issues/237
+    test(testCase.filename + ': ' + testCase.name + ' (idempotent)', () => {
+      const result = scsLib.format(testCase.expected)
+
+      expect(result.status).toBe('success')
+      expect(result.out).toBe(testCase.expected)
+    })
+
     // add one-off tests for trailing whitespace
     // NOTE: my editor keeps trimming trailing whitespace on the format.eno file, so
     // this test case catches when that happens
