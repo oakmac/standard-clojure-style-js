@@ -2504,3 +2504,39 @@
    [a.b] #_ 1 ;; c
    [c.d]))
 --Expected
+
+# GitHub Issue #244 - discard on the :require keyword line stays with :require
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/244
+> A comment or discard attaches to the nearest form to its left on the same line.
+> On the keyword line that is :require, so the discard stays there even though the
+> libspec that followed it in the source is sorted to the end.
+
+--Input
+(ns foo (:require #_ :c1 [c.d] [a.b]))
+--Input
+
+--Expected
+(ns foo
+  (:require #_ :c1
+   [a.b]
+   [c.d]))
+--Expected
+
+# GitHub Issue #244 - comment on the :require keyword line with reader conditional libspecs
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/244
+
+--Input
+(ns foo
+  (:require ;; c1
+   #?(:clj [a.b]
+      :cljs [c.d])))
+--Input
+
+--Expected
+(ns foo
+  (:require ;; c1
+   #?(:clj [a.b]
+      :cljs [c.d])))
+--Expected

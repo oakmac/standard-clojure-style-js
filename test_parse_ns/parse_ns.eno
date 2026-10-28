@@ -4342,3 +4342,28 @@
   "commentOutsideNsForm": "#_ 2 #_ 3"
 }
 --Expected
+
+# GitHub Issue #244 - discard and comment on the :require keyword line are requireCommentAfter
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/244
+
+--Input
+(ns foo
+  (:require #_ :c1 ;; c2
+    [c.d] [a.b]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "requireCommentAfter": "#_ :c1 ;; c2",
+  "requires": [
+    {
+      "symbol": "a.b"
+    },
+    {
+      "symbol": "c.d"
+    }
+  ]
+}
+--Expected
