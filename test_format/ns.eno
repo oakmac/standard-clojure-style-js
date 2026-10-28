@@ -2540,3 +2540,41 @@
    #?(:clj [a.b]
       :cljs [c.d])))
 --Expected
+
+# GitHub Issue #243 - comment on the :require-macros keyword line
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/243
+
+--Input
+(ns foo
+  (:require-macros ;; c1
+    [m.b] [m.a]))
+--Input
+
+--Expected
+(ns foo
+  (:require-macros ;; c1
+   [m.a]
+   [m.b]))
+--Expected
+
+# GitHub Issue #243 - discard and comment on the :require-macros keyword line wrapped in a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/243
+
+--Input
+(ns foo
+  #?(:cljs (:require-macros #_ :c1 ;; c2
+             [m.b] [m.a]))
+  (:require [a.b]))
+--Input
+
+--Expected
+(ns foo
+  #?(:cljs
+     (:require-macros #_ :c1 ;; c2
+      [m.a]
+      [m.b]))
+  (:require
+   [a.b]))
+--Expected
