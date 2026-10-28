@@ -88,10 +88,6 @@ ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
 
-// test cases that are known to not be idempotent yet
-// these still run the main Input --> Expected assertion, just not the second pass
-const ignoreIdempotencyTests = new Set()
-
 allTestCases.forEach(testCase => {
   let runThisTest = true
   if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
@@ -112,14 +108,12 @@ allTestCases.forEach(testCase => {
 
     // formatting is idempotent: formatting the Expected output again should produce no changes
     // https://github.com/oakmac/standard-clojure-style-js/issues/237
-    if (!ignoreIdempotencyTests.has(testCase.name)) {
-      test(testCase.filename + ': ' + testCase.name + ' (idempotent)', () => {
-        const result = scsLib.format(testCase.expected)
+    test(testCase.filename + ': ' + testCase.name + ' (idempotent)', () => {
+      const result = scsLib.format(testCase.expected)
 
-        expect(result.status).toBe('success')
-        expect(result.out).toBe(testCase.expected)
-      })
-    }
+      expect(result.status).toBe('success')
+      expect(result.out).toBe(testCase.expected)
+    })
 
     // add one-off tests for trailing whitespace
     // NOTE: my editor keeps trimming trailing whitespace on the format.eno file, so
