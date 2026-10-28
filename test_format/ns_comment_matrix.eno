@@ -7,6 +7,11 @@
 >
 > Cells affected by an open bug are not in this file yet; they are listed in the issue
 > for that bug and should be added here once it is fixed.
+>
+> The rule being tested: a comment or discard form attaches to the nearest form to its
+> left on the same line. If nothing is to its left on that line, it is a comment above
+> the next item and travels with that item when the item is sorted. A closing paren
+> counts as the end of the form it closes.
 
 # ns comment matrix: comment above - refer-clojure - comment - last main form
 
@@ -380,49 +385,6 @@
 (ns foo
   #_ :c1
   (:require
-   [a.b]
-   [c.d])
-  (:import
-   (java.net URI)))
-
-(def x 1)
---Expected
-
-# ns comment matrix: comment after keyword - require - discard - last main form
-
---Input
-(ns foo
-  (:require #_ :c1
-    [a.b] [c.d]))
-
-(def x 1)
---Input
-
---Expected
-(ns foo
-  (:require
-   #_ :c1
-   [a.b]
-   [c.d]))
-
-(def x 1)
---Expected
-
-# ns comment matrix: comment after keyword - require - discard - not last main form
-
---Input
-(ns foo
-  (:require #_ :c1
-    [a.b] [c.d])
-  (:import (java.net URI)))
-
-(def x 1)
---Input
-
---Expected
-(ns foo
-  (:require
-   #_ :c1
    [a.b]
    [c.d])
   (:import

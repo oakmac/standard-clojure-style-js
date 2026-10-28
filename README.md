@@ -274,6 +274,9 @@ mv standard-clj /usr/local/bin
 - [cljfmt option] `:insert-missing-whitespace?` = true
 - [cljfmt option] `:remove-consecutive-blank-lines?` = true
 - format and sort `ns` forms according to Stuart Sierra's [how to ns]
+  - comments and `#_` discard forms inside the `ns` form attach to the nearest form to their left on the same line
+    - if nothing is to their left on that line, they are a comment above the next item and travel with it when it is sorted
+    - a closing paren counts as the end of the form it closes, so a comment after `(:require ...)` belongs to the `:require` form, and a comment after the `ns` form's closing paren stays after the `ns` form
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
   - with the addition of [Rule 3](https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649) as proposed by Shaun Lebron
 - Use `#_ :standard-clj/ignore` or `#_ :standard-clj/ignore-file` to disable the formatter for certain special cases

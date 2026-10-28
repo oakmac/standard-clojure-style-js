@@ -123,6 +123,11 @@
 # GitHub Issue #125 - inline discard form with comment on require line
 
 > an inline discard form and same-line comment should not be deleted
+>
+> NOTE: the Expected below will change. Under the rule "a comment or discard attaches
+> to the nearest form to its left on the same line", the discard and comment belong to
+> :require and should stay on its line: (:require #_:clj-kondo/ignore ;; some comment
+> See the issue for "comments and discards on the :require keyword line attach to :require".
 
 --Input
 (ns foo (:require #_:clj-kondo/ignore ;; some comment
