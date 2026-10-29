@@ -4423,3 +4423,31 @@
   ]
 }
 --Expected
+
+# GitHub Issue #247 - comment after a :gen-class value on the keyword line belongs to the key
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/247
+
+--Input
+(ns foo
+  (:gen-class :name foo.Bar ;; c1
+              :extends Object)) ;; c2
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "foo.Bar",
+      "commentAfter": ";; c1"
+    },
+    "extends": {
+      "value": "Object",
+      "commentAfter": ";; c2"
+    }
+  },
+  "commentOutsideNsForm": ";; c2"
+}
+--Expected

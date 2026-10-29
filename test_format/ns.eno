@@ -2743,3 +2743,79 @@
   (:refer-clojure ;; c1
     :rename {x y}))
 --Expected
+
+# GitHub Issue #247 - comment after a :gen-class value on the keyword line
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/247
+> ";; c1" attaches to "foo.Bar" here
+
+--Input
+(ns foo
+  (:gen-class :name foo.Bar ;; c1
+              :extends Object))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name foo.Bar ;; c1
+   :extends Object))
+--Expected
+
+# GitHub Issue #247 - comments after several :gen-class values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/247
+
+--Input
+(ns foo
+  (:gen-class :name foo.Bar ;; c1
+              :extends Object ;; c2
+              :implements [java.io.Serializable] ;; c3
+              :main false)) ;; c4
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name foo.Bar ;; c1
+   :extends Object ;; c2
+   :implements [java.io.Serializable] ;; c3
+   :main false)) ;; c4
+--Expected
+
+# GitHub Issue #247 - discard after the closing paren of :gen-class when :import follows
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/247
+> The discard belongs to :extends Object, which is printed last, so it ends up after the ns form.
+
+--Input
+(ns foo
+  (:gen-class :name foo.Bar :extends Object) #_ :c1
+  (:import (java.net URI)))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.net URI))
+  (:gen-class
+   :name foo.Bar
+   :extends Object)) #_ :c1
+--Expected
+
+# GitHub Issue #247 - comment on the :gen-class keyword line before any key
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/247
+
+--Input
+(ns foo
+  (:gen-class ;; c1
+    :name foo.Bar :extends Object))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class ;; c1
+   :name foo.Bar
+   :extends Object))
+--Expected
