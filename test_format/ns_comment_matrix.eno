@@ -91,6 +91,84 @@
 (def x 1)
 --Expected
 
+# ns comment matrix: comment after keyword - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [get assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [assoc get]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [get assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [assoc get])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  (:refer-clojure #_ :c1
+    :exclude [get assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure #_ :c1
+    :exclude [assoc get]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after keyword - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure #_ :c1
+    :exclude [get assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure #_ :c1
+    :exclude [assoc get])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
 # ns comment matrix: comment after last item - refer-clojure - comment - last main form
 
 --Input
