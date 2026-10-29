@@ -277,6 +277,7 @@ mv standard-clj /usr/local/bin
   - comments and `#_` discard forms inside the `ns` form attach to the nearest item to their left on the same line, and travel with that item when it is sorted
     - closing parens are not items: a comment after `[a.b]))` belongs to `a.b`
     - if nothing is to their left on that line, they are a comment above the next item and travel with it
+    - one exception: `:refer-clojure` symbols are sorted onto a single line, so a comment on one of those symbols is printed after the `:refer-clojure` form instead
 - indentation follows the guide from Niki Tonsky's [Better clojure formatting]
   - with the addition of [Rule 3](https://github.com/clj-commons/formatter/issues/9#issuecomment-446167649) as proposed by Shaun Lebron
 - Use `#_ :standard-clj/ignore` or `#_ :standard-clj/ignore-file` to disable the formatter for certain special cases
