@@ -11,7 +11,9 @@
 > The rule being tested: a comment or discard form attaches to the nearest item to its
 > left on the same line and travels with that item when the item is sorted. Closing
 > parens are not items, so a comment after [a.b])) belongs to a.b. If nothing is to its
-> left on that line, it is a comment above the next item.
+> left on that line, it is a comment above the next item. One exception: :refer-clojure
+> symbols are sorted onto a single line, so a comment on one of them is printed after
+> the :refer-clojure form (GitHub Issue #248).
 
 # ns comment matrix: comment above - refer-clojure - comment - last main form
 
@@ -163,6 +165,80 @@
 (ns foo
   (:refer-clojure #_ :c1
     :exclude [assoc get])
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - refer-clojure - comment - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get ;; c1
+                            assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) ;; c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - refer-clojure - comment - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get ;; c1
+                            assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) ;; c1
+  (:require
+   [z.z]))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - refer-clojure - discard - last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get #_ :c1
+                            assoc]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after item - refer-clojure - discard - not last main form
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [get #_ :c1
+                            assoc])
+  (:require [z.z]))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure :exclude [assoc get]) #_ :c1
   (:require
    [z.z]))
 
