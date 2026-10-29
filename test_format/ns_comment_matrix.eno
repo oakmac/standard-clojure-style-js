@@ -8,10 +8,10 @@
 > Cells affected by an open bug are not in this file yet; they are listed in the issue
 > for that bug and should be added here once it is fixed.
 >
-> The rule being tested: a comment or discard form attaches to the nearest form to its
-> left on the same line. If nothing is to its left on that line, it is a comment above
-> the next item and travels with that item when the item is sorted. A closing paren
-> counts as the end of the form it closes.
+> The rule being tested: a comment or discard form attaches to the nearest item to its
+> left on the same line and travels with that item when the item is sorted. Closing
+> parens are not items, so a comment after [a.b])) belongs to a.b. If nothing is to its
+> left on that line, it is a comment above the next item.
 
 # ns comment matrix: comment above - refer-clojure - comment - last main form
 
@@ -576,6 +576,28 @@
 (def x 1)
 --Expected
 
+# ns comment matrix: comment after last item - require - comment - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d] ;; c1
+            )
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d]) ;; c1
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
 # ns comment matrix: comment after last item - require - discard - last main form
 
 --Input
@@ -591,6 +613,28 @@
   (:require
    [a.b]
    [c.d])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after last item - require - discard - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d] #_ :c1
+            )
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d]) #_ :c1
+  (:import
+   (java.net URI)))
 
 (def x 1)
 --Expected
@@ -614,6 +658,27 @@
 (def x 1)
 --Expected
 
+# ns comment matrix: comment after closing paren - require - comment - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d]) ;; c1
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d]) ;; c1
+  (:import
+   (java.net URI)))
+
+(def x 1)
+--Expected
+
 # ns comment matrix: comment after closing paren - require - discard - last main form
 
 --Input
@@ -629,6 +694,27 @@
   (:require
    [a.b]
    [c.d])) #_ :c1
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - require - discard - not last main form
+
+--Input
+(ns foo
+  (:require [a.b] [c.d]) #_ :c1
+  (:import (java.net URI)))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d]) #_ :c1
+  (:import
+   (java.net URI)))
 
 (def x 1)
 --Expected
@@ -1529,6 +1615,122 @@
    (java.util Date))
   (:gen-class
    :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - import - comment - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File)) ;; c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c1
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - import - comment - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File)) ;; c1
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c1
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - import - discard - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File)) #_ :c1
+  )
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) #_ :c1
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after closing paren - import - discard - not last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File)) #_ :c1
+  (:gen-class :name foo.Baz))
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) #_ :c1
+   (java.util Date))
+  (:gen-class
+   :name foo.Baz))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - import - comment - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File))) ;; c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) ;; c1
+   (java.util Date)))
+
+(def x 1)
+--Expected
+
+# ns comment matrix: comment after ns closing paren - import - discard - last main form
+
+--Input
+(ns foo
+  (:import (java.util Date) (java.io File))) #_ :c1
+
+(def x 1)
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File) #_ :c1
+   (java.util Date)))
 
 (def x 1)
 --Expected

@@ -2578,3 +2578,63 @@
   (:require
    [a.b]))
 --Expected
+
+# GitHub Issue #242 - comment after the closing paren of :require when :import follows
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/242
+> The comment belongs to [a.b], the nearest item to its left.
+
+--Input
+(ns foo
+  (:require [a.b]) ;; r
+  (:import (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]) ;; r
+  (:import
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #242 - comment on the last libspec when :import follows
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/242
+
+--Input
+(ns foo
+  (:require [a.b]
+            [c.d] ;; r
+            )
+  (:import (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   [c.d]) ;; r
+  (:import
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #242 - comment on the last libspec travels with it when :import follows
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/242
+> [a.b] was parsed last but sorts first, so the comment stays on its line inside the form.
+
+--Input
+(ns foo
+  (:require [c.d] [a.b]) ;; r
+  (:import (java.util Date)))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b] ;; r
+   [c.d])
+  (:import
+   (java.util Date)))
+--Expected
