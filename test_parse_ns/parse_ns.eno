@@ -476,7 +476,7 @@
     ";; aaa",
     ";; bbb"
   ],
-  "referClojureCommentAfter": "; ccc",
+  "referClojureCommentAfterForm": "; ccc",
   "referClojure": {
     "only": [
       {"symbol": "->"},
@@ -2744,7 +2744,7 @@
     ";; aaa",
     ";; bbb"
   ],
-  "referClojureCommentAfter": "; ccc",
+  "referClojureCommentAfterForm": "; ccc",
   "referClojure": {
     "only": [
       {"symbol": "->"},
@@ -2772,7 +2772,7 @@
     ";; aaa",
     ";; bbb"
   ],
-  "referClojureCommentAfter": "; ccc",
+  "referClojureCommentAfterForm": "; ccc",
   "referClojure": {
     "only": [
       {"symbol": "->"},
@@ -2801,7 +2801,7 @@
     ";; comment 1",
     ";; comment 2"
   ],
-  "referClojureCommentAfter": ";; comment 3",
+  "referClojureCommentAfterForm": ";; comment 3",
   "referClojure": {
     "rename": [
       {
@@ -4388,6 +4388,37 @@
     },
     {
       "symbol": "m.b"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line is referClojureCommentAfter
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+
+--Input
+(ns foo
+  (:refer-clojure #_ :c1 ;; c2
+    :exclude [get]) ;; c3
+  (:require [z.z]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "referClojureCommentAfter": "#_ :c1 ;; c2",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "get"
+      }
+    ]
+  },
+  "referClojureCommentAfterForm": ";; c3",
+  "requires": [
+    {
+      "symbol": "z.z"
     }
   ]
 }

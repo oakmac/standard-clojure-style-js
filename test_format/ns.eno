@@ -2638,3 +2638,108 @@
   (:import
    (java.util Date)))
 --Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+> The comment stays on the keyword, so the first key moves to the next line.
+
+--Input
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [get assoc]))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [assoc get]))
+--Expected
+
+# GitHub Issue #245 - discard and comment on the :refer-clojure keyword line with multiple keys
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+
+--Input
+(ns foo
+  (:refer-clojure #_ :c1 ;; c2
+    :exclude [a] :rename {x y}))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure #_ :c1 ;; c2
+    :exclude [a]
+    :rename {x y}))
+--Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line and after the form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+
+--Input
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [get assoc]) ;; c2
+  (:require [z.z]))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure ;; c1
+    :exclude [assoc get]) ;; c2
+  (:require
+   [z.z]))
+--Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure ;; c1
+             :only [dissoc conj])))
+--Input
+
+--Expected
+(ns foo
+  #?(:cljs
+     (:refer-clojure ;; c1
+       :only [conj dissoc])))
+--Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line with one form per platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+> Only the first form has a comment; the second form's keyword line had none.
+
+--Input
+(ns foo
+  #?(:clj (:refer-clojure ;; c1
+            :only [a])
+     :cljs (:refer-clojure :only [b])))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj (:refer-clojure ;; c1
+            :only [a])
+     :cljs (:refer-clojure :only [b])))
+--Expected
+
+# GitHub Issue #245 - comment on the :refer-clojure keyword line with :rename only
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/245
+
+--Input
+(ns foo
+  (:refer-clojure ;; c1
+    :rename {x y}))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure ;; c1
+    :rename {x y}))
+--Expected
