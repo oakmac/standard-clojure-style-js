@@ -356,3 +356,258 @@ clojure.string))
   ]
 }
 --Expected
+
+# GitHub Issue #223 - metadata on require-macros line 1
+
+> same as GitHub Issue #125, but for :require-macros
+> metadata must attach to the libspec and travel with it when sorting
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 2
+
+> metadata map form
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "zzz.macros",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 3
+
+> stacked metadata is collected in source order
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :refer [defthing]]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc", "^{:clj-kondo/ignore [:discouraged-namespace]}"],
+      "symbol": "zzz.macros",
+      "refer": [
+        {"symbol": "defthing"}
+      ]
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 4
+
+> metadata on a bare symbol
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc zzz.macros
+   aaa.macros))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 5
+
+> metadata with :refer and :rename
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :refer [a b] :rename {a aa}]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "refer": [
+        {"symbol": "a"},
+        {"symbol": "b"}
+      ],
+      "rename": [
+        {"fromSymbol": "a", "toSymbol": "aa"}
+      ]
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 6
+
+> comments above and after a libspec that has metadata
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ;; comment above
+   ^:no-doc
+   [zzz.macros :as z] ;; comment after
+   [mmm.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "symbol": "mmm.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "commentsAbove": [";; comment above"],
+      "as": "z",
+      "commentAfter": ";; comment after"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 7
+
+> :require-macros wrapped in a reader conditional keeps the platform
+
+--Input
+(ns com.example.my-app
+  #?(:cljs (:require-macros
+            ^:no-doc
+            [zzz.macros :as z]
+            [aaa.macros])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros",
+      "platform": ":cljs"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "platform": ":cljs",
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 8
+
+> metadata in both :require-macros and :require in the same ns form
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z]
+   [aaa.macros])
+  (:require
+   ^:no-doc
+   [zzz.core :as zc]
+   [aaa.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "as": "z"
+    }
+  ],
+  "requires": [
+    {
+      "symbol": "aaa.core"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.core",
+      "as": "zc"
+    }
+  ]
+}
+--Expected
