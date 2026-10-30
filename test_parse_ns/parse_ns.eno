@@ -4451,3 +4451,106 @@
   "commentOutsideNsForm": ";; c2"
 }
 --Expected
+
+# GitHub Issue #241 - :refer-clojure with a different key on each platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a])
+     :clj  (:refer-clojure :only [c d])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "a",
+        "platform": ":cljs"
+      }
+    ],
+    "only": [
+      {
+        "symbol": "c",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "d",
+        "platform": ":clj"
+      }
+    ]
+  }
+}
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with the same key on two platforms and a second key on one of them
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a] :rename {x y})
+     :clj  (:refer-clojure :exclude [c d])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "a",
+        "platform": ":cljs"
+      },
+      {
+        "symbol": "c",
+        "platform": ":clj"
+      },
+      {
+        "symbol": "d",
+        "platform": ":clj"
+      }
+    ],
+    "rename": [
+      {
+        "fromSymbol": "x",
+        "toSymbol": "y",
+        "platform": ":cljs"
+      }
+    ]
+  }
+}
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys on a single platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a] :rename {x y})))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "referClojure": {
+    "exclude": [
+      {
+        "symbol": "a",
+        "platform": ":cljs"
+      }
+    ],
+    "rename": [
+      {
+        "fromSymbol": "x",
+        "toSymbol": "y",
+        "platform": ":cljs"
+      }
+    ]
+  }
+}
+--Expected

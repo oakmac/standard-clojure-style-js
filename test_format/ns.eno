@@ -2891,3 +2891,143 @@
    :name foo.Bar
    :extends Object))
 --Expected
+
+# GitHub Issue #241 - :refer-clojure with a different key on each platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+> Every symbol is platform-specific, so print one (:refer-clojure) per platform.
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a])
+     :clj  (:refer-clojure :only [c d])))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj (:refer-clojure :only [c d])
+     :cljs (:refer-clojure :exclude [a])))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with the same key on two platforms and a second key on one of them
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a] :rename {x y})
+     :clj  (:refer-clojure :exclude [c d])))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj (:refer-clojure :exclude [c d])
+     :cljs (:refer-clojure :exclude [a] :rename {x y})))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys on a single platform
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+> Wrap the whole form in the reader conditional, with the keys on one line.
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a] :rename {x y})))
+--Input
+
+--Expected
+(ns foo
+  #?(:cljs
+     (:refer-clojure :exclude [a] :rename {x y})))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys on a single platform followed by :require
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure :exclude [a] :rename {x y})
+     :clj  (:refer-clojure :exclude [c d]))
+  (:require [b.c]))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj (:refer-clojure :exclude [c d])
+     :cljs (:refer-clojure :exclude [a] :rename {x y}))
+  (:require
+   [b.c]))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys and a comment on the keyword line inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  #?(:cljs (:refer-clojure ;; c1
+             :exclude [a] :rename {x y})))
+--Input
+
+--Expected
+(ns foo
+  #?(:cljs
+     (:refer-clojure ;; c1
+       :exclude [a] :rename {x y})))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys mixing all-platform and platform-specific symbols
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+> Some symbols apply to every platform, so splice the platform-specific ones into each key's collection.
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [a #?@(:cljs [b])] :rename {x y}))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure
+    :exclude [a
+              #?@(:cljs [b])]
+    :rename {x y}))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys and platform-specific :rename pairs
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [a] :rename {x y #?@(:cljs [p q] :clj [r s])}))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure
+    :exclude [a]
+    :rename {x y
+             #?@(:clj [r s]
+                 :cljs [p q])}))
+--Expected
+
+# GitHub Issue #241 - :refer-clojure with multiple keys where one key is entirely platform-specific
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/241
+> :exclude has an all-platform symbol so the form cannot be wrapped;
+> :only has no all-platform symbols so its collection holds only the splice.
+
+--Input
+(ns foo
+  (:refer-clojure :exclude [a #?@(:cljs [b])] :only [#?@(:clj [c])]))
+--Input
+
+--Expected
+(ns foo
+  (:refer-clojure
+    :exclude [a
+              #?@(:cljs [b])]
+    :only [#?@(:clj [c])]))
+--Expected
