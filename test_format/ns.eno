@@ -2823,7 +2823,6 @@
 # GitHub Issue #236 - :import with one reader conditional platform followed by :gen-class
 
 > https://github.com/oakmac/standard-clojure-style-js/issues/236
-> The #?(:clj form was never closed.
 
 --Input
 (ns foo (:import #?@(:clj [(java.util Date)])) (:gen-class))
