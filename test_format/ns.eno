@@ -2819,3 +2819,75 @@
    :name foo.Bar
    :extends Object))
 --Expected
+
+# GitHub Issue #236 - :import with one reader conditional platform followed by :gen-class
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/236
+
+--Input
+(ns foo (:import #?@(:clj [(java.util Date)])) (:gen-class))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:import
+      (java.util Date)))
+  (:gen-class))
+--Expected
+
+# GitHub Issue #236 - :import with non-platform imports plus one platform followed by :gen-class
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/236
+
+--Input
+(ns foo (:import (java.io File) #?@(:clj [(java.util Date)])) (:gen-class))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   (java.io File)
+   #?@(:clj
+       [(java.util Date)]))
+  (:gen-class))
+--Expected
+
+# GitHub Issue #236 - :import with two platforms followed by :gen-class
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/236
+
+--Input
+(ns foo (:import #?@(:clj [(java.util Date)] :cljs [(goog Uri)])) (:gen-class))
+--Input
+
+--Expected
+(ns foo
+  (:import
+   #?@(:clj
+       [(java.util Date)]
+
+       :cljs
+       [(goog Uri)]))
+  (:gen-class))
+--Expected
+
+# GitHub Issue #236 - :import with one reader conditional platform followed by :gen-class with keys
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/236
+
+--Input
+(ns foo
+  (:import #?@(:clj [(java.util Date)]))
+  (:gen-class :name foo.Bar :extends Object))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:import
+      (java.util Date)))
+  (:gen-class
+   :name foo.Bar
+   :extends Object))
+--Expected
