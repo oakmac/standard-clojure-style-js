@@ -2900,7 +2900,7 @@
 --Input
 (ns foo
   #?(:cljs (:refer-clojure :exclude [a])
-     :clj  (:refer-clojure :only [c d])))
+     :clj  (:refer-clojure :only [d c])))
 --Input
 
 --Expected
