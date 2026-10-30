@@ -276,3 +276,112 @@
   }
 }
 --Expected
+
+# GitHub Issue #225 - gen-class empty string values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :name ""
+   :extends ""
+   :implements [""]
+   :init ""
+   :post-init ""
+   :factory ""
+   :state ""
+   :prefix ""
+   :impl-ns ""))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "\"\""
+    },
+    "extends": {
+      "value": "\"\""
+    },
+    "implements": {
+      "value": [
+        {
+          "symbol": "\"\""
+        }
+      ]
+    },
+    "init": {
+      "value": "\"\""
+    },
+    "post-init": {
+      "value": "\"\""
+    },
+    "factory": {
+      "value": "\"\""
+    },
+    "state": {
+      "value": "\"\""
+    },
+    "prefix": {
+      "value": "\"\""
+    },
+    "impl-ns": {
+      "value": "\"\""
+    }
+  }
+}
+--Expected
+
+# GitHub Issue #225 - gen-class metadata on empty string values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :name ^:private ""
+   :state ^{:doc "the state"} ""))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "metadata": "^:private",
+      "value": "\"\""
+    },
+    "state": {
+      "metadata": "^{:doc \"the state\"}",
+      "value": "\"\""
+    }
+  }
+}
+--Expected
+
+# GitHub Issue #225 - gen-class empty string value followed by another key
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :name "" :main true))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "genClass": {
+    "isEmpty": false,
+    "name": {
+      "value": "\"\""
+    },
+    "main": {
+      "value": true
+    }
+  }
+}
+--Expected

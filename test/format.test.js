@@ -171,6 +171,37 @@ test('crlf to lf', () => {
   expect(result.out + '\n').toBe(outputFileWithLF)
 })
 
+// a :gen-class key with no recognizable value must be an error, never the text "undefined"
+// https://github.com/oakmac/standard-clojure-style-js/issues/225
+test('gen-class key with a missing value is an error', () => {
+  const missingName = scsLib.format('(ns foo (:gen-class :name))')
+  expect(missingName.status).toBe('error')
+  expect(missingName.reason).toBe(':gen-class :name is missing a value.')
+
+  const missingPrefix = scsLib.format('(ns foo (:gen-class :prefix))')
+  expect(missingPrefix.status).toBe('error')
+  expect(missingPrefix.reason).toBe(':gen-class :prefix is missing a value.')
+
+  const missingInit = scsLib.format('(ns foo (:gen-class :name foo.Bar :init))')
+  expect(missingInit.status).toBe('error')
+  expect(missingInit.reason).toBe(':gen-class :init is missing a value.')
+})
+
+test('gen-class output never contains the text undefined or null', () => {
+  const inputs = [
+    '(ns foo (:gen-class :prefix ""))',
+    '(ns foo (:gen-class :name "" :extends "" :init "" :post-init "" :factory "" :state "" :impl-ns ""))',
+    '(ns foo (:gen-class :implements [""]))',
+    '(ns foo (:gen-class :name ^:private ""))'
+  ]
+  inputs.forEach((input) => {
+    const result = scsLib.format(input)
+    expect(result.status).toBe('success')
+    expect(result.out.includes('undefined')).toBe(false)
+    expect(result.out.includes('null')).toBe(false)
+  })
+})
+
 // sanity-check the bracketBalance helper itself
 // NOTE: brackets inside strings, regex literals, character literals and comments must not count
 test('bracketBalance helper', () => {

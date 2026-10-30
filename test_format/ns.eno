@@ -3078,3 +3078,176 @@
   (:require
    [b.c]))
 --Expected
+
+# GitHub Issue #225 - empty ns docstring is preserved
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo "" (:require [a.b]))
+--Input
+
+--Expected
+(ns foo
+  ""
+  (:require
+   [a.b]))
+--Expected
+
+# GitHub Issue #225 - empty ns docstring with nothing else in the ns form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo "")
+--Input
+
+--Expected
+(ns foo
+  "")
+--Expected
+
+# GitHub Issue #225 - empty ns docstring with a metadata map
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo "" {:author "me"} (:require [a.b]))
+--Input
+
+--Expected
+(ns foo
+  ""
+  {:author "me"}
+  (:require
+   [a.b]))
+--Expected
+
+# GitHub Issue #225 - empty ns docstring with gen-class
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo "" (:gen-class :prefix ""))
+--Input
+
+--Expected
+(ns foo
+  ""
+  (:gen-class
+   :prefix ""))
+--Expected
+
+# GitHub Issue #225 - empty string require with :as
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:require ["" :as x]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   ["" :as x]))
+--Expected
+
+# GitHub Issue #225 - empty string require with :refer
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:require ["" :refer [a b]]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   ["" :refer [a b]]))
+--Expected
+
+# GitHub Issue #225 - empty string require with :default
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:require ["" :default Foo]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   ["" :default Foo]))
+--Expected
+
+# GitHub Issue #225 - empty string require by itself
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:require [""]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [""]))
+--Expected
+
+# GitHub Issue #225 - empty string require sorts with the other requires
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:require
+   ["zebra" :as z]
+   [a.b]
+   ["" :as e]
+   ["apple" :as a]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   ["" :as e]
+   ["apple" :as a]
+   ["zebra" :as z]
+   [a.b]))
+--Expected
+
+# GitHub Issue #225 - empty string require with a comment after it
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:require
+   ["" :as x] ;; c1
+   [a.b]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   ["" :as x] ;; c1
+   [a.b]))
+--Expected
+
+# GitHub Issue #225 - empty string require inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:require
+   [a.b]
+   #?(:cljs ["" :as x])))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b]
+   #?(:cljs ["" :as x])))
+--Expected
