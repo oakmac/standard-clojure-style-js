@@ -3031,3 +3031,50 @@
               #?@(:cljs [b])]
     :only [#?@(:clj [c])]))
 --Expected
+
+# GitHub Issue #258 - comment above a :refer-clojure form with multiple keys
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/258
+
+--Input
+(ns foo
+  ;; above
+  (:refer-clojure :exclude [a] :rename {x y}))
+--Input
+
+--Expected
+(ns foo
+  ;; above
+  (:refer-clojure
+    :exclude [a]
+    :rename {x y}))
+--Expected
+
+# GitHub Issue #258 - comments above, on the keyword line, and after a :refer-clojure form with multiple keys
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/258
+
+--Input
+(ns foo
+;; a1
+(:require [b.c])
+  ;; c1
+  ;; c2
+  (:refer-clojure ;; c3
+    :exclude [a] :only [b] :rename {x y}) ;; c4
+
+  )
+--Input
+
+--Expected
+(ns foo
+  ;; c1
+  ;; c2
+  (:refer-clojure ;; c3
+    :exclude [a]
+    :only [b]
+    :rename {x y}) ;; c4
+  ;; a1
+  (:require
+   [b.c]))
+--Expected
