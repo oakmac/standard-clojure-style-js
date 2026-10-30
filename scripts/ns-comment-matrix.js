@@ -8,10 +8,11 @@
 //   - kind:     line comment (;; c1) or discard form (#_ :c1)
 //   - whether the section is the last main form in the input
 //
-// and checks each cell with three oracles that need no hand-written expected output:
+// and checks each cell with four oracles that need no hand-written expected output:
 //   1. format() succeeds
 //   2. the output is idempotent (formatting it again changes nothing)
 //   3. the comment appears in the output exactly once
+//   4. the output has balanced brackets (checked with the formatter's own parser)
 //
 // Usage:
 //   node scripts/ns-comment-matrix.js          report every cell: clean / problem, and
@@ -124,6 +125,25 @@ function countOccurrences (s, needle) {
   return s.split(needle).length - 1
 }
 
+// Returns an Object describing the bracket balance of txt, using the formatter's own
+// parser so that brackets inside strings, regex literals, character literals and
+// comments are not counted. A missing closer leaves an unmatched .open node, so
+// numOpen !== numClose. A stray closer becomes an error node, listed in strayClosers.
+// Same check as the "balanced brackets" assertion in test/format.test.js
+// https://github.com/oakmac/standard-clojure-style-js/issues/256
+function bracketBalance (txt) {
+  const nodes = scs._flattenTree(scs.parse(txt))
+  let numOpen = 0
+  let numClose = 0
+  const strayClosers = []
+  nodes.forEach(node => {
+    if (node.name === '.open') numOpen = numOpen + 1
+    else if (node.name === '.close') numClose = numClose + 1
+    else if (node.name === 'error') strayClosers.push(node.text)
+  })
+  return { numOpen, numClose, strayClosers }
+}
+
 // returns an Array of problems with this cell (empty when the cell is clean)
 function checkCell (input, commentTxt) {
   const result = scs.format(input)
@@ -136,6 +156,14 @@ function checkCell (input, commentTxt) {
   const numComments = countOccurrences(result.out, commentTxt)
   if (numComments === 0) problems.push('comment dropped')
   else if (numComments > 1) problems.push('comment duplicated x' + numComments)
+
+  const balance = bracketBalance(result.out)
+  if (balance.numOpen !== balance.numClose) {
+    problems.push('unbalanced brackets (' + balance.numOpen + ' open, ' + balance.numClose + ' close)')
+  }
+  if (balance.strayClosers.length > 0) {
+    problems.push('stray closing bracket: ' + balance.strayClosers.join(' '))
+  }
 
   return problems
 }
@@ -188,9 +216,9 @@ function printReport (cells, existingNames) {
 
   cells.forEach(cell => {
     const inFile = existingNames.has(cell.name)
-    if (inFile) numInFile++
+    if (inFile) numInFile = numInFile + 1
     if (cell.problems.length === 0) {
-      numClean++
+      numClean = numClean + 1
       if (!inFile) cleanButMissing.push(cell)
     } else {
       problemCells.push(cell)

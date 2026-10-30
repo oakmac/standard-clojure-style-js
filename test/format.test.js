@@ -88,6 +88,12 @@ ignoreTests.add('Surrounding newlines removed 3')
 
 ignoreTests.add('ambiguous import comment')
 
+// cases that exist to test behavior on malformed input: skip only the
+// "balanced brackets" assertion for these, the other assertions still run
+// https://github.com/oakmac/standard-clojure-style-js/issues/256
+const ignoreBalanceTests = new Set()
+// ignoreBalanceTests.add('your malformed-input test case here')
+
 allTestCases.forEach(testCase => {
   let runThisTest = true
   if (onlyRunSpecificTests && !specificTests.has(testCase.name)) runThisTest = false
@@ -114,6 +120,20 @@ allTestCases.forEach(testCase => {
       expect(result.status).toBe('success')
       expect(result.out).toBe(testCase.expected)
     })
+
+    // the formatter's output must be syntactically well-formed: a hand-written Expected
+    // can itself be one paren short, and unbalanced output is idempotent, so neither
+    // of the two assertions above catches it.
+    // Checking Expected is enough: the first assertion already forces output to equal it.
+    // https://github.com/oakmac/standard-clojure-style-js/issues/256
+    if (!ignoreBalanceTests.has(testCase.name)) {
+      test(testCase.filename + ': ' + testCase.name + ' (balanced brackets)', () => {
+        const balance = bracketBalance(testCase.expected)
+
+        expect(balance.numOpen).toBe(balance.numClose)
+        expect(balance.strayClosers).toEqual([])
+      })
+    }
 
     // add one-off tests for trailing whitespace
     // NOTE: my editor keeps trimming trailing whitespace on the format.eno file, so
@@ -151,11 +171,53 @@ test('crlf to lf', () => {
   expect(result.out + '\n').toBe(outputFileWithLF)
 })
 
+// sanity-check the bracketBalance helper itself
+// NOTE: brackets inside strings, regex literals, character literals and comments must not count
+test('bracketBalance helper', () => {
+  const balanced = bracketBalance('(def x "(((") (def y \\() (def z #"[(]") ;; )))\n{:a [1 2]}')
+  expect(balanced.numOpen).toBe(7)
+  expect(balanced.numClose).toBe(7)
+  expect(balanced.strayClosers).toEqual([])
+
+  const missingCloser = bracketBalance('(ns foo\n  (:import\n   (java.util Date)\n  (:gen-class))')
+  expect(missingCloser.numOpen).toBe(4)
+  expect(missingCloser.numClose).toBe(3)
+  expect(missingCloser.strayClosers).toEqual([])
+
+  const strayParen = bracketBalance('(def x 1))')
+  expect(strayParen.numOpen).toBe(1)
+  expect(strayParen.numClose).toBe(1)
+  expect(strayParen.strayClosers).toEqual([')'])
+
+  const strayBracket = bracketBalance('(def x 1)]')
+  expect(strayBracket.numOpen).toBe(1)
+  expect(strayBracket.numClose).toBe(1)
+  expect(strayBracket.strayClosers).toEqual([']'])
+})
+
 // -----------------------------------------------------------------------------
 // Util
 
 function isEnoFile (f) {
   return path.extname(f) === '.eno'
+}
+
+// Returns an Object describing the bracket balance of txt, using the formatter's own
+// parser so that brackets inside strings, regex literals, character literals and
+// comments are not counted. A missing closer leaves an unmatched .open node, so
+// numOpen !== numClose. A stray closer becomes an error node, listed in strayClosers.
+// https://github.com/oakmac/standard-clojure-style-js/issues/256
+function bracketBalance (txt) {
+  const nodes = scsLib._flattenTree(scsLib.parse(txt))
+  let numOpen = 0
+  let numClose = 0
+  const strayClosers = []
+  nodes.forEach(node => {
+    if (node.name === '.open') numOpen = numOpen + 1
+    else if (node.name === '.close') numClose = numClose + 1
+    else if (node.name === 'error') strayClosers.push(node.text)
+  })
+  return { numOpen, numClose, strayClosers }
 }
 
 function isString (s) {
