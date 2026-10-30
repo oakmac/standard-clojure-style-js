@@ -521,3 +521,242 @@
    ;; second comment above implements
    :implements [foo.bar.BizBang zap.zip.RockSock])) ;; after implements
 --Expected
+
+# GitHub Issue #225 - gen-class :prefix with an empty string value
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :prefix ""))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :prefix ""))
+--Expected
+
+# GitHub Issue #225 - gen-class every name-like key with an empty string value
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :name ""
+   :extends ""
+   :init ""
+   :post-init ""
+   :factory ""
+   :state ""
+   :impl-ns ""))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name ""
+   :extends ""
+   :init ""
+   :post-init ""
+   :factory ""
+   :state ""
+   :impl-ns ""))
+--Expected
+
+# GitHub Issue #225 - gen-class empty string values mixed with other values and sorted
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :main true
+   :prefix ""
+   :extends java.lang.Object
+   :name ""
+   :init "init"))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name ""
+   :extends java.lang.Object
+   :init "init"
+   :main true
+   :prefix ""))
+--Expected
+
+# GitHub Issue #225 - gen-class empty string value does not swallow the key that follows it
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :name "" :main true))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name ""
+   :main true))
+--Expected
+
+# GitHub Issue #225 - gen-class :implements with an empty string
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :implements [""]))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :implements [""]))
+--Expected
+
+# GitHub Issue #225 - gen-class :implements with an empty string among other values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :implements ["" java.lang.Runnable "java.io.Closeable"]))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :implements ["" "java.io.Closeable" java.lang.Runnable]))
+--Expected
+
+# GitHub Issue #225 - gen-class metadata on empty string values is preserved
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :state ^{:doc "the state"} ""
+   :name ^:private ""))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name ^:private ""
+   :state ^{:doc "the state"} ""))
+--Expected
+
+# GitHub Issue #225 - gen-class comments after empty string values
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :prefix "" ;; empty prefix
+   :name "" ;; empty name
+   ))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :name "" ;; empty name
+   :prefix "")) ;; empty prefix
+--Expected
+
+# GitHub Issue #225 - gen-class comment above and after an empty string value
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   ;; above prefix
+   :prefix "")) ;; after prefix
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   ;; above prefix
+   :prefix "")) ;; after prefix
+--Expected
+
+# GitHub Issue #225 - gen-class with an empty string value inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo #?(:clj (:gen-class :prefix "")))
+--Input
+
+--Expected
+(ns foo
+  #?(:clj
+     (:gen-class
+      :prefix "")))
+--Expected
+
+# GitHub Issue #225 - gen-class empty string value when gen-class is not the last main form
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class :prefix "")
+  (:require [a.b]))
+--Input
+
+--Expected
+(ns foo
+  (:require
+   [a.b])
+  (:gen-class
+   :prefix ""))
+--Expected
+
+# GitHub Issue #225 - gen-class empty strings inside :methods :exposes :exposes-methods and :constructors
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo
+  (:gen-class
+   :constructors {[""] [""]}
+   :methods [["" [] ""]]
+   :exposes {"" {:get "" :set ""}}
+   :exposes-methods {"" ""}))
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :constructors {[""] [""]}
+   :methods [["" [] ""]]
+   :exposes {"" {:get "" :set ""}}
+   :exposes-methods {"" ""}))
+--Expected
+
+# GitHub Issue #225 - empty string outside of gen-class is unchanged
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:gen-class :prefix "-"))
+
+(def x "")
+(def y {"" ""})
+--Input
+
+--Expected
+(ns foo
+  (:gen-class
+   :prefix "-"))
+
+(def x "")
+(def y {"" ""})
+--Expected

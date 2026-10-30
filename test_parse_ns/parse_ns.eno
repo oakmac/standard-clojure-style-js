@@ -4554,3 +4554,57 @@
   }
 }
 --Expected
+
+# GitHub Issue #225 - empty ns docstring
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo "" (:require [a.b]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "docstring": "",
+  "requires": [
+    {
+      "symbol": "a.b"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #225 - empty string require
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/225
+
+--Input
+(ns foo (:require ["" :as x] ["" :refer [a]] [""]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "foo",
+  "requires": [
+    {
+      "symbol": "\"\"",
+      "symbolIsString": true,
+      "as": "x"
+    },
+    {
+      "symbol": "\"\"",
+      "symbolIsString": true,
+      "refer": [
+        {
+          "symbol": "a"
+        }
+      ]
+    },
+    {
+      "symbol": "\"\"",
+      "symbolIsString": true
+    }
+  ]
+}
+--Expected
