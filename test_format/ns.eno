@@ -3519,3 +3519,113 @@
       [zzz.core :as z] ;; after clj
       :cljs [yyy.core :as y])))
 --Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> the comment belongs to the libspec and travels with it when sorting, as it does for :require
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ;; above zzz
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ;; above zzz
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> a comment above the form and a comment above the first libspec stay apart
+
+--Input
+(ns com.example.my-app
+  ;; above form
+  (:require-macros
+   ;; above zzz
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  ;; above form
+  (:require-macros
+   [aaa.macros]
+   ;; above zzz
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> comment on the keyword line plus a comment above the first libspec
+
+--Input
+(ns com.example.my-app
+  (:require-macros ;; after keyword
+   ;; above zzz
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros ;; after keyword
+   [aaa.macros]
+   ;; above zzz
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 4
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> :require-macros wrapped in a reader conditional, with a comment above the reader conditional too
+
+--Input
+(ns com.example.my-app
+  ;; above form
+  #?(:cljs (:require-macros
+            ;; above zzz
+            [zzz.macros :as z]
+            [aaa.macros])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     ;; above form
+     (:require-macros
+      [aaa.macros]
+      ;; above zzz
+      [zzz.macros :as z])))
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 5
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> the first libspec is already in sorted position
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ;; above aaa
+   [aaa.macros]
+   [zzz.macros :as z]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   ;; above aaa
+   [aaa.macros]
+   [zzz.macros :as z]))
+--Expected

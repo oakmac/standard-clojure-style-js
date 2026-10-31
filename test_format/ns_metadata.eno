@@ -734,3 +734,26 @@ clojure.string))
    ^:a ^:b
    [zzz.macros :as z]))
 --Expected
+
+# GitHub Issue #268 - comment between metadata and the first require-macros libspec
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> the :require-macros version of the GitHub Issue #266 example, metadata libspec first
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   ;; comment between
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ;; comment between
+   ^:no-doc
+   [zzz.macros :as z]))
+--Expected
