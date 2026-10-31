@@ -4608,3 +4608,96 @@
   ]
 }
 --Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> the comment is commentsAbove on the libspec, not requireMacrosCommentsAbove
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ;; above zzz
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "symbol": "zzz.macros",
+      "commentsAbove": [";; above zzz"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> a comment above the form is requireMacrosCommentsAbove, a comment above the first libspec is commentsAbove
+
+--Input
+(ns com.example.my-app
+  ;; above form
+  (:require-macros
+   ;; above zzz
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacrosCommentsAbove": [";; above form"],
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "symbol": "zzz.macros",
+      "commentsAbove": [";; above zzz"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #268 - comment above the first :require-macros libspec 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/268
+> wrapped in a reader conditional
+
+--Input
+(ns com.example.my-app
+  ;; above form
+  #?(:cljs (:require-macros
+            ;; above zzz
+            [zzz.macros :as z]
+            [aaa.macros])))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacrosCommentsAbove": [";; above form"],
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros",
+      "platform": ":cljs"
+    },
+    {
+      "symbol": "zzz.macros",
+      "commentsAbove": [";; above zzz"],
+      "platform": ":cljs",
+      "as": "z"
+    }
+  ]
+}
+--Expected
