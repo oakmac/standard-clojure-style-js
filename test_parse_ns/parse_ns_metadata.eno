@@ -611,3 +611,130 @@ clojure.string))
   ]
 }
 --Expected
+
+# GitHub Issue #266 - comment between metadata and require libspec 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/266
+> a comment between a metadata form and its libspec is collected as commentsAbove
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:no-doc
+   ;; comment between
+   [zzz.core :as z]
+   [aaa.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.core",
+      "commentsAbove": [";; comment between"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #266 - comment between metadata and require libspec 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/266
+> comment between two stacked metadata forms
+
+--Input
+(ns com.example.my-app
+  (:require
+   ^:a
+   ;; c
+   ^:b
+   [zzz.core :as z]
+   [aaa.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core"
+    },
+    {
+      "metadata": ["^:a", "^:b"],
+      "symbol": "zzz.core",
+      "commentsAbove": [";; c"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #266 - comment between metadata and require libspec 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/266
+> comment above the metadata plus a comment between the metadata and the libspec,
+> in source order
+
+--Input
+(ns com.example.my-app
+  (:require
+   ;; above
+   ^:no-doc
+   ;; between
+   [zzz.core :as z]
+   [aaa.core]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requires": [
+    {
+      "symbol": "aaa.core"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.core",
+      "commentsAbove": [";; above", ";; between"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
+
+# GitHub Issue #266 - comment between metadata and require-macros libspec 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/266
+> same as above, but for :require-macros
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   ;; comment between
+   [zzz.macros :as z]))
+--Input
+
+--Expected
+{
+  "nsSymbol": "com.example.my-app",
+  "requireMacros": [
+    {
+      "symbol": "aaa.macros"
+    },
+    {
+      "metadata": ["^:no-doc"],
+      "symbol": "zzz.macros",
+      "commentsAbove": [";; comment between"],
+      "as": "z"
+    }
+  ]
+}
+--Expected
