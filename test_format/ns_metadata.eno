@@ -244,3 +244,278 @@ clojure.string))
    #_:clj-kondo/ignore
    [zzz.core])) ;; trailing comment
 --Expected
+
+# GitHub Issue #223 - metadata on require-macros line 1
+
+> same as GitHub Issue #125, but for :require-macros
+> metadata must attach to the libspec and travel with it when sorting
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 2
+
+> metadata map form
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :as z]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 3
+
+> stacked metadata on one line
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc ^:deprecated
+   [zzz.macros :refer [defthing]]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc ^:deprecated
+   [zzz.macros :refer [defthing]]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 4
+
+> stacked metadata across multiple lines is joined onto one line
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :refer [defthing]]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc ^{:clj-kondo/ignore [:discouraged-namespace]}
+   [zzz.macros :refer [defthing]]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 5
+
+> metadata on a bare symbol is preserved when the symbol is wrapped in a vector
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc zzz.macros
+   aaa.macros))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   [zzz.macros]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 6
+
+> inline metadata on a single-line form moves to its own line above the libspec
+
+--Input
+(ns com.example.my-app
+  (:require-macros ^:no-doc [zzz.macros :as z] [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 7
+
+> metadata on more than one libspec, each travels with its own libspec
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc [zzz.macros :as z]
+   ^:deprecated [mmm.macros]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:deprecated
+   [mmm.macros]
+   ^:no-doc
+   [zzz.macros :as z]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 8
+
+> metadata with :refer and :rename
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :refer [a b] :rename {a aa}]
+   [aaa.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   [zzz.macros :refer [a b] :rename {a aa}]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 9
+
+> comments above and after a libspec that has metadata
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ;; comment above
+   ^:no-doc
+   [zzz.macros :as z] ;; comment after
+   [mmm.macros]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   [mmm.macros]
+   ;; comment above
+   ^:no-doc
+   [zzz.macros :as z])) ;; comment after
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 10
+
+> :require-macros wrapped in a reader conditional
+
+--Input
+(ns com.example.my-app
+  #?(:cljs (:require-macros
+            ^:no-doc
+            [zzz.macros :as z]
+            [aaa.macros])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  #?(:cljs
+     (:require-macros
+      [aaa.macros]
+      ^:no-doc
+      [zzz.macros :as z])))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 11
+
+> metadata in both :require-macros and :require in the same ns form
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z]
+   [aaa.macros])
+  (:require
+   ^:no-doc
+   [zzz.core :as zc]
+   [aaa.core]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   [aaa.macros]
+   ^:no-doc
+   [zzz.macros :as z])
+  (:require
+   [aaa.core]
+   ^:no-doc
+   [zzz.core :as zc]))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 12
+
+> metadata on the only libspec, with another ns form after :require-macros
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z])
+  (:import
+   (goog.string StringBuffer)))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [zzz.macros :as z])
+  (:import
+   (goog.string StringBuffer)))
+--Expected
+
+# GitHub Issue #223 - metadata on require-macros line 13
+
+> metadata on the first libspec, already sorted
+
+--Input
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [aaa.macros]
+   [zzz.macros :as z]))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require-macros
+   ^:no-doc
+   [aaa.macros]
+   [zzz.macros :as z]))
+--Expected
