@@ -3251,3 +3251,271 @@
    [a.b]
    #?(:cljs ["" :as x])))
 --Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> the platform keyword is printed alone, then the comment and the libspec on their own lines
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z])))
+--Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> two platforms, both with a comment above
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z]
+      :cljs
+      ;; above2
+      [yyy.core :as y])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z]
+      :cljs
+      ;; above2
+      [yyy.core :as y])))
+--Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> only the second platform has a comment above; the first stays on the keyword line
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs
+      ;; above cljs
+      [yyy.core :as y])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs
+      ;; above cljs
+      [yyy.core :as y])))
+--Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 4
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> :require is not the last main form
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z]))
+  (:import
+   (java.util Date)))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above
+      [zzz.core :as z]))
+  (:import
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 5
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> metadata stays inline with the libspec, below the comment (see also GitHub Issue #266)
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj ^:no-doc
+      ;; between
+      [zzz.core :as z])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; between
+      ^:no-doc [zzz.core :as z])))
+--Expected
+
+# GitHub Issue #269 - comment above a require libspec inside a reader conditional 6
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> more than one comment above, and the platforms are sorted
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:cljs
+      ;; above 1
+      ;; above 2
+      [yyy.core :as y]
+      :clj [zzz.core :as z])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs
+      ;; above 1
+      ;; above 2
+      [yyy.core :as y])))
+--Expected
+
+# GitHub Issue #269 - comment after a require libspec inside a reader conditional 1
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> a comment after a platform that is not the last one stays on its line
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z] ;; after
+      :cljs [yyy.core :as y])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z] ;; after
+      :cljs [yyy.core :as y])))
+--Expected
+
+# GitHub Issue #269 - comment after a require libspec inside a reader conditional 2
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> a comment after the last platform is printed after the closing parens when :require is the last main form
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs [yyy.core :as y] ;; after cljs
+      )))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs [yyy.core :as y]))) ;; after cljs
+--Expected
+
+# GitHub Issue #269 - comment after a require libspec inside a reader conditional 3
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> a comment after the last platform is printed after the closing parens when :import follows
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs [yyy.core :as y] ;; after cljs
+      ))
+  (:import
+   (java.util Date)))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]
+      :cljs [yyy.core :as y])) ;; after cljs
+  (:import
+   (java.util Date)))
+--Expected
+
+# GitHub Issue #269 - comment after a require libspec inside a reader conditional 4
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> a comment after the only platform
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z] ;; after clj
+      )))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj [zzz.core :as z]))) ;; after clj
+--Expected
+
+# GitHub Issue #269 - comment above and after a require libspec inside a reader conditional
+
+> https://github.com/oakmac/standard-clojure-style-js/issues/269
+> a comment above the first platform and a comment after it, then a second platform
+
+--Input
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above clj
+      [zzz.core :as z] ;; after clj
+      :cljs [yyy.core :as y])))
+--Input
+
+--Expected
+(ns com.example.my-app
+  (:require
+   [aaa.core]
+   #?(:clj
+      ;; above clj
+      [zzz.core :as z] ;; after clj
+      :cljs [yyy.core :as y])))
+--Expected
